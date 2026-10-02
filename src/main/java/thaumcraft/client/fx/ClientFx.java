@@ -225,6 +225,27 @@ public final class ClientFx implements FxProxy {
     }
 
     @Override
+    public void sourceStream(Level level, double x, double y, double z, double tx, double ty, double tz, int color) {
+        if (level instanceof ClientLevel clientLevel) {
+            WispParticle fx = new WispParticle(
+                clientLevel,
+                x,
+                y,
+                z,
+                tx,
+                ty,
+                tz,
+                0.15F,
+                (color >> 16 & 255) / 255.0F,
+                (color >> 8 & 255) / 255.0F,
+                (color & 255) / 255.0F
+            );
+            fx.setGravity(0.0F);
+            add(fx);
+        }
+    }
+
+    @Override
     public void alembicSpill(Level level, int x, int y, int z, int color) {
         bubbles(level, x, y + 0.8, z, color, 0.01, 2);
     }

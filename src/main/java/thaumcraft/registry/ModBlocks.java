@@ -12,6 +12,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.device.AlembicBlock;
+import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
 import thaumcraft.block.device.TableBlock;
 import thaumcraft.block.device.CrucibleBlock;
@@ -86,6 +87,11 @@ public final class ModBlocks {
     public static final DeferredBlock<AlembicBlock> ALEMBIC = BLOCKS.registerBlock("alembic", AlembicBlock::new, ModBlocks::metalDevice);
     public static final DeferredBlock<TableBlock> TABLE = BLOCKS.registerBlock("table", TableBlock::new, ModBlocks::table);
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = BLOCKS.registerBlock("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
+    public static final DeferredBlock<ArcaneStoneBlock> ARCANE_STONE = BLOCKS.registerBlock(
+        "arcane_stone",
+        ArcaneStoneBlock::new,
+        properties -> stone(properties).strength(4.0F, 100.0F).noOcclusion()
+    );
 
     private ModBlocks() {
     }

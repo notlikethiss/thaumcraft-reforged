@@ -50,6 +50,9 @@ public interface FxProxy {
     default void crucibleBoil(Level level, int x, int y, int z, float fluidHeight, int[] colors, int strength) {
     }
 
+    default void sourceStream(Level level, double x, double y, double z, double tx, double ty, double tz, int color) {
+    }
+
     default void alembicSpill(Level level, int x, int y, int z, int color) {
     }
 

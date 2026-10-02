@@ -534,6 +534,53 @@ def tables():
     mineable("axe", "table", "arcane_worktable")
 
 
+ARCANE_STONE_PARTS = {
+    "origin": ("infusion1", {"south": 5, "west": 5, "north": 6, "east": 6}),
+    "x": ("infusion2", {"north": 5, "south": 5, "west": 6, "east": 6}),
+    "z": ("infusion3", {"north": 5, "south": 5, "west": 6, "east": 6}),
+    "xz": ("infusion4", {"north": 5, "east": 5, "south": 6, "west": 6}),
+}
+
+
+def arcane_stone():
+    cube_all("arcane_stone", "infusionbase")
+    variants = {"part=none": {"model": ref("arcane_stone")}}
+    glow = 0.02 * 16
+    for part, (top, sides) in ARCANE_STONE_PARTS.items():
+        faces = {"up": {"texture": "#top", "cullface": "up"}, "down": {"texture": "#top", "cullface": "down"}}
+        for direction, index in sides.items():
+            faces[direction] = {"texture": f"#side{index}", "cullface": direction}
+        name = f"arcane_stone_{part}"
+        block_model(name, {
+            "parent": "minecraft:block/block",
+            "textures": {
+                "particle": ref("infusionbase"),
+                "top": ref(top),
+                "side5": ref("infusion5"),
+                "side6": ref("infusion6"),
+                "glow": ref("animatedglow"),
+            },
+            "elements": [
+                {
+                    "from": [glow, glow, glow],
+                    "to": [16 - glow, 16 - glow, 16 - glow],
+                    "light_emission": 11,
+                    "shade": False,
+                    "faces": {
+                        direction: {"texture": "#glow", "tintindex": 0}
+                        for direction in ["up", "down", "north", "south", "east", "west"]
+                    },
+                },
+                {"from": [0, 0, 0], "to": [16, 16, 16], "faces": faces},
+            ],
+        })
+        variants[f"part={part}"] = {"model": ref(name)}
+    blockstate("arcane_stone", {"variants": variants})
+    block_item("arcane_stone")
+    self_drop("arcane_stone")
+    mineable("pickaxe", "arcane_stone")
+
+
 WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge"}
 
 
@@ -541,6 +588,7 @@ def devices():
     crucible()
     alembic()
     tables()
+    arcane_stone()
     for name, texture in WANDS.items():
         item_model(name, {"parent": "minecraft:item/handheld", "textures": {"layer0": ref(texture, "item")}})
         item_definition(name, ref(name, "item"))

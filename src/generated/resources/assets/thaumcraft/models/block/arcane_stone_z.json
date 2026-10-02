@@ -1,0 +1,90 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/infusionbase",
+    "top": "thaumcraft:block/infusion3",
+    "side5": "thaumcraft:block/infusion5",
+    "side6": "thaumcraft:block/infusion6",
+    "glow": "thaumcraft:block/animatedglow"
+  },
+  "elements": [
+    {
+      "from": [
+        0.32,
+        0.32,
+        0.32
+      ],
+      "to": [
+        15.68,
+        15.68,
+        15.68
+      ],
+      "light_emission": 11,
+      "shade": false,
+      "faces": {
+        "up": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "down": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "north": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "south": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#glow",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#top",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#side5",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side5",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side6",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#side6",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

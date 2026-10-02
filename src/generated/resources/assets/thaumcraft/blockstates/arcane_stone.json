@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "part=none": {
+      "model": "thaumcraft:block/arcane_stone"
+    },
+    "part=origin": {
+      "model": "thaumcraft:block/arcane_stone_origin"
+    },
+    "part=x": {
+      "model": "thaumcraft:block/arcane_stone_x"
+    },
+    "part=z": {
+      "model": "thaumcraft:block/arcane_stone_z"
+    },
+    "part=xz": {
+      "model": "thaumcraft:block/arcane_stone_xz"
+    }
+  }
+}

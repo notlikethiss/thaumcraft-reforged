@@ -22,6 +22,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:arcane_stone",
+      "required": false
+    },
+    {
       "id": "thaumcraft:cinnabar_ore",
       "required": false
     },

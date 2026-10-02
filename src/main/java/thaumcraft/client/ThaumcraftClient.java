@@ -19,6 +19,7 @@ import thaumcraft.client.color.EssenceTint;
 import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.WorkbenchWandRenderer;
 import thaumcraft.client.screen.ArcaneWorkbenchScreen;
+import thaumcraft.client.screen.InfusionWorkbenchScreen;
 import thaumcraft.registry.ModMenus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -66,6 +67,7 @@ public final class ThaumcraftClient {
         event.register(List.of(BlockTintSources.constant(colors[5])), ModBlocks.DULL_INFUSED_STONE.get());
         event.register(List.of(BlockTintSources.foliage()), ModBlocks.GREATWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
+        event.register(List.of(BlockTintSources.constant(0xC000C0)), ModBlocks.ARCANE_STONE.get());
     }
 
     @SubscribeEvent
@@ -78,11 +80,13 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKTABLE.get(), context -> new WorkbenchWandRenderer<>(context, false));
+        event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_WORKBENCH.get(), context -> new WorkbenchWandRenderer<>(context, true));
     }
 
     @SubscribeEvent
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
+        event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
     }
 
     @SubscribeEvent

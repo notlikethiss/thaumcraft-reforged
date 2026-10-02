@@ -117,6 +117,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> ALEMBIC = block(ModBlocks.ALEMBIC);
     public static final DeferredItem<BlockItem> TABLE = block(ModBlocks.TABLE);
     public static final DeferredItem<BlockItem> ARCANE_WORKTABLE = block(ModBlocks.ARCANE_WORKTABLE);
+    public static final DeferredItem<BlockItem> ARCANE_STONE = block(ModBlocks.ARCANE_STONE);
     public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
     public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
