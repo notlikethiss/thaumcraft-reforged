@@ -30,6 +30,7 @@ import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.CrucibleBlockEntity;
+import thaumcraft.blockentity.JarBlockEntity;
 import thaumcraft.client.gui.AspectRenderer;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
@@ -78,6 +79,9 @@ public final class GogglesTagRenderer {
         }
         if (blockEntity instanceof AlembicBlockEntity alembic) {
             return alembic.getSourceTags();
+        }
+        if (blockEntity instanceof JarBlockEntity jar) {
+            return jar.getSourceTags();
         }
         return null;
     }

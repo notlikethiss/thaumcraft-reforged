@@ -8,6 +8,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
+import thaumcraft.item.JarContents;
 import thaumcraft.research.ResearchNote;
 
 public final class ModDataComponents {
@@ -24,6 +25,11 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<Integer>> VIS_DISCOUNT = COMPONENTS.registerComponentType(
         "vis_discount",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+
+    public static final Supplier<DataComponentType<JarContents>> JAR_CONTENTS = COMPONENTS.registerComponentType(
+        "jar_contents",
+        builder -> builder.persistent(JarContents.CODEC).networkSynchronized(JarContents.STREAM_CODEC.cast())
     );
 
     public static final Supplier<DataComponentType<Integer>> GOLEM_CORE = COMPONENTS.registerComponentType(

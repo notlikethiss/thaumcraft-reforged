@@ -22,6 +22,11 @@ import thaumcraft.client.color.ResearchNoteTint;
 import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
+import thaumcraft.client.render.JarRenderer;
+import thaumcraft.client.render.JarSpecialRenderer;
+import thaumcraft.client.render.model.TcModelLayers;
+import thaumcraft.client.extensions.JarClientExtensions;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import thaumcraft.client.render.WorkbenchWandRenderer;
 import thaumcraft.client.screen.ArcaneWorkbenchScreen;
 import thaumcraft.client.screen.InfusionWorkbenchScreen;
@@ -108,6 +113,18 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKTABLE.get(), context -> new WorkbenchWandRenderer<>(context, false));
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_WORKBENCH.get(), context -> new WorkbenchWandRenderer<>(context, true));
+        event.registerBlockEntityRenderer(ModBlockEntities.WARDED_JAR.get(), JarRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
+    }
+
+    @SubscribeEvent
+    static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        TcModelLayers.register(event);
+    }
+
+    @SubscribeEvent
+    static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
+        event.register(Thaumcraft.id("jar"), JarSpecialRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent
@@ -127,6 +144,7 @@ public final class ThaumcraftClient {
             ModBlocks.EARTH_INFUSED_STONE.get(),
             ModBlocks.VIS_INFUSED_STONE.get()
         );
+        event.registerBlock(new JarClientExtensions(), ModBlocks.WARDED_JAR.get(), ModBlocks.BRAIN_JAR.get());
     }
 
     @SubscribeEvent

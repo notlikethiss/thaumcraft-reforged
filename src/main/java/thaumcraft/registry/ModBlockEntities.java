@@ -10,6 +10,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
+import thaumcraft.blockentity.BrainJarBlockEntity;
+import thaumcraft.blockentity.JarBlockEntity;
 import thaumcraft.blockentity.ArcaneWorktableBlockEntity;
 import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.InfusionWorkbenchBlockEntity;
@@ -46,6 +48,14 @@ public final class ModBlockEntities {
         () -> new BlockEntityType<>(InfusionWorkbenchBlockEntity::new, ModBlocks.ARCANE_STONE.get())
     );
 
+    public static final Supplier<BlockEntityType<JarBlockEntity>> WARDED_JAR = BLOCK_ENTITIES.register(
+        "warded_jar",
+        () -> new BlockEntityType<>(JarBlockEntity::new, ModBlocks.WARDED_JAR.get())
+    );
+    public static final Supplier<BlockEntityType<BrainJarBlockEntity>> BRAIN_JAR = BLOCK_ENTITIES.register(
+        "brain_jar",
+        () -> new BlockEntityType<>(BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get())
+    );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",
         () -> new BlockEntityType<>(OwnedBlockEntity::new, owned())

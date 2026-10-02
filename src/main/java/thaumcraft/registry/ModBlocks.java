@@ -22,6 +22,7 @@ import thaumcraft.block.device.ResearchTableBlock;
 import thaumcraft.block.device.TableBlock;
 import thaumcraft.block.device.CandleBlock;
 import thaumcraft.block.device.CrucibleBlock;
+import thaumcraft.block.device.JarBlock;
 import thaumcraft.block.ward.WardedBlock;
 import thaumcraft.block.ward.WardedGlassBlock;
 import thaumcraft.crafting.ConfigRecipes;
@@ -149,6 +150,8 @@ public final class ModBlocks {
         Block::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD)
     );
+    public static final DeferredBlock<JarBlock> WARDED_JAR = BLOCKS.registerBlock("warded_jar", properties -> new JarBlock(false, properties), ModBlocks::jar);
+    public static final DeferredBlock<JarBlock> BRAIN_JAR = BLOCKS.registerBlock("brain_jar", properties -> new JarBlock(true, properties), ModBlocks::jar);
 
     private ModBlocks() {
     }
@@ -186,6 +189,18 @@ public final class ModBlocks {
             .strength(3.0F, 17.0F)
             .sound(SoundType.METAL)
             .noOcclusion();
+    }
+
+    private static BlockBehaviour.Properties jar(BlockBehaviour.Properties properties) {
+        return properties
+            .mapColor(MapColor.NONE)
+            .strength(0.3F)
+            .sound(ModSounds.JAR_SOUND)
+            .lightLevel(state -> 9)
+            .noOcclusion()
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos, aabb) -> false);
     }
 
     private static BlockBehaviour.Properties table(BlockBehaviour.Properties properties) {

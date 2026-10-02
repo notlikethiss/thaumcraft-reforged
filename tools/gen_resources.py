@@ -788,8 +788,24 @@ def wards_and_decor():
         mineable("axe", name)
 
 
+def special_item(name, base, model):
+    write(ASSETS / "items" / f"{name}.json", {"model": {"type": "minecraft:special", "base": base, "model": model}})
+
+
+def jars():
+    block_model("jar", {"textures": {"particle": "minecraft:block/glass"}})
+    item_model("jar", {"parent": "minecraft:block/block", "textures": {"particle": "minecraft:block/glass"}})
+    for name, brain in [("warded_jar", False), ("brain_jar", True)]:
+        simple_state(name, ref("jar"))
+        special_item(name, ref("jar", "item"), {"type": f"{NS}:jar", "brain": brain})
+    special_item("filled_jar", ref("jar", "item"), {"type": f"{NS}:jar"})
+    loot("warded_jar", [])
+    self_drop("brain_jar")
+
+
 def devices():
     wards_and_decor()
+    jars()
     crucible()
     alembic()
     tables()

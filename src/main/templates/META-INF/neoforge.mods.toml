@@ -12,6 +12,9 @@ description='''
 Adding a touch of magic to Minecraft. Unofficial port of Thaumcraft 3.0.5e.
 '''
 
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"

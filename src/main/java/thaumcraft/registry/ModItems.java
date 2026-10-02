@@ -24,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
+import thaumcraft.item.FilledJarItem;
 import thaumcraft.item.ModMaterials;
 import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
@@ -132,6 +133,9 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> WARDED_GLASS = block(ModBlocks.WARDED_GLASS);
     public static final Map<String, DeferredItem<BlockItem>> CANDLES = blocks(ModBlocks.CANDLES, properties -> properties);
     public static final Map<String, DeferredItem<BlockItem>> MARKERS = blocks(ModBlocks.MARKERS, properties -> properties);
+    public static final DeferredItem<BlockItem> WARDED_JAR = block(ModBlocks.WARDED_JAR);
+    public static final DeferredItem<BlockItem> BRAIN_JAR = block(ModBlocks.BRAIN_JAR);
+    public static final DeferredItem<FilledJarItem> FILLED_JAR = ITEMS.registerItem("filled_jar", properties -> new FilledJarItem(properties.stacksTo(8)));
     public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
     public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);

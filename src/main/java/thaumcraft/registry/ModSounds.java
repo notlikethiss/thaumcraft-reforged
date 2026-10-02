@@ -2,6 +2,8 @@ package thaumcraft.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.SoundType;
+import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -39,6 +41,9 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> WISPDEAD = register("wispdead");
     public static final DeferredHolder<SoundEvent, SoundEvent> WISPLIVE = register("wisplive");
     public static final DeferredHolder<SoundEvent, SoundEvent> ZAP = register("zap");
+
+    public static final SoundType JAR_SOUND = new DeferredSoundType(1.0F, 1.0F, JAR, JAR, JAR, JAR, JAR);
+    public static final SoundType CRYSTAL_SOUND = new DeferredSoundType(1.0F, 1.0F, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL);
 
     private ModSounds() {
     }
