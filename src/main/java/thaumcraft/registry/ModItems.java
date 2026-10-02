@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -19,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.item.ModMaterials;
+import thaumcraft.item.wand.CastingWandItem;
 
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Thaumcraft.MODID);
@@ -88,14 +90,14 @@ public final class ModItems {
         )
     );
 
-    public static final DeferredItem<Item> GOGGLES_OF_REVEALING = armor("goggles_of_revealing", ModMaterials.GOGGLES_ARMOR, ArmorType.HELMET);
+    public static final DeferredItem<Item> GOGGLES_OF_REVEALING = armor("goggles_of_revealing", ModMaterials.GOGGLES_ARMOR, ArmorType.HELMET, 5);
     public static final DeferredItem<Item> THAUMIUM_HELMET = armor("thaumium_helmet", ModMaterials.THAUMIUM_ARMOR, ArmorType.HELMET);
     public static final DeferredItem<Item> THAUMIUM_CHESTPLATE = armor("thaumium_chestplate", ModMaterials.THAUMIUM_ARMOR, ArmorType.CHESTPLATE);
     public static final DeferredItem<Item> THAUMIUM_LEGGINGS = armor("thaumium_leggings", ModMaterials.THAUMIUM_ARMOR, ArmorType.LEGGINGS);
     public static final DeferredItem<Item> THAUMIUM_BOOTS = armor("thaumium_boots", ModMaterials.THAUMIUM_ARMOR, ArmorType.BOOTS);
-    public static final DeferredItem<Item> ROBE_CHESTPLATE = armor("robe_chestplate", ModMaterials.ROBE_ARMOR, ArmorType.CHESTPLATE);
-    public static final DeferredItem<Item> ROBE_LEGGINGS = armor("robe_leggings", ModMaterials.ROBE_ARMOR, ArmorType.LEGGINGS);
-    public static final DeferredItem<Item> ROBE_BOOTS = armor("robe_boots", ModMaterials.ROBE_ARMOR, ArmorType.BOOTS);
+    public static final DeferredItem<Item> ROBE_CHESTPLATE = armor("robe_chestplate", ModMaterials.ROBE_ARMOR, ArmorType.CHESTPLATE, 2);
+    public static final DeferredItem<Item> ROBE_LEGGINGS = armor("robe_leggings", ModMaterials.ROBE_ARMOR, ArmorType.LEGGINGS, 2);
+    public static final DeferredItem<Item> ROBE_BOOTS = armor("robe_boots", ModMaterials.ROBE_ARMOR, ArmorType.BOOTS, 1);
     public static final DeferredItem<Item> BOOTS_TRAVELLER = armor("boots_traveller", ModMaterials.TRAVELLER_ARMOR, ArmorType.BOOTS);
 
     public static final DeferredItem<Item> THAUMIUM_SWORD = ITEMS.registerSimpleItem("thaumium_sword", properties -> properties.sword(ModMaterials.THAUMIUM_TOOL, 3.0F, -2.4F));
@@ -109,6 +111,13 @@ public final class ModItems {
     public static final DeferredItem<Item> ELEMENTAL_SHOVEL = ITEMS.registerSimpleItem("elemental_shovel", properties -> properties.shovel(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F));
     public static final DeferredItem<Item> ELEMENTAL_HOE = ITEMS.registerSimpleItem("elemental_hoe", properties -> properties.hoe(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F));
 
+    public static final DeferredItem<BlockItem> CRUCIBLE = block(ModBlocks.CRUCIBLE);
+    public static final DeferredItem<BlockItem> ALEMBIC = block(ModBlocks.ALEMBIC);
+    public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
+    public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
+    public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
+    public static final DeferredItem<Item> THAUMONOMICON = ITEMS.registerSimpleItem("thaumonomicon", properties -> properties.stacksTo(1));
+
     private ModItems() {
     }
 
@@ -118,6 +127,14 @@ public final class ModItems {
 
     private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type) {
         return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type));
+    }
+
+    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type, int visDiscount) {
+        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).component(ModDataComponents.VIS_DISCOUNT.get(), visDiscount));
+    }
+
+    private static DeferredItem<CastingWandItem> wand(String name, int maxVis, int interval, Rarity rarity) {
+        return ITEMS.registerItem(name, properties -> new CastingWandItem(maxVis, interval, properties.rarity(rarity)));
     }
 
     private static DeferredItem<BlockItem> block(DeferredBlock<?> block) {

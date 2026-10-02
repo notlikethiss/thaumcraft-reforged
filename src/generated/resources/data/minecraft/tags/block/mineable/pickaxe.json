@@ -6,6 +6,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:alembic",
+      "required": false
+    },
+    {
       "id": "thaumcraft:amber_block",
       "required": false
     },
@@ -19,6 +23,10 @@
     },
     {
       "id": "thaumcraft:cinnabar_ore",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:crucible",
       "required": false
     },
     {

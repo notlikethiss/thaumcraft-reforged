@@ -13,6 +13,10 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import thaumcraft.client.extensions.InfusedStoneClientExtensions;
 import thaumcraft.registry.ModBlocks;
+import thaumcraft.registry.ModBlockEntities;
+import thaumcraft.client.render.AlembicRenderer;
+import thaumcraft.client.render.CrucibleRenderer;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -23,6 +27,7 @@ import thaumcraft.client.fx.ClientFx;
 import thaumcraft.client.fx.ModRenderPipelines;
 import thaumcraft.fx.Fx;
 import thaumcraft.network.AspectTagsPayload;
+import thaumcraft.network.BlockSparklePayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
@@ -59,6 +64,12 @@ public final class ThaumcraftClient {
     }
 
     @SubscribeEvent
+    static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
+    }
+
+    @SubscribeEvent
     static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerBlock(
             new InfusedStoneClientExtensions(),
@@ -78,6 +89,7 @@ public final class ThaumcraftClient {
         event.register(NodeZapPayload.TYPE, ClientPayloadHandlers::nodeZap);
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
         event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
+        event.register(BlockSparklePayload.TYPE, ClientPayloadHandlers::blockSparkle);
     }
 
     @SubscribeEvent

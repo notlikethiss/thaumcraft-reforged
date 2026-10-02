@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "thaumcraft:block/alembic"
+    },
+    "facing=east": {
+      "model": "thaumcraft:block/alembic",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "thaumcraft:block/alembic",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thaumcraft:block/alembic",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,351 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/goldbase",
+    "texture": "thaumcraft:block/alembic_model"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        6,
+        -5
+      ],
+      "to": [
+        9,
+        19,
+        -3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            14.5,
+            0.0,
+            15.0,
+            1.0
+          ],
+          "texture": "#texture"
+        },
+        "down": {
+          "uv": [
+            15.0,
+            0.0,
+            15.5,
+            1.0
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            1.0,
+            15.0,
+            7.5
+          ],
+          "texture": "#texture"
+        },
+        "north": {
+          "uv": [
+            15.5,
+            1.0,
+            16.0,
+            7.5
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            14.0,
+            1.0,
+            14.5,
+            7.5
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            15.0,
+            1.0,
+            15.5,
+            7.5
+          ],
+          "texture": "#texture"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        4,
+        7
+      ],
+      "to": [
+        9,
+        19,
+        9
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            14.5,
+            0.0,
+            15.0,
+            1.0
+          ],
+          "texture": "#texture"
+        },
+        "down": {
+          "uv": [
+            15.0,
+            0.0,
+            15.5,
+            1.0
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            1.0,
+            15.0,
+            8.5
+          ],
+          "texture": "#texture"
+        },
+        "north": {
+          "uv": [
+            15.5,
+            1.0,
+            16.0,
+            8.5
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            14.0,
+            1.0,
+            14.5,
+            8.5
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            15.0,
+            1.0,
+            15.5,
+            8.5
+          ],
+          "texture": "#texture"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        4,
+        12
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.0,
+            10.0,
+            4.0,
+            14.0
+          ],
+          "texture": "#texture"
+        },
+        "down": {
+          "uv": [
+            4.0,
+            10.0,
+            6.0,
+            14.0
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            2.0,
+            14.0,
+            4.0,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "north": {
+          "uv": [
+            6.0,
+            14.0,
+            8.0,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            14.0,
+            2.0,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            4.0,
+            14.0,
+            6.0,
+            16.0
+          ],
+          "texture": "#texture"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        16,
+        -3
+      ],
+      "to": [
+        10,
+        20,
+        7
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            10.0,
+            12.0,
+            12.5,
+            14.0
+          ],
+          "texture": "#texture",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            12.5,
+            12.0,
+            15.0,
+            14.0
+          ],
+          "texture": "#texture",
+          "rotation": 90
+        },
+        "east": {
+          "uv": [
+            10.0,
+            14.0,
+            12.5,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            13.5,
+            14.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "north": {
+          "uv": [
+            9.0,
+            14.0,
+            10.0,
+            16.0
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            12.5,
+            14.0,
+            13.5,
+            16.0
+          ],
+          "texture": "#texture"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        4
+      ],
+      "to": [
+        12,
+        14,
+        12
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.0,
+            0.0,
+            4.0,
+            4.0
+          ],
+          "texture": "#texture"
+        },
+        "down": {
+          "uv": [
+            4.0,
+            0.0,
+            6.0,
+            4.0
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            2.0,
+            4.0,
+            4.0,
+            9.0
+          ],
+          "texture": "#texture"
+        },
+        "north": {
+          "uv": [
+            6.0,
+            4.0,
+            8.0,
+            9.0
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            4.0,
+            2.0,
+            9.0
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            4.0,
+            4.0,
+            6.0,
+            9.0
+          ],
+          "texture": "#texture"
+        }
+      }
+    }
+  ]
+}

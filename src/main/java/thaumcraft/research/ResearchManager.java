@@ -2,7 +2,10 @@ package thaumcraft.research;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,6 +14,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
+import thaumcraft.crafting.CrucibleRecipe;
+import thaumcraft.crafting.ThaumcraftRecipes;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.registry.ModAttachments;
 
@@ -52,6 +57,20 @@ public final class ResearchManager {
             }
         }
         return result;
+    }
+
+    public static boolean isCrucibleCreationSuccessful(Level level, ItemStack output, Player player) {
+        CrucibleRecipe recipe = ThaumcraftRecipes.getCrucibleRecipe(output);
+        if (recipe == null || isResearchComplete(player, recipe.key())) {
+            return true;
+        }
+        if (!doesPlayerHaveRequisites(player, recipe.key())) {
+            return false;
+        }
+        if (!level.isClientSide()) {
+            player.sendSystemMessage(Component.translatable("tc.thaumcraft.cantrecord"));
+        }
+        return false;
     }
 
     public static void completeResearch(Player player, String key) {

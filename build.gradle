@@ -108,3 +108,7 @@ idea {
         downloadJavadoc = true
     }
 }
+
+tasks.named('runServer') {
+    standardInput = System.in
+}

@@ -9,6 +9,7 @@ import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.fx.Fx;
 import thaumcraft.aspect.AspectRegistry;
 import thaumcraft.network.AspectTagsPayload;
+import thaumcraft.network.BlockSparklePayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
@@ -57,6 +58,11 @@ public final class ClientPayloadHandlers {
         if (target != null) {
             Fx.get().nodeBolt(player.level(), payload.from().x(), payload.from().y(), payload.from().z(), target);
         }
+    }
+
+    public static void blockSparkle(BlockSparklePayload payload, IPayloadContext context) {
+        Player player = context.player();
+        Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.color(), 5);
     }
 
     public static void researchComplete(ResearchCompletePayload payload, IPayloadContext context) {

@@ -6,6 +6,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.blockentity.AlembicBlockEntity;
+import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.NitorBlockEntity;
 
 public final class ModBlockEntities {
@@ -14,6 +16,15 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<NitorBlockEntity>> NITOR = BLOCK_ENTITIES.register(
         "nitor",
         () -> new BlockEntityType<>(NitorBlockEntity::new, ModBlocks.NITOR.get())
+    );
+
+    public static final Supplier<BlockEntityType<CrucibleBlockEntity>> CRUCIBLE = BLOCK_ENTITIES.register(
+        "crucible",
+        () -> new BlockEntityType<>(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE.get())
+    );
+    public static final Supplier<BlockEntityType<AlembicBlockEntity>> ALEMBIC = BLOCK_ENTITIES.register(
+        "alembic",
+        () -> new BlockEntityType<>(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get())
     );
 
     private ModBlockEntities() {

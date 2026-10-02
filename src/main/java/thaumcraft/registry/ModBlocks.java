@@ -11,6 +11,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.block.device.AlembicBlock;
+import thaumcraft.block.device.CrucibleBlock;
 import thaumcraft.block.device.NitorBlock;
 import thaumcraft.block.world.AmberBlock;
 import thaumcraft.block.world.InfusedStoneBlock;
@@ -78,6 +80,9 @@ public final class ModBlocks {
         properties -> properties.noCollision().instabreak().sound(SoundType.WOOL).lightLevel(state -> 15).pushReaction(PushReaction.POPPED)
     );
 
+    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = BLOCKS.registerBlock("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
+    public static final DeferredBlock<AlembicBlock> ALEMBIC = BLOCKS.registerBlock("alembic", AlembicBlock::new, ModBlocks::metalDevice);
+
     private ModBlocks() {
     }
 
@@ -92,6 +97,15 @@ public final class ModBlocks {
             .requiresCorrectToolForDrops()
             .strength(1.5F, 3.0F)
             .sound(SoundType.STONE);
+    }
+
+    private static BlockBehaviour.Properties metalDevice(BlockBehaviour.Properties properties) {
+        return properties
+            .mapColor(MapColor.METAL)
+            .requiresCorrectToolForDrops()
+            .strength(3.0F, 17.0F)
+            .sound(SoundType.METAL)
+            .noOcclusion();
     }
 
     private static BlockBehaviour.Properties amber(BlockBehaviour.Properties properties) {

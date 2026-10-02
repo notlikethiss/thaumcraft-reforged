@@ -389,6 +389,128 @@ def items():
     item_tags["c:ores"].update({f"{NS}:cinnabar_ore", f"{NS}:amber_ore"})
 
 
+FACING_ROTATION = {"north": 0, "east": 90, "south": 180, "west": 270}
+
+
+def facing_state(name, model=None):
+    blockstate(name, {"variants": {
+        f"facing={facing}": {"model": model or ref(name), "y": rotation} if rotation else {"model": model or ref(name)}
+        for facing, rotation in FACING_ROTATION.items()
+    }})
+
+
+def uv_rect(u1, v1, u2, v2, tex_w, tex_h):
+    return [u1 * 16 / tex_w, v1 * 16 / tex_h, u2 * 16 / tex_w, v2 * 16 / tex_h]
+
+
+def model_box(start, end, tex_offset, size, tex_size, texture="#texture", mirror=True, rotated=False):
+    u, v = tex_offset
+    dx, dy, dz = size
+    tex_w, tex_h = tex_size
+
+    def face(u1, v1, u2, v2, rotation=0):
+        result = {"uv": uv_rect(u1, v1, u2, v2, tex_w, tex_h), "texture": texture}
+        if rotation:
+            result["rotation"] = rotation
+        return result
+
+    top = face(u + dz, v, u + dz + dx, v + dz, 90 if rotated else 0)
+    bottom = face(u + dz + dx, v, u + dz + 2 * dx, v + dz, 90 if rotated else 0)
+    front = face(u + dz, v + dz, u + dz + dx, v + dz + dy)
+    back = face(u + 2 * dz + dx, v + dz, u + 2 * dz + 2 * dx, v + dz + dy)
+    right = face(u + dz + dx, v + dz, u + 2 * dz + dx, v + dz + dy)
+    left = face(u, v + dz, u + dz, v + dz + dy)
+    if mirror:
+        right, left = left, right
+    if rotated:
+        faces = {"up": top, "down": bottom, "east": front, "west": back, "north": right, "south": left}
+    else:
+        faces = {"up": top, "down": bottom, "south": front, "north": back, "east": right, "west": left}
+    return {"from": list(start), "to": list(end), "faces": faces}
+
+
+def plane(start, end, direction, texture):
+    return {"from": list(start), "to": list(end), "faces": {direction: {"uv": [0, 0, 16, 16], "texture": texture}}}
+
+
+def crucible():
+    inset = 0.123 * 16
+    sides = {direction: {"texture": "#side", "cullface": direction} for direction in ["north", "south", "east", "west"]}
+    block_model("crucible", {
+        "parent": "minecraft:block/block",
+        "textures": {
+            "particle": ref("metalbase"),
+            "top": ref("crucible1"),
+            "bottom": ref("crucible2"),
+            "side": ref("crucible3"),
+            "inner": ref("crucible5"),
+            "floor": ref("crucible6"),
+        },
+        "elements": [
+            {"from": [0, 0, 0], "to": [16, 16, 16], "faces": {
+                "up": {"texture": "#top", "cullface": "up"},
+                "down": {"texture": "#bottom", "cullface": "down"},
+                **sides,
+            }},
+            plane([inset, 0, 0], [inset, 16, 16], "east", "#inner"),
+            plane([16 - inset, 0, 0], [16 - inset, 16, 16], "west", "#inner"),
+            plane([0, 0, inset], [16, 16, inset], "south", "#inner"),
+            plane([0, 0, 16 - inset], [16, 16, 16 - inset], "north", "#inner"),
+            plane([0, 4, 0], [16, 4, 16], "up", "#floor"),
+        ],
+    })
+    block_model("crucible_inventory", {
+        "parent": "minecraft:block/cube",
+        "textures": {
+            "particle": ref("metalbase"),
+            "up": ref("crucible4"),
+            "down": ref("crucible2"),
+            "north": ref("crucible3"),
+            "south": ref("crucible3"),
+            "east": ref("crucible3"),
+            "west": ref("crucible3"),
+        },
+    })
+    simple_state("crucible")
+    item_definition("crucible", ref("crucible_inventory"))
+    self_drop("crucible")
+    mineable("pickaxe", "crucible")
+
+
+def alembic():
+    tex = (64, 32)
+    copy_texture("model/alembic.png", "block/alembic_model.png")
+    block_model("alembic", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("goldbase"), "texture": ref("alembic_model")},
+        "elements": [
+            model_box([7, 6, -5], [9, 19, -3], (56, 0), (2, 13, 2), tex),
+            model_box([7, 4, 7], [9, 19, 9], (56, 0), (2, 15, 2), tex),
+            model_box([4, 0, 4], [12, 4, 12], (0, 20), (8, 4, 8), tex),
+            model_box([6, 16, -3], [10, 20, 7], (36, 24), (10, 4, 4), tex, rotated=True),
+            model_box([4, 4, 4], [12, 14, 12], (0, 0), (8, 10, 8), tex),
+        ],
+    })
+    facing_state("alembic")
+    block_item("alembic")
+    self_drop("alembic")
+    mineable("pickaxe", "alembic")
+
+
+WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge"}
+
+
+def devices():
+    crucible()
+    alembic()
+    for name, texture in WANDS.items():
+        item_model(name, {"parent": "minecraft:item/handheld", "textures": {"layer0": ref(texture, "item")}})
+        item_definition(name, ref(name, "item"))
+    generated_item("thaumonomicon", "thaumonomicon")
+    block_tags[f"{NS}:crucible_heaters"].update({"minecraft:lava", "#minecraft:fire", f"{NS}:nitor"})
+    block_tags[f"{NS}:crucible_bellows"].add(f"{NS}:arcane_bellows")
+
+
 ELEMENTAL_TOOLS = [f"{NS}:elemental_{tool}" for tool in ["axe", "sword", "shovel", "pickaxe", "hoe"]]
 
 
@@ -525,6 +647,7 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     world_blocks()
+    devices()
     items()
     worldgen()
     recipes()

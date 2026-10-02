@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "thaumcraft:block/metalbase",
+    "up": "thaumcraft:block/crucible4",
+    "down": "thaumcraft:block/crucible2",
+    "north": "thaumcraft:block/crucible3",
+    "south": "thaumcraft:block/crucible3",
+    "east": "thaumcraft:block/crucible3",
+    "west": "thaumcraft:block/crucible3"
+  }
+}

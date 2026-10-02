@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:fire",
+    "minecraft:lava",
+    {
+      "id": "thaumcraft:nitor",
+      "required": false
+    }
+  ]
+}

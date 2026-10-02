@@ -225,6 +225,11 @@ public final class ClientFx implements FxProxy {
     }
 
     @Override
+    public void alembicSpill(Level level, int x, int y, int z, int color) {
+        bubbles(level, x, y + 0.8, z, color, 0.01, 2);
+    }
+
+    @Override
     public void bubbles(Level level, double x, double y, double z, int color, double speed, int count) {
         if (!(level instanceof ClientLevel clientLevel)) {
             return;
