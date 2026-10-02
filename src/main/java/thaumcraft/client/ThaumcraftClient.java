@@ -15,6 +15,7 @@ import thaumcraft.client.extensions.InfusedStoneClientExtensions;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.client.render.AlembicRenderer;
+import thaumcraft.client.color.EssenceTint;
 import thaumcraft.client.render.CrucibleRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
@@ -61,6 +62,11 @@ public final class ThaumcraftClient {
         event.register(List.of(BlockTintSources.constant(colors[5])), ModBlocks.DULL_INFUSED_STONE.get());
         event.register(List.of(BlockTintSources.foliage()), ModBlocks.GREATWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
+    }
+
+    @SubscribeEvent
+    static void registerItemTints(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(Thaumcraft.id("essence"), EssenceTint.MAP_CODEC);
     }
 
     @SubscribeEvent

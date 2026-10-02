@@ -19,6 +19,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.item.EssenceItem;
+import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.ModMaterials;
 import thaumcraft.item.wand.CastingWandItem;
 
@@ -116,6 +118,8 @@ public final class ModItems {
     public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
     public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
+    public static final DeferredItem<EssentiaPhialItem> ESSENTIA_PHIAL = ITEMS.registerItem("essentia_phial", EssentiaPhialItem::new);
+    public static final DeferredItem<EssenceItem> ESSENCE = ITEMS.registerItem("essence", EssenceItem::new);
     public static final DeferredItem<Item> THAUMONOMICON = ITEMS.registerSimpleItem("thaumonomicon", properties -> properties.stacksTo(1));
 
     private ModItems() {

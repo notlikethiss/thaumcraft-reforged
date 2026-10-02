@@ -9,6 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.aspect.Aspect;
 
 public final class ModCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Thaumcraft.MODID);
@@ -18,7 +19,15 @@ public final class ModCreativeTabs {
         .icon(() -> new ItemStack(ModItems.THAUMIUM_INGOT.get()))
         .displayItems((parameters, output) -> {
             for (DeferredHolder<net.minecraft.world.item.Item, ? extends net.minecraft.world.item.Item> item : ModItems.ITEMS.getEntries()) {
-                if (CreativeTabFilter.visible(item.get(), parameters)) {
+                if (item.get() == ModItems.ESSENCE.get()) {
+                    for (Aspect aspect : Aspect.values()) {
+                        if (aspect != Aspect.UNKNOWN) {
+                            ItemStack essence = new ItemStack(item.get());
+                            essence.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+                            output.accept(essence);
+                        }
+                    }
+                } else if (CreativeTabFilter.visible(item.get(), parameters)) {
                     output.accept(item.get());
                 }
             }

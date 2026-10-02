@@ -8,4 +8,8 @@ public interface EssentiaContainer extends AspectSource {
     int getContainedAmount();
 
     int getMaxAmount();
+
+    default boolean acceptsPhials() {
+        return false;
+    }
 }
