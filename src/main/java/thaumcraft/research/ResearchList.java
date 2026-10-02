@@ -33,7 +33,7 @@ public final class ResearchList {
         maxDisplayRow = Math.max(maxDisplayRow, row);
     }
 
-    public static @Nullable ResearchItem getResearch(String key) {
+    public static @Nullable ResearchItem getResearch(@Nullable String key) {
         return RESEARCH.get(key);
     }
 

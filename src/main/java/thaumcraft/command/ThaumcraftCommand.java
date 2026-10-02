@@ -1,6 +1,7 @@
 package thaumcraft.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -10,12 +11,16 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Prediction;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import thaumcraft.Thaumcraft;
+import net.minecraft.world.item.ItemStack;
 import thaumcraft.registry.ModAttachments;
+import thaumcraft.registry.ModItems;
+import thaumcraft.research.ResearchNoteData;
 import thaumcraft.research.PlayerKnowledge;
 import thaumcraft.research.ResearchItem;
 import thaumcraft.research.ResearchList;
@@ -60,7 +65,59 @@ public final class ThaumcraftCommand {
                                 )
                         )
                 )
+                .then(
+                    Commands.literal("note")
+                        .then(
+                            Commands.argument("targets", EntityArgument.players())
+                                .then(
+                                    Commands.argument("key", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(ResearchList.RESEARCH.keySet(), builder))
+                                        .executes(
+                                            context -> giveNote(
+                                                context.getSource(),
+                                                EntityArgument.getPlayers(context, "targets"),
+                                                StringArgumentType.getString(context, "key"),
+                                                0.0F
+                                            )
+                                        )
+                                        .then(
+                                            Commands.argument("progress", FloatArgumentType.floatArg(0.0F, 1.0F))
+                                                .executes(
+                                                    context -> giveNote(
+                                                        context.getSource(),
+                                                        EntityArgument.getPlayers(context, "targets"),
+                                                        StringArgumentType.getString(context, "key"),
+                                                        FloatArgumentType.getFloat(context, "progress")
+                                                    )
+                                                )
+                                        )
+                                )
+                        )
+                )
         );
+    }
+
+    private static int giveNote(CommandSourceStack source, Collection<ServerPlayer> targets, String key, float progress) throws CommandSyntaxException {
+        ResearchItem research = ResearchList.getResearch(key);
+        if (research == null) {
+            throw UNKNOWN_RESEARCH.create(key);
+        }
+        for (ServerPlayer player : targets) {
+            ItemStack note = ResearchManager.createNote(new ItemStack(ModItems.RESEARCH_NOTES.get()), key);
+            ResearchNoteData data = ResearchManager.getData(note);
+            for (int i = 0; i < data.tags.length; i++) {
+                data.progress[i] = Math.round(research.tags.getAmount(data.tags[i]) * progress);
+            }
+            ResearchManager.updateData(note, data);
+            if (data.getTotalProgress() == 1.0F) {
+                note = ResearchManager.toDiscovery(note);
+            }
+            if (!player.getInventory().add(note)) {
+                player.drop(note, false, Prediction.SERVER_ONLY);
+            }
+        }
+        source.sendSuccess(() -> Component.literal("Gave research note " + key + " to " + targets.size() + " player(s)"), true);
+        return targets.size();
     }
 
     private static int grant(CommandSourceStack source, Collection<ServerPlayer> targets, String key) throws CommandSyntaxException {

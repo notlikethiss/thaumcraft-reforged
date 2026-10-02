@@ -1,6 +1,7 @@
 package thaumcraft.registry;
 
 import java.util.Map;
+import java.util.Set;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -18,11 +19,16 @@ public final class CreativeTabFilter {
         "native_lead_cluster", "lead"
     );
 
+    private static final Set<String> HIDDEN = Set.of("research_notes", "discovery");
+
     private CreativeTabFilter() {
     }
 
     public static boolean visible(Item item, CreativeModeTab.ItemDisplayParameters parameters) {
         String path = item.builtInRegistryHolder().key().identifier().getPath();
+        if (HIDDEN.contains(path)) {
+            return false;
+        }
         String metal = REQUIRES_METAL.get(path);
         if (metal == null) {
             return true;

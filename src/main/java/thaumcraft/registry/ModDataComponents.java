@@ -8,6 +8,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
+import thaumcraft.research.ResearchNote;
 
 public final class ModDataComponents {
     private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(net.minecraft.core.registries.Registries.DATA_COMPONENT_TYPE, Thaumcraft.MODID);
@@ -28,6 +29,11 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<Integer>> GOLEM_CORE = COMPONENTS.registerComponentType(
         "golem_core",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+
+    public static final Supplier<DataComponentType<ResearchNote>> RESEARCH_NOTE = COMPONENTS.registerComponentType(
+        "research_note",
+        builder -> builder.persistent(ResearchNote.CODEC).networkSynchronized(ResearchNote.STREAM_CODEC)
     );
 
     private ModDataComponents() {
