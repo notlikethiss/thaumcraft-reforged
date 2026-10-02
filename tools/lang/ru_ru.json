@@ -111,5 +111,9 @@
   "tc.thaumcraft.hud.flux.high": "Высокий",
   "tc.thaumcraft.hud.flux.dangerous": "Опасный",
   "tc.thaumcraft.warded_pearl": "Магия ближайшего укреплённого объекта уничтожает жемчуг Края.",
-  "block.thaumcraft.infernal_furnace": "Адская печь"
+  "block.thaumcraft.infernal_furnace": "Адская печь",
+  "tc.thaumcraft.plate_mode0": "Теперь плита срабатывает на всё.",
+  "tc.thaumcraft.plate_mode1": "Теперь плита срабатывает на всё, кроме вас.",
+  "tc.thaumcraft.plate_mode2": "Теперь плита срабатывает только на вас.",
+  "tc.thaumcraft.door_refuses": "Дверь не поддаётся."
 }

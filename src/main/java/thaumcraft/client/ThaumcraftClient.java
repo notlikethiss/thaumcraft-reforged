@@ -96,6 +96,10 @@ public final class ThaumcraftClient {
         event.register(List.of(BlockTintSources.foliage()), ModBlocks.GREATWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0xC000C0)), ModBlocks.ARCANE_STONE.get());
+        event.register(
+            List.of(BlockTintSources.constant(0x00A000), BlockTintSources.constant(0xFFFF7E), BlockTintSources.constant(0xAA33FC)),
+            ModBlocks.ARCANE_LEVITATOR.get()
+        );
         for (int index = 0; index < ConfigRecipes.WOOL_COLORS.length; index++) {
             List<BlockTintSource> tint = List.of(BlockTintSources.constant(WOOL_TINTS[index]));
             String color = ConfigRecipes.WOOL_COLORS[index];

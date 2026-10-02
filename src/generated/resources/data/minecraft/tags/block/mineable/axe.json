@@ -6,6 +6,18 @@
       "required": false
     },
     {
+      "id": "thaumcraft:arcane_ear",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:arcane_levitator",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:arcane_pressure_plate",
+      "required": false
+    },
+    {
       "id": "thaumcraft:arcane_wood",
       "required": false
     },

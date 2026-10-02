@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.JarContents;
+import thaumcraft.item.KeyLink;
 import thaumcraft.research.ResearchNote;
 
 public final class ModDataComponents {
@@ -40,6 +41,11 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<ResearchNote>> RESEARCH_NOTE = COMPONENTS.registerComponentType(
         "research_note",
         builder -> builder.persistent(ResearchNote.CODEC).networkSynchronized(ResearchNote.STREAM_CODEC)
+    );
+
+    public static final Supplier<DataComponentType<KeyLink>> KEY_LINK = COMPONENTS.registerComponentType(
+        "key_link",
+        builder -> builder.persistent(KeyLink.CODEC).networkSynchronized(KeyLink.STREAM_CODEC.cast())
     );
 
     private ModDataComponents() {

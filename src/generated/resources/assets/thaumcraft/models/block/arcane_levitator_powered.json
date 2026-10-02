@@ -1,0 +1,87 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/lifterside",
+    "top": "thaumcraft:block/liftertop",
+    "side": "thaumcraft:block/lifterside",
+    "glow": "thaumcraft:block/animatedglow"
+  },
+  "elements": [
+    {
+      "from": [
+        0.16,
+        0.16,
+        0.16
+      ],
+      "to": [
+        15.84,
+        15.84,
+        15.84
+      ],
+      "faces": {
+        "down": {
+          "texture": "#glow",
+          "tintindex": 1
+        },
+        "up": {
+          "texture": "#glow",
+          "tintindex": 0
+        },
+        "north": {
+          "texture": "#glow",
+          "tintindex": 2
+        },
+        "south": {
+          "texture": "#glow",
+          "tintindex": 2
+        },
+        "west": {
+          "texture": "#glow",
+          "tintindex": 2
+        },
+        "east": {
+          "texture": "#glow",
+          "tintindex": 2
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

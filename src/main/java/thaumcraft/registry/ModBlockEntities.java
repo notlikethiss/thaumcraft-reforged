@@ -10,6 +10,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
+import thaumcraft.blockentity.ArcaneEarBlockEntity;
+import thaumcraft.blockentity.LevitatorBlockEntity;
 import thaumcraft.blockentity.BellowsBlockEntity;
 import thaumcraft.blockentity.InfernalFurnaceBlockEntity;
 import thaumcraft.blockentity.BrainJarBlockEntity;
@@ -66,6 +68,14 @@ public final class ModBlockEntities {
         "infernal_furnace",
         () -> new BlockEntityType<>(InfernalFurnaceBlockEntity::new, ModBlocks.INFERNAL_FURNACE.get())
     );
+    public static final Supplier<BlockEntityType<ArcaneEarBlockEntity>> ARCANE_EAR = BLOCK_ENTITIES.register(
+        "arcane_ear",
+        () -> new BlockEntityType<>(ArcaneEarBlockEntity::new, ModBlocks.ARCANE_EAR.get())
+    );
+    public static final Supplier<BlockEntityType<LevitatorBlockEntity>> LEVITATOR = BLOCK_ENTITIES.register(
+        "arcane_levitator",
+        () -> new BlockEntityType<>(LevitatorBlockEntity::new, ModBlocks.ARCANE_LEVITATOR.get())
+    );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",
         () -> new BlockEntityType<>(OwnedBlockEntity::new, owned())
@@ -78,6 +88,8 @@ public final class ModBlockEntities {
         Set<Block> blocks = new HashSet<>();
         ModBlocks.WARDED_STONES.values().forEach(block -> blocks.add(block.get()));
         blocks.add(ModBlocks.WARDED_GLASS.get());
+        blocks.add(ModBlocks.ARCANE_PRESSURE_PLATE.get());
+        blocks.add(ModBlocks.ARCANE_DOOR.get());
         return blocks;
     }
 

@@ -16,6 +16,10 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.device.AlembicBlock;
+import thaumcraft.block.device.ArcaneDoorBlock;
+import thaumcraft.block.device.ArcaneEarBlock;
+import thaumcraft.block.device.ArcanePressurePlateBlock;
+import thaumcraft.block.device.LevitatorBlock;
 import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
 import thaumcraft.block.device.ResearchTableBlock;
@@ -170,6 +174,32 @@ public final class ModBlocks {
             .lightLevel(InfernalFurnaceBlock::lightLevel)
             .pushReaction(PushReaction.IMMOVEABLE)
             .noLootTable()
+    );
+    public static final DeferredBlock<ArcaneEarBlock> ARCANE_EAR = BLOCKS.registerBlock(
+        "arcane_ear",
+        ArcaneEarBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
+    );
+    public static final DeferredBlock<ArcanePressurePlateBlock> ARCANE_PRESSURE_PLATE = BLOCKS.registerBlock(
+        "arcane_pressure_plate",
+        ArcanePressurePlateBlock::new,
+        properties -> properties
+            .mapColor(MapColor.WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .noCollision()
+            .strength(2.0F, 999.0F)
+            .sound(SoundType.WOOD)
+            .pushReaction(PushReaction.IMMOVEABLE)
+    );
+    public static final DeferredBlock<ArcaneDoorBlock> ARCANE_DOOR = BLOCKS.registerBlock(
+        "arcane_door",
+        ArcaneDoorBlock::new,
+        properties -> properties.mapColor(MapColor.METAL).strength(15.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+    );
+    public static final DeferredBlock<LevitatorBlock> ARCANE_LEVITATOR = BLOCKS.registerBlock(
+        "arcane_levitator",
+        LevitatorBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 15.0F).sound(SoundType.WOOD)
     );
 
     private ModBlocks() {

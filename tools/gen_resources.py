@@ -926,8 +926,134 @@ def infernal_furnace():
     block_tags[f"{NS}:portable_hole_blacklist"].add(f"{NS}:infernal_furnace")
 
 
+def box_element(start, end, textures, tintindex=None, light=None):
+    bounds = {
+        "down": start[1] == 0, "up": end[1] == 16,
+        "north": start[2] == 0, "south": end[2] == 16,
+        "west": start[0] == 0, "east": end[0] == 16,
+    }
+    faces = {}
+    for direction in DIRECTIONS:
+        face = {"texture": textures[direction]}
+        if bounds[direction]:
+            face["cullface"] = direction
+        if tintindex is not None:
+            face["tintindex"] = tintindex[direction]
+        faces[direction] = face
+    element = {"from": start, "to": end, "faces": faces}
+    if light:
+        element["light_emission"] = light
+    return element
+
+
+def faces(top, bottom, side):
+    return {"up": top, "down": bottom, "north": side, "south": side, "west": side, "east": side}
+
+
+EAR_BELLS = [
+    ([4, 8, 1], [12, 16, 3]), ([5, 8, 3], [11, 15, 4]),
+    ([1, 8, 4], [3, 16, 12]), ([3, 8, 5], [4, 15, 11]),
+    ([4, 8, 13], [12, 16, 15]), ([5, 8, 12], [11, 15, 13]),
+    ([13, 8, 4], [15, 16, 12]), ([12, 8, 5], [13, 15, 11]),
+]
+LEVITATOR_TINTS = [0x00A000, 0xFFFF7E, 0xAA33FC]
+
+
+def door_variants(name):
+    variants = {}
+    for facing, base in {"east": 0, "south": 90, "west": 180, "north": 270}.items():
+        for half, part in [("lower", "bottom"), ("upper", "top")]:
+            for hinge in ["left", "right"]:
+                for is_open in [False, True]:
+                    model = f"{name}_{part}_{hinge}" + ("_open" if is_open else "")
+                    rotation = (base + (0 if not is_open else 90 if hinge == "left" else 270)) % 360
+                    variant = {"model": ref(model)}
+                    if rotation:
+                        variant["y"] = rotation
+                    variants[f"facing={facing},half={half},hinge={hinge},open={str(is_open).lower()}"] = variant
+    return variants
+
+
+def owned_devices():
+    ear_textures = {
+        "particle": ref("arcaneearsideon"),
+        "side": ref("arcaneearsideon"),
+        "bottom": ref("arcaneearbottom"),
+        "bell_side": ref("arcaneearbellside"),
+        "bell_top": ref("arcaneearbelltop"),
+    }
+    for suffix, top in [("", "arcaneeartopoff"), ("_on", "arcaneeartopon")]:
+        block_model(f"arcane_ear{suffix}", {
+            "parent": "minecraft:block/block",
+            "textures": {**ear_textures, "top": ref(top)},
+            "elements": [
+                box_element([0, 0, 0], [16, 3, 16], faces("#top", "#bottom", "#side")),
+                box_element([4, 3, 4], [12, 16, 12], faces("#top", "#bottom", "#side")),
+                *[box_element(start, end, faces("#bell_top", "#bell_top", "#bell_side")) for start, end in EAR_BELLS],
+            ],
+        })
+    blockstate("arcane_ear", {"variants": {
+        "powered=false": {"model": ref("arcane_ear")},
+        "powered=true": {"model": ref("arcane_ear_on")},
+    }})
+    block_item("arcane_ear")
+    self_drop("arcane_ear")
+
+    variants = {}
+    for mode in range(3):
+        for powered, parent in [("false", "pressure_plate_up"), ("true", "pressure_plate_down")]:
+            model = f"arcane_pressure_plate_{mode}" + ("_down" if powered == "true" else "")
+            block_model(model, {"parent": f"minecraft:block/{parent}", "textures": {"texture": ref(f"applate{mode + 1}")}})
+            variants[f"mode={mode},powered={powered}"] = {"model": ref(model)}
+    blockstate("arcane_pressure_plate", {"variants": variants})
+    item_definition("arcane_pressure_plate", ref("arcane_pressure_plate_0"))
+    self_drop("arcane_pressure_plate")
+
+    for part in ["bottom", "top"]:
+        for hinge in ["left", "right"]:
+            for suffix in ["", "_open"]:
+                block_model(f"arcane_door_{part}_{hinge}{suffix}", {
+                    "parent": f"minecraft:block/door_{part}_{hinge}{suffix}",
+                    "textures": {"bottom": ref("adoorbot"), "top": ref("adoortop")},
+                })
+    blockstate("arcane_door", {"variants": door_variants("arcane_door")})
+    generated_item("arcane_door", "arcanedoor")
+    loot("arcane_door", [{
+        "rolls": 1,
+        "entries": [{
+            "type": "minecraft:item",
+            "name": f"{NS}:arcane_door",
+            "condition": {"type": "minecraft:match_block", "blocks": f"{NS}:arcane_door", "state": {"half": "lower"}},
+        }],
+        "condition": {"type": "minecraft:survives_explosion"},
+    }])
+
+    generated_item("iron_arcane_key", "keyiron")
+    generated_item("gold_arcane_key", "keygold")
+
+    levitator_textures = {"particle": ref("lifterside"), "top": ref("liftertop"), "side": ref("lifterside"), "glow": ref("animatedglow")}
+    glow_tints = {"up": 0, "down": 1, "north": 2, "south": 2, "west": 2, "east": 2}
+    for suffix, light in [("", 11), ("_powered", None)]:
+        glow = box_element([0.16, 0.16, 0.16], [15.84, 15.84, 15.84], faces("#glow", "#glow", "#glow"), glow_tints, light)
+        block_model(f"arcane_levitator{suffix}", {
+            "parent": "minecraft:block/block",
+            "textures": levitator_textures,
+            "elements": [glow, box_element([0, 0, 0], [16, 16, 16], faces("#top", "#top", "#side"))],
+        })
+    blockstate("arcane_levitator", {"variants": {
+        "powered=false": {"model": ref("arcane_levitator")},
+        "powered=true": {"model": ref("arcane_levitator_powered")},
+    }})
+    block_item("arcane_levitator", [tint(color) for color in LEVITATOR_TINTS])
+    self_drop("arcane_levitator")
+
+    mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator")
+    mineable("pickaxe", "arcane_door")
+
+
 def devices():
     wards_and_decor()
+    owned_devices()
     jars()
     bellows()
     infernal_furnace()

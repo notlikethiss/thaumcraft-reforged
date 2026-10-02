@@ -110,5 +110,9 @@
   "tc.thaumcraft.hud.flux.high": "High",
   "tc.thaumcraft.hud.flux.dangerous": "Dangerous",
   "tc.thaumcraft.warded_pearl": "The magic of a nearby warded object destroys the ender pearl.",
-  "block.thaumcraft.infernal_furnace": "Infernal Furnace"
+  "block.thaumcraft.infernal_furnace": "Infernal Furnace",
+  "tc.thaumcraft.plate_mode0": "It will now trigger on everything.",
+  "tc.thaumcraft.plate_mode1": "It will now trigger on everything except you.",
+  "tc.thaumcraft.plate_mode2": "It will now trigger on just you.",
+  "tc.thaumcraft.door_refuses": "The door refuses to budge."
 }

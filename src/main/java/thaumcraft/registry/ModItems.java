@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
@@ -22,6 +23,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.item.ArcaneKeyItem;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.FilledJarItem;
@@ -137,6 +139,21 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> BRAIN_JAR = block(ModBlocks.BRAIN_JAR);
     public static final DeferredItem<FilledJarItem> FILLED_JAR = ITEMS.registerItem("filled_jar", properties -> new FilledJarItem(properties.stacksTo(8)));
     public static final DeferredItem<BlockItem> ARCANE_BELLOWS = block(ModBlocks.ARCANE_BELLOWS);
+    public static final DeferredItem<BlockItem> ARCANE_EAR = block(ModBlocks.ARCANE_EAR);
+    public static final DeferredItem<BlockItem> ARCANE_PRESSURE_PLATE = block(ModBlocks.ARCANE_PRESSURE_PLATE);
+    public static final DeferredItem<BlockItem> ARCANE_LEVITATOR = block(ModBlocks.ARCANE_LEVITATOR);
+    public static final DeferredItem<DoubleHighBlockItem> ARCANE_DOOR = ITEMS.registerItem(
+        "arcane_door",
+        properties -> new DoubleHighBlockItem(ModBlocks.ARCANE_DOOR.get(), properties.stacksTo(1).useBlockDescriptionPrefix())
+    );
+    public static final DeferredItem<ArcaneKeyItem> IRON_ARCANE_KEY = ITEMS.registerItem(
+        "iron_arcane_key",
+        properties -> new ArcaneKeyItem(0, properties.rarity(Rarity.UNCOMMON))
+    );
+    public static final DeferredItem<ArcaneKeyItem> GOLD_ARCANE_KEY = ITEMS.registerItem(
+        "gold_arcane_key",
+        properties -> new ArcaneKeyItem(1, properties.rarity(Rarity.UNCOMMON))
+    );
     public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
     public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
