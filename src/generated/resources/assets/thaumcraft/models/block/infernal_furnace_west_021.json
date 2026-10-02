@@ -1,0 +1,50 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "t6": "thaumcraft:block/furnace6",
+    "t9": "thaumcraft:block/furnace9",
+    "t7": "thaumcraft:block/furnace7",
+    "t4": "thaumcraft:block/furnace4",
+    "particle": "minecraft:block/obsidian"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#t6",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#t9",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#t7",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#t7",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#t4",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#t7",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 package thaumcraft.item.wand;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -12,11 +13,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.block.WandTarget;
+import thaumcraft.block.device.InfernalFurnaceBlock;
+import thaumcraft.research.ResearchManager;
 import thaumcraft.network.BlockSparklePayload;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModDataComponents;
@@ -49,7 +55,79 @@ public final class WandManager {
         if (state.is(BlockTags.CAULDRONS)) {
             return createCrucible(stack, player, level, pos);
         }
+        if ((state.is(Blocks.OBSIDIAN) || state.is(Blocks.NETHER_BRICKS) || state.is(Blocks.IRON_BARS))
+            && ResearchManager.isResearchComplete(player, "INFERNALFURNACE")) {
+            return createInfernalFurnace(stack, player, level, pos);
+        }
         return InteractionResult.PASS;
+    }
+
+    private static InteractionResult createInfernalFurnace(ItemStack stack, Player player, Level level, BlockPos pos) {
+        for (int x = pos.getX() - 2; x <= pos.getX(); x++) {
+            for (int y = pos.getY() - 2; y <= pos.getY(); y++) {
+                for (int z = pos.getZ() - 2; z <= pos.getZ(); z++) {
+                    BlockPos origin = new BlockPos(x, y, z);
+                    Direction grate = fitInfernalFurnace(level, origin);
+                    if (grate != null && spendCharge(level, stack, player, 100)) {
+                        if (level.isClientSide()) {
+                            return InteractionResult.SUCCESS;
+                        }
+                        replaceInfernalFurnace(level, origin, grate);
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    private static @Nullable Direction fitInfernalFurnace(Level level, BlockPos origin) {
+        Direction grate = null;
+        for (int layer = 0; layer < 3; layer++) {
+            for (int x = 0; x < 3; x++) {
+                for (int z = 0; z < 3; z++) {
+                    BlockState state = level.getBlockState(origin.offset(x, 2 - layer, z));
+                    boolean corner = x != 1 && z != 1;
+                    boolean center = x == 1 && z == 1;
+                    boolean matches;
+                    if (corner) {
+                        matches = state.is(Blocks.NETHER_BRICKS);
+                    } else if (center) {
+                        matches = switch (layer) {
+                            case 0 -> state.isAir();
+                            case 1 -> state.is(Blocks.LAVA) && state.getFluidState().isSource();
+                            default -> state.is(Blocks.OBSIDIAN);
+                        };
+                    } else {
+                        matches = state.is(Blocks.OBSIDIAN);
+                    }
+                    if (!matches) {
+                        if (layer != 1 || grate != null || center || corner || !state.is(Blocks.IRON_BARS)) {
+                            return null;
+                        }
+                        grate = Direction.getApproximateNearest(x - 1, 0, z - 1);
+                    }
+                }
+            }
+        }
+        return grate;
+    }
+
+    private static void replaceInfernalFurnace(Level level, BlockPos origin, Direction grate) {
+        BlockState base = ModBlocks.INFERNAL_FURNACE.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, grate);
+        for (int y = 0; y < 3; y++) {
+            for (int z = 0; z < 3; z++) {
+                for (int x = 0; x < 3; x++) {
+                    BlockPos target = origin.offset(x, y, z);
+                    if (level.getBlockState(target).isAir()) {
+                        continue;
+                    }
+                    BlockState state = base.setValue(InfernalFurnaceBlock.X, x).setValue(InfernalFurnaceBlock.Y, y).setValue(InfernalFurnaceBlock.Z, z);
+                    level.setBlock(target, state, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                    level.blockEvent(target, state.getBlock(), 1, 4);
+                }
+            }
+        }
     }
 
     private static InteractionResult createThaumonomicon(ItemStack stack, Player player, Level level, BlockPos pos) {

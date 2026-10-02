@@ -1,0 +1,331 @@
+{
+  "variants": {
+    "facing=north,x=0,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_000"
+    },
+    "facing=north,x=1,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_100"
+    },
+    "facing=north,x=2,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_200"
+    },
+    "facing=north,x=0,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_001"
+    },
+    "facing=north,x=1,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_101"
+    },
+    "facing=north,x=2,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_201"
+    },
+    "facing=north,x=0,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_002"
+    },
+    "facing=north,x=1,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_102"
+    },
+    "facing=north,x=2,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_202"
+    },
+    "facing=north,x=0,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_010"
+    },
+    "facing=north,x=1,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_grate",
+      "y": 270
+    },
+    "facing=north,x=2,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_210"
+    },
+    "facing=north,x=0,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_011"
+    },
+    "facing=north,x=1,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_lava"
+    },
+    "facing=north,x=2,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_211"
+    },
+    "facing=north,x=0,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_012"
+    },
+    "facing=north,x=1,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_112"
+    },
+    "facing=north,x=2,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_212"
+    },
+    "facing=north,x=0,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_020"
+    },
+    "facing=north,x=1,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_120"
+    },
+    "facing=north,x=2,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_north_220"
+    },
+    "facing=north,x=0,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_021"
+    },
+    "facing=north,x=1,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace"
+    },
+    "facing=north,x=2,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_north_221"
+    },
+    "facing=north,x=0,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_022"
+    },
+    "facing=north,x=1,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_122"
+    },
+    "facing=north,x=2,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_north_222"
+    },
+    "facing=south,x=0,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_000"
+    },
+    "facing=south,x=1,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_100"
+    },
+    "facing=south,x=2,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_200"
+    },
+    "facing=south,x=0,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_001"
+    },
+    "facing=south,x=1,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_101"
+    },
+    "facing=south,x=2,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_201"
+    },
+    "facing=south,x=0,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_002"
+    },
+    "facing=south,x=1,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_102"
+    },
+    "facing=south,x=2,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_202"
+    },
+    "facing=south,x=0,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_010"
+    },
+    "facing=south,x=1,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_110"
+    },
+    "facing=south,x=2,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_210"
+    },
+    "facing=south,x=0,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_011"
+    },
+    "facing=south,x=1,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_lava"
+    },
+    "facing=south,x=2,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_211"
+    },
+    "facing=south,x=0,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_012"
+    },
+    "facing=south,x=1,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_grate",
+      "y": 90
+    },
+    "facing=south,x=2,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_212"
+    },
+    "facing=south,x=0,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_020"
+    },
+    "facing=south,x=1,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_120"
+    },
+    "facing=south,x=2,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_south_220"
+    },
+    "facing=south,x=0,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_021"
+    },
+    "facing=south,x=1,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace"
+    },
+    "facing=south,x=2,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_south_221"
+    },
+    "facing=south,x=0,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_022"
+    },
+    "facing=south,x=1,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_122"
+    },
+    "facing=south,x=2,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_south_222"
+    },
+    "facing=west,x=0,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_000"
+    },
+    "facing=west,x=1,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_100"
+    },
+    "facing=west,x=2,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_200"
+    },
+    "facing=west,x=0,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_001"
+    },
+    "facing=west,x=1,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_101"
+    },
+    "facing=west,x=2,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_201"
+    },
+    "facing=west,x=0,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_002"
+    },
+    "facing=west,x=1,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_102"
+    },
+    "facing=west,x=2,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_202"
+    },
+    "facing=west,x=0,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_010"
+    },
+    "facing=west,x=1,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_110"
+    },
+    "facing=west,x=2,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_210"
+    },
+    "facing=west,x=0,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_grate",
+      "y": 180
+    },
+    "facing=west,x=1,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_lava"
+    },
+    "facing=west,x=2,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_211"
+    },
+    "facing=west,x=0,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_012"
+    },
+    "facing=west,x=1,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_112"
+    },
+    "facing=west,x=2,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_212"
+    },
+    "facing=west,x=0,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_020"
+    },
+    "facing=west,x=1,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_120"
+    },
+    "facing=west,x=2,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_west_220"
+    },
+    "facing=west,x=0,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_021"
+    },
+    "facing=west,x=1,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace"
+    },
+    "facing=west,x=2,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_west_221"
+    },
+    "facing=west,x=0,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_022"
+    },
+    "facing=west,x=1,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_122"
+    },
+    "facing=west,x=2,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_west_222"
+    },
+    "facing=east,x=0,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_000"
+    },
+    "facing=east,x=1,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_100"
+    },
+    "facing=east,x=2,y=0,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_200"
+    },
+    "facing=east,x=0,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_001"
+    },
+    "facing=east,x=1,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_101"
+    },
+    "facing=east,x=2,y=0,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_201"
+    },
+    "facing=east,x=0,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_002"
+    },
+    "facing=east,x=1,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_102"
+    },
+    "facing=east,x=2,y=0,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_202"
+    },
+    "facing=east,x=0,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_010"
+    },
+    "facing=east,x=1,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_110"
+    },
+    "facing=east,x=2,y=1,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_210"
+    },
+    "facing=east,x=0,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_011"
+    },
+    "facing=east,x=1,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_lava"
+    },
+    "facing=east,x=2,y=1,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_grate"
+    },
+    "facing=east,x=0,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_012"
+    },
+    "facing=east,x=1,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_112"
+    },
+    "facing=east,x=2,y=1,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_212"
+    },
+    "facing=east,x=0,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_020"
+    },
+    "facing=east,x=1,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_120"
+    },
+    "facing=east,x=2,y=2,z=0": {
+      "model": "thaumcraft:block/infernal_furnace_east_220"
+    },
+    "facing=east,x=0,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_021"
+    },
+    "facing=east,x=1,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace"
+    },
+    "facing=east,x=2,y=2,z=1": {
+      "model": "thaumcraft:block/infernal_furnace_east_221"
+    },
+    "facing=east,x=0,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_022"
+    },
+    "facing=east,x=1,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_122"
+    },
+    "facing=east,x=2,y=2,z=2": {
+      "model": "thaumcraft:block/infernal_furnace_east_222"
+    }
+  }
+}

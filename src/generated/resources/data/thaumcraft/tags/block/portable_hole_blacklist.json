@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:infernal_furnace",
+      "required": false
+    }
+  ]
+}

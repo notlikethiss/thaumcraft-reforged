@@ -20,7 +20,9 @@ import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
 import thaumcraft.block.device.ResearchTableBlock;
 import thaumcraft.block.device.TableBlock;
+import thaumcraft.block.device.BellowsBlock;
 import thaumcraft.block.device.CandleBlock;
+import thaumcraft.block.device.InfernalFurnaceBlock;
 import thaumcraft.block.device.CrucibleBlock;
 import thaumcraft.block.device.JarBlock;
 import thaumcraft.block.ward.WardedBlock;
@@ -109,7 +111,7 @@ public final class ModBlocks {
     );
     public static final DeferredBlock<Block> ARCANE_WOOD = BLOCKS.registerSimpleBlock(
         "arcane_wood",
-        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 10.0F).sound(SoundType.WOOD)
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 6.0F).sound(SoundType.WOOD)
     );
     public static final Map<String, DeferredBlock<WardedBlock>> WARDED_STONES = colored(
         ConfigRecipes.DYE_COLORS,
@@ -148,10 +150,27 @@ public final class ModBlocks {
         ConfigRecipes.WOOL_COLORS,
         "_marker",
         Block::new,
-        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD)
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD)
     );
     public static final DeferredBlock<JarBlock> WARDED_JAR = BLOCKS.registerBlock("warded_jar", properties -> new JarBlock(false, properties), ModBlocks::jar);
     public static final DeferredBlock<JarBlock> BRAIN_JAR = BLOCKS.registerBlock("brain_jar", properties -> new JarBlock(true, properties), ModBlocks::jar);
+    public static final DeferredBlock<BellowsBlock> ARCANE_BELLOWS = BLOCKS.registerBlock(
+        "arcane_bellows",
+        BellowsBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.POPPED)
+    );
+    public static final DeferredBlock<InfernalFurnaceBlock> INFERNAL_FURNACE = BLOCKS.registerBlock(
+        "infernal_furnace",
+        InfernalFurnaceBlock::new,
+        properties -> properties
+            .mapColor(MapColor.COLOR_BLACK)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .requiresCorrectToolForDrops()
+            .strength(10.0F, 599.0F)
+            .lightLevel(InfernalFurnaceBlock::lightLevel)
+            .pushReaction(PushReaction.IMMOVEABLE)
+            .noLootTable()
+    );
 
     private ModBlocks() {
     }

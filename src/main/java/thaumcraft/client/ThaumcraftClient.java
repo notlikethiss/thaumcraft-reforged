@@ -22,6 +22,8 @@ import thaumcraft.client.color.ResearchNoteTint;
 import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
+import thaumcraft.client.render.BellowsRenderer;
+import thaumcraft.client.render.BellowsSpecialRenderer;
 import thaumcraft.client.render.JarRenderer;
 import thaumcraft.client.render.JarSpecialRenderer;
 import thaumcraft.client.render.model.TcModelLayers;
@@ -115,6 +117,7 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_WORKBENCH.get(), context -> new WorkbenchWandRenderer<>(context, true));
         event.registerBlockEntityRenderer(ModBlockEntities.WARDED_JAR.get(), JarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
     }
 
     @SubscribeEvent
@@ -125,6 +128,7 @@ public final class ThaumcraftClient {
     @SubscribeEvent
     static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
         event.register(Thaumcraft.id("jar"), JarSpecialRenderer.Unbaked.MAP_CODEC);
+        event.register(Thaumcraft.id("bellows"), BellowsSpecialRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent

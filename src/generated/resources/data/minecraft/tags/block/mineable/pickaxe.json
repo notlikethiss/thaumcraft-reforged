@@ -70,6 +70,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:infernal_furnace",
+      "required": false
+    },
+    {
       "id": "thaumcraft:light_blue_warded_stone",
       "required": false
     },

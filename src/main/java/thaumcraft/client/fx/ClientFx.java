@@ -3,8 +3,10 @@ package thaumcraft.client.fx;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -29,6 +31,20 @@ public final class ClientFx implements FxProxy {
             case DECREASED -> base;
             case ALL -> base * 2;
         };
+    }
+
+    @Override
+    public void furnaceLava(Level level, int x, int y, int z, int facingX, int facingZ) {
+        RandomSource random = level.getRandom();
+        double px = x + 0.5 + (random.nextFloat() - random.nextFloat()) * 0.3 + facingX;
+        double py = y + 0.3;
+        double pz = z + 0.5 + (random.nextFloat() - random.nextFloat()) * 0.3 + facingZ;
+        Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.LAVA, px, py, pz, 0.0, 0.0, 0.0);
+        if (particle != null) {
+            float qx = facingX == 0 ? (random.nextFloat() - random.nextFloat()) * 0.5F : facingX * random.nextFloat();
+            float qz = facingZ == 0 ? (random.nextFloat() - random.nextFloat()) * 0.5F : facingZ * random.nextFloat();
+            particle.setParticleSpeed(0.15 * qx, 0.2 * random.nextFloat(), 0.15 * qz);
+        }
     }
 
     @Override

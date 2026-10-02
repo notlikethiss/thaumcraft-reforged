@@ -110,5 +110,6 @@
   "tc.thaumcraft.hud.flux.moderate": "Умеренный",
   "tc.thaumcraft.hud.flux.high": "Высокий",
   "tc.thaumcraft.hud.flux.dangerous": "Опасный",
-  "tc.thaumcraft.warded_pearl": "Магия ближайшего укреплённого объекта уничтожает жемчуг Края."
+  "tc.thaumcraft.warded_pearl": "Магия ближайшего укреплённого объекта уничтожает жемчуг Края.",
+  "block.thaumcraft.infernal_furnace": "Адская печь"
 }

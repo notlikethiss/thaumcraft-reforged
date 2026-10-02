@@ -64,4 +64,7 @@ public interface FxProxy {
 
     default void auraTransfer(Level level, float x, float y, float z, float tx, float ty, float tz) {
     }
+
+    default void furnaceLava(Level level, int x, int y, int z, int facingX, int facingZ) {
+    }
 }

@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumcraft:arcane_bellows",
+      "required": false
+    },
+    {
       "id": "thaumcraft:arcane_wood",
       "required": false
     },

@@ -803,9 +803,134 @@ def jars():
     self_drop("brain_jar")
 
 
+def bellows():
+    block_model("arcane_bellows", {"textures": {"particle": ref("woodplain")}})
+    simple_state("arcane_bellows")
+    item_model("arcane_bellows", {"parent": "minecraft:block/block", "textures": {"particle": ref("woodplain")}})
+    special_item("arcane_bellows", ref("arcane_bellows", "item"), {"type": f"{NS}:bellows"})
+    self_drop("arcane_bellows")
+    mineable("axe", "arcane_bellows")
+
+
+FURNACE_FACINGS = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}
+FURNACE_GRATE_ROTATION = {"east": 0, "south": 90, "west": 180, "north": 270}
+SIDE_NAMES = ["down", "up", "north", "south", "west", "east"]
+
+
+def furnace_world(facing):
+    fx, fz = FURNACE_FACINGS[facing]
+    world = {}
+    for y in range(3):
+        for z in range(3):
+            for x in range(3):
+                if (x, y, z) == (1, 2, 1):
+                    continue
+                meta = z * 3 + x + 1
+                if (x, y, z) == (1, 1, 1):
+                    meta = 0
+                if (x, y, z) == (1 + fx, 1, 1 + fz):
+                    meta = 10
+                world[(x, y, z)] = meta
+    return world
+
+
+def furnace_texture(world, x, y, z, side):
+    def block(dx, dy, dz):
+        return world.get((x + dx, y + dy, z + dz))
+
+    def grate(dx, dy, dz):
+        return block(dx, dy, dz) == 10
+
+    meta = world[(x, y, z)]
+    meta_above = block(0, 1, 0)
+    meta_below = block(0, -1, 0)
+    has_above = meta_above is not None
+    has_below = meta_below is not None
+    if meta_above in (10, 0):
+        meta_above = meta
+    if meta_below in (10, 0):
+        meta_below = meta
+    if meta == meta_above and meta == meta_below and has_above and has_below:
+        level = 9
+    elif meta != meta_above or not has_above or (meta == meta_below and has_below):
+        level = 0
+    else:
+        level = 18
+
+    touching = (
+        (side > 3 and (grate(0, 0, 1) or grate(0, 0, -1)))
+        or (1 < side < 4 and (grate(1, 0, 0) or grate(-1, 0, 0)))
+        or (side > 1 and (grate(0, 1, 0) or grate(0, -1, 0)))
+        or (side > 3 and (grate(0, 1, 1) or grate(0, 1, -1)))
+        or (1 < side < 4 and (grate(1, 1, 0) or grate(-1, 1, 0)))
+        or (side > 3 and (grate(0, -1, 1) or grate(0, -1, -1)))
+        or (1 < side < 4 and (grate(1, -1, 0) or grate(-1, -1, 0)))
+        or (side == 0 and grate(0, -1, 0))
+        or (side == 1 and grate(0, 1, 0))
+    )
+    add = 3 if touching else 0
+    if side in (0, 1):
+        if add != 3:
+            return 7 if meta == 5 else (meta - 1) % 3 + (meta - 1) // 3 * 9
+        return 6
+    rows = {2: {1: 2, 2: 1, 3: 0}, 3: {7: 0, 8: 1, 9: 2}, 4: {1: 0, 4: 1, 7: 2}, 5: {3: 2, 6: 1, 9: 0}}
+    column = rows[side].get(meta)
+    if column is None:
+        return 7
+    return column + level + add
+
+
+def infernal_furnace():
+    block_model("infernal_furnace_lava", {"parent": "minecraft:block/cube_all", "textures": {"all": "minecraft:block/lava_still"}})
+    block_model("infernal_furnace_grate", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("furnace13"), "bars": ref("furnace13"), "inner": ref("furnace15"), "fire": "minecraft:block/fire_0"},
+        "elements": [
+            {"from": [6, 0, 0], "to": [6, 16, 16], "shade": False, "faces": {"east": {"uv": [0, 0, 16, 16], "texture": "#bars"}}},
+            {"from": [3.2, 0, 0], "to": [3.2, 16, 16], "shade": False, "faces": {"east": {"uv": [0, 0, 16, 16], "texture": "#inner"}}},
+            {"from": [1.6, 0, 0], "to": [1.6, 24, 16], "shade": False, "faces": {"east": {"uv": [0, 0, 16, 16], "texture": "#fire"}}},
+        ],
+    })
+    block_model("infernal_furnace", {"parent": "minecraft:block/cube_all", "textures": {"all": "minecraft:block/obsidian"}})
+    variants = {}
+    for facing in FURNACE_FACINGS:
+        world = furnace_world(facing)
+        for y in range(3):
+            for z in range(3):
+                for x in range(3):
+                    key = f"facing={facing},x={x},y={y},z={z}"
+                    meta = world.get((x, y, z))
+                    if meta is None:
+                        variants[key] = {"model": ref("infernal_furnace")}
+                    elif meta == 0:
+                        variants[key] = {"model": ref("infernal_furnace_lava")}
+                    elif meta == 10:
+                        rotation = FURNACE_GRATE_ROTATION[facing]
+                        variants[key] = {"model": ref("infernal_furnace_grate"), **({"y": rotation} if rotation else {})}
+                    else:
+                        name = f"infernal_furnace_{facing}_{x}{y}{z}"
+                        faces = {}
+                        for side, direction in enumerate(SIDE_NAMES):
+                            texture = furnace_texture(world, x, y, z, side)
+                            faces[direction] = {"texture": f"#t{texture}", "cullface": direction}
+                        textures = {f"t{face['texture'][2:]}": ref(f"furnace{face['texture'][2:]}") for face in faces.values()}
+                        textures["particle"] = "minecraft:block/obsidian"
+                        block_model(name, {
+                            "parent": "minecraft:block/block",
+                            "textures": textures,
+                            "elements": [{"from": [0, 0, 0], "to": [16, 16, 16], "faces": faces}],
+                        })
+                        variants[key] = {"model": ref(name)}
+    blockstate("infernal_furnace", {"variants": variants})
+    mineable("pickaxe", "infernal_furnace")
+    block_tags[f"{NS}:portable_hole_blacklist"].add(f"{NS}:infernal_furnace")
+
+
 def devices():
     wards_and_decor()
     jars()
+    bellows()
+    infernal_furnace()
     crucible()
     alembic()
     tables()
