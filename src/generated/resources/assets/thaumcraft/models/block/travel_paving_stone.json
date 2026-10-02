@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "thaumcraft:block/travelstoneside",
+    "down": "thaumcraft:block/infusionbase",
+    "up": "minecraft:block/chiseled_quartz_block_top",
+    "north": "thaumcraft:block/travelstoneside",
+    "south": "thaumcraft:block/travelstoneside",
+    "west": "thaumcraft:block/travelstoneside",
+    "east": "thaumcraft:block/travelstoneside"
+  }
+}

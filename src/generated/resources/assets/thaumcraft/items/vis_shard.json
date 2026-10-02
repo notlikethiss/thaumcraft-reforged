@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:item/vis_shard",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -5622788
+      }
+    ]
+  }
+}

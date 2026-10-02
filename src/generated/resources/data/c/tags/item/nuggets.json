@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:lead_nugget",
+    "thaumcraft:silver_nugget",
+    "thaumcraft:tin_nugget"
+  ]
+}

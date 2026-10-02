@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:air_infused_stone",
+    "thaumcraft:amber_block",
+    "thaumcraft:amber_bricks",
+    "thaumcraft:amber_ore",
+    "thaumcraft:cinnabar_ore",
+    "thaumcraft:dull_infused_stone",
+    "thaumcraft:earth_infused_stone",
+    "thaumcraft:fire_infused_stone",
+    "thaumcraft:obsidian_tile",
+    "thaumcraft:obsidian_totem",
+    "thaumcraft:travel_paving_stone",
+    "thaumcraft:vis_infused_stone",
+    "thaumcraft:water_infused_stone"
+  ]
+}

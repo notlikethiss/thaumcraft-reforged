@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:block/fire_infused_stone",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -42495
+      }
+    ]
+  }
+}

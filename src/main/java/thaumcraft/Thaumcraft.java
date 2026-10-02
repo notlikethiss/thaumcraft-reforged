@@ -8,6 +8,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 import thaumcraft.registry.ModAttachments;
+import thaumcraft.registry.ModBlockEntities;
+import thaumcraft.registry.ModBlocks;
+import thaumcraft.registry.ModCreativeTabs;
+import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModSounds;
 
 @Mod(Thaumcraft.MODID)
@@ -16,6 +20,10 @@ public class Thaumcraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
+        ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModCreativeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
         ModAttachments.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);

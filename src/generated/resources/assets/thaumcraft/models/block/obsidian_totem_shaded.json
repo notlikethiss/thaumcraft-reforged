@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thaumcraft:block/obsidiantile",
+    "side": "thaumcraft:block/obsidiantotembaseshaded"
+  }
+}

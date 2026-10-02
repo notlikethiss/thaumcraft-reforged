@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:any_of",
+            "terms": [
+              "minecraft:tool/can_shear",
+              "minecraft:tool/can_silk_touch"
+            ]
+          },
+          "name": "thaumcraft:silverwood_leaves"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "thaumcraft:blocks/silverwood_leaves"
+}

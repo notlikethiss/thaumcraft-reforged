@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:block/vis_infused_stone",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -5622788
+      }
+    ]
+  }
+}

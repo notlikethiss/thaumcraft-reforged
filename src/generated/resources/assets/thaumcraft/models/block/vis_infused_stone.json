@@ -1,0 +1,93 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/infusedorestone",
+    "stone": "thaumcraft:block/infusedorestone",
+    "ore": "thaumcraft:block/infusedore"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#stone",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#stone",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#stone",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#stone",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#stone",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#stone",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "light_emission": 10,
+      "faces": {
+        "down": {
+          "texture": "#ore",
+          "cullface": "down",
+          "tintindex": 0
+        },
+        "up": {
+          "texture": "#ore",
+          "cullface": "up",
+          "tintindex": 0
+        },
+        "north": {
+          "texture": "#ore",
+          "cullface": "north",
+          "tintindex": 0
+        },
+        "south": {
+          "texture": "#ore",
+          "cullface": "south",
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#ore",
+          "cullface": "west",
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#ore",
+          "cullface": "east",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}
