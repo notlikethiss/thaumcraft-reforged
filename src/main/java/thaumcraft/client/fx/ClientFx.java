@@ -6,7 +6,10 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import thaumcraft.client.fx.bolt.BoltRenderer;
+import thaumcraft.client.fx.bolt.LightningBolt;
 import thaumcraft.fx.FxProxy;
 
 public final class ClientFx implements FxProxy {
@@ -274,5 +277,11 @@ public final class ClientFx implements FxProxy {
 
     @Override
     public void nodeBolt(Level level, float x, float y, float z, Entity target) {
+        double targetY = target instanceof Player ? target.getEyeY() : target.getY();
+        bolt(level, x, y, z, target.getX(), targetY, target.getZ(), 10, 2.0F, 5, 3);
+    }
+
+    public static void bolt(Level level, double x1, double y1, double z1, double x2, double y2, double z2, int duration, float multiplier, int speed, int type) {
+        BoltRenderer.add(new LightningBolt(x1, y1, z1, x2, y2, z2, level.getRandom().nextLong(), duration, multiplier, speed).setType(type).defaultFractal());
     }
 }
