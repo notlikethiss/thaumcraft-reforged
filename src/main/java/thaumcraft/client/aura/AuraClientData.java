@@ -47,6 +47,17 @@ public final class AuraClientData {
         RENDER_POSITIONS.remove(key);
     }
 
+    public static void retainDimension(ResourceKey<Level> dimension) {
+        NODES.values().removeIf(node -> {
+            if (node.dimension() == dimension) {
+                return false;
+            }
+            HISTORY.remove(node.key());
+            RENDER_POSITIONS.remove(node.key());
+            return true;
+        });
+    }
+
     public static void clear() {
         NODES.clear();
         HISTORY.clear();
