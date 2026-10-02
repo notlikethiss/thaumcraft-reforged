@@ -25,6 +25,7 @@
 - `thaumcraft/menu` меню верстаков (`MagicWorkbenchMenu` + наследники), `thaumcraft/client/screen` экраны, `thaumcraft/client/render` BER
 - `thaumcraft/research` исследования; клиентские вещи из общего кода через `ResearchClientHooks` (имя исследования, открытие книги)
 - `thaumcraft/item/wand` жезлы и `WandManager`; блоки, реагирующие на жезл, реализуют `block/WandTarget`
+- `thaumcraft/block/device` устройства, `thaumcraft/block/ward` защищённые блоки (`WardedBlock`, `WardedGlassBlock`, `WardHelper`: владелец, креатив-слом, снятие жезлом); `blockentity/OwnedBlockEntity` владелец + доступ (0 использование, 1 выдача), `safeToRemove`, восстановление через `ward/WardManager` (очередь на уровень, блок эндер-жемчуга)
 - Ресурсы (blockstates, модели, лут, рецепты) генерируются python-скриптами в `tools/`, не datagen
 - Тексты исследований: `assets/thaumcraft/research/<lang>.xml` (у русского перевода свой набор страниц)
 
@@ -42,7 +43,7 @@
 - [x] 4 аура: сервер, клиентские данные нод, рендер нод в очках (`client/render/AuraNodeRenderer`), молнии (`client/fx/bolt`), HUD очков и жезла (`client/gui/TcHud`), аспекты тигля/куба в очках (`GogglesTagRenderer`); флюкс-события с сущностями ждут фазы 8
 - [x] 5 крафт: `ThaumcraftRecipes` + `ConfigRecipes`, JSON-рецепты верстака, тигель (BE + BER, плавление, флюкс, крафт `CrucibleCrafting`), перегонный куб, жезлы (`CastingWandItem`, `WAND_VIS`, скидка `VIS_DISCOUNT`), `WandManager` (книга, тигель из котла, интерфейс `WandTarget` на блоках), фиалы и эссенции, стол → магический верстак, инфузионный верстак (2×2 `arcane_stone`); адская печь и магнит нод ждут фазы 7
 - [x] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`, тост «узнали новое», загрузчик текстов `client/research/ResearchTexts`; заметки/открытия (компонент `RESEARCH_NOTE`, `ResearchNoteData`), чернильница, эксперименты в тигле, исследовательский стол (`research_table` из двух столов + чернильница, BE, меню, экран с диаграммой), Таумономикон (`client/research/ResearchBookScreen` карта, `ResearchPageScreen` страницы всех типов, ванильные рецепты на клиенте через `ClientRecipes`), шпаргалка `thaumonomicon_cheat`, таумометр и заметки в руках как карта (`client/render/HandheldItemRenderer`, `RenderHandEvent`); `ScanManager` не переносится (в оригинале мёртвый код)
-- [ ] 7 устройства
+- [~] 7 устройства (план `~/.claude/plans/claude-md-glowing-sprout.md`): arcane wood, `{dye}_warded_stone`, `warded_glass` с рунами по краям, восстановление вардов, свечи, маркеры (без логики до фазы 8), банки `warded_jar`/`brain_jar`/`filled_jar` (`JarRenderer`, `JarSpecialRenderer`), мехи (`BellowsRenderer`), адская печь (сборка жезлом); осталось ухо, плита, дверь, ключи, левитатор, голодный сундук, кристаллы/ядро/конденсатор, зеркала, портативная дыра, бур
 - [ ] 8 существа и големы
 - [ ] 9 снаряжение (особые свойства)
 - [ ] 10 клиент и JEI
@@ -58,4 +59,5 @@
 - `/setblock` прогоняет `updateShape`, многоблочные штуки (стол исследований) ставить с режимом `strict`
 - Блочные модели из `ModelRenderer` оригинала генерируются хелпером `model_box` в `gen_resources.py` (текстура копируется в `textures/block/*_model.png`, иначе её нет в атласе блоков)
 - Теги с id мода пишутся с `"required": false`
+- Мехи ускоряют ванильную печь через access transformer (`META-INF/accesstransformer.cfg`, `AbstractFurnaceBlockEntity.cookingTimer`/`cookingTotalTime`)
 - Баги оригинала: чиним только поломки (уничтожение предметов, NPE, рассинхрон), игровые особенности 1:1
