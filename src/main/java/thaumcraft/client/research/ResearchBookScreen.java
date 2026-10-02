@@ -46,9 +46,7 @@ public class ResearchBookScreen extends Screen {
     private double mapY;
     private double targetMapX;
     private double targetMapY;
-    private int dragState;
-    private int dragMouseX;
-    private int dragMouseY;
+    private boolean dragging;
     private @Nullable ResearchItem highlight;
 
     public ResearchBookScreen() {
@@ -136,32 +134,36 @@ public class ResearchBookScreen extends Screen {
         return true;
     }
 
-    private void handleDrag(int mouseX, int mouseY) {
-        if (!minecraft.mouseHandler.isLeftPressed()) {
-            dragState = 0;
-            return;
-        }
+    private boolean insideMap(double mouseX, double mouseY) {
         int left = (width - PANE_WIDTH) / 2 + 8;
         int top = (height - PANE_HEIGHT) / 2 + 17;
-        if ((dragState == 0 || dragState == 1) && mouseX >= left && mouseX < left + 224 && mouseY >= top && mouseY < top + 196) {
-            if (dragState == 0) {
-                dragState = 1;
-            } else {
-                mapX -= mouseX - dragMouseX;
-                mapY -= mouseY - dragMouseY;
-                targetMapX = previousMapX = mapX;
-                targetMapY = previousMapY = mapY;
-            }
-            dragMouseX = mouseX;
-            dragMouseY = mouseY;
+        return mouseX >= left && mouseX < left + 224 && mouseY >= top && mouseY < top + 196;
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (!dragging) {
+            return super.mouseDragged(event, dx, dy);
         }
-        targetMapX = Mth.clamp(targetMapX, mapTop, mapBottom - 1);
-        targetMapY = Mth.clamp(targetMapY, mapLeft, mapRight - 1);
+        mapX -= dx;
+        mapY -= dy;
+        targetMapX = previousMapX = mapX;
+        targetMapY = previousMapY = mapY;
+        return true;
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (event.button() == 0) {
+            dragging = false;
+        }
+        return super.mouseReleased(event);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        handleDrag(mouseX, mouseY);
+        targetMapX = Mth.clamp(targetMapX, mapTop, mapBottom - 1);
+        targetMapY = Mth.clamp(targetMapY, mapLeft, mapRight - 1);
         int viewX = Mth.clamp(Mth.floor(previousMapX + (mapX - previousMapX) * partialTick), mapTop, mapBottom - 1);
         int viewY = Mth.clamp(Mth.floor(previousMapY + (mapY - previousMapY) * partialTick), mapLeft, mapRight - 1);
         int paneX = (width - PANE_WIDTH) / 2;
@@ -330,6 +332,10 @@ public class ResearchBookScreen extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (highlight != null && isComplete(highlight) && ResearchPageScreen.hasPages(highlight.key)) {
             minecraft.gui.setScreen(new ResearchPageScreen(highlight, mapX, mapY));
+            return true;
+        }
+        if (event.button() == 0 && insideMap(event.x(), event.y())) {
+            dragging = true;
             return true;
         }
         return super.mouseClicked(event, doubleClick);

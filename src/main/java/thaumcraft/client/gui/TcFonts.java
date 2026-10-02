@@ -9,12 +9,17 @@ import net.minecraft.resources.Identifier;
 public final class TcFonts {
     private static final FontDescription GALACTIC = new FontDescription.Resource(Identifier.withDefaultNamespace("alt"));
     private static final Style GALACTIC_STYLE = Style.EMPTY.withFont(GALACTIC);
+    private static final Style UNIFORM_STYLE = Style.EMPTY.withFont(new FontDescription.Resource(Identifier.withDefaultNamespace("uniform")));
 
     private TcFonts() {
     }
 
     public static MutableComponent galactic(String text) {
         return Component.literal(text).withStyle(GALACTIC_STYLE);
+    }
+
+    public static MutableComponent uniform(String text) {
+        return Component.literal(text).withStyle(UNIFORM_STYLE);
     }
 
     public static MutableComponent text(String text, boolean galactic) {

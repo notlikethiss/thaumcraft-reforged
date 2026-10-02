@@ -29,6 +29,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.client.gui.AspectRenderer;
+import thaumcraft.client.gui.TcFonts;
 import thaumcraft.crafting.CrucibleRecipe;
 import thaumcraft.crafting.RecipeReference;
 import thaumcraft.crafting.TcIngredient;
@@ -180,7 +181,7 @@ public class ResearchPageScreen extends Screen {
     }
 
     private void drawTextPage(GuiGraphicsExtractor graphics, int side, int x, int y, String text) {
-        List<FormattedCharSequence> lines = font.split(Component.literal(text.stripTrailing()), 139);
+        List<FormattedCharSequence> lines = font.split(TcFonts.uniform(text.stripTrailing()), 139);
         for (int i = 0; i < lines.size(); i++) {
             graphics.text(font, lines.get(i), x - 15 + side * 152, y + i * font.lineHeight, TEXT_COLOR, false);
         }
