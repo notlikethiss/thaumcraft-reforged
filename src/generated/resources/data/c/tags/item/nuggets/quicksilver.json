@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:quicksilver_drop"
+    {
+      "id": "thaumcraft:quicksilver_drop",
+      "required": false
+    }
   ]
 }

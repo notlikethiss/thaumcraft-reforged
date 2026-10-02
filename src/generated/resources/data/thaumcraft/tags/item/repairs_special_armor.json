@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:enchanted_fabric"
+    {
+      "id": "thaumcraft:enchanted_fabric",
+      "required": false
+    }
   ]
 }

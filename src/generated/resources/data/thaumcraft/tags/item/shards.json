@@ -1,11 +1,29 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:air_shard",
-    "thaumcraft:dull_shard",
-    "thaumcraft:earth_shard",
-    "thaumcraft:fire_shard",
-    "thaumcraft:vis_shard",
-    "thaumcraft:water_shard"
+    {
+      "id": "thaumcraft:air_shard",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:dull_shard",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:earth_shard",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:fire_shard",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:vis_shard",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:water_shard",
+      "required": false
+    }
   ]
 }

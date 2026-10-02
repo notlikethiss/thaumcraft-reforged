@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:cinnabar_ore"
+    {
+      "id": "thaumcraft:cinnabar_ore",
+      "required": false
+    }
   ]
 }

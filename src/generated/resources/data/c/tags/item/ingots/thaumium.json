@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:thaumium_ingot"
+    {
+      "id": "thaumcraft:thaumium_ingot",
+      "required": false
+    }
   ]
 }

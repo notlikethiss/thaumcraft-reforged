@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:greatwood_log",
-    "thaumcraft:silverwood_log"
+    {
+      "id": "thaumcraft:greatwood_log",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:silverwood_log",
+      "required": false
+    }
   ]
 }

@@ -508,13 +508,17 @@ def recipes():
         item_tags[f"{NS}:shards"].add(tc(f"{shard}_shard"))
 
 
+def tag_entries(values):
+    return [{"id": value, "required": False} if value.startswith(f"{NS}:") else value for value in sorted(values)]
+
+
 def write_tags():
     for tag, values in block_tags.items():
         namespace, path = tag.split(":")
-        write(DATA / namespace / "tags" / "block" / f"{path}.json", {"replace": False, "values": sorted(values)})
+        write(DATA / namespace / "tags" / "block" / f"{path}.json", {"replace": False, "values": tag_entries(values)})
     for tag, values in item_tags.items():
         namespace, path = tag.split(":")
-        write(DATA / namespace / "tags" / "item" / f"{path}.json", {"replace": False, "values": sorted(values)})
+        write(DATA / namespace / "tags" / "item" / f"{path}.json", {"replace": False, "values": tag_entries(values)})
 
 
 def main():

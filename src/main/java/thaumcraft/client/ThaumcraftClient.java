@@ -27,6 +27,9 @@ import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
 import thaumcraft.network.NodeZapPayload;
+import thaumcraft.network.ResearchCompletePayload;
+import thaumcraft.client.research.ResearchTexts;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
@@ -74,6 +77,12 @@ public final class ThaumcraftClient {
         event.register(AuraTransferFxPayload.TYPE, ClientPayloadHandlers::auraTransferFx);
         event.register(NodeZapPayload.TYPE, ClientPayloadHandlers::nodeZap);
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
+        event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
+    }
+
+    @SubscribeEvent
+    static void registerReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(Thaumcraft.id("research_texts"), ResearchTexts.INSTANCE);
     }
 
     @SubscribeEvent

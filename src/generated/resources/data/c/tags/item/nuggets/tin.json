@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:tin_nugget"
+    {
+      "id": "thaumcraft:tin_nugget",
+      "required": false
+    }
   ]
 }

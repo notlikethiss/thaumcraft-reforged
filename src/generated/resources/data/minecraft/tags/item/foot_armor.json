@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:robe_boots",
-    "thaumcraft:thaumium_boots"
+    {
+      "id": "thaumcraft:robe_boots",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_boots",
+      "required": false
+    }
   ]
 }

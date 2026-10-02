@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:elemental_pickaxe",
-    "thaumcraft:thaumium_pickaxe"
+    {
+      "id": "thaumcraft:elemental_pickaxe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_pickaxe",
+      "required": false
+    }
   ]
 }

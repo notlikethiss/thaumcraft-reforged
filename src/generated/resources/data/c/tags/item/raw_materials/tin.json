@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:native_tin_cluster"
+    {
+      "id": "thaumcraft:native_tin_cluster",
+      "required": false
+    }
   ]
 }

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:amber"
+    {
+      "id": "thaumcraft:amber",
+      "required": false
+    }
   ]
 }

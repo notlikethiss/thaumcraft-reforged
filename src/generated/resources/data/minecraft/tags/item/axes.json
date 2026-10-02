@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:elemental_axe",
-    "thaumcraft:thaumium_axe"
+    {
+      "id": "thaumcraft:elemental_axe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_axe",
+      "required": false
+    }
   ]
 }

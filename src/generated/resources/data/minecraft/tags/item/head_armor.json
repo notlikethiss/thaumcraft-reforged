@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:goggles_of_revealing",
-    "thaumcraft:thaumium_helmet"
+    {
+      "id": "thaumcraft:goggles_of_revealing",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_helmet",
+      "required": false
+    }
   ]
 }

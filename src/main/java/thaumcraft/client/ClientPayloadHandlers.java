@@ -13,6 +13,8 @@ import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
 import thaumcraft.network.NodeZapPayload;
+import thaumcraft.network.ResearchCompletePayload;
+import thaumcraft.client.research.ResearchToast;
 import thaumcraft.registry.ModItems;
 
 public final class ClientPayloadHandlers {
@@ -55,5 +57,9 @@ public final class ClientPayloadHandlers {
         if (target != null) {
             Fx.get().nodeBolt(player.level(), payload.from().x(), payload.from().y(), payload.from().z(), target);
         }
+    }
+
+    public static void researchComplete(ResearchCompletePayload payload, IPayloadContext context) {
+        Minecraft.getInstance().gui.toastManager().addToast(new ResearchToast(payload.key()));
     }
 }

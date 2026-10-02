@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:amber_ore",
-    "thaumcraft:cinnabar_ore"
+    {
+      "id": "thaumcraft:amber_ore",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:cinnabar_ore",
+      "required": false
+    }
   ]
 }

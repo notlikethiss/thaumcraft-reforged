@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:elemental_sword",
-    "thaumcraft:thaumium_sword"
+    {
+      "id": "thaumcraft:elemental_sword",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_sword",
+      "required": false
+    }
   ]
 }

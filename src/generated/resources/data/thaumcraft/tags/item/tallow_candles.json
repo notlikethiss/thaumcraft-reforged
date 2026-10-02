@@ -1,21 +1,69 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:black_tallow_candle",
-    "thaumcraft:blue_tallow_candle",
-    "thaumcraft:brown_tallow_candle",
-    "thaumcraft:cyan_tallow_candle",
-    "thaumcraft:gray_tallow_candle",
-    "thaumcraft:green_tallow_candle",
-    "thaumcraft:light_blue_tallow_candle",
-    "thaumcraft:light_gray_tallow_candle",
-    "thaumcraft:lime_tallow_candle",
-    "thaumcraft:magenta_tallow_candle",
-    "thaumcraft:orange_tallow_candle",
-    "thaumcraft:pink_tallow_candle",
-    "thaumcraft:purple_tallow_candle",
-    "thaumcraft:red_tallow_candle",
-    "thaumcraft:white_tallow_candle",
-    "thaumcraft:yellow_tallow_candle"
+    {
+      "id": "thaumcraft:black_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:blue_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:brown_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:cyan_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:gray_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:green_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_blue_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_gray_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:lime_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:magenta_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:orange_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:pink_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:purple_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:red_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:white_tallow_candle",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:yellow_tallow_candle",
+      "required": false
+    }
   ]
 }

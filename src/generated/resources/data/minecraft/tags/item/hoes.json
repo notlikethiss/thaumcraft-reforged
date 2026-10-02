@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:elemental_hoe",
-    "thaumcraft:thaumium_hoe"
+    {
+      "id": "thaumcraft:elemental_hoe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_hoe",
+      "required": false
+    }
   ]
 }

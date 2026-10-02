@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:elemental_shovel",
-    "thaumcraft:thaumium_shovel"
+    {
+      "id": "thaumcraft:elemental_shovel",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_shovel",
+      "required": false
+    }
   ]
 }

@@ -282,6 +282,10 @@ def convert_textures():
             if animation.exists():
                 write_animation(destination, animation)
             count += 1
+    blank = ASSETS / "textures" / "block" / "blank.png"
+    if blank.exists():
+        from PIL import Image
+        Image.new("RGBA", (16, 16), (0, 0, 0, 0)).save(blank)
     print(f"textures: {count}")
 
 

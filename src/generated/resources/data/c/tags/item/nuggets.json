@@ -1,8 +1,17 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:lead_nugget",
-    "thaumcraft:silver_nugget",
-    "thaumcraft:tin_nugget"
+    {
+      "id": "thaumcraft:lead_nugget",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:silver_nugget",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:tin_nugget",
+      "required": false
+    }
   ]
 }

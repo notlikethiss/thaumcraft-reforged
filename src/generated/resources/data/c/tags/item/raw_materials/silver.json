@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:native_silver_cluster"
+    {
+      "id": "thaumcraft:native_silver_cluster",
+      "required": false
+    }
   ]
 }

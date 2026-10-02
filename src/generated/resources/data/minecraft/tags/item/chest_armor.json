@@ -1,7 +1,13 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:robe_chestplate",
-    "thaumcraft:thaumium_chestplate"
+    {
+      "id": "thaumcraft:robe_chestplate",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_chestplate",
+      "required": false
+    }
   ]
 }

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:silver_nugget"
+    {
+      "id": "thaumcraft:silver_nugget",
+      "required": false
+    }
   ]
 }

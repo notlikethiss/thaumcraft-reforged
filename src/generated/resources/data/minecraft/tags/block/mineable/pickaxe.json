@@ -1,18 +1,57 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:air_infused_stone",
-    "thaumcraft:amber_block",
-    "thaumcraft:amber_bricks",
-    "thaumcraft:amber_ore",
-    "thaumcraft:cinnabar_ore",
-    "thaumcraft:dull_infused_stone",
-    "thaumcraft:earth_infused_stone",
-    "thaumcraft:fire_infused_stone",
-    "thaumcraft:obsidian_tile",
-    "thaumcraft:obsidian_totem",
-    "thaumcraft:travel_paving_stone",
-    "thaumcraft:vis_infused_stone",
-    "thaumcraft:water_infused_stone"
+    {
+      "id": "thaumcraft:air_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:amber_block",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:amber_bricks",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:amber_ore",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:cinnabar_ore",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:dull_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:earth_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:fire_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:obsidian_tile",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:obsidian_totem",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:travel_paving_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:vis_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:water_infused_stone",
+      "required": false
+    }
   ]
 }
