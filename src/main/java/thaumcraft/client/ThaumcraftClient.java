@@ -17,7 +17,8 @@ import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.client.render.AlembicRenderer;
 import thaumcraft.client.color.EssenceTint;
 import thaumcraft.client.color.ResearchNoteTint;
-import thaumcraft.research.ResearchNames;
+import thaumcraft.research.ResearchClientHooks;
+import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.WorkbenchWandRenderer;
 import thaumcraft.client.screen.ArcaneWorkbenchScreen;
@@ -50,7 +51,7 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 public final class ThaumcraftClient {
     public ThaumcraftClient(IEventBus modEventBus, ModContainer container) {
         Fx.set(new ClientFx());
-        ResearchNames.setResolver(ResearchTexts::name);
+        ResearchClientHooks.set(ResearchTexts::name, ResearchBookScreen::open);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 

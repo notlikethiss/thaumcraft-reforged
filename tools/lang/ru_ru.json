@@ -42,5 +42,17 @@
   "item.thaumcraft.research_notes": "Исследовательские заметки",
   "block.thaumcraft.research_table": "Исследовательский стол",
   "tc.thaumcraft.research_cursory": "Беглое",
-  "tc.thaumcraft.research_thorough": "Тщательное"
+  "tc.thaumcraft.research_thorough": "Тщательное",
+  "item.thaumcraft.thaumonomicon_cheat": "Таумономикон",
+  "tc.thaumcraft.cheat_sheet": "Шпаргалка",
+  "tc.thaumcraft.research_completed": "Исследование завершено!",
+  "tc.thaumcraft.missing_research": "Не хватает знаний",
+  "tc.thaumcraft.click_for_research": "Нажмите, чтобы открыть исследование",
+  "tc.thaumcraft.nerfed": "ОСЛАБЛЕНО",
+  "tc.thaumcraft.page.arcane": "Магический верстак",
+  "tc.thaumcraft.page.infusion": "Инфузионный алтарь",
+  "tc.thaumcraft.page.workbench": "Верстак",
+  "tc.thaumcraft.page.workbench_shapeless": "Верстак (бесформенный)",
+  "tc.thaumcraft.page.crucible": "Тигель",
+  "tc.thaumcraft.page.compound": "Мистическая конструкция"
 }

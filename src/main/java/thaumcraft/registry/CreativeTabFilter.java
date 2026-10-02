@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import thaumcraft.Config;
 
 public final class CreativeTabFilter {
     private static final Map<String, String> REQUIRES_METAL = Map.of(
@@ -28,6 +29,9 @@ public final class CreativeTabFilter {
         String path = item.builtInRegistryHolder().key().identifier().getPath();
         if (HIDDEN.contains(path)) {
             return false;
+        }
+        if (path.equals("thaumonomicon_cheat")) {
+            return Config.SPEC.isLoaded() && Config.ALLOW_CHEAT_SHEET.getAsBoolean();
         }
         String metal = REQUIRES_METAL.get(path);
         if (metal == null) {

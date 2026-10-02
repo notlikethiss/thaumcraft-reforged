@@ -23,6 +23,7 @@
 - `thaumcraft/network` payload-ы, `thaumcraft/registry` DeferredRegister-ы
 - `thaumcraft/blockentity` BE: база `TcBlockEntity` (`sync()`), `CrucibleBlockEntity`, `AlembicBlockEntity` (`EssentiaContainer`), `MagicWorkbenchBlockEntity` (11 слотов, слушатели-меню) → `ArcaneWorktableBlockEntity`, `InfusionWorkbenchBlockEntity` (источники аспектов ±12/±5)
 - `thaumcraft/menu` меню верстаков (`MagicWorkbenchMenu` + наследники), `thaumcraft/client/screen` экраны, `thaumcraft/client/render` BER
+- `thaumcraft/research` исследования; клиентские вещи из общего кода через `ResearchClientHooks` (имя исследования, открытие книги)
 - `thaumcraft/item/wand` жезлы и `WandManager`; блоки, реагирующие на жезл, реализуют `block/WandTarget`
 - Ресурсы (blockstates, модели, лут, рецепты) генерируются python-скриптами в `tools/`, не datagen
 - Тексты исследований: `assets/thaumcraft/research/<lang>.xml` (у русского перевода свой набор страниц)
@@ -40,7 +41,7 @@
 - [x] 3 генерация мира (руды, деревья, цветы, курган, обелиски, ноды) через фичу `thaumcraft:world_generation`; башня волшебника не сделана
 - [~] 4 аура: сервер готов, клиентские данные нод есть; рендер нод в очках, FX молнии ноды, сущности флюкс-событий не сделаны
 - [x] 5 крафт: `ThaumcraftRecipes` + `ConfigRecipes`, JSON-рецепты верстака, тигель (BE + BER, плавление, флюкс, крафт `CrucibleCrafting`), перегонный куб, жезлы (`CastingWandItem`, `WAND_VIS`, скидка `VIS_DISCOUNT`), `WandManager` (книга, тигель из котла, интерфейс `WandTarget` на блоках), фиалы и эссенции, стол → магический верстак, инфузионный верстак (2×2 `arcane_stone`); адская печь и магнит нод ждут фазы 7
-- [~] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`, тост «узнали новое», загрузчик текстов `client/research/ResearchTexts`; заметки/открытия (компонент `RESEARCH_NOTE`, `ResearchNoteData`), чернильница, эксперименты в тигле, исследовательский стол (`research_table` из двух столов + чернильница, BE, меню, экран с диаграммой); нет книги и таумометра
+- [~] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`, тост «узнали новое», загрузчик текстов `client/research/ResearchTexts`; заметки/открытия (компонент `RESEARCH_NOTE`, `ResearchNoteData`), чернильница, эксперименты в тигле, исследовательский стол (`research_table` из двух столов + чернильница, BE, меню, экран с диаграммой), Таумономикон (`client/research/ResearchBookScreen` карта, `ResearchPageScreen` страницы всех типов, ванильные рецепты на клиенте через `ClientRecipes`), шпаргалка `thaumonomicon_cheat`; нет таумометра
 - [ ] 7 устройства
 - [ ] 8 существа и големы
 - [ ] 9 снаряжение (особые свойства)

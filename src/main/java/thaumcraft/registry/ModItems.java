@@ -24,6 +24,7 @@ import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.ModMaterials;
 import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
+import thaumcraft.item.ThaumonomiconItem;
 import thaumcraft.item.wand.CastingWandItem;
 
 public final class ModItems {
@@ -125,7 +126,14 @@ public final class ModItems {
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
     public static final DeferredItem<EssentiaPhialItem> ESSENTIA_PHIAL = ITEMS.registerItem("essentia_phial", EssentiaPhialItem::new);
     public static final DeferredItem<EssenceItem> ESSENCE = ITEMS.registerItem("essence", EssenceItem::new);
-    public static final DeferredItem<Item> THAUMONOMICON = ITEMS.registerSimpleItem("thaumonomicon", properties -> properties.stacksTo(1));
+    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON = ITEMS.registerItem(
+        "thaumonomicon",
+        properties -> new ThaumonomiconItem(false, properties.stacksTo(1).rarity(Rarity.UNCOMMON))
+    );
+    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON_CHEAT = ITEMS.registerItem(
+        "thaumonomicon_cheat",
+        properties -> new ThaumonomiconItem(true, properties.stacksTo(1).rarity(Rarity.EPIC))
+    );
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.RARE)));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS = ITEMS.registerItem("scribing_tools", properties -> new ScribingToolsItem(properties.durability(50)));

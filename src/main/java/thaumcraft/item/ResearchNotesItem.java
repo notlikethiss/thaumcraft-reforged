@@ -16,7 +16,7 @@ import thaumcraft.registry.ModSounds;
 import thaumcraft.research.ResearchItem;
 import thaumcraft.research.ResearchList;
 import thaumcraft.research.ResearchManager;
-import thaumcraft.research.ResearchNames;
+import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.research.ResearchNoteData;
 
 public class ResearchNotesItem extends Item {
@@ -57,7 +57,7 @@ public class ResearchNotesItem extends Item {
         ResearchNoteData data = ResearchManager.getData(stack);
         float progress = data.getTotalProgress();
         if (progress >= 0.2F && data.key != null) {
-            builder.accept(Component.literal(ResearchNames.name(data.key)));
+            builder.accept(Component.literal(ResearchClientHooks.name(data.key)));
         } else {
             builder.accept(Component.translatable("tc.thaumcraft.discoveryunknown"));
         }

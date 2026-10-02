@@ -648,6 +648,7 @@ def devices():
         item_model(name, {"parent": "minecraft:item/handheld", "textures": {"layer0": ref(texture, "item")}})
         item_definition(name, ref(name, "item"))
     generated_item("thaumonomicon", "thaumonomicon")
+    generated_item("thaumonomicon_cheat", "thaumonomiconcheat")
     generated_item("scribing_tools", "inkwell")
     for name, texture in [("research_notes", "researchnotes"), ("discovery", "discovery")]:
         item_model(name, {"parent": "minecraft:item/generated", "textures": {"layer0": ref(texture, "item"), "layer1": ref(texture + "overlay", "item")}})

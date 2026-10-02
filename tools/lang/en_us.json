@@ -41,5 +41,17 @@
   "item.thaumcraft.research_notes": "Research Notes",
   "block.thaumcraft.research_table": "Research Table",
   "tc.thaumcraft.research_cursory": "Cursory",
-  "tc.thaumcraft.research_thorough": "Thorough"
+  "tc.thaumcraft.research_thorough": "Thorough",
+  "item.thaumcraft.thaumonomicon_cheat": "Thaumonomicon",
+  "tc.thaumcraft.cheat_sheet": "Cheat Sheet",
+  "tc.thaumcraft.research_completed": "Research Completed!",
+  "tc.thaumcraft.missing_research": "Missing research",
+  "tc.thaumcraft.click_for_research": "Click for research",
+  "tc.thaumcraft.nerfed": "NERFED",
+  "tc.thaumcraft.page.arcane": "Arcane Worktable",
+  "tc.thaumcraft.page.infusion": "Infusion Altar",
+  "tc.thaumcraft.page.workbench": "Workbench",
+  "tc.thaumcraft.page.workbench_shapeless": "Workbench (Shapeless)",
+  "tc.thaumcraft.page.crucible": "Crucible",
+  "tc.thaumcraft.page.compound": "Mystical Construct"
 }
