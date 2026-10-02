@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.menu.ArcaneWorkbenchMenu;
 import thaumcraft.menu.InfusionWorkbenchMenu;
+import thaumcraft.menu.ResearchTableMenu;
 
 public final class ModMenus {
     private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Thaumcraft.MODID);
@@ -20,6 +21,11 @@ public final class ModMenus {
     public static final Supplier<MenuType<InfusionWorkbenchMenu>> INFUSION_WORKBENCH = MENUS.register(
         "infusion_workbench",
         () -> IMenuTypeExtension.create(InfusionWorkbenchMenu::fromNetwork)
+    );
+
+    public static final Supplier<MenuType<ResearchTableMenu>> RESEARCH_TABLE = MENUS.register(
+        "research_table",
+        () -> IMenuTypeExtension.create(ResearchTableMenu::fromNetwork)
     );
 
     private ModMenus() {

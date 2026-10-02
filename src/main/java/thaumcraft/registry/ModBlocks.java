@@ -14,6 +14,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
+import thaumcraft.block.device.ResearchTableBlock;
 import thaumcraft.block.device.TableBlock;
 import thaumcraft.block.device.CrucibleBlock;
 import thaumcraft.block.device.NitorBlock;
@@ -86,6 +87,11 @@ public final class ModBlocks {
     public static final DeferredBlock<CrucibleBlock> CRUCIBLE = BLOCKS.registerBlock("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
     public static final DeferredBlock<AlembicBlock> ALEMBIC = BLOCKS.registerBlock("alembic", AlembicBlock::new, ModBlocks::metalDevice);
     public static final DeferredBlock<TableBlock> TABLE = BLOCKS.registerBlock("table", TableBlock::new, ModBlocks::table);
+    public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = BLOCKS.registerBlock(
+        "research_table",
+        ResearchTableBlock::new,
+        properties -> table(properties).pushReaction(PushReaction.IMMOVEABLE)
+    );
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = BLOCKS.registerBlock("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
     public static final DeferredBlock<ArcaneStoneBlock> ARCANE_STONE = BLOCKS.registerBlock(
         "arcane_stone",

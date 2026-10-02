@@ -10,6 +10,7 @@ import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.ArcaneWorktableBlockEntity;
 import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.InfusionWorkbenchBlockEntity;
+import thaumcraft.blockentity.ResearchTableBlockEntity;
 import thaumcraft.blockentity.NitorBlockEntity;
 
 public final class ModBlockEntities {
@@ -31,6 +32,10 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<ArcaneWorktableBlockEntity>> ARCANE_WORKTABLE = BLOCK_ENTITIES.register(
         "arcane_worktable",
         () -> new BlockEntityType<>(ArcaneWorktableBlockEntity::new, ModBlocks.ARCANE_WORKTABLE.get())
+    );
+    public static final Supplier<BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE = BLOCK_ENTITIES.register(
+        "research_table",
+        () -> new BlockEntityType<>(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
     );
     public static final Supplier<BlockEntityType<InfusionWorkbenchBlockEntity>> INFUSION_WORKBENCH = BLOCK_ENTITIES.register(
         "infusion_workbench",

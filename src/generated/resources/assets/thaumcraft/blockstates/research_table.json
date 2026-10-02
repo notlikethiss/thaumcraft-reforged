@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "facing=east,part=main": {
+      "model": "thaumcraft:block/research_table"
+    },
+    "facing=east,part=side": {
+      "model": "thaumcraft:block/research_table_side"
+    },
+    "facing=south,part=main": {
+      "model": "thaumcraft:block/research_table",
+      "y": 90
+    },
+    "facing=south,part=side": {
+      "model": "thaumcraft:block/research_table_side"
+    },
+    "facing=west,part=main": {
+      "model": "thaumcraft:block/research_table",
+      "y": 180
+    },
+    "facing=west,part=side": {
+      "model": "thaumcraft:block/research_table_side"
+    },
+    "facing=north,part=main": {
+      "model": "thaumcraft:block/research_table",
+      "y": 270
+    },
+    "facing=north,part=side": {
+      "model": "thaumcraft:block/research_table_side"
+    }
+  }
+}

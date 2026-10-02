@@ -38,5 +38,8 @@
   "subtitles.thaumcraft.wispdead": "Wisp dies",
   "subtitles.thaumcraft.wisplive": "Wisp hums",
   "subtitles.thaumcraft.zap": "Zap",
-  "item.thaumcraft.research_notes": "Research Notes"
+  "item.thaumcraft.research_notes": "Research Notes",
+  "block.thaumcraft.research_table": "Research Table",
+  "tc.thaumcraft.research_cursory": "Cursory",
+  "tc.thaumcraft.research_thorough": "Thorough"
 }

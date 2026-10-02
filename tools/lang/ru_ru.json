@@ -39,5 +39,8 @@
   "subtitles.thaumcraft.wispdead": "Висп гибнет",
   "subtitles.thaumcraft.wisplive": "Гудит висп",
   "subtitles.thaumcraft.zap": "Треск разряда",
-  "item.thaumcraft.research_notes": "Исследовательские заметки"
+  "item.thaumcraft.research_notes": "Исследовательские заметки",
+  "block.thaumcraft.research_table": "Исследовательский стол",
+  "tc.thaumcraft.research_cursory": "Беглое",
+  "tc.thaumcraft.research_thorough": "Тщательное"
 }

@@ -23,6 +23,7 @@ import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.ModMaterials;
 import thaumcraft.item.ResearchNotesItem;
+import thaumcraft.item.ScribingToolsItem;
 import thaumcraft.item.wand.CastingWandItem;
 
 public final class ModItems {
@@ -127,7 +128,7 @@ public final class ModItems {
     public static final DeferredItem<Item> THAUMONOMICON = ITEMS.registerSimpleItem("thaumonomicon", properties -> properties.stacksTo(1));
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.RARE)));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.EPIC)));
-    public static final DeferredItem<Item> SCRIBING_TOOLS = ITEMS.registerSimpleItem("scribing_tools", properties -> properties.durability(50));
+    public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS = ITEMS.registerItem("scribing_tools", properties -> new ScribingToolsItem(properties.durability(50)));
 
     private ModItems() {
     }

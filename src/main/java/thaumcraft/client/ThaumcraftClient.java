@@ -22,6 +22,7 @@ import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.WorkbenchWandRenderer;
 import thaumcraft.client.screen.ArcaneWorkbenchScreen;
 import thaumcraft.client.screen.InfusionWorkbenchScreen;
+import thaumcraft.client.screen.ResearchTableScreen;
 import thaumcraft.registry.ModMenus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -57,6 +58,7 @@ public final class ThaumcraftClient {
     static void registerPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(ModRenderPipelines.ADDITIVE_PARTICLE);
         event.registerPipeline(ModRenderPipelines.TRANSLUCENT_PARTICLE);
+        event.registerPipeline(ModRenderPipelines.GUI_ADDITIVE);
     }
 
     @SubscribeEvent
@@ -91,6 +93,7 @@ public final class ThaumcraftClient {
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
+        event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }
 
     @SubscribeEvent

@@ -531,7 +531,62 @@ def tables():
     simple_state("arcane_worktable")
     block_item("arcane_worktable")
     self_drop("arcane_worktable")
-    mineable("axe", "table", "arcane_worktable")
+    mineable("axe", "table", "arcane_worktable", "research_table")
+    research_table()
+
+
+def research_table():
+    copy_texture("model/restable.png", "block/restable_model.png")
+    copy_texture("misc/parchment.png", "block/parchment.png")
+    tex = (128, 64)
+    block_model("research_table", {
+        "parent": "minecraft:block/block",
+        "textures": {
+            "particle": ref("woodplain"),
+            "texture": ref("restable_model"),
+            "parchment": ref("parchment"),
+            "quill": ref("tablequill"),
+        },
+        "elements": [
+            model_box([0, 12, 0], [32, 16, 16], (0, 0), (32, 4, 16), tex),
+            model_box([2, 0, 10], [6, 12, 14], (0, 24), (4, 12, 4), tex),
+            model_box([2, 0, 2], [6, 12, 6], (0, 24), (4, 12, 4), tex),
+            model_box([26, 0, 10], [30, 12, 14], (0, 24), (4, 12, 4), tex),
+            model_box([26, 0, 2], [30, 12, 6], (0, 24), (4, 12, 4), tex),
+            model_box([4, 2, 6], [28, 6, 10], (24, 24), (24, 4, 4), tex),
+            model_box([2, 16, 2], [5, 18, 5], (0, 44), (3, 2, 3), tex),
+            {
+                "from": [13.6, 16.16, 2.4],
+                "to": [23.2, 16.16, 12],
+                "rotation": {"origin": [13.6, 16.16, 2.4], "axis": "y", "angle": -15},
+                "faces": {"up": {"uv": [0, 0, 16, 16], "texture": "#parchment"}},
+            },
+            {
+                "from": [5.6, 17.6, 2.72],
+                "to": [5.6, 25.6, 10.72],
+                "rotation": {"origin": [5.6, 17.6, 10.72], "axis": "y", "angle": 15},
+                "faces": {
+                    "east": {"uv": [16, 0, 0, 16], "texture": "#quill"},
+                    "west": {"uv": [0, 0, 16, 16], "texture": "#quill"},
+                },
+            },
+        ],
+    })
+    block_model("research_table_side", {"textures": {"particle": ref("woodplain")}})
+    rotations = {"east": 0, "south": 90, "west": 180, "north": 270}
+    variants = {}
+    for facing, angle in rotations.items():
+        main = {"model": ref("research_table")}
+        if angle:
+            main["y"] = angle
+        variants[f"facing={facing},part=main"] = main
+        variants[f"facing={facing},part=side"] = {"model": ref("research_table_side")}
+    blockstate("research_table", {"variants": variants})
+    loot("research_table", [{
+        "rolls": 1,
+        "entries": [{"type": "minecraft:item", "name": f"{NS}:table"}],
+        "condition": {"type": "minecraft:survives_explosion"},
+    }])
 
 
 ARCANE_STONE_PARTS = {

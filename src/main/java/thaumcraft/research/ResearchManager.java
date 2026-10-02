@@ -18,6 +18,7 @@ import org.jspecify.annotations.Nullable;
 import thaumcraft.Config;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
+import thaumcraft.blockentity.ResearchTableBlockEntity;
 import thaumcraft.crafting.CrucibleRecipe;
 import thaumcraft.crafting.ThaumcraftRecipes;
 import thaumcraft.network.ResearchCompletePayload;
@@ -162,6 +163,83 @@ public final class ResearchManager {
 
     public static ItemStack toDiscovery(ItemStack note) {
         return note.transmuteCopy(ModItems.DISCOVERY.get());
+    }
+
+    public static void createResearchNoteForTable(ResearchTableBlockEntity table, String key) {
+        if (table.getItem(ResearchTableBlockEntity.NOTE_SLOT).isEmpty() && table.getItem(ResearchTableBlockEntity.PAPER_SLOT).is(Items.PAPER)) {
+            table.removeItem(ResearchTableBlockEntity.PAPER_SLOT, 1);
+            table.setItem(ResearchTableBlockEntity.NOTE_SLOT, createNote(new ItemStack(ModItems.RESEARCH_NOTES.get()), key));
+        }
+    }
+
+    private static int researchIterations(int amount) {
+        return 1 + amount / 2;
+    }
+
+    public static boolean progressTableResearch(
+        Level level,
+        Player researcher,
+        ResearchTableBlockEntity table,
+        ItemStack note,
+        int baseChance,
+        int baseLoss,
+        Aspect[] inTags,
+        int[] inTagAmounts
+    ) {
+        boolean progressed = false;
+        if (baseLoss <= 0) {
+            baseLoss = 1;
+        }
+        if (!note.has(ModDataComponents.RESEARCH_NOTE.get())) {
+            String key = findLostResearch(researcher);
+            if (key != null) {
+                createNote(note, key);
+            }
+        }
+        ResearchNoteData data = getData(note);
+        ResearchItem research = ResearchList.getResearch(data.key);
+        if (research == null) {
+            table.setItem(ResearchTableBlockEntity.NOTE_SLOT, new ItemStack(ModItems.KNOWLEDGE_FRAGMENT.get(), 7 + level.getRandom().nextInt(3)));
+            return false;
+        }
+        List<Aspect> tags = research.aspectOrder();
+        for (Aspect tag : inTags) {
+            if (tag != null && !tags.contains(tag) && data.failedTags[tag.getId()] < 100) {
+                data.failedTags[tag.getId()] += (byte) Math.round((2 + level.getRandom().nextInt(baseLoss)) / 10.0F);
+            }
+        }
+        for (Aspect tag : tags) {
+            int entry = -1;
+            for (int i = 0; i < inTags.length; i++) {
+                if (inTags[i] == tag) {
+                    entry = i;
+                    break;
+                }
+            }
+            if (entry < 0) {
+                continue;
+            }
+            float chance = baseChance / 100.0F;
+            int tries = researchIterations(inTagAmounts[entry]);
+            if (tries == 0) {
+                tries = 1;
+                chance = baseChance / 2.0F;
+            }
+            for (int a = 0; a < tries; a++) {
+                if (level.getRandom().nextFloat() <= chance) {
+                    for (int q = 0; q < data.tags.length; q++) {
+                        if (data.tags[q] == tag && data.progress[q] < research.tags.getAmount(tag)) {
+                            data.progress[q]++;
+                            chance *= 0.9F;
+                            progressed = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        updateData(note, data);
+        return progressed;
     }
 
     public static boolean progressExperimentalResearch(Level level, String key, ItemStack note, int baseChance) {

@@ -1,0 +1,23 @@
+package thaumcraft.client.gui;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
+
+public final class TcFonts {
+    private static final FontDescription GALACTIC = new FontDescription.Resource(Identifier.withDefaultNamespace("alt"));
+    private static final Style GALACTIC_STYLE = Style.EMPTY.withFont(GALACTIC);
+
+    private TcFonts() {
+    }
+
+    public static MutableComponent galactic(String text) {
+        return Component.literal(text).withStyle(GALACTIC_STYLE);
+    }
+
+    public static MutableComponent text(String text, boolean galactic) {
+        return galactic ? galactic(text) : Component.literal(text);
+    }
+}
