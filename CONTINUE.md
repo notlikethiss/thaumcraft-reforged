@@ -23,7 +23,7 @@
 - `ResourceLocation` теперь `Identifier`. `EntityType.WITCH` переехал в `EntityTypes`. `GuiGraphics` теперь `GuiGraphicsExtractor`.
 - Конфиг: `ModConfig.Type.SYNCED` (типы LOCAL, CLIENT, SYNCED, STARTUP).
 - BlockEntity: `loadAdditional(ValueInput)` / `saveAdditional(ValueOutput)`, обновления через `ClientboundBlockEntityDataPacket.create(this)` + `getUpdateTag`.
-- BER: `BlockEntityRenderer<T, S extends BlockEntityRenderState>` с `createRenderState`, `extractRenderState`, `submit(state, poseStack, SubmitNodeCollector, camera)`. Произвольная геометрия: `submitNodeCollector.submitCustomGeometry(poseStack, RenderType, (pose, buffer) -> ...)`, см. `BeaconRenderer`. RenderType из `net.minecraft.client.renderer.rendertype.RenderTypes`. Спрайт блока: `Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(id)`.
+- BER: `BlockEntityRenderer<T, S extends BlockEntityRenderState>` с `createRenderState`, `extractRenderState`, `submit(state, poseStack, SubmitNodeCollector, camera)`. Произвольная геометрия: `submitNodeCollector.submitCustomGeometry(poseStack, RenderType, (pose, buffer) -> ...)`, см. `BeaconRenderer`. RenderType из `net.minecraft.client.renderer.rendertype.RenderTypes`. Спрайт блока: `Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(id)` (ключ атласа `AtlasIds`, путь `TextureAtlas.LOCATION_*` только для `RenderType`).
 - Частицы: `SingleQuadParticle` с `Layer(translucent, textureId, pipeline, oitSet)`. Наши слои и пайплайны: `client/fx/TcParticleLayers`, `ModRenderPipelines` (аддитивный = `BlendFunction.LIGHTNING`). Новые частицы наследуют `client/fx/TcParticle`.
 - Feature теперь интерфейс с `place(level, generator, random, origin)` и `MapCodec`, регистрируется в `Registries.FEATURE_TYPE`, сами фичи data-driven (`worldgen/feature`, `placed_feature`).
 - Топливо: компонент `cookingFuel(ResourceKey<ContextIntProvider>)`, JSON в `data/thaumcraft/context_int_provider/cooking/`.
@@ -37,6 +37,10 @@
 - BER с предметом: `ItemModelResolver.updateForTopItem` + `ItemStackRenderState.submit`; поворот `poseStack.rotateDegrees(Axis.XP, deg)`. `BlockAndTintGetter` лежит в `net.minecraft.client.renderer.block`.
 - Слом блока с BE: `BlockEntity.preRemoveSideEffects` (команда `/setblock` без `destroy` его не вызывает). Предмет до `useItemOn` блока: `onItemUseFirst`. `Player.drop(stack, false, Prediction.PREDICTED)`.
 - Компоненты регистрируются раньше предметов, значение по умолчанию можно задать в `Item.Properties.component(...)`.
+- Экраны: открывать через `minecraft.gui.setScreen(...)`, фон как в игре `isInGameUi() -> true`, кнопки меню `minecraft.gameMode.handleInventoryButtonClick` + `clickMenuButton`, поверх слотов рисовать после `graphics.nextStratum()`. Галактический шрифт: `FontDescription.Resource("minecraft:alt")` (`client/gui/TcFonts`). Свой GUI-пайплайн: `ModRenderPipelines.GUI_ADDITIVE`.
+- Ванильные рецепты на клиенте: `OnDatapackSyncEvent.sendRecipes(RecipeType.CRAFTING)` + `RecipesReceivedEvent` (`client/research/ClientRecipes`), отображение через `Recipe.display()` и `SlotDisplay.resolveForStacks(SlotDisplayContext.fromLevel(level))`.
+- Рендер в руке от первого лица: `RenderHandEvent` (отменить и повторить `FirstPersonHandsAndItemsRenderer.renderTwoHandedMap`), текст в мире `SubmitNodeCollector.submitText`.
+- `/setblock` прогоняет `updateShape`; многоблочные конструкции ставить с режимом `strict`.
 
 ## Архитектурные решения (не пересматривать)
 - Аспекты: `aspect/ConfigAspects.java` генерируется `tools/convert_tags.py`, реестр строится на сервере при старте и `/reload` (`AspectSync`) и синхронизируется клиенту.
@@ -48,25 +52,16 @@
 - FX вызываются через `fx.Fx.get()` (интерфейс `FxProxy`, на сервере пустой, на клиенте `client/fx/ClientFx`).
 
 ## Сделано в прошлой сессии
-- Тост `ResearchToast` по `ResearchCompletePayload`, загрузчик текстов исследований `client/research/ResearchTexts` (XML по языку клиента, откат на en_us, сбрасывается при перезагрузке ресурсов). Его же использовать для книги.
-- Клиент запускается и входит в мир без ошибок ресурсов. Исправлены: субтитры звуков, `blank.png` 16×16 (ломал мипмапы атласа), теги с id мода необязательные.
-- Фаза 5 целиком: тигель, перегонный куб, жезлы, `WandManager`, крафт в тигле, фиалы и эссенции, стол → магический верстак, инфузионный верстак. Админ-команда `/thaumcraft research <игроки> <ключ|all>`.
-- Логика тигля проверена через консоль сервера (нагрев, плавление в аспекты, слив в куб при сломе). Меню и модели визуально ещё не проверялись: при первом запуске клиента пройтись по чек-листу ниже.
+- Фаза 6 целиком (план `~/.claude/plans/luminous-spinning-hare.md`): заметки и открытия (компонент `RESEARCH_NOTE`, `ResearchNoteData`, тинт `ResearchNoteTint`), чернильница `scribing_tools`, экспериментальные открытия в тигле, исследовательский стол (`research_table` main/side, BE с бонусами окружения, `ResearchTableMenu`, `ResearchTableScreen`), Таумономикон (`ResearchBookScreen`, `ResearchPageScreen`), шпаргалка `thaumonomicon_cheat`, таумометр и заметки в руках (`HandheldItemRenderer`).
+- Команда `/thaumcraft note <игроки> <ключ> [прогресс]`.
+- Исправлен поиск атласа в `TcRenderUtil.blockSprite` (падал бы при рендере тигля и куба).
+- Сервер стартует без ошибок, логика стола проверена консолью (установка `strict`, откат половины, выброс содержимого). Визуально ничего из фаз 5-6 ещё не проверялось.
 
-## Чек-лист визуальной проверки фазы 5
-Модели тигля, куба (направление носика к тиглю), стола (поворот по оси), верстака, `arcane_stone` по частям со свечением; жидкость в тигле и её окраска; уровень в кубе; жезл на верстаке и парящий над инфузионным; экраны верстаков (тексты вис, призрачный результат, ряд аспектов); тинт эссенций; тост исследования.
-
-## Отложено из фазы 5
-- `ResearchManager.isCrucibleCreationSuccessful`: ветка с заметками (`progressExperimentalResearch`) ждёт заметок фазы 6, сейчас без исследования крафт в тигле не удаётся.
-- Адская печь и магнит нод в `WandManager` (фаза 7), снятие вардов, поворот бура жезлом, превращение голема в предмет жезлом.
-- Жидкостная capability тигля (для продвинутого сального голема), мехи (`thaumcraft:crucible_bellows` уже учитывается тиглем).
-- JEI: 47 «дублей» эссенций во вкладке, нужен subtype-интерпретатор по `ESSENCE_ASPECT` (фаза 10).
-- Поток частиц инфузии сделан на `WispParticle`, точный `FXWispArcing` в фазе 10.
+## Чек-лист визуальной проверки (фазы 5-6)
+- Фаза 5: модели тигля, куба (направление носика к тиглю), стола (поворот по оси), верстака, `arcane_stone` по частям со свечением; жидкость в тигле и её окраска; уровень в кубе; жезл на верстаке и парящий над инфузионным; экраны верстаков (тексты вис, призрачный результат, ряд аспектов); тинт эссенций; тост исследования.
+- Фаза 6: модель исследовательского стола на 2 блока по 4 сторонам (пергамент и перо, поворот), тинт заметок и открытий, экран стола (колонка аспектов с бонусами, кнопка, переключатель режима, диаграмма с линиями, всплывающий пергамент с галактическим шрифтом), книга (карта, перетаскивание, линии, рамки, тултипы, иконки), страницы всех типов (текст, тигель, верстак, магический, инфузия с циклом `C_*`, мистическая конструкция), клик по ингредиенту ведёт на исследование, шпаргалка, таумометр в руках (стрелка на ноду), заметки в руках.
 
 ## Что осталось по порядку
-
-### Фаза 6. Исследования
-Таумономикон (`GuiResearchWindow`, `GuiResearchRecipe`, рендер всех типов страниц и `RecipeReference`), загрузка XML по языку, исследовательский стол и мини-игра (`TileResearchTable`, `ResearchNoteData`, шансы из `Config`), заметки/открытия, чернильница, таумометр и `ScanManager` (аспекты сущностей `generateEntityAspects`), экспериментальные открытия в тигле, шпаргалка-книга в креативе (`ALLOW_CHEAT_SHEET`).
 
 ### Фаза 4, остаток
 Рендер нод в очках откровения и HUD (`client/lib/RenderEventHandler`, `GUITicker`), FX молнии (`FXLightningBolt*`) для `nodeBolt`, эффекты флюкса ждут сущностей (ищутся по id `thaumcraft:brainy_zombie`, `giant_brainy_zombie`, `fire_bat`, `wisp`). Флюкс-слизь `BlockFluxGoo` + падающая сущность.

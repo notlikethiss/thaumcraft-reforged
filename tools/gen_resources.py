@@ -650,6 +650,8 @@ def devices():
     generated_item("thaumonomicon", "thaumonomicon")
     generated_item("thaumonomicon_cheat", "thaumonomiconcheat")
     generated_item("scribing_tools", "inkwell")
+    item_model("thaumometer", {"parent": "minecraft:item/generated", "textures": {"layer0": ref("thaumometerring", "item"), "layer1": ref("thaumometercore", "item")}})
+    item_definition("thaumometer", ref("thaumometer", "item"))
     for name, texture in [("research_notes", "researchnotes"), ("discovery", "discovery")]:
         item_model(name, {"parent": "minecraft:item/generated", "textures": {"layer0": ref(texture, "item"), "layer1": ref(texture + "overlay", "item")}})
         item_definition(name, ref(name, "item"), [tint(0xFFFFFF), {"type": f"{NS}:research_note"}])

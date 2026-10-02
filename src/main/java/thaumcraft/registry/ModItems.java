@@ -134,6 +134,7 @@ public final class ModItems {
         "thaumonomicon_cheat",
         properties -> new ThaumonomiconItem(true, properties.stacksTo(1).rarity(Rarity.EPIC))
     );
+    public static final DeferredItem<Item> THAUMOMETER = ITEMS.registerSimpleItem("thaumometer", properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.RARE)));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS = ITEMS.registerItem("scribing_tools", properties -> new ScribingToolsItem(properties.durability(50)));
