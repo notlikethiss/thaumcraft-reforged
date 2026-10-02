@@ -108,5 +108,6 @@
   "tc.thaumcraft.hud.flux.minimal": "Minimal",
   "tc.thaumcraft.hud.flux.moderate": "Moderate",
   "tc.thaumcraft.hud.flux.high": "High",
-  "tc.thaumcraft.hud.flux.dangerous": "Dangerous"
+  "tc.thaumcraft.hud.flux.dangerous": "Dangerous",
+  "tc.thaumcraft.warded_pearl": "The magic of a nearby warded object destroys the ender pearl."
 }

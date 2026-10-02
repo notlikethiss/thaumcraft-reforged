@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:block/warded_stone",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -1341372
+      }
+    ]
+  }
+}

@@ -1,6 +1,9 @@
 package thaumcraft.registry;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -12,6 +15,7 @@ import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.InfusionWorkbenchBlockEntity;
 import thaumcraft.blockentity.ResearchTableBlockEntity;
 import thaumcraft.blockentity.NitorBlockEntity;
+import thaumcraft.blockentity.OwnedBlockEntity;
 
 public final class ModBlockEntities {
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Thaumcraft.MODID);
@@ -42,7 +46,19 @@ public final class ModBlockEntities {
         () -> new BlockEntityType<>(InfusionWorkbenchBlockEntity::new, ModBlocks.ARCANE_STONE.get())
     );
 
+    public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
+        "owned",
+        () -> new BlockEntityType<>(OwnedBlockEntity::new, owned())
+    );
+
     private ModBlockEntities() {
+    }
+
+    private static Set<Block> owned() {
+        Set<Block> blocks = new HashSet<>();
+        ModBlocks.WARDED_STONES.values().forEach(block -> blocks.add(block.get()));
+        blocks.add(ModBlocks.WARDED_GLASS.get());
+        return blocks;
     }
 
     public static void register(IEventBus bus) {

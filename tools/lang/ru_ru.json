@@ -109,5 +109,6 @@
   "tc.thaumcraft.hud.flux.minimal": "Слабый",
   "tc.thaumcraft.hud.flux.moderate": "Умеренный",
   "tc.thaumcraft.hud.flux.high": "Высокий",
-  "tc.thaumcraft.hud.flux.dangerous": "Опасный"
+  "tc.thaumcraft.hud.flux.dangerous": "Опасный",
+  "tc.thaumcraft.warded_pearl": "Магия ближайшего укреплённого объекта уничтожает жемчуг Края."
 }

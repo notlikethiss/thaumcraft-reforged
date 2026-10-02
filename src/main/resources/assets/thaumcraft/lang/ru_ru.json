@@ -311,5 +311,6 @@
   "tc.thaumcraft.vis_amount": "%s вис",
   "tc.thaumcraft.wand_too_weak": "Этот посох слишком слаб",
   "tc.thaumcraft.wandcharge": "В этом посохе %s вис",
-  "tc.thaumcraft.wandnocharge": "У посоха недостаточно заряда."
+  "tc.thaumcraft.wandnocharge": "У посоха недостаточно заряда.",
+  "tc.thaumcraft.warded_pearl": "Магия ближайшего укреплённого объекта уничтожает жемчуг Края."
 }

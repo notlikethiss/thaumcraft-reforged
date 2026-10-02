@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "thaumcraft:block/warded_glass"
+      }
+    },
+    {
+      "when": {
+        "down": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_down"
+      }
+    },
+    {
+      "when": {
+        "up": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_up"
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_north"
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_south"
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_west"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "thaumcraft:block/warded_glass_rune_east"
+      }
+    }
+  ]
+}

@@ -26,11 +26,27 @@
       "required": false
     },
     {
+      "id": "thaumcraft:black_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:blue_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:brown_warded_stone",
+      "required": false
+    },
+    {
       "id": "thaumcraft:cinnabar_ore",
       "required": false
     },
     {
       "id": "thaumcraft:crucible",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:cyan_warded_stone",
       "required": false
     },
     {
@@ -46,11 +62,51 @@
       "required": false
     },
     {
+      "id": "thaumcraft:gray_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:green_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_blue_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_gray_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:lime_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:magenta_warded_stone",
+      "required": false
+    },
+    {
       "id": "thaumcraft:obsidian_tile",
       "required": false
     },
     {
       "id": "thaumcraft:obsidian_totem",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:orange_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:pink_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:purple_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:red_warded_stone",
       "required": false
     },
     {
@@ -62,7 +118,19 @@
       "required": false
     },
     {
+      "id": "thaumcraft:warded_glass",
+      "required": false
+    },
+    {
       "id": "thaumcraft:water_infused_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:white_warded_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:yellow_warded_stone",
       "required": false
     }
   ]

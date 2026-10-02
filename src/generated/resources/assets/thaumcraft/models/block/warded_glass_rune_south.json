@@ -1,0 +1,39 @@
+{
+  "textures": {
+    "particle": "thaumcraft:block/wardedglass",
+    "all": "thaumcraft:block/wardedglass",
+    "rune": "thaumcraft:block/wardedglassrune"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        13
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rune",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#rune",
+          "cullface": "up"
+        },
+        "west": {
+          "texture": "#rune",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#rune",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

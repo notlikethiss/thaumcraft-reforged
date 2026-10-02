@@ -2,11 +2,71 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumcraft:arcane_wood",
+      "required": false
+    },
+    {
       "id": "thaumcraft:arcane_worktable",
       "required": false
     },
     {
+      "id": "thaumcraft:black_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:blue_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:brown_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:cyan_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:gray_marker",
+      "required": false
+    },
+    {
       "id": "thaumcraft:greatwood_log",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:green_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_blue_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:light_gray_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:lime_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:magenta_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:orange_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:pink_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:purple_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:red_marker",
       "required": false
     },
     {
@@ -19,6 +79,14 @@
     },
     {
       "id": "thaumcraft:table",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:white_marker",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:yellow_marker",
       "required": false
     }
   ]

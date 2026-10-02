@@ -30,6 +30,9 @@ public final class CreativeTabFilter {
         if (HIDDEN.contains(path)) {
             return false;
         }
+        if (path.endsWith("_warded_stone")) {
+            return !Config.SPEC.isLoaded() || Config.wardedStone();
+        }
         if (path.equals("thaumonomicon_cheat")) {
             return Config.SPEC.isLoaded() && Config.ALLOW_CHEAT_SHEET.getAsBoolean();
         }

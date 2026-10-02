@@ -1,5 +1,8 @@
 package thaumcraft.registry;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.UnaryOperator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -121,6 +124,14 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> TABLE = block(ModBlocks.TABLE);
     public static final DeferredItem<BlockItem> ARCANE_WORKTABLE = block(ModBlocks.ARCANE_WORKTABLE);
     public static final DeferredItem<BlockItem> ARCANE_STONE = block(ModBlocks.ARCANE_STONE);
+    public static final DeferredItem<BlockItem> ARCANE_WOOD = block(ModBlocks.ARCANE_WOOD);
+    public static final Map<String, DeferredItem<BlockItem>> WARDED_STONES = blocks(
+        ModBlocks.WARDED_STONES,
+        properties -> properties.overrideDescription("block.thaumcraft.warded_stone")
+    );
+    public static final DeferredItem<BlockItem> WARDED_GLASS = block(ModBlocks.WARDED_GLASS);
+    public static final Map<String, DeferredItem<BlockItem>> CANDLES = blocks(ModBlocks.CANDLES, properties -> properties);
+    public static final Map<String, DeferredItem<BlockItem>> MARKERS = blocks(ModBlocks.MARKERS, properties -> properties);
     public static final DeferredItem<CastingWandItem> WAND_APPRENTICE = wand("wand_apprentice", 50, 10, Rarity.UNCOMMON);
     public static final DeferredItem<CastingWandItem> WAND_ADEPT = wand("wand_adept", 250, 7, Rarity.RARE);
     public static final DeferredItem<CastingWandItem> WAND_THAUMATURGE = wand("wand_thaumaturge", 1000, 5, Rarity.EPIC);
@@ -156,6 +167,15 @@ public final class ModItems {
 
     private static DeferredItem<CastingWandItem> wand(String name, int maxVis, int interval, Rarity rarity) {
         return ITEMS.registerItem(name, properties -> new CastingWandItem(maxVis, interval, properties.rarity(rarity)));
+    }
+
+    private static Map<String, DeferredItem<BlockItem>> blocks(
+        Map<String, ? extends DeferredBlock<?>> blocks,
+        UnaryOperator<Item.Properties> properties
+    ) {
+        Map<String, DeferredItem<BlockItem>> items = new LinkedHashMap<>();
+        blocks.forEach((color, block) -> items.put(color, ITEMS.registerSimpleBlockItem(block, properties)));
+        return items;
     }
 
     private static DeferredItem<BlockItem> block(DeferredBlock<?> block) {

@@ -1,0 +1,228 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/wardedglass",
+    "all": "thaumcraft:block/wardedglass",
+    "rune": "thaumcraft:block/wardedglassrune"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#all",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#all",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#all",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#all",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#all",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#all",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rune",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#rune",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#rune",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#rune",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        13,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rune",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#rune",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#rune",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#rune",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        3
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rune",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#rune",
+          "cullface": "up"
+        },
+        "west": {
+          "texture": "#rune",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#rune",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        13
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rune",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#rune",
+          "cullface": "up"
+        },
+        "west": {
+          "texture": "#rune",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#rune",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rune",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#rune",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#rune",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#rune",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rune",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#rune",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#rune",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#rune",
+          "cullface": "south"
+        }
+      }
+    }
+  ]
+}

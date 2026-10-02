@@ -311,5 +311,6 @@
   "tc.thaumcraft.vis_amount": "%s vis",
   "tc.thaumcraft.wand_too_weak": "This wand is too weak",
   "tc.thaumcraft.wandcharge": "This wand currently holds %s vis",
-  "tc.thaumcraft.wandnocharge": "The wand does not have enough charge to do that."
+  "tc.thaumcraft.wandnocharge": "The wand does not have enough charge to do that.",
+  "tc.thaumcraft.warded_pearl": "The magic of a nearby warded object destroys the ender pearl."
 }

@@ -1,5 +1,9 @@
 package thaumcraft.registry;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -16,7 +20,11 @@ import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
 import thaumcraft.block.device.ResearchTableBlock;
 import thaumcraft.block.device.TableBlock;
+import thaumcraft.block.device.CandleBlock;
 import thaumcraft.block.device.CrucibleBlock;
+import thaumcraft.block.ward.WardedBlock;
+import thaumcraft.block.ward.WardedGlassBlock;
+import thaumcraft.crafting.ConfigRecipes;
 import thaumcraft.block.device.NitorBlock;
 import thaumcraft.block.world.AmberBlock;
 import thaumcraft.block.world.InfusedStoneBlock;
@@ -98,8 +106,64 @@ public final class ModBlocks {
         ArcaneStoneBlock::new,
         properties -> stone(properties).strength(4.0F, 100.0F).noOcclusion()
     );
+    public static final DeferredBlock<Block> ARCANE_WOOD = BLOCKS.registerSimpleBlock(
+        "arcane_wood",
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 10.0F).sound(SoundType.WOOD)
+    );
+    public static final Map<String, DeferredBlock<WardedBlock>> WARDED_STONES = colored(
+        ConfigRecipes.DYE_COLORS,
+        "_warded_stone",
+        WardedBlock::new,
+        properties -> stone(properties).strength(10.0F, 599.0F).pushReaction(PushReaction.IMMOVEABLE).overrideDescription("block.thaumcraft.warded_stone")
+    );
+    public static final DeferredBlock<WardedGlassBlock> WARDED_GLASS = BLOCKS.registerBlock(
+        "warded_glass",
+        WardedGlassBlock::new,
+        properties -> properties
+            .mapColor(MapColor.NONE)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(5.0F, 999.0F)
+            .sound(SoundType.STONE)
+            .noOcclusion()
+            .pushReaction(PushReaction.IMMOVEABLE)
+            .isValidSpawn((state, level, pos, entity) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos, aabb) -> false)
+    );
+    public static final Map<String, DeferredBlock<CandleBlock>> CANDLES = colored(
+        ConfigRecipes.WOOL_COLORS,
+        "_tallow_candle",
+        CandleBlock::new,
+        properties -> properties
+            .mapColor(MapColor.WOOL)
+            .noCollision()
+            .strength(0.1F)
+            .sound(SoundType.WOOL)
+            .lightLevel(state -> 14)
+            .pushReaction(PushReaction.POPPED)
+    );
+    public static final Map<String, DeferredBlock<Block>> MARKERS = colored(
+        ConfigRecipes.WOOL_COLORS,
+        "_marker",
+        Block::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD)
+    );
 
     private ModBlocks() {
+    }
+
+    private static <B extends Block> Map<String, DeferredBlock<B>> colored(
+        String[] colors,
+        String suffix,
+        Function<BlockBehaviour.Properties, B> factory,
+        UnaryOperator<BlockBehaviour.Properties> properties
+    ) {
+        Map<String, DeferredBlock<B>> blocks = new LinkedHashMap<>();
+        for (String color : colors) {
+            blocks.put(color, BLOCKS.registerBlock(color + suffix, factory, properties));
+        }
+        return blocks;
     }
 
     private static DeferredBlock<InfusedStoneBlock> infusedStone(String name, int type) {

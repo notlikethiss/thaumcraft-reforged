@@ -12,6 +12,14 @@ NS = "thaumcraft"
 INFUSED_COLORS = [0xFFFFFF, 0xFFFF7E, 0xFF5A01, 0x0090FF, 0x00A000, 0xAA33FC, 0xB0B0BC]
 FOLIAGE_DEFAULT = 0x48B518
 SILVERWOOD_COLOR = 0x8899AA
+WOOL_COLORS = [
+    "white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray",
+    "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black",
+]
+WOOL_TINTS = [
+    0xF0F0F0, 0xEB8844, 0xC354CD, 0x6689D3, 0xDECF2A, 0x41CD34, 0xD88198, 0x434343,
+    0xA0A0A0, 0x287697, 0x7B2FBE, 0x253192, 0x51301A, 0x3B511A, 0xB3312C, 0x1E1B1B,
+]
 
 block_tags = defaultdict(set)
 item_tags = defaultdict(set)
@@ -639,7 +647,149 @@ def arcane_stone():
 WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge"}
 
 
+def full_cube(texture, tintindex=None):
+    face = {"texture": texture}
+    if tintindex is not None:
+        face["tintindex"] = tintindex
+    return {
+        "from": [0, 0, 0],
+        "to": [16, 16, 16],
+        "faces": {direction: {**face, "cullface": direction} for direction in DIRECTIONS},
+    }
+
+
+DIRECTIONS = ["down", "up", "north", "south", "west", "east"]
+PERPENDICULAR = {
+    "down": ["north", "south", "west", "east"],
+    "up": ["north", "south", "west", "east"],
+    "north": ["down", "up", "west", "east"],
+    "south": ["down", "up", "west", "east"],
+    "west": ["down", "up", "north", "south"],
+    "east": ["down", "up", "north", "south"],
+}
+RUNE_SLABS = {
+    "down": ([0, 0, 0], [16, 3, 16]),
+    "up": ([0, 13, 0], [16, 16, 16]),
+    "north": ([0, 0, 0], [16, 16, 3]),
+    "south": ([0, 0, 13], [16, 16, 16]),
+    "west": ([0, 0, 0], [3, 16, 16]),
+    "east": ([13, 0, 0], [16, 16, 16]),
+}
+
+
+def rune_strip(direction):
+    start, end = RUNE_SLABS[direction]
+    return {
+        "from": start,
+        "to": end,
+        "faces": {face: {"texture": "#rune", "cullface": face} for face in PERPENDICULAR[direction]},
+    }
+
+
+def candle_drips(seed):
+    import random
+    rng = random.Random(seed)
+    drips = []
+    for index in range(1 + rng.randrange(5)):
+        side = rng.random() < 0.5
+        loc = 2 + rng.randrange(2)
+        height = 1 + rng.randrange(3)
+        if index % 2 == 0:
+            start = [5 + loc, 0, 5 if side else 10]
+            end = [6 + loc, height, 6 if side else 11]
+        else:
+            start = [5 if side else 10, 0, 5 + loc]
+            end = [6 if side else 11, height, 6 + loc]
+        drips.append({
+            "from": start,
+            "to": end,
+            "faces": {direction: {"texture": "#candle", "tintindex": 0} for direction in DIRECTIONS},
+        })
+    return drips
+
+
+def candle_elements(drips):
+    column = {
+        "from": [6, 0, 6],
+        "to": [10, 8, 10],
+        "faces": {direction: {"texture": "#candle", "tintindex": 0} for direction in DIRECTIONS},
+    }
+    wick = {
+        "from": [7.6, 8, 7.6],
+        "to": [8.4, 10, 8.4],
+        "faces": {direction: {"texture": "#stub"} for direction in DIRECTIONS if direction != "down"},
+    }
+    return [column, *drips, wick]
+
+
+def wards_and_decor():
+    cube_all("arcane_wood", "arcanewoodblock")
+    simple_state("arcane_wood")
+    block_item("arcane_wood")
+    self_drop("arcane_wood")
+    mineable("axe", "arcane_wood")
+    block_tags["minecraft:beacon_base_blocks"].add(f"{NS}:arcane_wood")
+
+    block_model("warded_stone", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("wardedstone"), "all": ref("wardedstone")},
+        "elements": [full_cube("#all", 0)],
+    })
+    for color, value in zip(WOOL_COLORS, WOOL_TINTS):
+        name = f"{color}_warded_stone"
+        simple_state(name, ref("warded_stone"))
+        item_definition(name, ref("warded_stone"), [tint(value)])
+        self_drop(name)
+        mineable("pickaxe", name)
+
+    glass_textures = {"particle": ref("wardedglass"), "all": ref("wardedglass"), "rune": ref("wardedglassrune")}
+    block_model("warded_glass", {"parent": "minecraft:block/block", "textures": glass_textures, "elements": [full_cube("#all")]})
+    for direction in DIRECTIONS:
+        block_model(f"warded_glass_rune_{direction}", {"textures": glass_textures, "elements": [rune_strip(direction)]})
+    blockstate("warded_glass", {"multipart": [
+        {"apply": {"model": ref("warded_glass")}},
+        *[
+            {"when": {direction: "false"}, "apply": {"model": ref(f"warded_glass_rune_{direction}")}}
+            for direction in DIRECTIONS
+        ],
+    ]})
+    item_model("warded_glass", {
+        "parent": "minecraft:block/block",
+        "textures": glass_textures,
+        "elements": [full_cube("#all"), *[rune_strip(direction) for direction in DIRECTIONS]],
+    })
+    item_definition("warded_glass", ref("warded_glass", "item"))
+    mineable("pickaxe", "warded_glass")
+
+    candle_textures = {"particle": ref("candle"), "candle": ref("candle"), "stub": ref("candlestub")}
+    for variant in range(4):
+        block_model(f"tallow_candle_{variant}", {
+            "parent": "minecraft:block/block",
+            "textures": candle_textures,
+            "elements": candle_elements(candle_drips(variant * 7919 + 13)),
+        })
+    item_model("tallow_candle", {"parent": "minecraft:block/block", "textures": candle_textures, "elements": candle_elements([])})
+    for color, value in zip(WOOL_COLORS, WOOL_TINTS):
+        name = f"{color}_tallow_candle"
+        blockstate(name, {"variants": {"": [{"model": ref(f"tallow_candle_{variant}")} for variant in range(4)]}})
+        item_definition(name, ref("tallow_candle", "item"), [tint(value)])
+        self_drop(name)
+
+    block_model("marker", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("marker"), "base": ref("marker"), "inset": ref("markerinset")},
+        "elements": [full_cube("#base"), full_cube("#inset", 0)],
+    })
+    for color, value in zip(WOOL_COLORS, WOOL_TINTS):
+        name = f"{color}_marker"
+        simple_state(name, ref("marker"))
+        item_definition(name, ref("marker"), [tint(value)])
+        self_drop(name)
+        mineable("axe", name)
+
+
 def devices():
+    wards_and_decor()
     crucible()
     alembic()
     tables()
@@ -690,10 +840,6 @@ def worldgen():
     chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
 
 
-WOOL_COLORS = [
-    "white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray",
-    "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black",
-]
 
 
 def mod_ids(values):

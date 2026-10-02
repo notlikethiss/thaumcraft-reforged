@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:item/tallow_candle",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -10057261
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "thaumcraft:block/marker",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -8704066
+      }
+    ]
+  }
+}

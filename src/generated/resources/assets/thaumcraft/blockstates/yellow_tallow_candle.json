@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "thaumcraft:block/tallow_candle_0"
+      },
+      {
+        "model": "thaumcraft:block/tallow_candle_1"
+      },
+      {
+        "model": "thaumcraft:block/tallow_candle_2"
+      },
+      {
+        "model": "thaumcraft:block/tallow_candle_3"
+      }
+    ]
+  }
+}

@@ -7,7 +7,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import java.util.List;
+import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.color.block.BlockTintSources;
+import thaumcraft.crafting.ConfigRecipes;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -52,6 +54,11 @@ import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class ThaumcraftClient {
+    private static final int[] WOOL_TINTS = {
+        0xF0F0F0, 0xEB8844, 0xC354CD, 0x6689D3, 0xDECF2A, 0x41CD34, 0xD88198, 0x434343,
+        0xA0A0A0, 0x287697, 0x7B2FBE, 0x253192, 0x51301A, 0x3B511A, 0xB3312C, 0x1E1B1B,
+    };
+
     public ThaumcraftClient(IEventBus modEventBus, ModContainer container) {
         Fx.set(new ClientFx());
         ResearchClientHooks.set(ResearchTexts::name, ResearchBookScreen::open);
@@ -82,6 +89,11 @@ public final class ThaumcraftClient {
         event.register(List.of(BlockTintSources.foliage()), ModBlocks.GREATWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
         event.register(List.of(BlockTintSources.constant(0xC000C0)), ModBlocks.ARCANE_STONE.get());
+        for (int index = 0; index < ConfigRecipes.WOOL_COLORS.length; index++) {
+            List<BlockTintSource> tint = List.of(BlockTintSources.constant(WOOL_TINTS[index]));
+            String color = ConfigRecipes.WOOL_COLORS[index];
+            event.register(tint, ModBlocks.CANDLES.get(color).get(), ModBlocks.MARKERS.get(color).get(), ModBlocks.WARDED_STONES.get(color).get());
+        }
     }
 
     @SubscribeEvent

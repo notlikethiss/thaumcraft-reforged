@@ -1,0 +1,92 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/marker",
+    "base": "thaumcraft:block/marker",
+    "inset": "thaumcraft:block/markerinset"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#base",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#base",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#base",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#base",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#base",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#base",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#inset",
+          "tintindex": 0,
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}
