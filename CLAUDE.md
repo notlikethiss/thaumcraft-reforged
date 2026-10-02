@@ -21,6 +21,9 @@
 - `thaumcraft/aspect` аспекты: `Aspect` (EnumTag), `AspectList` (ObjectTags), `AspectRegistry` (теги + генерация из рецептов), `AspectHelper` (стек: зелья, бонусы, зачарования)
 - `thaumcraft/aura` ноды ауры: `AuraManager` (бывшие статические мапы + флюкс-события), `AuraTicker` (тик на главном потоке вместо 3 потоков), ноды хранятся в attachment чанка `AuraChunkData`, id нод в `AuraIdData`
 - `thaumcraft/network` payload-ы, `thaumcraft/registry` DeferredRegister-ы
+- `thaumcraft/blockentity` BE: база `TcBlockEntity` (`sync()`), `CrucibleBlockEntity`, `AlembicBlockEntity` (`EssentiaContainer`), `MagicWorkbenchBlockEntity` (11 слотов, слушатели-меню) → `ArcaneWorktableBlockEntity`, `InfusionWorkbenchBlockEntity` (источники аспектов ±12/±5)
+- `thaumcraft/menu` меню верстаков (`MagicWorkbenchMenu` + наследники), `thaumcraft/client/screen` экраны, `thaumcraft/client/render` BER
+- `thaumcraft/item/wand` жезлы и `WandManager`; блоки, реагирующие на жезл, реализуют `block/WandTarget`
 - Ресурсы (blockstates, модели, лут, рецепты) генерируются python-скриптами в `tools/`, не datagen
 - Тексты исследований: `assets/thaumcraft/research/<lang>.xml` (у русского перевода свой набор страниц)
 
@@ -36,8 +39,8 @@
 - [~] 2 контент: мировые блоки, ресурсы, осколки, самородки, еда, инструменты и броня (базовые), нитор, аспекты с синхронизацией и оверлеем
 - [x] 3 генерация мира (руды, деревья, цветы, курган, обелиски, ноды) через фичу `thaumcraft:world_generation`; башня волшебника не сделана
 - [~] 4 аура: сервер готов, клиентские данные нод есть; рендер нод в очках, FX молнии ноды, сущности флюкс-событий не сделаны
-- [~] 5 крафт: `ThaumcraftRecipes` + `ConfigRecipes` (все рецепты TC), JSON-рецепты верстака; дальше: тигель (BE + BER), перегонный куб, жезлы (`WAND_VIS`), WandManager, верстаки
-- [~] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`; нет книги, стола, заметок, сканирования, клиентского обработчика `ResearchCompletePayload`
+- [x] 5 крафт: `ThaumcraftRecipes` + `ConfigRecipes`, JSON-рецепты верстака, тигель (BE + BER, плавление, флюкс, крафт `CrucibleCrafting`), перегонный куб, жезлы (`CastingWandItem`, `WAND_VIS`, скидка `VIS_DISCOUNT`), `WandManager` (книга, тигель из котла, интерфейс `WandTarget` на блоках), фиалы и эссенции, стол → магический верстак, инфузионный верстак (2×2 `arcane_stone`); адская печь и магнит нод ждут фазы 7
+- [~] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`, тост «узнали новое», загрузчик текстов `client/research/ResearchTexts`; нет книги, стола, заметок (открытие в тигле пока всегда неудачно), сканирования
 - [ ] 7 устройства
 - [ ] 8 существа и големы
 - [ ] 9 снаряжение (особые свойства)
@@ -48,4 +51,8 @@
 - Продвинутый тигель/перегонный куб (meta 5-7) в оригинале недостижимы, не переносятся
 - Тин/серебро/свинец: предметы есть, рецепты переплавки кластеров не делаются (нет конкретного слитка)
 - Рецепты с предметами TC имеют условие `neoforge:registered`, включаются по мере регистрации предметов
-- Проверка сервера: `./gradlew runServer` (папка `run/`)
+- Проверка сервера: `./gradlew runServer` (папка `run/`), stdin проброшен: `tail -f cmds | ./gradlew runServer`, команды дописываются в файл `cmds`
+- Админ-команда `/thaumcraft research <игроки> <ключ|all>` выдаёт исследования (для проверки до появления заметок)
+- Блочные модели из `ModelRenderer` оригинала генерируются хелпером `model_box` в `gen_resources.py` (текстура копируется в `textures/block/*_model.png`, иначе её нет в атласе блоков)
+- Теги с id мода пишутся с `"required": false`
+- Баги оригинала: чиним только поломки (уничтожение предметов, NPE, рассинхрон), игровые особенности 1:1

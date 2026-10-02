@@ -13,7 +13,7 @@
 
 ## Окружение и команды
 - `JAVA_HOME=/opt/homebrew/opt/openjdk@25 ./gradlew compileJava --console=plain -q 2>&1 | grep -E "error:" -A2`
-- Сервер для проверки: `./gradlew runServer` в фоне (игровая папка `run/`), ждать строку `Done (` в логе. Остановка: `kill` по PID java-процесса DevLaunch.
+- Сервер для проверки: `tail -f cmds | ./gradlew runServer` в фоне (stdin проброшен в `build.gradle`, игровая папка `run/`), ждать строку `Done (` в логе, команды дописывать в файл `cmds` (`forceload add 0 0`, `setblock ... destroy`, `data get block ...`). Остановка: `kill` по PID процесса с `serverRunProgramArgs`.
 - Ресурсы: `python3 tools/gen_resources.py` (пишет в `src/generated/resources`, полностью пересоздаёт папку), `python3 tools/convert_assets.py` (текстуры, звуки, lang в `src/main/resources`). Доп. строки перевода в `tools/lang/en_us.json`, `tools/lang/ru_ru.json`, после правки перезапустить `convert_assets.py`.
 - Справочники (в .gitignore): `reference/decompiled/thaumcraft/...` (оригинал с MCP-именами), `reference/mc/` (исходники MC 26.3 + ванильные assets/data), `reference/neo/` (NeoForge).
 - Оболочка zsh: в `grep --include=*.java` экранировать glob или не использовать.
@@ -32,6 +32,11 @@
 - Цвета блоков: `RegisterColorHandlersEvent.BlockTintSources`, у предметов тинты в `items/*.json`.
 - Броня: `Item.Properties.humanoidArmor(ArmorMaterial, ArmorType)`, ассеты в `assets/thaumcraft/equipment/*.json`.
 - Payload-ы: `registrar.playToClient(type, codec)` без хендлера, клиентский хендлер в `RegisterClientPayloadHandlersEvent` (`client/ThaumcraftClient`).
+- Меню: `IMenuTypeExtension.create(factory)`, открытие `player.openMenu(provider, pos)`, экраны в `RegisterMenuScreensEvent`. Экран: `extractBackground`, `extractLabels`, `extractTooltip`, тултип `graphics.setTooltipForNextFrame(font, list, Optional.empty(), x, y)`. Ванильный крафт на сервере: `serverLevel.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, level)`, остаток предмета `item.getCraftingRemainder()` (`ItemStackTemplate`).
+- Тосты: `Minecraft.getInstance().gui.toastManager()`. Тинты предметов: свой `ItemTintSource` + `RegisterColorHandlersEvent.ItemTintSources`.
+- BER с предметом: `ItemModelResolver.updateForTopItem` + `ItemStackRenderState.submit`; поворот `poseStack.rotateDegrees(Axis.XP, deg)`. `BlockAndTintGetter` лежит в `net.minecraft.client.renderer.block`.
+- Слом блока с BE: `BlockEntity.preRemoveSideEffects` (команда `/setblock` без `destroy` его не вызывает). Предмет до `useItemOn` блока: `onItemUseFirst`. `Player.drop(stack, false, Prediction.PREDICTED)`.
+- Компоненты регистрируются раньше предметов, значение по умолчанию можно задать в `Item.Properties.component(...)`.
 
 ## Архитектурные решения (не пересматривать)
 - Аспекты: `aspect/ConfigAspects.java` генерируется `tools/convert_tags.py`, реестр строится на сервере при старте и `/reload` (`AspectSync`) и синхронизируется клиенту.
@@ -42,20 +47,23 @@
 - Метаданные расплющены в отдельные блоки и предметы. Имена новых id смотреть в `tools/convert_assets.py` (`build_key_map`), `tools/convert_research.py` (ICONS/SIMPLE) и `ConfigRecipes.java`. Ядро голема хранится в компоненте `GOLEM_CORE` предмета-голема. Варды-камни по цветам красителя: `{dye}_warded_stone`, свечи и маркеры по цветам шерсти.
 - FX вызываются через `fx.Fx.get()` (интерфейс `FxProxy`, на сервере пустой, на клиенте `client/fx/ClientFx`).
 
-## Срочно исправить первым делом
-- `ResearchCompletePayload` отправляется сервером, но клиентского хендлера нет. Зарегистрировать в `ThaumcraftClient.registerPayloadHandlers` (класть ключ в очередь всплывающих уведомлений «You've learned something new!», звук `thaumcraft:learn`). Без этого клиент, возможно, отключается при завершении исследования.
-- Клиент ни разу не запускался: проверить `./gradlew runClient` на ошибки моделей, текстур, пайплайнов частиц.
+## Сделано в прошлой сессии
+- Тост `ResearchToast` по `ResearchCompletePayload`, загрузчик текстов исследований `client/research/ResearchTexts` (XML по языку клиента, откат на en_us, сбрасывается при перезагрузке ресурсов). Его же использовать для книги.
+- Клиент запускается и входит в мир без ошибок ресурсов. Исправлены: субтитры звуков, `blank.png` 16×16 (ломал мипмапы атласа), теги с id мода необязательные.
+- Фаза 5 целиком: тигель, перегонный куб, жезлы, `WandManager`, крафт в тигле, фиалы и эссенции, стол → магический верстак, инфузионный верстак. Админ-команда `/thaumcraft research <игроки> <ключ|all>`.
+- Логика тигля проверена через консоль сервера (нагрев, плавление в аспекты, слив в куб при сломе). Меню и модели визуально ещё не проверялись: при первом запуске клиента пройтись по чек-листу ниже.
+
+## Чек-лист визуальной проверки фазы 5
+Модели тигля, куба (направление носика к тиглю), стола (поворот по оси), верстака, `arcane_stone` по частям со свечением; жидкость в тигле и её окраска; уровень в кубе; жезл на верстаке и парящий над инфузионным; экраны верстаков (тексты вис, призрачный результат, ряд аспектов); тинт эссенций; тост исследования.
+
+## Отложено из фазы 5
+- `ResearchManager.isCrucibleCreationSuccessful`: ветка с заметками (`progressExperimentalResearch`) ждёт заметок фазы 6, сейчас без исследования крафт в тигле не удаётся.
+- Адская печь и магнит нод в `WandManager` (фаза 7), снятие вардов, поворот бура жезлом, превращение голема в предмет жезлом.
+- Жидкостная capability тигля (для продвинутого сального голема), мехи (`thaumcraft:crucible_bellows` уже учитывается тиглем).
+- JEI: 47 «дублей» эссенций во вкладке, нужен subtype-интерпретатор по `ESSENCE_ASPECT` (фаза 10).
+- Поток частиц инфузии сделан на `WispParticle`, точный `FXWispArcing` в фазе 10.
 
 ## Что осталось по порядку
-
-### Фаза 5. Жезлы и крафт (в работе)
-1. Базовый `blockentity/TcBlockEntity` с синхронизацией (getUpdateTag/packet, метод `sync()` = setChanged + sendBlockUpdated).
-2. Тигель: `CrucibleBlock` (форма с вырезом, `entityInside` плавит предметы через `AspectHelper.getObjectTagsWithBonus` и бьёт мобов, заливка водяным ведром, `onRemove` сливает остаток), `CrucibleBlockEntity` (heat, liquid, AspectList, нагрев от лавы/огня/нитора под ним, мехи по бокам, переполнение > 500 даёт флюкс, `spillRemnants` в перегонные кубы), события блока 1 = искры, 2 = бурление (`triggerEvent`). Оригинал: `common/blocks/BlockCrucible.java`, `common/tiles/TileCrucible.java`. BER жидкости по `client/renderers/tile/TileCrucibleRenderer.java`. JSON-модель котла (внешние стороны crucible1-3, внутренние crucible5/6). FX уже есть (`crucibleBoil`, `crucibleFroth`, `crucibleBubble`).
-3. Перегонный куб `alembic` (facing, BE с одним аспектом до 16, отдаёт через `AspectSource`), рендер `ModelAlembic` + уровень жидкости. Оригинал `TileAlembic`, `TileAlembicRenderer`.
-4. Жезлы: `CastingWandItem(maxVis, interval, rarity)` (ученик 50/10, адепт 250/7, тауматург 1000/5), компонент `WAND_VIS`, подзарядка `AuraManager.decreaseClosestAura`, подсказка `tc.thaumcraft.wandcharge`. `WandManager` (spendCharge со скидкой `IVisDiscounter` до 50%, Таумономикон из книжной полки, тигель из котла, адская печь, магнит нод, инфузионный верстак, перегонный куб → тигель). Взаимодействие с блоками TC через интерфейс на блоке. Оригинал `common/items/wands/`.
-5. Эссенции: `essentia_phial` и `essence` (компонент `ESSENCE_ASPECT`, реализует `AspectProvidingItem`), набор из куба и банки.
-6. Стол, магический верстак (Menu + Screen, слот жезла, стоимость вис), инфузионный верстак (мультиблок 2x2 из arcane_stone, берёт аспекты из источников рядом). Оригинал `TileArcaneWorkbench`, `TileInfusionWorkbench`, `GuiArcaneWorkbench`, `GuiInfusionWorkbench`.
-7. Крафт в тигле: `performCrucibleCrafting` и `isCrucibleCreationSuccessful` из `ThaumcraftCraftingManager` и `ResearchManager` оригинала.
 
 ### Фаза 6. Исследования
 Таумономикон (`GuiResearchWindow`, `GuiResearchRecipe`, рендер всех типов страниц и `RecipeReference`), загрузка XML по языку, исследовательский стол и мини-игра (`TileResearchTable`, `ResearchNoteData`, шансы из `Config`), заметки/открытия, чернильница, таумометр и `ScanManager` (аспекты сущностей `generateEntityAspects`), экспериментальные открытия в тигле, шпаргалка-книга в креативе (`ALLOW_CHEAT_SHEET`).
