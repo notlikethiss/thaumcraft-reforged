@@ -1,0 +1,203 @@
+{
+  "brain": {
+    "subtitle": "subtitles.thaumcraft.brain",
+    "sounds": [
+      "thaumcraft:brain1",
+      "thaumcraft:brain2",
+      "thaumcraft:brain3",
+      "thaumcraft:brain4"
+    ]
+  },
+  "bubble": {
+    "subtitle": "subtitles.thaumcraft.bubble",
+    "sounds": [
+      "thaumcraft:bubble1",
+      "thaumcraft:bubble2",
+      "thaumcraft:bubble3",
+      "thaumcraft:bubble4"
+    ]
+  },
+  "crystal": {
+    "subtitle": "subtitles.thaumcraft.crystal",
+    "sounds": [
+      "thaumcraft:crystal1"
+    ]
+  },
+  "doorfail": {
+    "subtitle": "subtitles.thaumcraft.doorfail",
+    "sounds": [
+      "thaumcraft:doorfail"
+    ]
+  },
+  "dw": {
+    "subtitle": "subtitles.thaumcraft.dw",
+    "sounds": [
+      "thaumcraft:dw"
+    ]
+  },
+  "fireloop": {
+    "subtitle": "subtitles.thaumcraft.fireloop",
+    "sounds": [
+      "thaumcraft:fireloop"
+    ]
+  },
+  "golemiron": {
+    "subtitle": "subtitles.thaumcraft.golemiron",
+    "sounds": [
+      "thaumcraft:golemiron1",
+      "thaumcraft:golemiron2",
+      "thaumcraft:golemiron3"
+    ]
+  },
+  "golemironshoot": {
+    "subtitle": "subtitles.thaumcraft.golemironshoot",
+    "sounds": [
+      "thaumcraft:golemironshoot"
+    ]
+  },
+  "golemstone": {
+    "subtitle": "subtitles.thaumcraft.golemstone",
+    "sounds": [
+      "thaumcraft:golemstone1",
+      "thaumcraft:golemstone2",
+      "thaumcraft:golemstone3"
+    ]
+  },
+  "golemwood": {
+    "subtitle": "subtitles.thaumcraft.golemwood",
+    "sounds": [
+      "thaumcraft:golemwood1",
+      "thaumcraft:golemwood2",
+      "thaumcraft:golemwood3"
+    ]
+  },
+  "hhoff": {
+    "subtitle": "subtitles.thaumcraft.hhoff",
+    "sounds": [
+      "thaumcraft:hhoff"
+    ]
+  },
+  "hhon": {
+    "subtitle": "subtitles.thaumcraft.hhon",
+    "sounds": [
+      "thaumcraft:hhon"
+    ]
+  },
+  "ice": {
+    "subtitle": "subtitles.thaumcraft.ice",
+    "sounds": [
+      "thaumcraft:ice1",
+      "thaumcraft:ice2",
+      "thaumcraft:ice3"
+    ]
+  },
+  "jacobs": {
+    "subtitle": "subtitles.thaumcraft.jacobs",
+    "sounds": [
+      "thaumcraft:jacobs"
+    ]
+  },
+  "jar": {
+    "subtitle": "subtitles.thaumcraft.jar",
+    "sounds": [
+      "thaumcraft:jar1",
+      "thaumcraft:jar2",
+      "thaumcraft:jar3",
+      "thaumcraft:jar4"
+    ]
+  },
+  "key": {
+    "subtitle": "subtitles.thaumcraft.key",
+    "sounds": [
+      "thaumcraft:key"
+    ]
+  },
+  "learn": {
+    "subtitle": "subtitles.thaumcraft.learn",
+    "sounds": [
+      "thaumcraft:learn"
+    ]
+  },
+  "page": {
+    "subtitle": "subtitles.thaumcraft.page",
+    "sounds": [
+      "thaumcraft:page1",
+      "thaumcraft:page2"
+    ]
+  },
+  "rumble": {
+    "subtitle": "subtitles.thaumcraft.rumble",
+    "sounds": [
+      "thaumcraft:rumble"
+    ]
+  },
+  "shock": {
+    "subtitle": "subtitles.thaumcraft.shock",
+    "sounds": [
+      "thaumcraft:shock1",
+      "thaumcraft:shock2"
+    ]
+  },
+  "spill": {
+    "subtitle": "subtitles.thaumcraft.spill",
+    "sounds": [
+      "thaumcraft:spill"
+    ]
+  },
+  "swing": {
+    "subtitle": "subtitles.thaumcraft.swing",
+    "sounds": [
+      "thaumcraft:swing1",
+      "thaumcraft:swing2"
+    ]
+  },
+  "tool": {
+    "subtitle": "subtitles.thaumcraft.tool",
+    "sounds": [
+      "thaumcraft:tool1",
+      "thaumcraft:tool2"
+    ]
+  },
+  "wand": {
+    "subtitle": "subtitles.thaumcraft.wand",
+    "sounds": [
+      "thaumcraft:wand1",
+      "thaumcraft:wand2",
+      "thaumcraft:wand3"
+    ]
+  },
+  "wandfail": {
+    "subtitle": "subtitles.thaumcraft.wandfail",
+    "sounds": [
+      "thaumcraft:wandfail"
+    ]
+  },
+  "wind": {
+    "subtitle": "subtitles.thaumcraft.wind",
+    "sounds": [
+      "thaumcraft:wind1",
+      "thaumcraft:wind2"
+    ]
+  },
+  "wispdead": {
+    "subtitle": "subtitles.thaumcraft.wispdead",
+    "sounds": [
+      "thaumcraft:wispdead"
+    ]
+  },
+  "wisplive": {
+    "subtitle": "subtitles.thaumcraft.wisplive",
+    "sounds": [
+      "thaumcraft:wisplive1",
+      "thaumcraft:wisplive2",
+      "thaumcraft:wisplive3"
+    ]
+  },
+  "zap": {
+    "subtitle": "subtitles.thaumcraft.zap",
+    "sounds": [
+      "thaumcraft:zap1",
+      "thaumcraft:zap2"
+    ]
+  }
+}
