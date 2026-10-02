@@ -28,7 +28,10 @@ import thaumcraft.registry.ModMenus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import thaumcraft.client.gui.TcHud;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import thaumcraft.Thaumcraft;
@@ -60,6 +63,11 @@ public final class ThaumcraftClient {
         event.registerPipeline(ModRenderPipelines.ADDITIVE_PARTICLE);
         event.registerPipeline(ModRenderPipelines.TRANSLUCENT_PARTICLE);
         event.registerPipeline(ModRenderPipelines.GUI_ADDITIVE);
+    }
+
+    @SubscribeEvent
+    static void registerGuiLayers(RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("hud"), TcHud::render);
     }
 
     @SubscribeEvent

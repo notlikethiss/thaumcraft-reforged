@@ -102,5 +102,11 @@
   "aspect.thaumcraft.wood.meaning": "Wood, Forest, Tree",
   "aspect.thaumcraft.flower.meaning": "Flower, Bloom, Blossom",
   "aspect.thaumcraft.fungus.meaning": "Mushroom, Toadstool, Fungi",
-  "aspect.thaumcraft.crop.meaning": "Crops, Harvest"
+  "aspect.thaumcraft.crop.meaning": "Crops, Harvest",
+  "tc.thaumcraft.hud.flux": "F: %s",
+  "tc.thaumcraft.hud.flux.none": "None",
+  "tc.thaumcraft.hud.flux.minimal": "Minimal",
+  "tc.thaumcraft.hud.flux.moderate": "Moderate",
+  "tc.thaumcraft.hud.flux.high": "High",
+  "tc.thaumcraft.hud.flux.dangerous": "Dangerous"
 }

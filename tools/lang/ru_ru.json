@@ -103,5 +103,11 @@
   "aspect.thaumcraft.wood.meaning": "Дерево, Лес, Древесина",
   "aspect.thaumcraft.flower.meaning": "Цветок, Цветение, Бутон",
   "aspect.thaumcraft.fungus.meaning": "Гриб, Поганка, Грибы",
-  "aspect.thaumcraft.crop.meaning": "Посевы, Урожай"
+  "aspect.thaumcraft.crop.meaning": "Посевы, Урожай",
+  "tc.thaumcraft.hud.flux": "Ф: %s",
+  "tc.thaumcraft.hud.flux.none": "Нет",
+  "tc.thaumcraft.hud.flux.minimal": "Слабый",
+  "tc.thaumcraft.hud.flux.moderate": "Умеренный",
+  "tc.thaumcraft.hud.flux.high": "Высокий",
+  "tc.thaumcraft.hud.flux.dangerous": "Опасный"
 }
