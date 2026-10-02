@@ -17,6 +17,15 @@ block_tags = defaultdict(set)
 item_tags = defaultdict(set)
 
 
+SOURCE_TEXTURES = ROOT / "src" / "main" / "resources" / "assets" / NS / "textures"
+
+
+def copy_texture(source, target):
+    destination = ASSETS / "textures" / target
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(SOURCE_TEXTURES / source, destination)
+
+
 def write(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(content, indent=2) + "\n", encoding="utf-8")
@@ -290,6 +299,49 @@ SIMPLE_ITEMS = {
     "pork_nugget": "nuggetpork",
     "triple_meat_treat": "tripletreat",
     "goggles_of_revealing": "gogglesrevealing",
+    "thaumium_helmet": "thaumiumhelm",
+    "thaumium_chestplate": "thaumiumchest",
+    "thaumium_leggings": "thaumiumlegs",
+    "thaumium_boots": "thaumiumboots",
+    "robe_chestplate": "clothchest",
+    "robe_leggings": "clothlegs",
+    "robe_boots": "clothboots",
+    "boots_traveller": "bootstraveler",
+}
+
+HANDHELD_ITEMS = {
+    "thaumium_sword": "thaumiumsword",
+    "thaumium_pickaxe": "thaumiumpick",
+    "thaumium_axe": "thaumiumaxe",
+    "thaumium_shovel": "thaumiumshovel",
+    "thaumium_hoe": "thaumiumhoe",
+    "elemental_sword": "elementalsword",
+    "elemental_pickaxe": "elementalpick",
+    "elemental_axe": "elementalaxe",
+    "elemental_shovel": "elementalshovel",
+    "elemental_hoe": "elementalhoe",
+}
+
+EQUIPMENT = {
+    "thaumium": ("thaumium_1", "thaumium_2"),
+    "robes": ("robes_1", "robes_2"),
+    "goggles": ("goggles", None),
+    "boots_traveller": ("bootstraveler", None),
+}
+
+TOOL_TAGS = {
+    "sword": "minecraft:swords",
+    "pickaxe": "minecraft:pickaxes",
+    "axe": "minecraft:axes",
+    "shovel": "minecraft:shovels",
+    "hoe": "minecraft:hoes",
+}
+
+ARMOR_TAGS = {
+    "helmet": "minecraft:head_armor",
+    "chestplate": "minecraft:chest_armor",
+    "leggings": "minecraft:leg_armor",
+    "boots": "minecraft:foot_armor",
 }
 
 
@@ -298,6 +350,22 @@ def items():
         generated_item(name, texture)
     for index, element in enumerate(["air", "fire", "water", "earth", "vis", "dull"], start=1):
         generated_item(f"{element}_shard", "shard", [tint(INFUSED_COLORS[index])])
+    for name, texture in HANDHELD_ITEMS.items():
+        item_model(name, {"parent": "minecraft:item/handheld", "textures": {"layer0": ref(texture, "item")}})
+        item_definition(name, ref(name, "item"))
+        item_tags[TOOL_TAGS[name.split("_")[1]]].add(f"{NS}:{name}")
+    for name in SIMPLE_ITEMS:
+        suffix = name.split("_")[-1]
+        if suffix in ARMOR_TAGS:
+            item_tags[ARMOR_TAGS[suffix]].add(f"{NS}:{name}")
+    item_tags["minecraft:head_armor"].add(f"{NS}:goggles_of_revealing")
+    for asset, (outer, inner) in EQUIPMENT.items():
+        layers = {"humanoid": [{"texture": f"{NS}:{asset}"}]}
+        copy_texture(f"model/{outer}.png", f"entity/equipment/humanoid/{asset}.png")
+        if inner:
+            layers["humanoid_leggings"] = [{"texture": f"{NS}:{asset}"}]
+            copy_texture(f"model/{inner}.png", f"entity/equipment/humanoid_leggings/{asset}.png")
+        write(ASSETS / "equipment" / f"{asset}.json", {"layers": layers})
     fuel("alumentum", 6400)
     fuel("magical_log", 400)
 
@@ -321,6 +389,34 @@ def items():
     item_tags["c:ores"].update({f"{NS}:cinnabar_ore", f"{NS}:amber_ore"})
 
 
+ELEMENTAL_TOOLS = [f"{NS}:elemental_{tool}" for tool in ["axe", "sword", "shovel", "pickaxe", "hoe"]]
+
+
+def chest_loot(name, base_tables, elemental_chance):
+    pools = [{"rolls": 1, "entries": [{"type": "minecraft:loot_table", "value": table}]} for table in base_tables]
+    pools.append({
+        "rolls": 1,
+        "entries": [{"type": "minecraft:item", "name": tool} for tool in ELEMENTAL_TOOLS],
+        "condition": {"type": "minecraft:random_chance", "chance": elemental_chance},
+    })
+    write(DATA / NS / "loot_table" / "chests" / f"{name}.json", {"type": "minecraft:chest", "pools": pools, "random_sequence": f"{NS}:chests/{name}"})
+
+
+def worldgen():
+    write(DATA / NS / "worldgen" / "feature" / "world_generation.json", {"type": f"{NS}:world_generation"})
+    write(DATA / NS / "worldgen" / "placed_feature" / "world_generation.json", {"feature": f"{NS}:world_generation", "placement": []})
+    for dimension in ["overworld", "nether"]:
+        write(DATA / NS / "neoforge" / "biome_modifier" / f"world_generation_{dimension}.json", {
+            "type": "neoforge:add_features",
+            "biomes": f"#minecraft:is_{dimension}",
+            "features": f"{NS}:world_generation",
+            "step": "top_layer_modification",
+        })
+    chest_loot("mound", ["minecraft:chests/simple_dungeon"], 1 / 20)
+    chest_loot("hilltop_stones", ["minecraft:chests/simple_dungeon", "minecraft:chests/simple_dungeon"], 1 / 10)
+    chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
+
+
 def write_tags():
     for tag, values in block_tags.items():
         namespace, path = tag.split(":")
@@ -335,6 +431,7 @@ def main():
         shutil.rmtree(OUT)
     world_blocks()
     items()
+    worldgen()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))
     print(f"generated {count} files")

@@ -42,6 +42,10 @@ public final class AuraChunkData {
         pending.add(node);
     }
 
+    public List<AuraNode> pendingView() {
+        return List.copyOf(pending);
+    }
+
     public List<AuraNode> takePending() {
         List<AuraNode> nodes = new ArrayList<>(pending);
         pending.clear();

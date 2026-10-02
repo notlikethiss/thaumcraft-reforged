@@ -11,6 +11,7 @@ import thaumcraft.registry.ModAttachments;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModCreativeTabs;
+import thaumcraft.registry.ModFeatures;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModSounds;
 
@@ -25,6 +26,7 @@ public class Thaumcraft {
         ModBlockEntities.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
+        ModFeatures.register(modEventBus);
         ModAttachments.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
     }

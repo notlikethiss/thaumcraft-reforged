@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "thaumcraft:robes"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "thaumcraft:robes"
+      }
+    ]
+  }
+}

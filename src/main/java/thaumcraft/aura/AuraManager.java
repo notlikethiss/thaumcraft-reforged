@@ -53,7 +53,7 @@ public final class AuraManager {
     record FluxEvent(ServerLevel level, AuraNode node, Aspect aspect, int severity) {
     }
 
-    static final Map<Integer, AuraNode> NODES = new HashMap<>();
+    static final Map<Integer, AuraNode> NODES = new java.util.concurrent.ConcurrentHashMap<>();
     static final Map<ResourceKey<Level>, LinkedList<Integer>> UPDATE_LIST = new HashMap<>();
     static final Map<Integer, List<Integer>> NEIGHBOURS = new HashMap<>();
     private static final Map<ChunkKey, List<Integer>> NODE_CHUNKS = new HashMap<>();

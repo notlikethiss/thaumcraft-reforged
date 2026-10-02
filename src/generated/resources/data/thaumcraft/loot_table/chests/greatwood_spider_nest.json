@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "minecraft:chests/simple_dungeon"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:elemental_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:elemental_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:elemental_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:elemental_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:elemental_hoe"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.06666666666666667
+      }
+    }
+  ],
+  "random_sequence": "thaumcraft:chests/greatwood_spider_nest"
+}
