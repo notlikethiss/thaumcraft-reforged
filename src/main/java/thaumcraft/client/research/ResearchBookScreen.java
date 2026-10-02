@@ -1,5 +1,6 @@
 package thaumcraft.client.research;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -154,7 +155,7 @@ public class ResearchBookScreen extends Screen {
 
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
-        if (event.button() == 0) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             dragging = false;
         }
         return super.mouseReleased(event);
@@ -334,7 +335,7 @@ public class ResearchBookScreen extends Screen {
             minecraft.gui.setScreen(new ResearchPageScreen(highlight, mapX, mapY));
             return true;
         }
-        if (event.button() == 0 && insideMap(event.x(), event.y())) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && insideMap(event.x(), event.y())) {
             dragging = true;
             return true;
         }
