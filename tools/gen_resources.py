@@ -497,12 +497,50 @@ def alembic():
     mineable("pickaxe", "alembic")
 
 
+def tables():
+    copy_texture("model/table.png", "block/table_model.png")
+    copy_texture("model/worktable.png", "block/worktable_model.png")
+    tex = (64, 32)
+    block_model("table", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("woodplain"), "texture": ref("table_model")},
+        "elements": [
+            model_box([0, 12, 0], [16, 16, 16], (0, 0), (16, 4, 16), tex),
+            model_box([10, 4, 6], [14, 12, 10], (0, 20), (4, 8, 4), tex),
+            model_box([2, 4, 6], [6, 12, 10], (0, 20), (4, 8, 4), tex),
+            model_box([0, 0, 4], [16, 4, 12], (16, 20), (16, 4, 8), tex),
+        ],
+    })
+    blockstate("table", {"variants": {
+        "axis=z": {"model": ref("table")},
+        "axis=x": {"model": ref("table"), "y": 90},
+    }})
+    block_item("table")
+    self_drop("table")
+    tex = (128, 64)
+    legs = [([11, 4, 11], [15, 8, 15]), ([1, 4, 1], [5, 8, 5]), ([11, 4, 1], [15, 8, 5]), ([1, 4, 11], [5, 8, 15])]
+    block_model("arcane_worktable", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": ref("woodplain"), "texture": ref("worktable_model")},
+        "elements": [
+            model_box([0, 8, 0], [16, 16, 16], (0, 0), (16, 8, 16), tex),
+            model_box([0, 0, 0], [16, 4, 16], (0, 32), (16, 4, 16), tex),
+            *[model_box(start, end, (72, 0), (4, 4, 4), tex) for start, end in legs],
+        ],
+    })
+    simple_state("arcane_worktable")
+    block_item("arcane_worktable")
+    self_drop("arcane_worktable")
+    mineable("axe", "table", "arcane_worktable")
+
+
 WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge"}
 
 
 def devices():
     crucible()
     alembic()
+    tables()
     for name, texture in WANDS.items():
         item_model(name, {"parent": "minecraft:item/handheld", "textures": {"layer0": ref(texture, "item")}})
         item_definition(name, ref(name, "item"))

@@ -17,6 +17,10 @@ import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.client.render.AlembicRenderer;
 import thaumcraft.client.color.EssenceTint;
 import thaumcraft.client.render.CrucibleRenderer;
+import thaumcraft.client.render.WorkbenchWandRenderer;
+import thaumcraft.client.screen.ArcaneWorkbenchScreen;
+import thaumcraft.registry.ModMenus;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -73,6 +77,12 @@ public final class ThaumcraftClient {
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKTABLE.get(), context -> new WorkbenchWandRenderer<>(context, false));
+    }
+
+    @SubscribeEvent
+    static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
     }
 
     @SubscribeEvent

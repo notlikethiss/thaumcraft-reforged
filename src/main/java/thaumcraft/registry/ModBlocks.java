@@ -12,6 +12,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.device.AlembicBlock;
+import thaumcraft.block.device.ArcaneWorktableBlock;
+import thaumcraft.block.device.TableBlock;
 import thaumcraft.block.device.CrucibleBlock;
 import thaumcraft.block.device.NitorBlock;
 import thaumcraft.block.world.AmberBlock;
@@ -82,6 +84,8 @@ public final class ModBlocks {
 
     public static final DeferredBlock<CrucibleBlock> CRUCIBLE = BLOCKS.registerBlock("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
     public static final DeferredBlock<AlembicBlock> ALEMBIC = BLOCKS.registerBlock("alembic", AlembicBlock::new, ModBlocks::metalDevice);
+    public static final DeferredBlock<TableBlock> TABLE = BLOCKS.registerBlock("table", TableBlock::new, ModBlocks::table);
+    public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = BLOCKS.registerBlock("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
 
     private ModBlocks() {
     }
@@ -106,6 +110,10 @@ public final class ModBlocks {
             .strength(3.0F, 17.0F)
             .sound(SoundType.METAL)
             .noOcclusion();
+    }
+
+    private static BlockBehaviour.Properties table(BlockBehaviour.Properties properties) {
+        return properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD).noOcclusion();
     }
 
     private static BlockBehaviour.Properties amber(BlockBehaviour.Properties properties) {

@@ -2,11 +2,19 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumcraft:arcane_worktable",
+      "required": false
+    },
+    {
       "id": "thaumcraft:greatwood_log",
       "required": false
     },
     {
       "id": "thaumcraft:silverwood_log",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:table",
       "required": false
     }
   ]
