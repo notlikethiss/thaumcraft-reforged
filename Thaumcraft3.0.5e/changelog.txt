@@ -1,0 +1,191 @@
+3.0.5e
+- trying to tackle the golem jar crashes... again
+- some localization and gui fixes
+
+3.0.5d
+- more fixes for golem related crashes
+- added russian to localization
+- wand of equal trade now displays the number of blocks of the targeted type you have available.
+
+3.0.5c
+- fix for a few more golem related crashes
+- fix for certain mod crops/plants not being correctly harvested by straw golems
+
+3.0.5b
+- arcane bore won't ignore unbreakable blocks and allow you to dig blocks beyond them anymore
+- fixed harness dupe exploit
+- some general bug and crash fixes 
+- fixed monster spawning in non-vanilla biomes
+- fixed language support
+- cinnibar should once again spawn... oops. You might want to run regen for cinnibar if the world was created using MC 1.5 or later.
+
+3.0.5a
+- prevent moving of harness while it's gui is open
+- fix for possible harness gui crash
+- harness recipe fixed to require the correct crystals
+- fix for thaumometer and discoveries displaying incorrectly in survival mode... for reals this time
+- frost shards should no longer collide with the player clientside (was a purely visual bug)
+- other minor bug fixes
+
+3.0.5
+- update to 1.5.2
+- golem visor should no longer cause a crash
+- items like the thaumometer should render properly again (blame Forge for that one)
+- New stuff? New stuff!
+
+3.0.4c
+- research table, mirror and jar rendering should not cause crashes anymore
+- harvesting and shearing my plants and leaves should not cause crashes anymore 
+- arcane pressure plate + door should no longer cause your game to lock up. 
+- the "java.lang.NullPointerException at thaumcraft.api.ObjectTags.<init>(ObjectTags.java:21)" is technically caused by addon mods not implementing the new version of the API, but I'm adding something to prevent this crash. This might cause those addon mods to do strange things however so be prepared. Also, depending on how those addon mods calls this function the error might not go away at all. 
+
+3.0.4b
+- recipes with 'wildcard' and/or damageable ingredients should work now
+- fixed blocks that were rendering a bit goofy
+- fixed Rod of Nine Hells crash
+- fixed possible crash when looking at a filled jar
+- fixed a possible crash related to markers and golem AI
+- tweaked infused ore spawn rates a bit - something seems to have made it a lot rarer than usual
+- API: Added a way to define "clickable" crops that the golem will harvest without breaking the block, (For example: Natura berry bushes). This needs to be set up using FMLInterModComms. 
+- API: The existing method to add crops also uses FMLInterModComms now, though a deprecated version of the old system will remain in place till the next major API revision.
+
+3.0.4a
+- It should run on a server now - derpdy derp
+- Fixed display of recipes in thaumonomicon with cycling items.
+- arcane door icons fixed and they should no longer cause the client to freeze when opened.
+
+3.0.4
+- added localization support so players and server admins may add support for other languages. Just add your own .lang file in /thaumcraft_localization/ directory located in the minecraft config directory. It uses the same naming convention as the minecraft localizations files.
+- filled jars can now stack to 8 as long as the jars contain the same amount and type of essentia
+- crucible now tries to place the most numerous aspects into alembics first
+- Added a thaumcrafty way to heat your crucible with an existing item.
+- Repair enchantment does nothing in creative mode 
+- step height increase from boots of the traveller should now properly remove itself along with the boots
+- brain in jars can now hold 2000 xp instead of 1000 xp
+- wooden logs now only give 4 wood aspect, which obviously has a huge knock-on effect in the aspects of most items
+- changed the aspect values of several other items.
+- fixed arcane workbench dupe bug
+- elemental shovel cannot 'build' with blocks that have tile entities
+- new golem
+- greatly improved the efficiency of the arcane bore digging algorithm (by up to 180 times!) so having more than one running at a time in close proximity should no longer kill the CPU. The beam may occasionally seem to stop digging and reset to the center position, but that is normal. 
+- API: The api has had a bit of a minor facelift and has been reorganized. It will change again once the 3.1 changes go into effect so consider yourself warned.
+- API: additional method in ObjectTags
+- API: Biome functions have been deprecated in favor of the new forge Biome dictionary.
+- API: there are some mysterious methods in the api. Ignore them for now :p
+
+3.0.3
+- API: api additions 
+- API: the way IVisRepairable is used has changed slightly. Items are no longer repaired using onUpdate
+- API: Tempus aspect added
+- fixed arcane bore dupe bug
+- fixed silk touch+pickaxe of the core in arcane bore and removed an infinite diamond/redstone/etc. exploit
+- items with repair enchantment will now only repair when worn or on the hotbar
+- existing frost shards in world when you log in shouldn't crash you anymore
+- added the ability to remove all (or at least most) aura nodes in the config.
+- magic mirrors, they are more common than you think
+- added quicksilver drops. Combine 9 in a crafting table to get quicksilver
+- fix for noteblock listener holding on to world references where they shouldn't
+- reduced the vis cost of the arcane bore a bit. Will now only cost 1 vis per 3 blocks mined 
+
+3.0.2c
+- wooden golems picking up custom item entities won't cause crashes anymore
+- the wand of frost should no longer cause crashes if it hits a player with the thorns enchant
+
+3.0.2b
+- several additions and improvements to the api
+- the amount of xp a brain in a jar can hold is now capped. It only holds 1000xp, which is enough to take you from level 0 to 30 or so.
+- crystal core should no longer forget the node it is pulling if it merges with another while being pulled.
+
+3.0.2a
+- brain in a jar releases more xp per bonk
+- frost wand will no longer be able to break the unbreakable... oops
+- worldgen blocks are now as solid as they appear to be
+- By popular demand elemental tools and weapons have more evocative names 
+- ignored criticism of certain textures... except amber bricks which did suck a bit
+
+3.0.2
+- Welcome to tier 3!
+- possible fix for corrupt nodeid count
+- thaumcraft monster worldspawns can now be disabled in the config settings
+- some server config settings will now be sent to the client whenever it connects
+- fixed crash when displaying aspects of items without actual aspects
+- added warded glass 
+- warded stone, glass and arcane door is now set to be completely unbreakable even for the person that placed them. They can only be picked up by using a casting wand on them.
+- added iron and gold keys to grant others access to an arcane door. See your thaumonomicon for details.
+- added warded pressure plates (new research)
+- arcane levitators are now more responsive and individual levitators in a stack can be powered down to reduce the levitation height. Only levitators above (or below) the one that has been powered down will be counted for lift or fall distance
+- aura node rarity is now configurable.
+- For texture pack makers: ss_core.png was getting a bit crowded so some stuff has been moved to ss_world.png
+- added another source of the aura aspect
+- added another source of the Mutatio aspect  
+- golems no longer flee when damaged. It caused more problems than it prevented 
+- added amber blocks and bricks. Blocks are crafted with 4 amber and amber bricks with 4 amber blocks. All of these can be converted back into amber.
+- rebalanced the casting wands (wand of the apprentice, adept and thaumaturge)
+- casting wands now have their own gui elements 
+- changed the way data is stored for casting wands. 
+- slowed casting wand recharge rates while in inventory. Wands now recharge at the same rate in both tables and the players inventory. Higher tier wands have higher recharge rates.
+- *WARNING*: Due to these changes there is a very small chance that existing casting wands with damage might break. You may also need to remove any wands from crafting tables and hold them in your inventory for a moment before they will start working with the new system.
+- in the ongoing battle to prevent data loss, research data is now saved with the players vanilla NBT data. As a happy side-effect this seems to solve the offline/online issue. \o/
+- aura data is now saved as part of the normal MC chunk data. As a result any kind of aura operations now only takes place on nodes in loaded chunks. This has already been true for the most part, but previously a small number of operations could still take place even in unloaded chunks.
+- *IMPORTANT* I will be removing all legacy saving methods for both research and auras in a FUTURE update. Research data for players that haven't logged in since this update, and aura data for chunks that have not been loaded WILL be lost. Don't worry, I will give ample warning when I do it.
+- added several new enchants - check your thaumonomicon for details. They do not require research to unlock.
+
+3.0.1c
+- update to 1.4.6
+- no more rocketjumping with alumentum. Sorry :p
+- a couple of new things
+
+3.0.1b
+- alumentum now follows the mobgriefing rules and will launch the 'grenade' when placed in a dispenser instead of just the item.
+
+3.0.1a
+- aura calculations only occur on nodes in loaded chunks
+- improved wizard villager trades
+- fix for discoveries turning back into fragments when they shouldn't
+- made clay golems slightly more useful 
+
+3.0.1 
+- now with bonus Adventure!, Action!, and Discovery!
+- changed to a new, hopefully more stable, save format for auras and research.
+- fix for random 'AuraWorldTicker' crashes, the Revenge
+- the opening animation that plays when a golem interacts with a chest can be turned off in the config
+- fixed an error where stone and clay golems were using their own 'home' facing when placing or retrieving from marked containers instead of the marker block facing.
+- rumor has it that Squidward has started dabbling in magic
+- doubled the length of the redstone pulse Arcane Ears emit 
+- tweaked the percentages for research. It will probably be a good idea to delete them from your config if you want to use the 'official' numbers. The correct numbers will be re-added the next time your game is run
+
+3.0.0i
+- angry zombies will spawn again
+- implement new extrabiomes api
+
+3.0.0h
+- removed all achievements for now. No real point to them anyway
+- some improvements to help prevent loss of auras.
+- arcane levitator is now only blocked by solid blocks
+- fix for random 'AuraWorldTicker' crashes
+- wisp essences should now drop from where they are supposed to.
+- some minor improvements to golem AI
+- possible fix to step height issue with Boots of the Traveller. I haven't been able to reproduce the error on my own test machines, so let me know if this error still exists.
+- placed nitor and candles should not get in the way of entity pathing anymore. 
+- placed nitor and candles aren't waterproof anymore. 
+
+3.0.0g
+- stone golems (and only stone golems) can now be used to extract smelted materials from normal ("vanilla") furnaces.
+- it should now be impossible to force items into the output slot of vanilla furnaces with golems. Let me know if you still find a way around this. 
+- smart wood golems shouldn't cause crashes anymore
+- enchanted items and potions should have their proper aspects now
+- make allowences for BC's derpy itemstack handling >.<
+- improvements for LAN games which should prevent loss of research
+- alembics can now be shift click to empty their contents into the aura
+- nitor is now placeable in the world as a light source
+- silverwood trees now only grow if there is enough vis to spawn their aura node
+- by popular demand flux events are now slightly more common
+- greatwood and silverwood log placement now works like vanilla log placement
+
+3.0.0f
+- fix for crash with arcane furnace
+
+3.0.0e
+- Possible fix to nugget exploits. Since I haven't been able to duplicate most of them myself please let me know if it persists.
+- Fix for straw golem crash
+- Fix for Wand of Excavation in SMP
