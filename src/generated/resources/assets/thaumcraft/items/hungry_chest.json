@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "thaumcraft:item/hungry_chest",
+    "model": {
+      "type": "thaumcraft:hungry_chest"
+    }
+  }
+}

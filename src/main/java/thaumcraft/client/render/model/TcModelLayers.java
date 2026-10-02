@@ -14,6 +14,7 @@ public final class TcModelLayers {
     public static final ModelLayerLocation JAR_BRINE = layer("jar_brine");
     public static final ModelLayerLocation BRAIN = layer("brain");
     public static final ModelLayerLocation BELLOWS = layer("bellows");
+    public static final ModelLayerLocation HUNGRY_CHEST = layer("hungry_chest");
 
     private TcModelLayers() {
     }
@@ -27,6 +28,7 @@ public final class TcModelLayers {
         event.registerLayerDefinition(JAR_BRINE, TcModelLayers::jarBrine);
         event.registerLayerDefinition(BRAIN, TcModelLayers::brain);
         event.registerLayerDefinition(BELLOWS, TcModelLayers::bellows);
+        event.registerLayerDefinition(HUNGRY_CHEST, TcModelLayers::hungryChest);
     }
 
     private static LayerDefinition jar() {
@@ -65,5 +67,14 @@ public final class TcModelLayers {
         root.addOrReplaceChild("bag", CubeListBuilder.create().texOffs(48, 0).mirror().addBox(-10.0F, -12.03333F, -10.0F, 20.0F, 24.0F, 20.0F), PartPose.offset(0.0F, 0.5F, 0.0F));
         root.addOrReplaceChild("nozzle", CubeListBuilder.create().texOffs(0, 36).mirror().addBox(-2.0F, -2.0F, 0.0F, 4.0F, 4.0F, 2.0F), PartPose.offset(0.0F, 16.0F, 6.0F));
         return LayerDefinition.create(mesh, 128, 64);
+    }
+
+    private static LayerDefinition hungryChest() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        root.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -5.0F, -14.0F, 14.0F, 5.0F, 14.0F), PartPose.offset(1.0F, 7.0F, 15.0F));
+        root.addOrReplaceChild("knob", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -2.0F, -15.0F, 2.0F, 4.0F, 1.0F), PartPose.offset(8.0F, 7.0F, 15.0F));
+        root.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(0, 19).addBox(0.0F, 0.0F, 0.0F, 14.0F, 10.0F, 14.0F), PartPose.offset(1.0F, 6.0F, 1.0F));
+        return LayerDefinition.create(mesh, 64, 64);
     }
 }

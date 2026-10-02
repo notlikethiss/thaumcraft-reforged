@@ -1047,7 +1047,13 @@ def owned_devices():
     block_item("arcane_levitator", [tint(color) for color in LEVITATOR_TINTS])
     self_drop("arcane_levitator")
 
-    mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator")
+    block_model("hungry_chest", {"textures": {"particle": ref("woodplain")}})
+    facing_state("hungry_chest")
+    item_model("hungry_chest", {"parent": "minecraft:block/block", "textures": {"particle": ref("woodplain")}})
+    special_item("hungry_chest", ref("hungry_chest", "item"), {"type": f"{NS}:hungry_chest"})
+    self_drop("hungry_chest")
+
+    mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator", "hungry_chest")
     mineable("pickaxe", "arcane_door")
 
 

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.ArcaneEarBlockEntity;
+import thaumcraft.blockentity.HungryChestBlockEntity;
 import thaumcraft.blockentity.LevitatorBlockEntity;
 import thaumcraft.blockentity.BellowsBlockEntity;
 import thaumcraft.blockentity.InfernalFurnaceBlockEntity;
@@ -75,6 +76,10 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<LevitatorBlockEntity>> LEVITATOR = BLOCK_ENTITIES.register(
         "arcane_levitator",
         () -> new BlockEntityType<>(LevitatorBlockEntity::new, ModBlocks.ARCANE_LEVITATOR.get())
+    );
+    public static final Supplier<BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST = BLOCK_ENTITIES.register(
+        "hungry_chest",
+        () -> new BlockEntityType<>(HungryChestBlockEntity::new, ModBlocks.HUNGRY_CHEST.get())
     );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",

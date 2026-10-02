@@ -19,6 +19,7 @@ import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.block.device.ArcaneDoorBlock;
 import thaumcraft.block.device.ArcaneEarBlock;
 import thaumcraft.block.device.ArcanePressurePlateBlock;
+import thaumcraft.block.device.HungryChestBlock;
 import thaumcraft.block.device.LevitatorBlock;
 import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
@@ -200,6 +201,11 @@ public final class ModBlocks {
         "arcane_levitator",
         LevitatorBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 15.0F).sound(SoundType.WOOD)
+    );
+    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = BLOCKS.registerBlock(
+        "hungry_chest",
+        HungryChestBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD).noOcclusion()
     );
 
     private ModBlocks() {

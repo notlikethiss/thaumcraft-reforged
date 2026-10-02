@@ -54,6 +54,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:hungry_chest",
+      "required": false
+    },
+    {
       "id": "thaumcraft:light_blue_marker",
       "required": false
     },

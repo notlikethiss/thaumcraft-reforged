@@ -23,6 +23,8 @@ import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.BellowsRenderer;
+import thaumcraft.client.render.HungryChestRenderer;
+import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
 import thaumcraft.client.render.JarRenderer;
 import thaumcraft.client.render.JarSpecialRenderer;
@@ -122,6 +124,7 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.WARDED_JAR.get(), JarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
     }
 
     @SubscribeEvent
@@ -133,6 +136,7 @@ public final class ThaumcraftClient {
     static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
         event.register(Thaumcraft.id("jar"), JarSpecialRenderer.Unbaked.MAP_CODEC);
         event.register(Thaumcraft.id("bellows"), BellowsSpecialRenderer.Unbaked.MAP_CODEC);
+        event.register(Thaumcraft.id("hungry_chest"), HungryChestSpecialRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent

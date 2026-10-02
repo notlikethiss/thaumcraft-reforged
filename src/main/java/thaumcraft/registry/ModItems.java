@@ -142,6 +142,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> ARCANE_EAR = block(ModBlocks.ARCANE_EAR);
     public static final DeferredItem<BlockItem> ARCANE_PRESSURE_PLATE = block(ModBlocks.ARCANE_PRESSURE_PLATE);
     public static final DeferredItem<BlockItem> ARCANE_LEVITATOR = block(ModBlocks.ARCANE_LEVITATOR);
+    public static final DeferredItem<BlockItem> HUNGRY_CHEST = block(ModBlocks.HUNGRY_CHEST);
     public static final DeferredItem<DoubleHighBlockItem> ARCANE_DOOR = ITEMS.registerItem(
         "arcane_door",
         properties -> new DoubleHighBlockItem(ModBlocks.ARCANE_DOOR.get(), properties.stacksTo(1).useBlockDescriptionPrefix())
