@@ -38,6 +38,21 @@ public interface FxProxy {
     default void burst(Level level, double x, double y, double z, float size) {
     }
 
+    default void crucibleBubble(Level level, float x, float y, float z, float red, float green, float blue) {
+    }
+
+    default void crucibleFroth(Level level, float x, float y, float z) {
+    }
+
+    default void crucibleFrothDown(Level level, float x, float y, float z) {
+    }
+
+    default void crucibleBoil(Level level, int x, int y, int z, float fluidHeight, int[] colors, int strength) {
+    }
+
+    default void bubbles(Level level, double x, double y, double z, int color, double speed, int count) {
+    }
+
     default void nodeBolt(Level level, float x, float y, float z, Entity target) {
     }
 

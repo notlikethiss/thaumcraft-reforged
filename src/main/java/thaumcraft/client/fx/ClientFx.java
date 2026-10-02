@@ -169,6 +169,84 @@ public final class ClientFx implements FxProxy {
     }
 
     @Override
+    public void crucibleBubble(Level level, float x, float y, float z, float red, float green, float blue) {
+        if (level instanceof ClientLevel clientLevel) {
+            BubbleParticle fx = new BubbleParticle(clientLevel, x, y, z, 0.0, 0.0, 0.0, 1);
+            fx.setColor(red, green, blue);
+            add(fx);
+        }
+    }
+
+    @Override
+    public void crucibleFroth(Level level, float x, float y, float z) {
+        if (level instanceof ClientLevel clientLevel) {
+            BubbleParticle fx = new BubbleParticle(clientLevel, x, y, z, 0.0, 0.0, 0.0, -4);
+            fx.setColor(0.5F, 0.5F, 0.7F);
+            fx.setFroth();
+            add(fx);
+        }
+    }
+
+    @Override
+    public void crucibleFrothDown(Level level, float x, float y, float z) {
+        if (level instanceof ClientLevel clientLevel) {
+            BubbleParticle fx = new BubbleParticle(clientLevel, x, y, z, 0.0, 0.0, 0.0, -4);
+            fx.setColor(0.5F, 0.5F, 0.7F);
+            fx.setFroth2();
+            add(fx);
+        }
+    }
+
+    @Override
+    public void crucibleBoil(Level level, int x, int y, int z, float fluidHeight, int[] colors, int strength) {
+        if (!(level instanceof ClientLevel clientLevel)) {
+            return;
+        }
+        for (int i = 0; i < particleCount(1); i++) {
+            BubbleParticle fx = new BubbleParticle(
+                clientLevel,
+                x + 0.2F + level.getRandom().nextFloat() * 0.6F,
+                y + 0.1F + fluidHeight,
+                z + 0.2F + level.getRandom().nextFloat() * 0.6F,
+                0.0,
+                0.0,
+                0.0,
+                3
+            );
+            if (colors.length == 0) {
+                fx.setColor(1.0F, 1.0F, 1.0F);
+            } else {
+                int color = colors[level.getRandom().nextInt(colors.length)];
+                fx.setColor((color >> 16 & 255) / 255.0F, (color >> 8 & 255) / 255.0F, (color & 255) / 255.0F);
+            }
+            fx.bubbleSpeed = 0.003 * strength;
+            add(fx);
+        }
+    }
+
+    @Override
+    public void bubbles(Level level, double x, double y, double z, int color, double speed, int count) {
+        if (!(level instanceof ClientLevel clientLevel)) {
+            return;
+        }
+        for (int i = 0; i < particleCount(count); i++) {
+            BubbleParticle fx = new BubbleParticle(
+                clientLevel,
+                x + 0.2F + level.getRandom().nextFloat() * 0.6F,
+                y + level.getRandom().nextFloat() * 0.1F,
+                z + 0.2F + level.getRandom().nextFloat() * 0.6F,
+                0.0,
+                0.0,
+                0.0,
+                3
+            );
+            fx.setColor((color >> 16 & 255) / 255.0F, (color >> 8 & 255) / 255.0F, (color & 255) / 255.0F);
+            fx.bubbleSpeed = speed;
+            add(fx);
+        }
+    }
+
+    @Override
     public void nodeBolt(Level level, float x, float y, float z, Entity target) {
     }
 }
