@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_helmet"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "thaumcraft:thaumium_ingot"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_helmet"
+  }
+}

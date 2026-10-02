@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber_ore"
+    }
+  ],
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "thaumcraft:amber_ore",
+  "result": {
+    "id": "thaumcraft:amber"
+  }
+}

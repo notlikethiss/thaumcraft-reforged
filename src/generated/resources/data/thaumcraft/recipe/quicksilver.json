@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:quicksilver"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:quicksilver_drop"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "thaumcraft:quicksilver_drop"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "thaumcraft:quicksilver"
+  }
+}

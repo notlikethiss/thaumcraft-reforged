@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber_block"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber_bricks"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": "thaumcraft:amber_block"
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "id": "thaumcraft:amber_bricks",
+    "count": 4
+  }
+}

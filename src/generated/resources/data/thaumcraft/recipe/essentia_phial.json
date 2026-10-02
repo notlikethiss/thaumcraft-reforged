@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:essentia_phial"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "minecraft:glass",
+    "C": "minecraft:clay_ball"
+  },
+  "pattern": [
+    " C ",
+    "G G",
+    " G "
+  ],
+  "result": {
+    "id": "thaumcraft:essentia_phial",
+    "count": 8
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:native_iron_cluster"
+    }
+  ],
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "thaumcraft:native_iron_cluster",
+  "result": {
+    "id": "minecraft:iron_ingot",
+    "count": 2
+  }
+}

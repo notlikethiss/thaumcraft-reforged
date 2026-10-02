@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_shovel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "thaumcraft:thaumium_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_shovel"
+  }
+}

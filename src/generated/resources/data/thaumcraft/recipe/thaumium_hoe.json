@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_hoe"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "thaumcraft:thaumium_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "II",
+    "S ",
+    "S "
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_hoe"
+  }
+}

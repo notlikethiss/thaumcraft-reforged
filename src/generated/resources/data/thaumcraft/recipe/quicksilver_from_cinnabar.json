@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:cinnabar_ore"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:quicksilver"
+    }
+  ],
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "thaumcraft:cinnabar_ore",
+  "result": {
+    "id": "thaumcraft:quicksilver"
+  }
+}

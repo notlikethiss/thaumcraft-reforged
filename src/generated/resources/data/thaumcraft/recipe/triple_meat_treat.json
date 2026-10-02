@@ -1,0 +1,31 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:beef_nugget"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:chicken_nugget"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:pork_nugget"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:triple_meat_treat"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "thaumcraft:chicken_nugget",
+    "thaumcraft:beef_nugget",
+    "thaumcraft:pork_nugget",
+    "minecraft:sugar"
+  ],
+  "result": {
+    "id": "thaumcraft:triple_meat_treat"
+  }
+}

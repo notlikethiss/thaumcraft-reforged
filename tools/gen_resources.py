@@ -417,6 +417,97 @@ def worldgen():
     chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
 
 
+WOOL_COLORS = [
+    "white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray",
+    "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black",
+]
+
+
+def mod_ids(values):
+    found = set()
+    for value in values:
+        if isinstance(value, str) and value.startswith(f"{NS}:"):
+            found.add(value)
+    return found
+
+
+def recipe(name, content, referenced):
+    conditions = [{"type": "neoforge:registered", "value": item} for item in sorted(mod_ids(referenced))]
+    if conditions:
+        content = {"neoforge:conditions": conditions, **content}
+    write(DATA / NS / "recipe" / f"{name}.json", content)
+
+
+def shaped(name, result, count, pattern, key, category="misc", components=None):
+    content = {"type": "minecraft:crafting_shaped", "category": category, "key": key, "pattern": pattern, "result": {"id": result}}
+    if components:
+        content["result"]["components"] = components
+    if count > 1:
+        content["result"]["count"] = count
+    recipe(name, content, [result, *key.values()])
+
+
+def shapeless(name, result, count, ingredients, category="misc"):
+    content = {"type": "minecraft:crafting_shapeless", "category": category, "ingredients": ingredients, "result": {"id": result}}
+    if count > 1:
+        content["result"]["count"] = count
+    recipe(name, content, [result, *ingredients])
+
+
+def smelting(name, ingredient, result, count, experience):
+    content = {"type": "minecraft:smelting", "cookingtime": 200, "experience": experience, "ingredient": ingredient, "result": {"id": result}}
+    if count > 1:
+        content["result"]["count"] = count
+    recipe(name, content, [ingredient, result])
+
+
+def recipes():
+    tc = lambda name: f"{NS}:{name}"
+    for color in WOOL_COLORS:
+        shaped(f"{color}_marker", tc(f"{color}_marker"), 2, [" W ", "WSW", " W "], {"W": "#minecraft:planks", "S": f"minecraft:{color}_wool"})
+        item_tags[f"{NS}:tallow_candles"].add(tc(f"{color}_tallow_candle"))
+    shaped("amber_block", tc("amber_block"), 1, ["##", "##"], {"#": tc("amber")}, "building")
+    shaped("amber_bricks", tc("amber_bricks"), 4, ["##", "##"], {"#": tc("amber_block")}, "building")
+    shaped("obsidian_tile", tc("obsidian_tile"), 4, ["##", "##"], {"#": "minecraft:obsidian"}, "building")
+    shapeless("amber_from_block", tc("amber"), 4, [tc("amber_block")])
+    shapeless("amber_from_bricks", tc("amber"), 4, [tc("amber_bricks")])
+    shaped("research_notes_from_fragments", tc("research_notes"), 1, ["KKK", "KKK", "KKK"], {"K": tc("knowledge_fragment")})
+    shaped("essentia_phial", tc("essentia_phial"), 8, [" C ", "G G", " G "], {"G": "minecraft:glass", "C": "minecraft:clay_ball"})
+    shaped("table", tc("table"), 1, ["SSS", "W W"], {"S": "#minecraft:wooden_slabs", "W": "#minecraft:planks"})
+    shaped("wand_apprentice", tc("wand_apprentice"), 1, ["  C", " S ", "G  "], {"C": f"#{NS}:shards", "G": "minecraft:gold_nugget", "S": "minecraft:stick"}, "equipment", {f"{NS}:wand_vis": 0})
+    shaped("quicksilver", tc("quicksilver"), 1, ["###", "###", "###"], {"#": tc("quicksilver_drop")})
+    armor = {
+        "helm": ("thaumium_helmet", ["III", "I I"]),
+        "chest": ("thaumium_chestplate", ["I I", "III", "III"]),
+        "legs": ("thaumium_leggings", ["III", "I I", "I I"]),
+        "feet": ("thaumium_boots", ["I I", "I I"]),
+    }
+    for name, (item, pattern) in armor.items():
+        shaped(f"thaumium_{name}", tc(item), 1, pattern, {"I": tc("thaumium_ingot")}, "equipment")
+    tools = {
+        "shovel": ["I", "S", "S"],
+        "pickaxe": ["III", " S ", " S "],
+        "axe": ["II", "SI", "S "],
+        "hoe": ["II", "S ", "S "],
+        "sword": ["I", "I", "S"],
+    }
+    for name, pattern in tools.items():
+        shaped(f"thaumium_{name}", tc(f"thaumium_{name}"), 1, pattern, {"I": tc("thaumium_ingot"), "S": "minecraft:stick"}, "equipment")
+    shapeless("scribing_tools_from_phial", tc("scribing_tools"), 1, [tc("essentia_phial"), "minecraft:feather", "minecraft:ink_sac"])
+    shapeless("scribing_tools", tc("scribing_tools"), 1, ["minecraft:glass_bottle", "minecraft:feather", "minecraft:ink_sac"])
+    shapeless("scribing_tools_refill", tc("scribing_tools"), 1, [tc("scribing_tools"), "minecraft:ink_sac"])
+    shapeless("triple_meat_treat", tc("triple_meat_treat"), 1, [tc("chicken_nugget"), tc("beef_nugget"), tc("pork_nugget"), "minecraft:sugar"])
+    smelting("quicksilver_from_cinnabar", tc("cinnabar_ore"), tc("quicksilver"), 1, 1.0)
+    smelting("amber_from_ore", tc("amber_ore"), tc("amber"), 1, 1.0)
+    smelting("charcoal_from_greatwood", tc("greatwood_log"), "minecraft:charcoal", 1, 0.5)
+    smelting("charcoal_from_silverwood", tc("silverwood_log"), "minecraft:charcoal", 1, 0.5)
+    smelting("iron_from_cluster", tc("native_iron_cluster"), "minecraft:iron_ingot", 2, 1.0)
+    smelting("gold_from_cluster", tc("native_gold_cluster"), "minecraft:gold_ingot", 2, 1.0)
+    smelting("copper_from_cluster", tc("native_copper_cluster"), "minecraft:copper_ingot", 2, 1.0)
+    for shard in ["air", "fire", "water", "earth", "vis", "dull"]:
+        item_tags[f"{NS}:shards"].add(tc(f"{shard}_shard"))
+
+
 def write_tags():
     for tag, values in block_tags.items():
         namespace, path = tag.split(":")
@@ -432,6 +523,7 @@ def main():
     world_blocks()
     items()
     worldgen()
+    recipes()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))
     print(f"generated {count} files")

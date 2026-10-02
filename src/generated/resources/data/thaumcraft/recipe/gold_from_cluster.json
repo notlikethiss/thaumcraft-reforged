@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:native_gold_cluster"
+    }
+  ],
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "thaumcraft:native_gold_cluster",
+  "result": {
+    "id": "minecraft:gold_ingot",
+    "count": 2
+  }
+}

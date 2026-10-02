@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:amber_bricks"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "thaumcraft:amber_bricks"
+  ],
+  "result": {
+    "id": "thaumcraft:amber",
+    "count": 4
+  }
+}

@@ -19,5 +19,6 @@ public final class ModNetwork {
         registrar.playToClient(AuraDeletePayload.TYPE, AuraDeletePayload.STREAM_CODEC);
         registrar.playToClient(NodeZapPayload.TYPE, NodeZapPayload.STREAM_CODEC);
         registrar.playToClient(AspectTagsPayload.TYPE, AspectTagsPayload.STREAM_CODEC);
+        registrar.playToClient(ResearchCompletePayload.TYPE, ResearchCompletePayload.STREAM_CODEC);
     }
 }

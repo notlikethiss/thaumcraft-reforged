@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:air_shard",
+    "thaumcraft:dull_shard",
+    "thaumcraft:earth_shard",
+    "thaumcraft:fire_shard",
+    "thaumcraft:vis_shard",
+    "thaumcraft:water_shard"
+  ]
+}

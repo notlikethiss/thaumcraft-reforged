@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_chestplate"
+    },
+    {
+      "type": "neoforge:registered",
+      "value": "thaumcraft:thaumium_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "thaumcraft:thaumium_ingot"
+  },
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_chestplate"
+  }
+}
