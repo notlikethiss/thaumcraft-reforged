@@ -42,7 +42,7 @@ import thaumcraft.registry.ModBlockEntities;
 
 public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     private static final Identifier TALLOW_GOLEM = Identifier.fromNamespaceAndPath("thaumcraft", "tallow_golem");
-    private static final Identifier ADVANCED_TALLOW_GOLEM = Identifier.fromNamespaceAndPath("thaumcraft", "advanced_tallow_golem");
+    private static final Identifier ADVANCED_TALLOW_GOLEM = Identifier.fromNamespaceAndPath("thaumcraft", "decanting_golem");
     private static final VoxelShape COLLISION = Shapes.or(
         Block.box(0.0, 0.0, 0.0, 16.0, 5.0, 16.0),
         Block.box(0.0, 0.0, 0.0, 2.0, 13.6, 16.0),

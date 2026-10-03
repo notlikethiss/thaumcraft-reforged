@@ -25,6 +25,18 @@ public abstract class GolemWorker extends GolemBase {
         return GolemUtils.handler(this.level(), getHomeContainerPos(), getHomeFacing());
     }
 
+    public boolean hasSomething() {
+        return this.inventory.hasSomething();
+    }
+
+    public ItemStack getProvideStack() {
+        return getCarried();
+    }
+
+    public void setProvideStack(ItemStack stack) {
+        setCarried(stack);
+    }
+
     public boolean isToggled() {
         return false;
     }

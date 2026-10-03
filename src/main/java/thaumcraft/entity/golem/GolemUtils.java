@@ -22,7 +22,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import thaumcraft.block.device.AlembicBlock;
+import thaumcraft.blockentity.AlembicBlockEntity;
+import thaumcraft.blockentity.JarBlockEntity;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Config;
@@ -164,7 +171,7 @@ public final class GolemUtils {
         return results;
     }
 
-    public static List<MarkedContainer> containersWithRoom(GolemBase golem) {
+    public static List<MarkedContainer> containersWithRoom(GolemBase golem, ItemStack stack) {
         List<MarkedContainer> results = new ArrayList<>();
         if (!(golem.level() instanceof ServerLevel level)) {
             return results;
@@ -177,7 +184,7 @@ public final class GolemUtils {
             for (MarkedContainer container : adjacentContainers(level, marker)) {
                 if (golem.distanceToSqr(Vec3.atCenterOf(container.pos())) < range * range) {
                     ResourceHandler<ItemResource> handler = handler(level, container.pos(), container.side());
-                    if (handler != null && insert(handler, golem.getCarried(), true) > 0) {
+                    if (handler != null && insert(handler, stack, true) > 0) {
                         results.add(container);
                     }
                 }
@@ -207,6 +214,127 @@ public final class GolemUtils {
 
     public static List<MarkedContainer> adjacentMarkedContainers(GolemBase golem) {
         return adjacentMarkedContainers(golem, marker -> colorMatches(golem.level(), marker, golem.getColor()));
+    }
+
+    public static List<BlockPos> markersForGolem(GolemBase golem, double maxDistanceSq) {
+        if (!(golem.level() instanceof ServerLevel level)) {
+            return List.of();
+        }
+        int radius = (int) Math.ceil(Math.sqrt(maxDistanceSq)) + 1;
+        List<BlockPos> result = new ArrayList<>();
+        for (BlockPos marker : markers(level, golem.blockPosition(), radius)) {
+            if (golem.distanceToSqr(Vec3.atCenterOf(marker)) <= maxDistanceSq && colorMatches(level, marker, golem.getColor())) {
+                result.add(marker);
+            }
+        }
+        return result;
+    }
+
+    public static @Nullable ResourceHandler<FluidResource> fluidHandler(Level level, BlockPos pos, @Nullable Direction side) {
+        return level.getCapability(Capabilities.Fluid.BLOCK, pos, side);
+    }
+
+    public static int fluidAmount(ResourceHandler<FluidResource> handler, Fluid fluid) {
+        int total = 0;
+        for (int index = 0; index < handler.size(); index++) {
+            FluidResource resource = handler.getResource(index);
+            if (!resource.isEmpty() && resource.getFluid().isSame(fluid)) {
+                total += handler.getAmountAsInt(index);
+            }
+        }
+        return total;
+    }
+
+    public static int fillFluid(ResourceHandler<FluidResource> handler, Fluid fluid, int amount, boolean simulate) {
+        try (Transaction transaction = Transaction.openRoot()) {
+            int inserted = handler.insert(FluidResource.of(fluid), amount, transaction);
+            if (!simulate) {
+                transaction.commit();
+            }
+            return inserted;
+        }
+    }
+
+    public static int drainFluid(ResourceHandler<FluidResource> handler, Fluid fluid, int amount, boolean simulate) {
+        try (Transaction transaction = Transaction.openRoot()) {
+            int extracted = handler.extract(FluidResource.of(fluid), amount, transaction);
+            if (!simulate) {
+                transaction.commit();
+            }
+            return extracted;
+        }
+    }
+
+    public static @Nullable Fluid firstFluid(ResourceHandler<FluidResource> handler) {
+        for (int index = 0; index < handler.size(); index++) {
+            FluidResource resource = handler.getResource(index);
+            if (!resource.isEmpty() && handler.getAmountAsInt(index) > 0) {
+                return resource.getFluid();
+            }
+        }
+        return null;
+    }
+
+    public static boolean isSource(Level level, BlockPos pos, Fluid fluid) {
+        FluidState state = level.getFluidState(pos);
+        return state.isSource() && state.getType().isSame(fluid);
+    }
+
+    public static List<BlockPos> adjacentWater(Level level, BlockPos marker) {
+        List<BlockPos> result = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            BlockPos pos = marker.relative(direction);
+            if (isSource(level, pos, Fluids.WATER)) {
+                result.add(pos);
+                continue;
+            }
+            ResourceHandler<FluidResource> handler = fluidHandler(level, pos, direction.getOpposite());
+            if (handler != null && fluidAmount(handler, Fluids.WATER) > 0) {
+                result.add(pos);
+            }
+        }
+        return result;
+    }
+
+    public static List<BlockPos> adjacentLiquid(Level level, BlockPos marker) {
+        List<BlockPos> result = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            BlockPos pos = marker.relative(direction);
+            if (isSource(level, pos, Fluids.WATER) || isSource(level, pos, Fluids.LAVA) || fluidHandler(level, pos, direction.getOpposite()) != null) {
+                result.add(pos);
+            }
+        }
+        return result;
+    }
+
+    public static List<JarBlockEntity> adjacentJars(Level level, BlockPos marker) {
+        List<JarBlockEntity> result = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            if (level.getBlockEntity(marker.relative(direction)) instanceof JarBlockEntity jar) {
+                result.add(jar);
+            }
+        }
+        return result;
+    }
+
+    public static Direction sideFacing(BlockPos from, BlockPos to) {
+        Direction direction = Direction.getApproximateNearest(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
+        return direction;
+    }
+
+    public static List<AlembicBlockEntity> alembicsAroundCrucible(Level level, BlockPos homeAlembic) {
+        List<AlembicBlockEntity> result = new ArrayList<>();
+        BlockState state = level.getBlockState(homeAlembic);
+        if (!state.hasProperty(AlembicBlock.FACING)) {
+            return result;
+        }
+        BlockPos crucible = homeAlembic.relative(state.getValue(AlembicBlock.FACING));
+        for (Direction direction : new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST}) {
+            if (level.getBlockEntity(crucible.relative(direction)) instanceof AlembicBlockEntity alembic) {
+                result.add(alembic);
+            }
+        }
+        return result;
     }
 
     public static void chestInteract(Level level, BlockPos pos, boolean open) {

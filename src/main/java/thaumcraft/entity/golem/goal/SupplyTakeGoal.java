@@ -18,7 +18,7 @@ public class SupplyTakeGoal extends GolemChestGoal {
         if (!(this.golem instanceof MultiColorGolem multi)) {
             return GolemUtils.adjacentMarkedContainers(this.golem);
         }
-        boolean hasSomething = this.golem.getInventory().hasSomething();
+        boolean hasSomething = this.golem.hasSomething();
         return GolemUtils.adjacentMarkedContainers(this.golem, marker -> {
             int color = GolemUtils.markerColor(this.golem.level().getBlockState(marker));
             for (int slot = 0; slot < 6; slot++) {
@@ -38,7 +38,7 @@ public class SupplyTakeGoal extends GolemChestGoal {
         if (!this.golem.getCarried().isEmpty()
             || this.golem.itemWatched.isEmpty()
             || !this.golem.getNavigation().isDone()
-            || !this.golem.getInventory().hasSomething()) {
+            || !this.golem.hasSomething()) {
             return false;
         }
         BlockPos home = this.golem.getHomeContainerPos();

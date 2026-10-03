@@ -19,7 +19,7 @@ public class SupplyGotoGoal extends GolemMoveGoal {
 
     @Override
     public boolean canUse() {
-        if (!this.worker.getCarried().isEmpty() || !this.worker.getInventory().hasSomething()) {
+        if (!this.worker.getCarried().isEmpty() || !this.worker.hasSomething()) {
             return false;
         }
         List<ItemStack> missing = this.worker.getMissingItems();

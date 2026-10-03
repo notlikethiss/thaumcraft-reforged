@@ -19,12 +19,12 @@ public class ProvidePlaceGoal extends GolemChestGoal {
         if (!(this.golem instanceof MultiColorGolem multi)) {
             return GolemUtils.adjacentMarkedContainers(this.golem);
         }
-        boolean hasSomething = this.golem.getInventory().hasSomething();
+        boolean hasSomething = this.golem.hasSomething();
         boolean anyColor = multi.hasAnyColor();
         return GolemUtils.adjacentMarkedContainers(this.golem, marker -> {
             int color = GolemUtils.markerColor(this.golem.level().getBlockState(marker));
             for (int slot = 0; slot < 6; slot++) {
-                if (!hasSomething || GolemUtils.sameItem(this.golem.getCarried(), this.golem.getInventory().getItem(slot))) {
+                if (!hasSomething || GolemUtils.sameItem(this.golem.getProvideStack(), this.golem.getInventory().getItem(slot))) {
                     int slotColor = multi.getSlotColor(slot);
                     if (color == slotColor || slotColor == -1 && (!anyColor || hasSomething)) {
                         return true;
@@ -42,7 +42,7 @@ public class ProvidePlaceGoal extends GolemChestGoal {
                 continue;
             }
             ResourceHandler<ItemResource> handler = GolemUtils.handler(this.golem.level(), container.pos(), container.side());
-            if (handler != null && GolemUtils.insert(handler, this.golem.getCarried(), true) > 0) {
+            if (handler != null && GolemUtils.insert(handler, this.golem.getProvideStack(), true) > 0) {
                 return container;
             }
         }
@@ -51,7 +51,7 @@ public class ProvidePlaceGoal extends GolemChestGoal {
 
     @Override
     public boolean canUse() {
-        return !this.golem.getCarried().isEmpty() && this.golem.getNavigation().isDone() && target() != null;
+        return !this.golem.getProvideStack().isEmpty() && this.golem.getNavigation().isDone() && target() != null;
     }
 
     @Override
@@ -65,9 +65,9 @@ public class ProvidePlaceGoal extends GolemChestGoal {
         if (handler == null) {
             return;
         }
-        ItemStack carried = this.golem.getCarried().copy();
+        ItemStack carried = this.golem.getProvideStack().copy();
         carried.shrink(GolemUtils.insert(handler, carried, false));
-        this.golem.setCarried(carried);
+        this.golem.setProvideStack(carried);
         openChest(container.pos());
     }
 }

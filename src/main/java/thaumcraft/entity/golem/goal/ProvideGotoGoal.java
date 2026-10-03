@@ -19,15 +19,15 @@ public class ProvideGotoGoal extends GolemMoveGoal {
 
     private List<GolemUtils.MarkedContainer> containers() {
         if (!(this.worker instanceof MultiColorGolem multi)) {
-            return GolemUtils.containersWithRoom(this.worker);
+            return GolemUtils.containersWithRoom(this.worker, this.worker.getProvideStack());
         }
         List<GolemUtils.MarkedContainer> results = new ArrayList<>();
-        boolean hasSomething = this.worker.getInventory().hasSomething();
+        boolean hasSomething = this.worker.hasSomething();
         for (int slot = 0; slot < 6; slot++) {
-            if ((!hasSomething || GolemUtils.sameItem(this.worker.getCarried(), this.worker.getInventory().getItem(slot)))
+            if ((!hasSomething || GolemUtils.sameItem(this.worker.getProvideStack(), this.worker.getInventory().getItem(slot)))
                 && (hasSomething || !multi.hasAnyColor() || multi.getSlotColor(slot) != -1)) {
                 this.worker.setColor(multi.getSlotColor(slot));
-                results.addAll(GolemUtils.containersWithRoom(this.worker));
+                results.addAll(GolemUtils.containersWithRoom(this.worker, this.worker.getProvideStack()));
             }
         }
         return results;
@@ -35,7 +35,7 @@ public class ProvideGotoGoal extends GolemMoveGoal {
 
     @Override
     public boolean canUse() {
-        if (this.worker.getCarried().isEmpty()) {
+        if (this.worker.getProvideStack().isEmpty()) {
             return false;
         }
         this.destination = GolemGoals.nearest(this.worker, containers());

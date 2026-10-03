@@ -13,7 +13,7 @@ public class HomeTakeGoal extends GolemChestGoal {
     }
 
     private Predicate<ItemStack> filter() {
-        return stack -> !this.golem.getInventory().hasSomething() || this.golem.getInventory().getAmountNeeded(stack) > 0;
+        return stack -> !this.golem.hasSomething() || this.golem.getInventory().getAmountNeeded(stack) > 0;
     }
 
     @Override

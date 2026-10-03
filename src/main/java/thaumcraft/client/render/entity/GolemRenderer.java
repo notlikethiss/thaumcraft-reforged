@@ -68,7 +68,7 @@ public class GolemRenderer extends MobRenderer<GolemBase, GolemRenderState, Gole
         state.leftArmActive = entity.leftArm > 0;
         state.leftArm = entity.leftArm - partialTicks;
         state.healing = entity.healing;
-        ItemStack carried = entity.getCarried();
+        ItemStack carried = entity.getDisplayCarried();
         state.carrying = !carried.isEmpty() && entity.deathTime == 0;
         state.carriedJar = carried.getItem() instanceof FilledJarItem;
         state.carriedBlock = carried.getItem() instanceof BlockItem && !state.carriedJar;

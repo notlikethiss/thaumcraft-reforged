@@ -188,8 +188,20 @@ public abstract class GolemBase extends PathfinderMob {
         return this.entityData.get(DATA_CARRIED);
     }
 
+    public ItemStack getDisplayCarried() {
+        return this.entityData.get(DATA_CARRIED);
+    }
+
+    protected void setDisplayCarried(ItemStack stack) {
+        this.entityData.set(DATA_CARRIED, stack.copy());
+    }
+
     public void setCarried(ItemStack stack) {
         this.entityData.set(DATA_CARRIED, stack.copy());
+    }
+
+    public int getMaxCarried() {
+        return maxCarried;
     }
 
     public int getCarrySpace() {
