@@ -1,31 +1,14 @@
 # Thaumcraft 3 Reforged
 
+![poster](https://github.com/notlikethiss/thaumcraft-reforged/blob/main/src/main/resources/poster.jpeg?raw=true)
+
 A port of **Thaumcraft 3.0.5e** by Azanor from Minecraft 1.5.2 to **Minecraft 26.3** on **NeoForge 26.3**.
 
 The goal is to recreate the original gameplay as closely as possible: aspects, aura nodes, vis and flux, the crucible, arcane and infusion crafting, research and the Thaumonomicon. Mechanics and numbers are ported 1:1 from the decompiled original. The technical side is rebuilt on modern APIs (data components, attachments, payloads, render states), and JEI integration is planned on top.
 
 > **Personal use only.** Thaumcraft and all of its assets belong to Azanor. This repository contains the original mod's logic and assets and is not intended for redistribution.
 
-## Status
-
-| Phase | Area                                                                                                                              | State        |
-| ----- | --------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| 0     | Tooling, decompilation, asset conversion                                                                                          | done         |
-| 1     | Mod skeleton                                                                                                                      | done         |
-| 2     | Base content: world blocks, resources, shards, nuggets, food, basic tools and armor, nitor, aspects with sync and tooltip overlay | done         |
-| 3     | World generation: ores, trees, plants, mounds, obelisks, aura nodes                                                               | done         |
-| 4     | Aura: nodes, vis exchange, flux events, goggles node rendering, HUD, lightning FX                                                 | done         |
-| 5     | Crafting: crucible, alembic, wands, arcane worktable, infusion workbench                                                          | done         |
-| 6     | Research: knowledge, notes and discoveries, research table, Thaumonomicon, thaumometer                                            | done         |
-| 7     | Devices: jars, arcane furnace, bellows, bore, levitator, mirrors, warded blocks and more                                          | done         |
-| 8     | Creatures and golems                                                                                                              | done         |
-| 9     | Special equipment properties                                                                                                      | done         |
-| 10    | Client polish and JEI                                                                                                             | partial      |
-| 11    | Config and localization                                                                                                           | partial      |
-
-Some content is intentionally left out because it is unreachable or broken in the original: the advanced crucible and alembic (meta 5-7) and flux goo.
-
-## Requirements
+## Requirements to build
 
 - Java 25
 - Python 3 (only for the conversion and resource generation scripts)
