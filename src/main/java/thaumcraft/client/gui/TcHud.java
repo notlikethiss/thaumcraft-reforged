@@ -6,12 +6,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.render.AuraNodeRenderer;
 import thaumcraft.item.wand.CastingWandItem;
+import thaumcraft.item.wand.HellrodItem;
 import thaumcraft.item.wand.WandManager;
 import thaumcraft.registry.ModDataComponents;
 
@@ -34,6 +36,8 @@ public final class TcHud {
             if (vis != null) {
                 renderCastingWand(graphics, minecraft, player, vis, wand.getMaxVis());
             }
+        } else if (held.getItem() instanceof HellrodItem) {
+            renderHellrod(graphics, player, HellrodItem.getCharges(held));
         }
     }
 
@@ -116,6 +120,21 @@ public final class TcHud {
         if (discount > 0) {
             String text = "-" + discount + "%";
             graphics.text(font, text, 75 - font.width(text), 1, 0xFFFFFFFF, true);
+        }
+        graphics.pose().popMatrix();
+    }
+
+    private static void renderHellrod(GuiGraphicsExtractor graphics, Player player, int charges) {
+        int shift = player.isCreative() ? 6 : (player.isUnderWater() ? 29 : 20);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(graphics.guiWidth() / 2 + 10, graphics.guiHeight() - 29.0F - shift);
+        graphics.pose().scale(0.525F, 0.525F);
+        for (int index = 0; index < 9; index++) {
+            float bob = Mth.sin((player.tickCount + index * 10) / 5.0F) + 1.0F;
+            graphics.pose().pushMatrix();
+            graphics.pose().translate(0.0F, bob);
+            blit(graphics, index * 17, 0, 160 + (index >= charges ? 16 : 0), 0, 16, 16);
+            graphics.pose().popMatrix();
         }
         graphics.pose().popMatrix();
     }

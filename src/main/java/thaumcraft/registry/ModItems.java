@@ -45,6 +45,8 @@ import thaumcraft.entity.golem.GolemKind;
 import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.ExcavationWandItem;
 import thaumcraft.item.wand.FrostWandItem;
+import thaumcraft.item.wand.FireWandItem;
+import thaumcraft.item.wand.HellrodItem;
 import thaumcraft.item.wand.LightningWandItem;
 
 public final class ModItems {
@@ -186,6 +188,14 @@ public final class ModItems {
     public static final DeferredItem<LightningWandItem> WAND_LIGHTNING = ITEMS.registerItem(
         "wand_lightning",
         properties -> new LightningWandItem(properties.durability(2000))
+    );
+    public static final DeferredItem<FireWandItem> WAND_FIRE = ITEMS.registerItem(
+        "wand_fire",
+        properties -> new FireWandItem(properties.durability(2000))
+    );
+    public static final DeferredItem<HellrodItem> HELLROD = ITEMS.registerItem(
+        "hellrod",
+        HellrodItem::new
     );
     public static final DeferredItem<CrystalCapacitorItem> CRYSTAL_CAPACITOR = ITEMS.registerItem(
         "crystal_capacitor",

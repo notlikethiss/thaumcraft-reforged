@@ -647,7 +647,7 @@ def arcane_stone():
     mineable("pickaxe", "arcane_stone")
 
 
-WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge", "wand_excavation": "wandexcavation", "wand_frost": "wandfrost", "wand_lightning": "wandlightning"}
+WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge", "wand_excavation": "wandexcavation", "wand_frost": "wandfrost", "wand_lightning": "wandlightning", "wand_fire": "wandfire", "hellrod": "hellrod"}
 
 
 def full_cube(texture, tintindex=None):

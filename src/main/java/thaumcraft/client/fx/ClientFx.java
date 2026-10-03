@@ -414,6 +414,22 @@ public final class ClientFx implements FxProxy {
     }
 
     @Override
+    public void wandFire(Level level, Entity shooter, int range) {
+        if (!(level instanceof ClientLevel clientLevel)) {
+            return;
+        }
+        Vec3 look = shooter.getViewVector(1.0F);
+        float yaw = shooter.getYRot();
+        double startX = shooter.getX() - Mth.cos(yaw / 180.0F * (float) Math.PI) * 0.16F;
+        double startY = shooter == Minecraft.getInstance().player ? shooter.getEyeY() : shooter.getY() + shooter.getBbHeight() / 2.0F + 0.25;
+        double startZ = shooter.getZ() - Mth.sin(yaw / 180.0F * (float) Math.PI) * 0.16F;
+        for (int index = 0; index < 3; index++) {
+            ScorchParticle fx = new ScorchParticle(clientLevel, startX + look.x * 0.6F, startY + look.y * 0.6F, startZ + look.z * 0.6F, look, range);
+            add(fx);
+        }
+    }
+
+    @Override
     public void nodeBolt(Level level, float x, float y, float z, Entity target) {
         double targetY = target instanceof Player ? target.getEyeY() : target.getY();
         bolt(level, x, y, z, target.getX(), targetY, target.getZ(), 10, 2.0F, 5, 3);
