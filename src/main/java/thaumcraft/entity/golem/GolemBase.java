@@ -33,7 +33,9 @@ import org.jspecify.annotations.Nullable;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.SimpleMenuProvider;
 import thaumcraft.aura.AuraManager;
+import thaumcraft.menu.GolemMenu;
 import thaumcraft.entity.golem.goal.AvoidCreeperSwellGoal;
 import thaumcraft.entity.golem.goal.GolemDoorGoal;
 import thaumcraft.entity.golem.goal.ReturnHomeGoal;
@@ -431,7 +433,13 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     protected InteractionResult openMenu(Player player) {
-        return InteractionResult.PASS;
+        if (!this.level().isClientSide()) {
+            player.openMenu(
+                new SimpleMenuProvider((id, inventory, opener) -> new GolemMenu(id, inventory, this), this.getDisplayName()),
+                buffer -> buffer.writeVarInt(this.getId())
+            );
+        }
+        return InteractionResult.SUCCESS;
     }
 
     @Override

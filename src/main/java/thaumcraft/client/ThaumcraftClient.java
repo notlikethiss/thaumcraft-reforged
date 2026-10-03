@@ -35,6 +35,7 @@ import thaumcraft.client.render.HungryChestRenderer;
 import thaumcraft.client.render.MirrorRenderer;
 import thaumcraft.client.screen.ArcaneBoreScreen;
 import thaumcraft.client.screen.HandMirrorScreen;
+import thaumcraft.client.screen.GolemScreen;
 import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
 import thaumcraft.client.render.JarRenderer;
@@ -192,6 +193,7 @@ public final class ThaumcraftClient {
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.HAND_MIRROR.get(), HandMirrorScreen::new);
+        event.register(ModMenus.GOLEM.get(), GolemScreen::new);
         event.register(ModMenus.ARCANE_BORE.get(), ArcaneBoreScreen::new);
         event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);

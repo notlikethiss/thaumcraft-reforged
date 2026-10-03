@@ -64,6 +64,7 @@ public class TallowGolem extends GolemWorker {
         List<ItemStack> stacks = this.inventory.saveStacks();
         this.inventory = new GolemInventory(this, 1, type == 0 ? 1 : this.maxCarried);
         this.inventory.loadStacks(stacks);
+        this.inventory.setOnChange(this::refreshDisplay);
         this.goalSelector.removeAllGoals(goal -> true);
         if (type == 0) {
             this.goalSelector.addGoal(1, new FillCrucibleGoal(this));

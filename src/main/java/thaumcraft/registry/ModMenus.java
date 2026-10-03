@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.menu.ArcaneBoreMenu;
 import thaumcraft.menu.ArcaneWorkbenchMenu;
+import thaumcraft.menu.GolemMenu;
 import thaumcraft.menu.HandMirrorMenu;
 import thaumcraft.menu.InfusionWorkbenchMenu;
 import thaumcraft.menu.ResearchTableMenu;
@@ -34,6 +35,10 @@ public final class ModMenus {
     public static final Supplier<MenuType<ArcaneBoreMenu>> ARCANE_BORE = MENUS.register(
         "arcane_bore",
         () -> IMenuTypeExtension.create(ArcaneBoreMenu::fromNetwork)
+    );
+    public static final Supplier<MenuType<GolemMenu>> GOLEM = MENUS.register(
+        "golem",
+        () -> IMenuTypeExtension.create(GolemMenu::fromNetwork)
     );
     public static final Supplier<MenuType<HandMirrorMenu>> HAND_MIRROR = MENUS.register(
         "hand_mirror",

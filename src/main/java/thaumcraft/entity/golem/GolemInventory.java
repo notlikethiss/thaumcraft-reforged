@@ -9,11 +9,23 @@ import net.minecraft.world.item.ItemStack;
 public class GolemInventory extends SimpleContainer {
     private final GolemBase golem;
     private final int stackLimit;
+    private Runnable onChange = () -> {
+    };
 
     public GolemInventory(GolemBase golem, int size, int stackLimit) {
         super(size);
         this.golem = golem;
         this.stackLimit = stackLimit;
+    }
+
+    public void setOnChange(Runnable onChange) {
+        this.onChange = onChange;
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        onChange.run();
     }
 
     @Override
