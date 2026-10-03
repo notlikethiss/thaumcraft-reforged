@@ -2,6 +2,7 @@ package thaumcraft.fx;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
@@ -92,6 +93,9 @@ public interface FxProxy {
     default @Nullable Object boreBeam(Level level, double x, double y, double z, double tx, double ty, double tz, int type, int color, boolean reverse,
                                       float endMod, @Nullable Object previous, int impact) {
         return null;
+    }
+
+    default void wandBeam(Level level, Player player, double tx, double ty, double tz, int type, int color, boolean reverse, float endMod, int impact) {
     }
 
     default void boreDigFx(Level level, BlockPos pos, BlockPos target, BlockState state) {

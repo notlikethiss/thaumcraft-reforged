@@ -1,6 +1,8 @@
 package thaumcraft.client.fx;
 
 import net.minecraft.client.Minecraft;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
@@ -20,10 +22,13 @@ import thaumcraft.client.fx.bolt.LightningBolt;
 import thaumcraft.client.fx.world.BeamFx;
 import thaumcraft.client.fx.world.BoreBeamFx;
 import thaumcraft.client.fx.world.RuneFx;
+import thaumcraft.client.fx.world.WandBeamFx;
 import thaumcraft.client.fx.world.WorldFxRenderer;
 import thaumcraft.fx.FxProxy;
 
 public final class ClientFx implements FxProxy {
+    private final Map<Integer, WandBeamFx> wandBeams = new HashMap<>();
+
     private static ClientLevel level() {
         return Minecraft.getInstance().level;
     }
@@ -81,6 +86,20 @@ public final class ClientFx implements FxProxy {
         BoreBeamFx beam = new BoreBeamFx(level, x, y, z, tx, ty, tz, color, type, reverse, endMod);
         WorldFxRenderer.add(beam);
         return beam;
+    }
+
+    @Override
+    public void wandBeam(Level level, Player player, double tx, double ty, double tz, int type, int color, boolean reverse, float endMod, int impact) {
+        wandBeams.values().removeIf(WandBeamFx::isDead);
+        WandBeamFx beam = wandBeams.get(player.getId());
+        if (beam != null) {
+            beam.update(tx, ty, tz, endMod, impact);
+            return;
+        }
+        beam = new WandBeamFx(level, player, tx, ty, tz, color, type, reverse, endMod);
+        beam.update(tx, ty, tz, endMod, impact);
+        wandBeams.put(player.getId(), beam);
+        WorldFxRenderer.add(beam);
     }
 
     @Override

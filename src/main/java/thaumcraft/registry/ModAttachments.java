@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aura.AuraChunkData;
+import thaumcraft.item.wand.ExcavationState;
 import thaumcraft.research.PlayerKnowledge;
 
 public final class ModAttachments {
@@ -24,6 +25,11 @@ public final class ModAttachments {
             .copyOnDeath()
             .sync((holder, player) -> holder == player, PlayerKnowledge.STREAM_CODEC)
             .build()
+    );
+
+    public static final Supplier<AttachmentType<ExcavationState>> EXCAVATION = ATTACHMENTS.register(
+        "excavation",
+        () -> AttachmentType.builder(ExcavationState::new).build()
     );
 
     private ModAttachments() {
