@@ -12,14 +12,14 @@ The goal is to recreate the original gameplay as closely as possible: aspects, a
 | ----- | --------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | 0     | Tooling, decompilation, asset conversion                                                                                          | done         |
 | 1     | Mod skeleton                                                                                                                      | done         |
-| 2     | Base content: world blocks, resources, shards, nuggets, food, basic tools and armor, nitor, aspects with sync and tooltip overlay | partial done |
+| 2     | Base content: world blocks, resources, shards, nuggets, food, basic tools and armor, nitor, aspects with sync and tooltip overlay | done         |
 | 3     | World generation: ores, trees, plants, mounds, obelisks, aura nodes                                                               | done         |
 | 4     | Aura: nodes, vis exchange, flux events, goggles node rendering, HUD, lightning FX                                                 | done         |
 | 5     | Crafting: crucible, alembic, wands, arcane worktable, infusion workbench                                                          | done         |
 | 6     | Research: knowledge, notes and discoveries, research table, Thaumonomicon, thaumometer                                            | done         |
 | 7     | Devices: jars, arcane furnace, bellows, bore, levitator, mirrors, warded blocks and more                                          | done         |
 | 8     | Creatures and golems                                                                                                              | done         |
-| 9     | Special equipment properties                                                                                                      | partial      |
+| 9     | Special equipment properties                                                                                                      | done         |
 | 10    | Client polish and JEI                                                                                                             | partial      |
 | 11    | Config and localization                                                                                                           | partial      |
 
