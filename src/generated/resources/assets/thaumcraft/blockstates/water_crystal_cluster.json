@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "thaumcraft:block/crystal"
+    },
+    "facing=up": {
+      "model": "thaumcraft:block/crystal"
+    },
+    "facing=north": {
+      "model": "thaumcraft:block/crystal"
+    },
+    "facing=south": {
+      "model": "thaumcraft:block/crystal"
+    },
+    "facing=west": {
+      "model": "thaumcraft:block/crystal"
+    },
+    "facing=east": {
+      "model": "thaumcraft:block/crystal"
+    }
+  }
+}

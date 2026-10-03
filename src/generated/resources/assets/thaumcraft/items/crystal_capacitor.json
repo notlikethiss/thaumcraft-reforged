@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "thaumcraft:block/crystal_capacitor"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "thaumcraft:block/crystal_capacitor",
+        "model": {
+          "type": "thaumcraft:crystal",
+          "kind": "capacitor"
+        }
+      }
+    ]
+  }
+}

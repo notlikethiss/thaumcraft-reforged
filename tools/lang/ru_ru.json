@@ -115,5 +115,6 @@
   "tc.thaumcraft.plate_mode0": "Теперь плита срабатывает на всё.",
   "tc.thaumcraft.plate_mode1": "Теперь плита срабатывает на всё, кроме вас.",
   "tc.thaumcraft.plate_mode2": "Теперь плита срабатывает только на вас.",
-  "tc.thaumcraft.door_refuses": "Дверь не поддаётся."
+  "tc.thaumcraft.door_refuses": "Дверь не поддаётся.",
+  "tc.thaumcraft.capacitor_vis": "Содержит %s вис"
 }

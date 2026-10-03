@@ -1,0 +1,149 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/crystalframe",
+    "frame": "thaumcraft:block/crystalframe"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#frame",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        1.84
+      ],
+      "to": [
+        16,
+        16,
+        1.84
+      ],
+      "faces": {
+        "south": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        14.16
+      ],
+      "to": [
+        16,
+        16,
+        14.16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        1.84,
+        0,
+        0
+      ],
+      "to": [
+        1.84,
+        16,
+        16
+      ],
+      "faces": {
+        "east": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        14.16,
+        0,
+        0
+      ],
+      "to": [
+        14.16,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        1.84,
+        0
+      ],
+      "to": [
+        16,
+        1.84,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        14.16,
+        0
+      ],
+      "to": [
+        16,
+        14.16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame"
+        }
+      }
+    }
+  ]
+}

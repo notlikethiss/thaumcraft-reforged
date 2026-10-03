@@ -254,6 +254,7 @@
   "subtitles.thaumcraft.wisplive": "Гудит висп",
   "subtitles.thaumcraft.zap": "Треск разряда",
   "tc.thaumcraft.cantrecord": "Вы что-то обнаружили, но вам не на чем записать находки!",
+  "tc.thaumcraft.capacitor_vis": "Содержит %s вис",
   "tc.thaumcraft.cheat_sheet": "Шпаргалка",
   "tc.thaumcraft.click_for_research": "Нажмите, чтобы открыть исследование",
   "tc.thaumcraft.discoveryerror": "У вас недостаточно знаний, необходимых для понимания этого.",

@@ -24,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.item.ArcaneKeyItem;
+import thaumcraft.item.CrystalCapacitorItem;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.FilledJarItem;
@@ -143,6 +144,17 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> ARCANE_PRESSURE_PLATE = block(ModBlocks.ARCANE_PRESSURE_PLATE);
     public static final DeferredItem<BlockItem> ARCANE_LEVITATOR = block(ModBlocks.ARCANE_LEVITATOR);
     public static final DeferredItem<BlockItem> HUNGRY_CHEST = block(ModBlocks.HUNGRY_CHEST);
+    public static final DeferredItem<BlockItem> AIR_CRYSTAL_CLUSTER = block(ModBlocks.AIR_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> FIRE_CRYSTAL_CLUSTER = block(ModBlocks.FIRE_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> WATER_CRYSTAL_CLUSTER = block(ModBlocks.WATER_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> EARTH_CRYSTAL_CLUSTER = block(ModBlocks.EARTH_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> VIS_CRYSTAL_CLUSTER = block(ModBlocks.VIS_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> MIXED_CRYSTAL_CLUSTER = block(ModBlocks.MIXED_CRYSTAL_CLUSTER);
+    public static final DeferredItem<BlockItem> CRYSTAL_CORE = block(ModBlocks.CRYSTAL_CORE);
+    public static final DeferredItem<CrystalCapacitorItem> CRYSTAL_CAPACITOR = ITEMS.registerItem(
+        "crystal_capacitor",
+        properties -> new CrystalCapacitorItem(ModBlocks.CRYSTAL_CAPACITOR.get(), properties.useBlockDescriptionPrefix())
+    );
     public static final DeferredItem<DoubleHighBlockItem> ARCANE_DOOR = ITEMS.registerItem(
         "arcane_door",
         properties -> new DoubleHighBlockItem(ModBlocks.ARCANE_DOOR.get(), properties.stacksTo(1).useBlockDescriptionPrefix())

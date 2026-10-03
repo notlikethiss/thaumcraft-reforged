@@ -48,6 +48,11 @@ public final class ModDataComponents {
         builder -> builder.persistent(KeyLink.CODEC).networkSynchronized(KeyLink.STREAM_CODEC.cast())
     );
 
+    public static final Supplier<DataComponentType<Integer>> STORED_VIS = COMPONENTS.registerComponentType(
+        "stored_vis",
+        builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+
     private ModDataComponents() {
     }
 

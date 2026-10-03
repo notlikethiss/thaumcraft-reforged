@@ -67,4 +67,16 @@ public interface FxProxy {
 
     default void furnaceLava(Level level, int x, int y, int z, int facingX, int facingZ) {
     }
+
+    default void beam(Level level, double x, double y, double z, double tx, double ty, double tz, int type, int color, boolean reverse, float endMod, int age) {
+    }
+
+    default void crystalSparkle(Level level, float x, float y, float z, int color) {
+    }
+
+    default void crystalCoreBeam(Level level, double x, double y, double z, int nodeKey) {
+    }
+
+    default void blockRunes(Level level, int x, int y, int z, float red, float green, float blue, int duration) {
+    }
 }

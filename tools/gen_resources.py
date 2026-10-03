@@ -1053,8 +1053,58 @@ def owned_devices():
     special_item("hungry_chest", ref("hungry_chest", "item"), {"type": f"{NS}:hungry_chest"})
     self_drop("hungry_chest")
 
+    crystals()
+
     mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator", "hungry_chest")
     mineable("pickaxe", "arcane_door")
+
+
+CRYSTAL_CLUSTERS = ["air", "fire", "water", "earth", "vis", "mixed"]
+
+
+def crystals():
+    block_model("crystal", {"textures": {"particle": ref("crystal")}})
+    item_model("crystal", {"parent": "minecraft:block/block", "textures": {"particle": ref("crystal")}})
+    for index, name in enumerate(CRYSTAL_CLUSTERS):
+        block = f"{name}_crystal_cluster"
+        blockstate(block, {"variants": {f"facing={direction}": {"model": ref("crystal")} for direction in DIRECTIONS}})
+        special_item(block, ref("crystal", "item"), {"type": f"{NS}:crystal", "kind": "cluster", "crystal": index})
+        self_drop(block)
+    simple_state("crystal_core", ref("crystal"))
+    special_item("crystal_core", ref("crystal", "item"), {"type": f"{NS}:crystal", "kind": "core"})
+    loot("crystal_core", [])
+
+    frame = ref("crystalframe")
+    inset = 1.84
+    inner = [
+        {"from": [0, 0, inset], "to": [16, 16, inset], "faces": {"south": {"texture": "#frame"}}},
+        {"from": [0, 0, 16 - inset], "to": [16, 16, 16 - inset], "faces": {"north": {"texture": "#frame"}}},
+        {"from": [inset, 0, 0], "to": [inset, 16, 16], "faces": {"east": {"texture": "#frame"}}},
+        {"from": [16 - inset, 0, 0], "to": [16 - inset, 16, 16], "faces": {"west": {"texture": "#frame"}}},
+        {"from": [0, inset, 0], "to": [16, inset, 16], "faces": {"up": {"texture": "#frame"}}},
+        {"from": [0, 16 - inset, 0], "to": [16, 16 - inset, 16], "faces": {"down": {"texture": "#frame"}}},
+    ]
+    block_model("crystal_capacitor", {
+        "parent": "minecraft:block/block",
+        "textures": {"particle": frame, "frame": frame},
+        "elements": [full_cube("#frame"), *inner],
+    })
+    simple_state("crystal_capacitor")
+    write(ASSETS / "items" / "crystal_capacitor.json", {"model": {
+        "type": "minecraft:composite",
+        "models": [
+            {"type": "minecraft:model", "model": ref("crystal_capacitor")},
+            {"type": "minecraft:special", "base": ref("crystal_capacitor"), "model": {"type": f"{NS}:crystal", "kind": "capacitor"}},
+        ],
+    }})
+    loot("crystal_capacitor", [{
+        "rolls": 1,
+        "entries": [{
+            "type": "minecraft:item",
+            "name": f"{NS}:crystal_capacitor",
+            "modifier": {"type": "minecraft:copy_components", "source": "block_entity", "include": [f"{NS}:stored_vis"]},
+        }],
+    }])
 
 
 def devices():

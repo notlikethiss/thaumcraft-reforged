@@ -15,6 +15,8 @@ public final class TcModelLayers {
     public static final ModelLayerLocation BRAIN = layer("brain");
     public static final ModelLayerLocation BELLOWS = layer("bellows");
     public static final ModelLayerLocation HUNGRY_CHEST = layer("hungry_chest");
+    public static final ModelLayerLocation CRYSTAL = layer("crystal");
+    public static final ModelLayerLocation CUBE = layer("cube");
 
     private TcModelLayers() {
     }
@@ -29,6 +31,8 @@ public final class TcModelLayers {
         event.registerLayerDefinition(BRAIN, TcModelLayers::brain);
         event.registerLayerDefinition(BELLOWS, TcModelLayers::bellows);
         event.registerLayerDefinition(HUNGRY_CHEST, TcModelLayers::hungryChest);
+        event.registerLayerDefinition(CRYSTAL, TcModelLayers::crystal);
+        event.registerLayerDefinition(CUBE, TcModelLayers::cube);
     }
 
     private static LayerDefinition jar() {
@@ -76,5 +80,21 @@ public final class TcModelLayers {
         root.addOrReplaceChild("knob", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -2.0F, -15.0F, 2.0F, 4.0F, 1.0F), PartPose.offset(8.0F, 7.0F, 15.0F));
         root.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(0, 19).addBox(0.0F, 0.0F, 0.0F, 14.0F, 10.0F, 14.0F), PartPose.offset(1.0F, 6.0F, 1.0F));
         return LayerDefinition.create(mesh, 64, 64);
+    }
+
+    private static LayerDefinition crystal() {
+        MeshDefinition mesh = new MeshDefinition();
+        mesh.getRoot().addOrReplaceChild(
+            "crystal",
+            CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-16.0F, -16.0F, 0.0F, 16.0F, 16.0F, 16.0F),
+            PartPose.offsetAndRotation(0.0F, 32.0F, 0.0F, 0.7071F, 0.0F, 0.7071F)
+        );
+        return LayerDefinition.create(mesh, 64, 32);
+    }
+
+    private static LayerDefinition cube() {
+        MeshDefinition mesh = new MeshDefinition();
+        mesh.getRoot().addOrReplaceChild("cube", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-8.0F, -8.0F, -8.0F, 16.0F, 16.0F, 16.0F), PartPose.offset(8.0F, 8.0F, 8.0F));
+        return LayerDefinition.create(mesh, 64, 32);
     }
 }

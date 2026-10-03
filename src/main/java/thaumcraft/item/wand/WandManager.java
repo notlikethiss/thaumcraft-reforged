@@ -21,6 +21,10 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.block.WandTarget;
+import thaumcraft.block.crystal.CrystalCapacitorBlock;
+import thaumcraft.block.crystal.CrystalClusterBlock;
+import thaumcraft.block.crystal.CrystalCoreBlock;
+import thaumcraft.blockentity.CrystalCoreBlockEntity;
 import thaumcraft.block.device.InfernalFurnaceBlock;
 import thaumcraft.research.ResearchManager;
 import thaumcraft.network.BlockSparklePayload;
@@ -59,7 +63,59 @@ public final class WandManager {
             && ResearchManager.isResearchComplete(player, "INFERNALFURNACE")) {
             return createInfernalFurnace(stack, player, level, pos);
         }
+        if ((isCosmeticSolid(state) || isCrystal(state)) && ResearchManager.isResearchComplete(player, "CRYSTALCORE")) {
+            return createNodeMagnet(stack, player, level, pos);
+        }
         return InteractionResult.PASS;
+    }
+
+    private static boolean isCosmeticSolid(BlockState state) {
+        return state.is(ModBlocks.OBSIDIAN_TOTEM.get()) || state.is(ModBlocks.OBSIDIAN_TILE.get()) || state.is(ModBlocks.TRAVEL_PAVING_STONE.get());
+    }
+
+    private static boolean isCrystal(BlockState state) {
+        return state.getBlock() instanceof CrystalClusterBlock || state.getBlock() instanceof CrystalCoreBlock || state.getBlock() instanceof CrystalCapacitorBlock;
+    }
+
+    private static InteractionResult createNodeMagnet(ItemStack stack, Player player, Level level, BlockPos pos) {
+        for (int x = pos.getX() - 2; x <= pos.getX(); x++) {
+            for (int y = pos.getY() - 2; y <= pos.getY(); y++) {
+                for (int z = pos.getZ() - 2; z <= pos.getZ(); z++) {
+                    BlockPos origin = new BlockPos(x, y, z);
+                    if (fitNodeMagnet(level, origin)
+                        && level.getBlockEntity(origin.offset(1, 2, 1)) instanceof CrystalCoreBlockEntity core
+                        && !core.isActive()
+                        && spendCharge(level, stack, player, 300)) {
+                        if (!level.isClientSide()) {
+                            core.activate();
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    private static boolean fitNodeMagnet(Level level, BlockPos origin) {
+        for (int layer = 0; layer < 3; layer++) {
+            for (int x = 0; x < 3; x++) {
+                for (int z = 0; z < 3; z++) {
+                    BlockState state = level.getBlockState(origin.offset(x, 2 - layer, z));
+                    boolean corner = x != 1 && z != 1;
+                    boolean matches;
+                    if (layer == 0) {
+                        matches = x == 1 && z == 1 ? state.is(ModBlocks.CRYSTAL_CORE.get()) : state.isAir();
+                    } else {
+                        matches = corner ? state.is(ModBlocks.OBSIDIAN_TOTEM.get()) : state.isAir();
+                    }
+                    if (!matches) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private static InteractionResult createInfernalFurnace(ItemStack stack, Player player, Level level, BlockPos pos) {

@@ -19,6 +19,9 @@ import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.block.device.ArcaneDoorBlock;
 import thaumcraft.block.device.ArcaneEarBlock;
 import thaumcraft.block.device.ArcanePressurePlateBlock;
+import thaumcraft.block.crystal.CrystalCapacitorBlock;
+import thaumcraft.block.crystal.CrystalClusterBlock;
+import thaumcraft.block.crystal.CrystalCoreBlock;
 import thaumcraft.block.device.HungryChestBlock;
 import thaumcraft.block.device.LevitatorBlock;
 import thaumcraft.block.device.ArcaneStoneBlock;
@@ -207,6 +210,14 @@ public final class ModBlocks {
         HungryChestBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD).noOcclusion()
     );
+    public static final DeferredBlock<CrystalClusterBlock> AIR_CRYSTAL_CLUSTER = crystal("air_crystal_cluster", 0);
+    public static final DeferredBlock<CrystalClusterBlock> FIRE_CRYSTAL_CLUSTER = crystal("fire_crystal_cluster", 1);
+    public static final DeferredBlock<CrystalClusterBlock> WATER_CRYSTAL_CLUSTER = crystal("water_crystal_cluster", 2);
+    public static final DeferredBlock<CrystalClusterBlock> EARTH_CRYSTAL_CLUSTER = crystal("earth_crystal_cluster", 3);
+    public static final DeferredBlock<CrystalClusterBlock> VIS_CRYSTAL_CLUSTER = crystal("vis_crystal_cluster", 4);
+    public static final DeferredBlock<CrystalClusterBlock> MIXED_CRYSTAL_CLUSTER = crystal("mixed_crystal_cluster", 5);
+    public static final DeferredBlock<CrystalCoreBlock> CRYSTAL_CORE = BLOCKS.registerBlock("crystal_core", CrystalCoreBlock::new, ModBlocks::crystal);
+    public static final DeferredBlock<CrystalCapacitorBlock> CRYSTAL_CAPACITOR = BLOCKS.registerBlock("crystal_capacitor", CrystalCapacitorBlock::new, ModBlocks::crystal);
 
     private ModBlocks() {
     }
@@ -222,6 +233,23 @@ public final class ModBlocks {
             blocks.put(color, BLOCKS.registerBlock(color + suffix, factory, properties));
         }
         return blocks;
+    }
+
+    private static DeferredBlock<CrystalClusterBlock> crystal(String name, int type) {
+        return BLOCKS.registerBlock(name, properties -> new CrystalClusterBlock(type, properties), ModBlocks::crystal);
+    }
+
+    private static BlockBehaviour.Properties crystal(BlockBehaviour.Properties properties) {
+        return properties
+            .mapColor(MapColor.NONE)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.7F, 1.0F)
+            .lightLevel(state -> 6)
+            .sound(ModSounds.CRYSTAL_SOUND)
+            .noOcclusion()
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos, aabb) -> false);
     }
 
     private static DeferredBlock<InfusedStoneBlock> infusedStone(String name, int type) {

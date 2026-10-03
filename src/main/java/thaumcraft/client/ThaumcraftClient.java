@@ -23,6 +23,10 @@ import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.BellowsRenderer;
+import thaumcraft.client.render.CrystalCapacitorRenderer;
+import thaumcraft.client.render.CrystalClusterRenderer;
+import thaumcraft.client.render.CrystalCoreRenderer;
+import thaumcraft.client.render.CrystalSpecialRenderer;
 import thaumcraft.client.render.HungryChestRenderer;
 import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
@@ -125,6 +129,9 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CLUSTER.get(), CrystalClusterRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CORE.get(), CrystalCoreRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CAPACITOR.get(), CrystalCapacitorRenderer::new);
     }
 
     @SubscribeEvent
@@ -137,6 +144,7 @@ public final class ThaumcraftClient {
         event.register(Thaumcraft.id("jar"), JarSpecialRenderer.Unbaked.MAP_CODEC);
         event.register(Thaumcraft.id("bellows"), BellowsSpecialRenderer.Unbaked.MAP_CODEC);
         event.register(Thaumcraft.id("hungry_chest"), HungryChestSpecialRenderer.Unbaked.MAP_CODEC);
+        event.register(Thaumcraft.id("crystal"), CrystalSpecialRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent

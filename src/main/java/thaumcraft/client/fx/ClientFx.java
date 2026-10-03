@@ -12,6 +12,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thaumcraft.client.fx.bolt.BoltRenderer;
 import thaumcraft.client.fx.bolt.LightningBolt;
+import thaumcraft.client.aura.AuraClientData;
+import thaumcraft.client.fx.world.BeamFx;
+import thaumcraft.client.fx.world.RuneFx;
+import thaumcraft.client.fx.world.WorldFxRenderer;
 import thaumcraft.fx.FxProxy;
 
 public final class ClientFx implements FxProxy {
@@ -31,6 +35,40 @@ public final class ClientFx implements FxProxy {
             case DECREASED -> base;
             case ALL -> base * 2;
         };
+    }
+
+    @Override
+    public void beam(Level level, double x, double y, double z, double tx, double ty, double tz, int type, int color, boolean reverse, float endMod, int age) {
+        WorldFxRenderer.add(new BeamFx(level, x, y, z, tx, ty, tz, color, type, reverse, endMod, age));
+    }
+
+    @Override
+    public void crystalSparkle(Level level, float x, float y, float z, int color) {
+        if (level instanceof ClientLevel clientLevel) {
+            SparkleParticle fx = new SparkleParticle(clientLevel, x, y, z, 1.0F, color, 3);
+            fx.setNoClip(true);
+            add(fx);
+        }
+    }
+
+    @Override
+    public void crystalCoreBeam(Level level, double x, double y, double z, int nodeKey) {
+        AuraClientData.ClientNode node = AuraClientData.NODES.get(nodeKey);
+        if (node == null) {
+            return;
+        }
+        float[] position = AuraClientData.RENDER_POSITIONS.get(nodeKey);
+        double tx = position != null ? position[0] : node.x();
+        double ty = position != null ? position[1] : node.y();
+        double tz = position != null ? position[2] : node.z();
+        float size = node.level() / 100.0F;
+        beam(level, x, y, z, tx, ty, tz, 0, 0xFFFFFF, true, size, 20);
+        beam(level, x, y, z, tx, ty, tz, 1, 0xFFFFFF, true, size / 2.0F, 20);
+    }
+
+    @Override
+    public void blockRunes(Level level, int x, int y, int z, float red, float green, float blue, int duration) {
+        WorldFxRenderer.add(new RuneFx(x + 0.5, y + 0.5, z + 0.5, red, green, blue, duration, 0.03F, level.getRandom()));
     }
 
     @Override

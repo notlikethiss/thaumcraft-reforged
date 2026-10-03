@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:crystal_capacitor",
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "source": "block_entity",
+            "include": [
+              "thaumcraft:stored_vis"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "thaumcraft:blocks/crystal_capacitor"
+}

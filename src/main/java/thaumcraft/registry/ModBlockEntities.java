@@ -11,6 +11,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.ArcaneEarBlockEntity;
+import thaumcraft.blockentity.CrystalCapacitorBlockEntity;
+import thaumcraft.blockentity.CrystalClusterBlockEntity;
+import thaumcraft.blockentity.CrystalCoreBlockEntity;
 import thaumcraft.blockentity.HungryChestBlockEntity;
 import thaumcraft.blockentity.LevitatorBlockEntity;
 import thaumcraft.blockentity.BellowsBlockEntity;
@@ -80,6 +83,26 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST = BLOCK_ENTITIES.register(
         "hungry_chest",
         () -> new BlockEntityType<>(HungryChestBlockEntity::new, ModBlocks.HUNGRY_CHEST.get())
+    );
+    public static final Supplier<BlockEntityType<CrystalClusterBlockEntity>> CRYSTAL_CLUSTER = BLOCK_ENTITIES.register(
+        "crystal_cluster",
+        () -> new BlockEntityType<>(
+            CrystalClusterBlockEntity::new,
+            ModBlocks.AIR_CRYSTAL_CLUSTER.get(),
+            ModBlocks.FIRE_CRYSTAL_CLUSTER.get(),
+            ModBlocks.WATER_CRYSTAL_CLUSTER.get(),
+            ModBlocks.EARTH_CRYSTAL_CLUSTER.get(),
+            ModBlocks.VIS_CRYSTAL_CLUSTER.get(),
+            ModBlocks.MIXED_CRYSTAL_CLUSTER.get()
+        )
+    );
+    public static final Supplier<BlockEntityType<CrystalCoreBlockEntity>> CRYSTAL_CORE = BLOCK_ENTITIES.register(
+        "crystal_core",
+        () -> new BlockEntityType<>(CrystalCoreBlockEntity::new, ModBlocks.CRYSTAL_CORE.get())
+    );
+    public static final Supplier<BlockEntityType<CrystalCapacitorBlockEntity>> CRYSTAL_CAPACITOR = BLOCK_ENTITIES.register(
+        "crystal_capacitor",
+        () -> new BlockEntityType<>(CrystalCapacitorBlockEntity::new, ModBlocks.CRYSTAL_CAPACITOR.get())
     );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",
