@@ -24,6 +24,9 @@ public class ElementalSwordItem extends Item {
     private static final int USE_DURATION = 72000;
     private static final double PUSH_RANGE = 2.5;
     private static final double SWEEP_RANGE = 1.1;
+    private static final double LIFT = 0.08;
+    private static final double LIFT_LIMIT = 0.5;
+    private static final double LIFT_RESET = 0.2;
     private static boolean sweeping;
 
     public ElementalSwordItem(Properties properties) {
@@ -57,6 +60,12 @@ public class ElementalSwordItem extends Item {
             player.setDeltaMovement(motion.x, motion.y / 1.2F, motion.z);
             player.fallDistance /= 1.2F;
         }
+        motion = player.getDeltaMovement();
+        double lift = motion.y + LIFT;
+        if (lift > LIFT_LIMIT) {
+            lift = LIFT_RESET;
+        }
+        player.setDeltaMovement(motion.x, lift, motion.z);
         if (level.isClientSide()) {
             double minY = player.getBoundingBox().minY;
             int spiralMinY = player.onGround() ? Mth.floor(minY) : (int) (minY - 2.0);

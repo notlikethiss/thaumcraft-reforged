@@ -9,6 +9,7 @@ import net.neoforged.fml.common.Mod;
 import java.util.List;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.color.block.BlockTintSources;
+import net.minecraft.util.ARGB;
 import thaumcraft.crafting.ConfigRecipes;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -124,24 +125,28 @@ public final class ThaumcraftClient {
     @SubscribeEvent
     static void registerBlockTints(RegisterColorHandlersEvent.BlockTintSources event) {
         int[] colors = {0xFFFF7E, 0xFF5A01, 0x0090FF, 0x00A000, 0xAA33FC, 0xB0B0BC};
-        event.register(List.of(BlockTintSources.constant(colors[0])), ModBlocks.AIR_INFUSED_STONE.get());
-        event.register(List.of(BlockTintSources.constant(colors[1])), ModBlocks.FIRE_INFUSED_STONE.get());
-        event.register(List.of(BlockTintSources.constant(colors[2])), ModBlocks.WATER_INFUSED_STONE.get());
-        event.register(List.of(BlockTintSources.constant(colors[3])), ModBlocks.EARTH_INFUSED_STONE.get());
-        event.register(List.of(BlockTintSources.constant(colors[4])), ModBlocks.VIS_INFUSED_STONE.get());
-        event.register(List.of(BlockTintSources.constant(colors[5])), ModBlocks.DULL_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[0])), ModBlocks.AIR_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[1])), ModBlocks.FIRE_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[2])), ModBlocks.WATER_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[3])), ModBlocks.EARTH_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[4])), ModBlocks.VIS_INFUSED_STONE.get());
+        event.register(List.of(tint(colors[5])), ModBlocks.DULL_INFUSED_STONE.get());
         event.register(List.of(BlockTintSources.foliage()), ModBlocks.GREATWOOD_LEAVES.get());
-        event.register(List.of(BlockTintSources.constant(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
-        event.register(List.of(BlockTintSources.constant(0xC000C0)), ModBlocks.ARCANE_STONE.get());
+        event.register(List.of(tint(0x8899AA)), ModBlocks.SILVERWOOD_LEAVES.get());
+        event.register(List.of(tint(0xC000C0)), ModBlocks.ARCANE_STONE.get());
         event.register(
-            List.of(BlockTintSources.constant(0x00A000), BlockTintSources.constant(0xFFFF7E), BlockTintSources.constant(0xAA33FC)),
+            List.of(tint(0x00A000), tint(0xFFFF7E), tint(0xAA33FC)),
             ModBlocks.ARCANE_LEVITATOR.get()
         );
         for (int index = 0; index < ConfigRecipes.WOOL_COLORS.length; index++) {
-            List<BlockTintSource> tint = List.of(BlockTintSources.constant(WOOL_TINTS[index]));
+            List<BlockTintSource> tints = List.of(tint(WOOL_TINTS[index]));
             String color = ConfigRecipes.WOOL_COLORS[index];
-            event.register(tint, ModBlocks.CANDLES.get(color).get(), ModBlocks.MARKERS.get(color).get(), ModBlocks.WARDED_STONES.get(color).get());
+            event.register(tints, ModBlocks.CANDLES.get(color).get(), ModBlocks.MARKERS.get(color).get(), ModBlocks.WARDED_STONES.get(color).get());
         }
+    }
+
+    private static BlockTintSource tint(int color) {
+        return BlockTintSources.constant(ARGB.opaque(color));
     }
 
     @SubscribeEvent

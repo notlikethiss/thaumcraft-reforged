@@ -262,7 +262,7 @@ public class MagicalTreeGenerator {
         int[] from = {basePos[0] + dx, basePos[1], basePos[2] + dz};
         int[] to = {basePos[0] + dx, basePos[1] + heightLimit - 1, basePos[2] + dz};
         BlockState soil = level.getBlockState(new BlockPos(basePos[0] + dx, basePos[1] - 1, basePos[2] + dz));
-        if (!soil.is(BlockTags.DIRT)) {
+        if (!soil.is(BlockTags.DIRT) && !soil.is(BlockTags.GRASS_BLOCKS)) {
             return false;
         }
         int blocked = checkBlockLine(from, to);

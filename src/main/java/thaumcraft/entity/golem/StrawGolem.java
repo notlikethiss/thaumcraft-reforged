@@ -22,9 +22,9 @@ public class StrawGolem extends GolemWorker {
 
     @Override
     protected void registerGoals() {
-        addBasicGoals(true, 5, 6, 7);
         this.goalSelector.addGoal(2, new HarvestCropGoal(this));
         this.goalSelector.addGoal(3, new GotoGrownCropsGoal(this));
+        addBasicGoals(true, 5, 6, 7);
     }
 
     @Override
