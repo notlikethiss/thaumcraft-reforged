@@ -24,6 +24,7 @@ import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModMenus;
 import thaumcraft.registry.ModPoiTypes;
 import thaumcraft.registry.ModSounds;
+import thaumcraft.registry.ModVillagers;
 
 @Mod(Thaumcraft.MODID)
 public class Thaumcraft {
@@ -42,6 +43,7 @@ public class Thaumcraft {
         ModAttachments.register(modEventBus);
         ModMenus.register(modEventBus);
         ModPoiTypes.register(modEventBus);
+        ModVillagers.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
         modEventBus.addListener(this::commonSetup);
     }

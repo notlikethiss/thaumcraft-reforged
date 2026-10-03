@@ -1,0 +1,11 @@
+{
+  "wants": {
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "thaumcraft:knowledge_fragment"
+  },
+  "max_uses": 8,
+  "xp": 2,
+  "reputation_discount": 0.05
+}

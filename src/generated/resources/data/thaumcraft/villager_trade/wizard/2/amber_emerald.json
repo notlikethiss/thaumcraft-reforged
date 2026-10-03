@@ -1,0 +1,16 @@
+{
+  "wants": {
+    "id": "thaumcraft:amber",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 4,
+      "max": 6
+    }
+  },
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 12,
+  "xp": 5,
+  "reputation_discount": 0.05
+}

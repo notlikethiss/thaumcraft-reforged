@@ -1477,6 +1477,53 @@ def recipes():
         item_tags[f"{NS}:shards"].add(tc(f"{shard}_shard"))
 
 
+def villagers():
+    tc = lambda name: f"{NS}:{name}"
+
+    def uniform(minimum, maximum):
+        return {"type": "minecraft:uniform", "min": minimum, "max": maximum}
+
+    def trade(level, name, wants, gives, max_uses, xp, modifier=None):
+        content = {"wants": wants, "gives": gives, "max_uses": max_uses, "xp": xp, "reputation_discount": 0.05}
+        if modifier:
+            content["given_item_modifier"] = modifier
+        write(DATA / NS / "villager_trade" / "wizard" / str(level) / f"{name}.json", content)
+        return f"{NS}:wizard/{level}/{name}"
+
+    emerald = {"id": "minecraft:emerald"}
+    shard_modifier = [{"type": "minecraft:set_item", "item": tc(f"{shard}_shard"), "condition": {"type": "minecraft:random_chance", "chance": chance}} for shard, chance in [("fire", 1 / 2), ("water", 1 / 3), ("earth", 1 / 4), ("vis", 1 / 5)]]
+    shard_modifier.append({"type": "minecraft:set_count", "count": uniform(2, 3)})
+    levels = {
+        1: [
+            trade(1, "emerald_knowledge_fragment", emerald, {"id": tc("knowledge_fragment")}, 8, 2),
+            trade(1, "quicksilver_emerald", {"id": tc("quicksilver"), "count": uniform(4, 6)}, {"id": "minecraft:emerald"}, 12, 2),
+        ],
+        2: [
+            trade(2, "emerald_alumentum", emerald, {"id": tc("alumentum")}, 8, 5),
+            trade(2, "amber_emerald", {"id": tc("amber"), "count": uniform(4, 6)}, {"id": "minecraft:emerald"}, 12, 5),
+        ],
+        3: [
+            trade(3, "emerald_nitor", emerald, {"id": tc("nitor")}, 8, 10),
+            trade(3, "chicken_nugget_emerald", {"id": tc("chicken_nugget"), "count": uniform(24, 31)}, {"id": "minecraft:emerald"}, 12, 10),
+        ],
+        4: [
+            trade(4, "bookshelf_knowledge_fragment", {"id": "minecraft:bookshelf", "count": uniform(2, 3)}, {"id": tc("knowledge_fragment")}, 8, 15),
+            trade(4, "emerald_shard", emerald, {"id": tc("air_shard")}, 8, 15, shard_modifier),
+        ],
+        5: [
+            trade(5, "wand_adept_knowledge_fragment", {"id": tc("wand_adept")}, {"id": tc("knowledge_fragment")}, 4, 30, {"type": "minecraft:set_count", "count": uniform(2, 3)}),
+        ],
+    }
+    for level, trades in levels.items():
+        write(DATA / NS / "tags" / "villager_trade" / "wizard" / f"level_{level}.json", {"values": trades})
+        write(DATA / NS / "trade_set" / "wizard" / f"level_{level}.json", {
+            "amount": min(2, len(trades)),
+            "random_sequence": f"{NS}:trade_set/wizard/level_{level}",
+            "trades": f"#{NS}:wizard/level_{level}",
+        })
+    write(DATA / "minecraft" / "tags" / "point_of_interest_type" / "acquirable_job_site.json", {"replace": False, "values": [{"id": tc("arcane_worktable"), "required": False}]})
+
+
 def tag_entries(values):
     return [{"id": value, "required": False} if value.startswith(f"{NS}:") else value for value in sorted(values)]
 
@@ -1499,6 +1546,7 @@ def main():
     worldgen()
     entities()
     golems()
+    villagers()
     recipes()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))

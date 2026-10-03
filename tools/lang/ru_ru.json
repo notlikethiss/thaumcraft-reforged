@@ -183,5 +183,6 @@
   "tc.thaumcraft.golem.gui.decanting_quote.3": "Почему бы тебе не сделать глоток? Что плохого может случиться?",
   "tc.thaumcraft.golem.gui.decanting_quote.4": "Не волнуйся, я совершенно точно ничего не замышляю.",
   "tc.thaumcraft.golem.gui.decanting_quote.5": "Почему бы тебе не вздремнуть? Ты выглядишь сонным. Очень-очень сонным.",
-  "tc.thaumcraft.golem.gui.decanting_quote.6": "Конечно это не яд. Зачем бы мне носить банку, полную яда?"
+  "tc.thaumcraft.golem.gui.decanting_quote.6": "Конечно это не яд. Зачем бы мне носить банку, полную яда?",
+  "entity.thaumcraft.villager.wizard": "Волшебник"
 }

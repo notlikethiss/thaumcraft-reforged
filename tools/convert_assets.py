@@ -289,6 +289,23 @@ def convert_textures():
     print(f"textures: {count}")
 
 
+def convert_villager_textures():
+    from PIL import Image
+    source = TEXTURES_IN / "models" / "wizard.png"
+    meta = json.dumps({"villager": {"hat": "full"}}, indent=4) + "\n"
+    human = ASSETS / "textures" / "entity" / "villager" / "profession"
+    zombie = ASSETS / "textures" / "entity" / "zombie_villager" / "profession"
+    human.mkdir(parents=True, exist_ok=True)
+    zombie.mkdir(parents=True, exist_ok=True)
+    image = Image.open(source).convert("RGBA")
+    image.save(human / "wizard.png")
+    (human / "wizard.png.mcmeta").write_text(meta)
+    zombie_image = image.copy()
+    zombie_image.paste((0, 0, 0, 0), (0, 0, 32, 18))
+    zombie_image.save(zombie / "wizard.png")
+    (zombie / "wizard.png.mcmeta").write_text(meta)
+
+
 def convert_sounds():
     target = ASSETS / "sounds"
     if target.exists():
@@ -320,6 +337,7 @@ def convert_research():
 
 if __name__ == "__main__":
     convert_textures()
+    convert_villager_textures()
     convert_sounds()
     convert_research()
     convert_lang()

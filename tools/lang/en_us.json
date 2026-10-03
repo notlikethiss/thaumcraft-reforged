@@ -182,5 +182,6 @@
   "tc.thaumcraft.golem.gui.decanting_quote.3": "Why don't you take a sip? What possible harm could it do?",
   "tc.thaumcraft.golem.gui.decanting_quote.4": "Don't worry, I'm definitely not plotting nothing.",
   "tc.thaumcraft.golem.gui.decanting_quote.5": "Why don't you go take a nap? You look sleepy. So very sleepy.",
-  "tc.thaumcraft.golem.gui.decanting_quote.6": "Of course this isn't poison. Why would I be carrying a jar full of poison?"
+  "tc.thaumcraft.golem.gui.decanting_quote.6": "Of course this isn't poison. Why would I be carrying a jar full of poison?",
+  "entity.thaumcraft.villager.wizard": "Wizard"
 }

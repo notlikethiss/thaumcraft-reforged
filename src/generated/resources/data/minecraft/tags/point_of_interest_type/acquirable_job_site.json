@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:arcane_worktable",
+      "required": false
+    }
+  ]
+}
