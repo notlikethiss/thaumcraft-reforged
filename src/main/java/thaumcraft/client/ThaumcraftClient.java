@@ -82,6 +82,7 @@ import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
 import thaumcraft.network.NodeZapPayload;
+import thaumcraft.network.LightningWandPayload;
 import thaumcraft.network.WispZapPayload;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.client.research.ResearchTexts;
@@ -219,6 +220,7 @@ public final class ThaumcraftClient {
         event.register(AuraTransferFxPayload.TYPE, ClientPayloadHandlers::auraTransferFx);
         event.register(NodeZapPayload.TYPE, ClientPayloadHandlers::nodeZap);
         event.register(WispZapPayload.TYPE, ClientPayloadHandlers::wispZap);
+        event.register(LightningWandPayload.TYPE, ClientPayloadHandlers::lightningWand);
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
         event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
         event.register(BlockSparklePayload.TYPE, ClientPayloadHandlers::blockSparkle);

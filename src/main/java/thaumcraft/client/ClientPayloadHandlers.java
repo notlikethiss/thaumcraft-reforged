@@ -15,6 +15,7 @@ import thaumcraft.network.BoreDigPayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
+import thaumcraft.network.LightningWandPayload;
 import thaumcraft.network.NodeZapPayload;
 import thaumcraft.network.WispZapPayload;
 import thaumcraft.network.ResearchCompletePayload;
@@ -61,6 +62,17 @@ public final class ClientPayloadHandlers {
         Entity target = player.level().getEntity(payload.targetId());
         if (source != null && target != null) {
             Fx.get().bolt(player.level(), source, target);
+        }
+    }
+
+    public static void lightningWand(LightningWandPayload payload, IPayloadContext context) {
+        Player player = context.player();
+        Entity shooter = player.level().getEntity(payload.playerId());
+        if (shooter != null) {
+            Fx.get().wandLightning(
+                player.level(), shooter, payload.endX(), payload.endY(), payload.endZ(),
+                payload.hasBlock(), payload.blockX(), payload.blockY(), payload.blockZ(), payload.hasEntity()
+            );
         }
     }
 

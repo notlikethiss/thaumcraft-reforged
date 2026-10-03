@@ -65,6 +65,9 @@ public interface FxProxy {
     default void bolt(Level level, Entity source, Entity target) {
     }
 
+    default void wandLightning(Level level, Entity shooter, double x, double y, double z, boolean hasBlock, double blockX, double blockY, double blockZ, boolean hasEntity) {
+    }
+
     default void nodeBolt(Level level, float x, float y, float z, Entity target) {
     }
 

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.fx.bolt.BoltRenderer;
@@ -374,6 +375,42 @@ public final class ClientFx implements FxProxy {
             .setSpeed(4)
             .setType(0);
         BoltRenderer.add(bolt.defaultFractal());
+    }
+
+    @Override
+    public void wandLightning(Level level, Entity shooter, double x, double y, double z, boolean hasBlock, double blockX, double blockY, double blockZ, boolean hasEntity) {
+        RandomSource random = level.getRandom();
+        if (hasBlock) {
+            wandSparkles(random, blockX, blockY, blockZ, 0.3F);
+        }
+        if (hasEntity) {
+            wandSparkles(random, x, y, z, 0.6F);
+        }
+        double startX = shooter.getX();
+        double startY = shooter == Minecraft.getInstance().player ? shooter.getEyeY() : shooter.getY() + shooter.getBbHeight() / 2.0F + 0.25;
+        double startZ = shooter.getZ();
+        float yaw = shooter.getYRot();
+        startX -= Mth.cos(yaw / 180.0F * (float) Math.PI) * 0.16F;
+        startY -= 0.05F;
+        startZ -= Mth.sin(yaw / 180.0F * (float) Math.PI) * 0.16F;
+        Vec3 look = shooter.getViewVector(1.0F);
+        startX += look.x * 0.25;
+        startY += look.y * 0.25;
+        startZ += look.z * 0.25;
+        BoltRenderer.add(new LightningBolt(startX, startY, startZ, x, y, z, random.nextLong(), 6, 0.5F, 5).setType(2).setWidth(0.125F).defaultFractal());
+    }
+
+    private void wandSparkles(RandomSource random, double x, double y, double z, float spread) {
+        for (int index = 0; index < 5; index++) {
+            sparkle(
+                (float) x + (random.nextFloat() - random.nextFloat()) * spread,
+                (float) y + (random.nextFloat() - random.nextFloat()) * spread,
+                (float) z + (random.nextFloat() - random.nextFloat()) * spread,
+                2.0F + random.nextFloat(),
+                2,
+                0.05F + random.nextFloat() * 0.05F
+            );
+        }
     }
 
     @Override

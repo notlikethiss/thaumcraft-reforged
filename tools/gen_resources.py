@@ -647,7 +647,7 @@ def arcane_stone():
     mineable("pickaxe", "arcane_stone")
 
 
-WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge", "wand_excavation": "wandexcavation"}
+WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge", "wand_excavation": "wandexcavation", "wand_frost": "wandfrost", "wand_lightning": "wandlightning"}
 
 
 def full_cube(texture, tintindex=None):
@@ -1630,7 +1630,7 @@ def enchantments():
             "anvil_cost": 2,
             "description": {"translate": f"enchantment.{NS}.{name}"},
             "effects": {},
-            "max_cost": {"base": 51, "per_level_above_first": 0},
+            "max_cost": {"base": 61, "per_level_above_first": 10},
             "max_level": max_level,
             "min_cost": {"base": base, "per_level_above_first": step},
             "slots": [slot],
