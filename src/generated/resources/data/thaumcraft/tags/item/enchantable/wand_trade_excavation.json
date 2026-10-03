@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:wand_equal_trade",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:wand_excavation",
+      "required": false
+    }
+  ]
+}

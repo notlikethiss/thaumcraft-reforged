@@ -4,6 +4,8 @@ import java.util.Map;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -20,7 +22,7 @@ public final class ModMaterials {
         25, defense(2, 5, 6, 2), 25, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, ModTags.REPAIRS_THAUMIUM_ARMOR, asset("thaumium")
     );
     public static final ArmorMaterial ROBE_ARMOR = special("robes");
-    public static final ArmorMaterial GOGGLES_ARMOR = special("goggles");
+    public static final ArmorMaterial GOGGLES_ARMOR = special("goggles", ModTags.REPAIRS_GOGGLES);
     public static final ArmorMaterial TRAVELLER_ARMOR = special("boots_traveller");
     public static final ArmorMaterial HARNESS_ARMOR = special("hover_harness");
 
@@ -28,7 +30,11 @@ public final class ModMaterials {
     }
 
     private static ArmorMaterial special(String assetName) {
-        return new ArmorMaterial(25, defense(1, 2, 3, 1), 25, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, ModTags.REPAIRS_SPECIAL_ARMOR, asset(assetName));
+        return special(assetName, ModTags.REPAIRS_SPECIAL_ARMOR);
+    }
+
+    private static ArmorMaterial special(String assetName, TagKey<Item> repairs) {
+        return new ArmorMaterial(25, defense(1, 2, 3, 1), 25, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, repairs, asset(assetName));
     }
 
     private static Map<ArmorType, Integer> defense(int boots, int legs, int chest, int helmet) {

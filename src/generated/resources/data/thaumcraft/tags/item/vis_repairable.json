@@ -1,0 +1,85 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:boots_traveller",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:elemental_axe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:elemental_hoe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:elemental_pickaxe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:elemental_shovel",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:elemental_sword",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:goggles_of_revealing",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:hover_harness",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:robe_boots",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:robe_chestplate",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:robe_leggings",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_axe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_boots",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_chestplate",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_helmet",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_hoe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_leggings",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_pickaxe",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_shovel",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:thaumium_sword",
+      "required": false
+    }
+  ]
+}

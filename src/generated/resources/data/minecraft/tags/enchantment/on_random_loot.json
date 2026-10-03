@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:potency",
+    "thaumcraft:frugal",
+    "thaumcraft:charging",
+    "thaumcraft:treasure",
+    "thaumcraft:haste",
+    "thaumcraft:repair"
+  ]
+}

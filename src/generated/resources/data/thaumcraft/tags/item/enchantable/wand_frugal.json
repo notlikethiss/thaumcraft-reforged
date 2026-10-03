@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:wand_equal_trade",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:wand_excavation",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:wand_fire",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:wand_frost",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:wand_lightning",
+      "required": false
+    }
+  ]
+}

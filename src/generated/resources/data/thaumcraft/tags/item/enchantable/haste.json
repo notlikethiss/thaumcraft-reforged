@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:boots_traveller",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:hover_harness",
+      "required": false
+    }
+  ]
+}

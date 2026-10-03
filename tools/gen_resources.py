@@ -1607,6 +1607,51 @@ def villagers():
     write(DATA / "minecraft" / "tags" / "point_of_interest_type" / "acquirable_job_site.json", {"replace": False, "values": [{"id": tc("arcane_worktable"), "required": False}]})
 
 
+WAND_ITEMS = ["wand_excavation", "wand_equal_trade", "wand_frost", "wand_lightning", "wand_fire", "hellrod"]
+VIS_REPAIRABLE = [
+    "thaumium_sword", "thaumium_pickaxe", "thaumium_axe", "thaumium_shovel", "thaumium_hoe",
+    "elemental_sword", "elemental_pickaxe", "elemental_axe", "elemental_shovel", "elemental_hoe",
+    "thaumium_helmet", "thaumium_chestplate", "thaumium_leggings", "thaumium_boots",
+    "robe_chestplate", "robe_leggings", "robe_boots", "goggles_of_revealing", "boots_traveller", "hover_harness",
+]
+ENCHANTMENTS = [
+    ("potency", 4, 3, 10, 11, "mainhand", f"#{NS}:enchantable/wand", None),
+    ("frugal", 5, 3, 5, 11, "mainhand", f"#{NS}:enchantable/wand_frugal", f"{NS}:charging"),
+    ("charging", 2, 1, 20, 0, "mainhand", f"#{NS}:enchantable/wand", f"{NS}:frugal"),
+    ("treasure", 3, 3, 15, 9, "mainhand", f"#{NS}:enchantable/wand_trade_excavation", None),
+    ("haste", 3, 3, 15, 9, "armor", f"#{NS}:enchantable/haste", None),
+    ("repair", 2, 2, 20, 10, "any", f"#{NS}:vis_repairable", "minecraft:unbreaking"),
+]
+
+
+def enchantments():
+    for name, weight, max_level, base, step, slot, supported, exclusive in ENCHANTMENTS:
+        definition = {
+            "anvil_cost": 2,
+            "description": {"translate": f"enchantment.{NS}.{name}"},
+            "effects": {},
+            "max_cost": {"base": 51, "per_level_above_first": 0},
+            "max_level": max_level,
+            "min_cost": {"base": base, "per_level_above_first": step},
+            "slots": [slot],
+            "supported_items": supported,
+            "weight": weight,
+        }
+        if name == "haste":
+            definition["primary_items"] = "#minecraft:enchantable/armor"
+        if exclusive:
+            definition["exclusive_set"] = exclusive
+        write(DATA / NS / "enchantment" / f"{name}.json", definition)
+    for tag in ["in_enchanting_table", "on_random_loot", "tradeable", "non_treasure"]:
+        write(DATA / "minecraft" / "tags" / "enchantment" / f"{tag}.json", {"replace": False, "values": [f"{NS}:{name}" for name, *_ in ENCHANTMENTS]})
+    item_tags[f"{NS}:enchantable/wand"].update(f"{NS}:{name}" for name in WAND_ITEMS)
+    item_tags[f"{NS}:enchantable/wand_frugal"].update(f"{NS}:{name}" for name in WAND_ITEMS if name != "hellrod")
+    item_tags[f"{NS}:enchantable/wand_trade_excavation"].update({f"{NS}:wand_excavation", f"{NS}:wand_equal_trade"})
+    item_tags[f"{NS}:enchantable/haste"].update({f"{NS}:boots_traveller", f"{NS}:hover_harness"})
+    item_tags[f"{NS}:vis_repairable"].update(f"{NS}:{name}" for name in VIS_REPAIRABLE)
+    item_tags[f"{NS}:repairs_goggles"].add("minecraft:gold_ingot")
+
+
 def tag_entries(values):
     return [{"id": value, "required": False} if value.startswith(f"{NS}:") else value for value in sorted(values)]
 
@@ -1630,6 +1675,7 @@ def main():
     entities()
     golems()
     villagers()
+    enchantments()
     recipes()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))

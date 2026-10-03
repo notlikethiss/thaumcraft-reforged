@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 2,
+  "description": {
+    "translate": "enchantment.thaumcraft.repair"
+  },
+  "effects": {},
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 0
+  },
+  "max_level": 2,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "any"
+  ],
+  "supported_items": "#thaumcraft:vis_repairable",
+  "weight": 2,
+  "exclusive_set": "minecraft:unbreaking"
+}

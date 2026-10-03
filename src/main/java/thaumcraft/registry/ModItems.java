@@ -113,26 +113,26 @@ public final class ModItems {
         )
     );
 
-    public static final DeferredItem<Item> GOGGLES_OF_REVEALING = armor("goggles_of_revealing", ModMaterials.GOGGLES_ARMOR, ArmorType.HELMET, 5);
-    public static final DeferredItem<Item> THAUMIUM_HELMET = armor("thaumium_helmet", ModMaterials.THAUMIUM_ARMOR, ArmorType.HELMET);
-    public static final DeferredItem<Item> THAUMIUM_CHESTPLATE = armor("thaumium_chestplate", ModMaterials.THAUMIUM_ARMOR, ArmorType.CHESTPLATE);
-    public static final DeferredItem<Item> THAUMIUM_LEGGINGS = armor("thaumium_leggings", ModMaterials.THAUMIUM_ARMOR, ArmorType.LEGGINGS);
-    public static final DeferredItem<Item> THAUMIUM_BOOTS = armor("thaumium_boots", ModMaterials.THAUMIUM_ARMOR, ArmorType.BOOTS);
-    public static final DeferredItem<Item> ROBE_CHESTPLATE = armor("robe_chestplate", ModMaterials.ROBE_ARMOR, ArmorType.CHESTPLATE, 2);
-    public static final DeferredItem<Item> ROBE_LEGGINGS = armor("robe_leggings", ModMaterials.ROBE_ARMOR, ArmorType.LEGGINGS, 2);
-    public static final DeferredItem<Item> ROBE_BOOTS = armor("robe_boots", ModMaterials.ROBE_ARMOR, ArmorType.BOOTS, 1);
-    public static final DeferredItem<Item> BOOTS_TRAVELLER = armor("boots_traveller", ModMaterials.TRAVELLER_ARMOR, ArmorType.BOOTS);
+    public static final DeferredItem<Item> GOGGLES_OF_REVEALING = armor("goggles_of_revealing", ModMaterials.GOGGLES_ARMOR, ArmorType.HELMET, 5, 350, Rarity.RARE);
+    public static final DeferredItem<Item> THAUMIUM_HELMET = armor("thaumium_helmet", ModMaterials.THAUMIUM_ARMOR, ArmorType.HELMET, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> THAUMIUM_CHESTPLATE = armor("thaumium_chestplate", ModMaterials.THAUMIUM_ARMOR, ArmorType.CHESTPLATE, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> THAUMIUM_LEGGINGS = armor("thaumium_leggings", ModMaterials.THAUMIUM_ARMOR, ArmorType.LEGGINGS, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> THAUMIUM_BOOTS = armor("thaumium_boots", ModMaterials.THAUMIUM_ARMOR, ArmorType.BOOTS, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> ROBE_CHESTPLATE = armor("robe_chestplate", ModMaterials.ROBE_ARMOR, ArmorType.CHESTPLATE, 2, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> ROBE_LEGGINGS = armor("robe_leggings", ModMaterials.ROBE_ARMOR, ArmorType.LEGGINGS, 2, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> ROBE_BOOTS = armor("robe_boots", ModMaterials.ROBE_ARMOR, ArmorType.BOOTS, 1, Rarity.UNCOMMON);
+    public static final DeferredItem<Item> BOOTS_TRAVELLER = durableArmor("boots_traveller", ModMaterials.TRAVELLER_ARMOR, ArmorType.BOOTS, 350, Rarity.RARE);
 
-    public static final DeferredItem<Item> THAUMIUM_SWORD = ITEMS.registerSimpleItem("thaumium_sword", properties -> properties.sword(ModMaterials.THAUMIUM_TOOL, 3.0F, -2.4F));
-    public static final DeferredItem<Item> THAUMIUM_PICKAXE = ITEMS.registerSimpleItem("thaumium_pickaxe", properties -> properties.pickaxe(ModMaterials.THAUMIUM_TOOL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> THAUMIUM_AXE = ITEMS.registerSimpleItem("thaumium_axe", properties -> properties.axe(ModMaterials.THAUMIUM_TOOL, 2.0F, -3.0F));
-    public static final DeferredItem<Item> THAUMIUM_SHOVEL = ITEMS.registerSimpleItem("thaumium_shovel", properties -> properties.shovel(ModMaterials.THAUMIUM_TOOL, 0.0F, -3.0F));
-    public static final DeferredItem<Item> THAUMIUM_HOE = ITEMS.registerSimpleItem("thaumium_hoe", properties -> properties.hoe(ModMaterials.THAUMIUM_TOOL, -2.0F, -1.0F));
-    public static final DeferredItem<Item> ELEMENTAL_SWORD = ITEMS.registerSimpleItem("elemental_sword", properties -> properties.sword(ModMaterials.ELEMENTAL_TOOL, 3.0F, -2.4F));
-    public static final DeferredItem<Item> ELEMENTAL_PICKAXE = ITEMS.registerSimpleItem("elemental_pickaxe", properties -> properties.pickaxe(ModMaterials.ELEMENTAL_TOOL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> ELEMENTAL_AXE = ITEMS.registerSimpleItem("elemental_axe", properties -> properties.axe(ModMaterials.ELEMENTAL_TOOL, 2.0F, -3.0F));
-    public static final DeferredItem<Item> ELEMENTAL_SHOVEL = ITEMS.registerSimpleItem("elemental_shovel", properties -> properties.shovel(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F));
-    public static final DeferredItem<Item> ELEMENTAL_HOE = ITEMS.registerSimpleItem("elemental_hoe", properties -> properties.hoe(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F));
+    public static final DeferredItem<Item> THAUMIUM_SWORD = ITEMS.registerSimpleItem("thaumium_sword", properties -> properties.sword(ModMaterials.THAUMIUM_TOOL, 3.0F, -2.4F).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> THAUMIUM_PICKAXE = ITEMS.registerSimpleItem("thaumium_pickaxe", properties -> properties.pickaxe(ModMaterials.THAUMIUM_TOOL, 1.0F, -2.8F).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> THAUMIUM_AXE = ITEMS.registerSimpleItem("thaumium_axe", properties -> properties.axe(ModMaterials.THAUMIUM_TOOL, 2.0F, -3.0F).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> THAUMIUM_SHOVEL = ITEMS.registerSimpleItem("thaumium_shovel", properties -> properties.shovel(ModMaterials.THAUMIUM_TOOL, 0.0F, -3.0F).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> THAUMIUM_HOE = ITEMS.registerSimpleItem("thaumium_hoe", properties -> properties.hoe(ModMaterials.THAUMIUM_TOOL, -2.0F, -1.0F).rarity(Rarity.UNCOMMON).enchantable(5));
+    public static final DeferredItem<Item> ELEMENTAL_SWORD = ITEMS.registerSimpleItem("elemental_sword", properties -> properties.sword(ModMaterials.ELEMENTAL_TOOL, 3.0F, -2.4F).rarity(Rarity.RARE));
+    public static final DeferredItem<Item> ELEMENTAL_PICKAXE = ITEMS.registerSimpleItem("elemental_pickaxe", properties -> properties.pickaxe(ModMaterials.ELEMENTAL_TOOL, 1.0F, -2.8F).rarity(Rarity.RARE));
+    public static final DeferredItem<Item> ELEMENTAL_AXE = ITEMS.registerSimpleItem("elemental_axe", properties -> properties.axe(ModMaterials.ELEMENTAL_TOOL, 2.0F, -3.0F).rarity(Rarity.RARE));
+    public static final DeferredItem<Item> ELEMENTAL_SHOVEL = ITEMS.registerSimpleItem("elemental_shovel", properties -> properties.shovel(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F).rarity(Rarity.RARE));
+    public static final DeferredItem<Item> ELEMENTAL_HOE = ITEMS.registerSimpleItem("elemental_hoe", properties -> properties.hoe(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F).rarity(Rarity.RARE).enchantable(5));
 
     public static final DeferredItem<BlockItem> CRUCIBLE = block(ModBlocks.CRUCIBLE);
     public static final DeferredItem<BlockItem> ALEMBIC = block(ModBlocks.ALEMBIC);
@@ -175,7 +175,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> ARCANE_BORE = block(ModBlocks.ARCANE_BORE);
     public static final DeferredItem<ExcavationWandItem> WAND_EXCAVATION = ITEMS.registerItem(
         "wand_excavation",
-        properties -> new ExcavationWandItem(properties.durability(2000).rarity(Rarity.RARE).setNoCombineRepair())
+        properties -> new ExcavationWandItem(properties.durability(2000))
     );
     public static final DeferredItem<CrystalCapacitorItem> CRYSTAL_CAPACITOR = ITEMS.registerItem(
         "crystal_capacitor",
@@ -243,12 +243,20 @@ public final class ModItems {
         return ResourceKey.create(Registries.CONTEXT_INT_PROVIDER, Thaumcraft.id("cooking/time_" + name));
     }
 
-    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type) {
-        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type));
+    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type, Rarity rarity) {
+        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).rarity(rarity));
     }
 
-    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type, int visDiscount) {
-        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).component(ModDataComponents.VIS_DISCOUNT.get(), visDiscount));
+    private static DeferredItem<Item> durableArmor(String name, ArmorMaterial material, ArmorType type, int durability, Rarity rarity) {
+        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).durability(durability).rarity(rarity));
+    }
+
+    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type, int visDiscount, Rarity rarity) {
+        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).rarity(rarity).component(ModDataComponents.VIS_DISCOUNT.get(), visDiscount));
+    }
+
+    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type, int visDiscount, int durability, Rarity rarity) {
+        return ITEMS.registerSimpleItem(name, properties -> properties.humanoidArmor(material, type).durability(durability).rarity(rarity).component(ModDataComponents.VIS_DISCOUNT.get(), visDiscount));
     }
 
     private static DeferredItem<CastingWandItem> wand(String name, int maxVis, int interval, Rarity rarity) {
