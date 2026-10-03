@@ -22,7 +22,9 @@ import thaumcraft.block.device.ArcanePressurePlateBlock;
 import thaumcraft.block.crystal.CrystalCapacitorBlock;
 import thaumcraft.block.crystal.CrystalClusterBlock;
 import thaumcraft.block.crystal.CrystalCoreBlock;
+import thaumcraft.block.device.HoleBlock;
 import thaumcraft.block.device.HungryChestBlock;
+import thaumcraft.block.mirror.MirrorBlock;
 import thaumcraft.block.device.LevitatorBlock;
 import thaumcraft.block.device.ArcaneStoneBlock;
 import thaumcraft.block.device.ArcaneWorktableBlock;
@@ -218,6 +220,28 @@ public final class ModBlocks {
     public static final DeferredBlock<CrystalClusterBlock> MIXED_CRYSTAL_CLUSTER = crystal("mixed_crystal_cluster", 5);
     public static final DeferredBlock<CrystalCoreBlock> CRYSTAL_CORE = BLOCKS.registerBlock("crystal_core", CrystalCoreBlock::new, ModBlocks::crystal);
     public static final DeferredBlock<CrystalCapacitorBlock> CRYSTAL_CAPACITOR = BLOCKS.registerBlock("crystal_capacitor", CrystalCapacitorBlock::new, ModBlocks::crystal);
+    public static final DeferredBlock<MirrorBlock> MAGIC_MIRROR = BLOCKS.registerBlock(
+        "magic_mirror",
+        MirrorBlock::new,
+        properties -> properties.mapColor(MapColor.NONE).strength(1.0F, 10.0F).sound(ModSounds.MIRROR_SOUND).noOcclusion().noCollision()
+    );
+    public static final DeferredBlock<HoleBlock> HOLE = BLOCKS.registerBlock(
+        "hole",
+        HoleBlock::new,
+        properties -> properties
+            .mapColor(MapColor.NONE)
+            .strength(-1.0F, 6000000.0F)
+            .sound(SoundType.STONE)
+            .lightLevel(state -> 10)
+            .noCollision()
+            .noOcclusion()
+            .noLootTable()
+            .pushReaction(PushReaction.IMMOVEABLE)
+            .isValidSpawn((state, level, pos, entity) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos, aabb) -> false)
+    );
 
     private ModBlocks() {
     }

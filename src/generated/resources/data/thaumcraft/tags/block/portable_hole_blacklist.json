@@ -1,6 +1,17 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:beds",
+    "minecraft:iron_door",
+    "minecraft:oak_door",
+    {
+      "id": "thaumcraft:arcane_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:arcane_wood",
+      "required": false
+    },
     {
       "id": "thaumcraft:infernal_furnace",
       "required": false

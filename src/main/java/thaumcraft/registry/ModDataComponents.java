@@ -2,6 +2,7 @@ package thaumcraft.registry;
 
 import com.mojang.serialization.Codec;
 import java.util.function.Supplier;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
@@ -51,6 +52,11 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<Integer>> STORED_VIS = COMPONENTS.registerComponentType(
         "stored_vis",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+
+    public static final Supplier<DataComponentType<GlobalPos>> MIRROR_LINK = COMPONENTS.registerComponentType(
+        "mirror_link",
+        builder -> builder.persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC)
     );
 
     private ModDataComponents() {

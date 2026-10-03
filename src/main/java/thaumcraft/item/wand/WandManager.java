@@ -197,7 +197,7 @@ public final class WandManager {
             book.setNoGravity(true);
             book.setDefaultPickUpDelay();
             serverLevel.addFreshEntity(book);
-            PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 0));
+            PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 0, 5));
         }
         return InteractionResult.SUCCESS;
     }

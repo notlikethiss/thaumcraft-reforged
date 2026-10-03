@@ -25,6 +25,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.item.ArcaneKeyItem;
 import thaumcraft.item.CrystalCapacitorItem;
+import thaumcraft.item.HandMirrorItem;
+import thaumcraft.item.MirrorItem;
+import thaumcraft.item.PortableHoleItem;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.FilledJarItem;
@@ -151,6 +154,15 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> VIS_CRYSTAL_CLUSTER = block(ModBlocks.VIS_CRYSTAL_CLUSTER);
     public static final DeferredItem<BlockItem> MIXED_CRYSTAL_CLUSTER = block(ModBlocks.MIXED_CRYSTAL_CLUSTER);
     public static final DeferredItem<BlockItem> CRYSTAL_CORE = block(ModBlocks.CRYSTAL_CORE);
+    public static final DeferredItem<MirrorItem> MAGIC_MIRROR = ITEMS.registerItem(
+        "magic_mirror",
+        properties -> new MirrorItem(ModBlocks.MAGIC_MIRROR.get(), properties.rarity(Rarity.UNCOMMON).useBlockDescriptionPrefix())
+    );
+    public static final DeferredItem<HandMirrorItem> HAND_MIRROR = ITEMS.registerItem("hand_mirror", properties -> new HandMirrorItem(properties.stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<PortableHoleItem> PORTABLE_HOLE = ITEMS.registerItem(
+        "portable_hole",
+        properties -> new PortableHoleItem(properties.durability(321).rarity(Rarity.RARE).setNoCombineRepair())
+    );
     public static final DeferredItem<CrystalCapacitorItem> CRYSTAL_CAPACITOR = ITEMS.registerItem(
         "crystal_capacitor",
         properties -> new CrystalCapacitorItem(ModBlocks.CRYSTAL_CAPACITOR.get(), properties.useBlockDescriptionPrefix())

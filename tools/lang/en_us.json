@@ -115,5 +115,8 @@
   "tc.thaumcraft.plate_mode1": "It will now trigger on everything except you.",
   "tc.thaumcraft.plate_mode2": "It will now trigger on just you.",
   "tc.thaumcraft.door_refuses": "The door refuses to budge.",
-  "tc.thaumcraft.capacitor_vis": "Holds %s vis"
+  "tc.thaumcraft.capacitor_vis": "Holds %s vis",
+  "tc.thaumcraft.mirror_already_linked": "That mirror is already linked to a valid destination.",
+  "tc.thaumcraft.mirror_linked_to": "Linked to %s,%s,%s in %s",
+  "tc.thaumcraft.hand_mirror_linked_to": "Linked to %s,%s,%s in %s"
 }

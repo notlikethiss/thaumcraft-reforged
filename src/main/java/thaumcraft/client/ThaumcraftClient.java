@@ -27,7 +27,10 @@ import thaumcraft.client.render.CrystalCapacitorRenderer;
 import thaumcraft.client.render.CrystalClusterRenderer;
 import thaumcraft.client.render.CrystalCoreRenderer;
 import thaumcraft.client.render.CrystalSpecialRenderer;
+import thaumcraft.client.render.HoleRenderer;
 import thaumcraft.client.render.HungryChestRenderer;
+import thaumcraft.client.render.MirrorRenderer;
+import thaumcraft.client.screen.HandMirrorScreen;
 import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
 import thaumcraft.client.render.JarRenderer;
@@ -129,6 +132,8 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MIRROR.get(), MirrorRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.HOLE.get(), HoleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CLUSTER.get(), CrystalClusterRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CORE.get(), CrystalCoreRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CAPACITOR.get(), CrystalCapacitorRenderer::new);
@@ -150,6 +155,7 @@ public final class ThaumcraftClient {
     @SubscribeEvent
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
+        event.register(ModMenus.HAND_MIRROR.get(), HandMirrorScreen::new);
         event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }

@@ -43,6 +43,7 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ZAP = register("zap");
 
     public static final SoundType JAR_SOUND = new DeferredSoundType(1.0F, 1.0F, JAR, JAR, JAR, JAR, JAR);
+    public static final SoundType MIRROR_SOUND = new DeferredSoundType(0.5F, 2.0F, JAR, JAR, JAR, JAR, JAR);
     public static final SoundType CRYSTAL_SOUND = new DeferredSoundType(1.0F, 1.0F, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL);
 
     private ModSounds() {

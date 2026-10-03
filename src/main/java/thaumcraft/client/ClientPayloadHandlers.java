@@ -62,7 +62,7 @@ public final class ClientPayloadHandlers {
 
     public static void blockSparkle(BlockSparklePayload payload, IPayloadContext context) {
         Player player = context.player();
-        Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.color(), 5);
+        Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.color(), payload.count());
     }
 
     public static void researchComplete(ResearchCompletePayload payload, IPayloadContext context) {

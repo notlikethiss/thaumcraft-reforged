@@ -1054,6 +1054,7 @@ def owned_devices():
     self_drop("hungry_chest")
 
     crystals()
+    mirrors_and_hole()
 
     mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator", "hungry_chest")
     mineable("pickaxe", "arcane_door")
@@ -1105,6 +1106,47 @@ def crystals():
             "modifier": {"type": "minecraft:copy_components", "source": "block_entity", "include": [f"{NS}:stored_vis"]},
         }],
     }])
+
+
+MIRROR_ROTATIONS = {
+    "north": {}, "south": {"y": 180}, "west": {"y": 270}, "east": {"y": 90}, "up": {"x": 270}, "down": {"x": 90},
+}
+
+
+def mirrors_and_hole():
+    for suffix, pane in [("", "mirrorpane"), ("_linked", "mirrorpanetrans")]:
+        block_model(f"magic_mirror{suffix}", {
+            "parent": "minecraft:block/block",
+            "textures": {"particle": ref("mirrorframe"), "frame": ref("mirrorframe"), "pane": ref(pane)},
+            "elements": [
+                {"from": [0, 0, 15], "to": [16, 16, 16], "faces": {direction: {"texture": "#frame"} for direction in DIRECTIONS}},
+                {"from": [0, 0, 15.68], "to": [16, 16, 15.68], "faces": {"north": {"texture": "#pane"}}},
+            ],
+        })
+    variants = {}
+    for facing, rotation in MIRROR_ROTATIONS.items():
+        for linked, suffix in [("false", ""), ("true", "_linked")]:
+            variants[f"facing={facing},linked={linked}"] = {"model": ref(f"magic_mirror{suffix}"), **rotation}
+    blockstate("magic_mirror", {"variants": variants})
+    for texture in ["mirrorpane", "mirrorpaneopen"]:
+        copy_texture(f"block/{texture}.png", f"item/{texture}.png")
+    for suffix, pane in [("", "mirrorpane"), ("_linked", "mirrorpaneopen")]:
+        item_model(f"magic_mirror{suffix}", {"parent": "minecraft:item/generated", "textures": {"layer0": ref("mirrorframe", "item"), "layer1": ref(pane, "item")}})
+    write(ASSETS / "items" / "magic_mirror.json", {"model": {
+        "type": "minecraft:condition",
+        "property": "minecraft:has_component",
+        "component": f"{NS}:mirror_link",
+        "on_true": {"type": "minecraft:model", "model": ref("magic_mirror_linked", "item")},
+        "on_false": {"type": "minecraft:model", "model": ref("magic_mirror", "item")},
+    }})
+    loot("magic_mirror", [])
+    generated_item("hand_mirror", "mirrorhand")
+    generated_item("portable_hole", "portablehole")
+    block_model("hole", {"textures": {"particle": "minecraft:block/black_concrete"}})
+    simple_state("hole")
+    block_tags[f"{NS}:portable_hole_blacklist"].update({
+        f"{NS}:arcane_stone", f"{NS}:arcane_wood", "#minecraft:beds", "minecraft:oak_door", "minecraft:iron_door",
+    })
 
 
 def devices():

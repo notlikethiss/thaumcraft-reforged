@@ -116,5 +116,8 @@
   "tc.thaumcraft.plate_mode1": "Теперь плита срабатывает на всё, кроме вас.",
   "tc.thaumcraft.plate_mode2": "Теперь плита срабатывает только на вас.",
   "tc.thaumcraft.door_refuses": "Дверь не поддаётся.",
-  "tc.thaumcraft.capacitor_vis": "Содержит %s вис"
+  "tc.thaumcraft.capacitor_vis": "Содержит %s вис",
+  "tc.thaumcraft.mirror_already_linked": "Это зеркало уже связано с действующим зеркалом.",
+  "tc.thaumcraft.mirror_linked_to": "Связано с %s,%s,%s в %s",
+  "tc.thaumcraft.hand_mirror_linked_to": "Связано с %s,%s,%s в %s"
 }

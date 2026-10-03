@@ -2,6 +2,7 @@ package thaumcraft.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -10,6 +11,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Prediction;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +20,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.aura.AuraManager;
+import thaumcraft.aura.NodeType;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.registry.ModAttachments;
 import thaumcraft.registry.ModItems;
@@ -94,7 +99,29 @@ public final class ThaumcraftCommand {
                                 )
                         )
                 )
+                .then(
+                    Commands.literal("node")
+                        .then(
+                            Commands.argument("pos", BlockPosArgument.blockPos())
+                                .then(
+                                    Commands.argument("level", IntegerArgumentType.integer(1, 1000))
+                                        .executes(
+                                            context -> createNode(
+                                                context.getSource(),
+                                                BlockPosArgument.getLoadedBlockPos(context, "pos"),
+                                                IntegerArgumentType.getInteger(context, "level")
+                                            )
+                                        )
+                                )
+                        )
+                )
         );
+    }
+
+    private static int createNode(CommandSourceStack source, BlockPos pos, int level) {
+        int key = AuraManager.registerAuraNode(source.getLevel(), level, NodeType.NORMAL, pos);
+        source.sendSuccess(() -> Component.literal("Created aura node " + key + " at " + pos.toShortString()), true);
+        return key;
     }
 
     private static int giveNote(CommandSourceStack source, Collection<ServerPlayer> targets, String key, float progress) throws CommandSyntaxException {

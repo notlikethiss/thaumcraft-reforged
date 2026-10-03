@@ -14,7 +14,9 @@ import thaumcraft.blockentity.ArcaneEarBlockEntity;
 import thaumcraft.blockentity.CrystalCapacitorBlockEntity;
 import thaumcraft.blockentity.CrystalClusterBlockEntity;
 import thaumcraft.blockentity.CrystalCoreBlockEntity;
+import thaumcraft.blockentity.HoleBlockEntity;
 import thaumcraft.blockentity.HungryChestBlockEntity;
+import thaumcraft.blockentity.MirrorBlockEntity;
 import thaumcraft.blockentity.LevitatorBlockEntity;
 import thaumcraft.blockentity.BellowsBlockEntity;
 import thaumcraft.blockentity.InfernalFurnaceBlockEntity;
@@ -103,6 +105,14 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<CrystalCapacitorBlockEntity>> CRYSTAL_CAPACITOR = BLOCK_ENTITIES.register(
         "crystal_capacitor",
         () -> new BlockEntityType<>(CrystalCapacitorBlockEntity::new, ModBlocks.CRYSTAL_CAPACITOR.get())
+    );
+    public static final Supplier<BlockEntityType<MirrorBlockEntity>> MIRROR = BLOCK_ENTITIES.register(
+        "magic_mirror",
+        () -> new BlockEntityType<>(MirrorBlockEntity::new, ModBlocks.MAGIC_MIRROR.get())
+    );
+    public static final Supplier<BlockEntityType<HoleBlockEntity>> HOLE = BLOCK_ENTITIES.register(
+        "hole",
+        () -> new BlockEntityType<>(HoleBlockEntity::new, ModBlocks.HOLE.get())
     );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",

@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=north,linked=false": {
+      "model": "thaumcraft:block/magic_mirror"
+    },
+    "facing=north,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked"
+    },
+    "facing=south,linked=false": {
+      "model": "thaumcraft:block/magic_mirror",
+      "y": 180
+    },
+    "facing=south,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked",
+      "y": 180
+    },
+    "facing=west,linked=false": {
+      "model": "thaumcraft:block/magic_mirror",
+      "y": 270
+    },
+    "facing=west,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked",
+      "y": 270
+    },
+    "facing=east,linked=false": {
+      "model": "thaumcraft:block/magic_mirror",
+      "y": 90
+    },
+    "facing=east,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked",
+      "y": 90
+    },
+    "facing=up,linked=false": {
+      "model": "thaumcraft:block/magic_mirror",
+      "x": 270
+    },
+    "facing=up,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked",
+      "x": 270
+    },
+    "facing=down,linked=false": {
+      "model": "thaumcraft:block/magic_mirror",
+      "x": 90
+    },
+    "facing=down,linked=true": {
+      "model": "thaumcraft:block/magic_mirror_linked",
+      "x": 90
+    }
+  }
+}
