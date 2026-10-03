@@ -62,6 +62,9 @@ public interface FxProxy {
     default void bubbles(Level level, double x, double y, double z, int color, double speed, int count) {
     }
 
+    default void bolt(Level level, Entity source, Entity target) {
+    }
+
     default void nodeBolt(Level level, float x, float y, float z, Entity target) {
     }
 

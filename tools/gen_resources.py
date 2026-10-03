@@ -1336,6 +1336,8 @@ def entities():
     add_spawns("fire_bat", "#minecraft:is_nether", "fire_bat", 10)
     spawn_egg("brainy_zombie_spawn_egg", 44975, 16729224)
     spawn_egg("fire_bat_spawn_egg", 16733525, 15602158)
+    spawn_egg("wisp_spawn_egg", 5592405, 1131656)
+    generated_item("wisp_essence", "wispessence", [{"type": f"{NS}:essence"}])
 
 
 def worldgen():

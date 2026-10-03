@@ -36,6 +36,7 @@ import thaumcraft.item.ModMaterials;
 import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
 import thaumcraft.item.ThaumonomiconItem;
+import thaumcraft.item.WispEssenceItem;
 import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.ExcavationWandItem;
 
@@ -209,6 +210,12 @@ public final class ModItems {
         SpawnEggItem::new,
         properties -> properties.spawnEgg(ModEntities.BRAINY_ZOMBIE.get())
     );
+    public static final DeferredItem<SpawnEggItem> WISP_SPAWN_EGG = ITEMS.registerItem(
+        "wisp_spawn_egg",
+        SpawnEggItem::new,
+        properties -> properties.spawnEgg(ModEntities.WISP.get())
+    );
+    public static final DeferredItem<WispEssenceItem> WISP_ESSENCE = ITEMS.registerItem("wisp_essence", WispEssenceItem::new);
     public static final DeferredItem<SpawnEggItem> FIRE_BAT_SPAWN_EGG = ITEMS.registerItem(
         "fire_bat_spawn_egg",
         SpawnEggItem::new,

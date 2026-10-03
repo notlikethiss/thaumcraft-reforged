@@ -43,6 +43,7 @@ import thaumcraft.client.render.model.TcModelLayers;
 import thaumcraft.client.render.entity.BrainyZombieRenderer;
 import thaumcraft.client.render.entity.FireBatRenderer;
 import thaumcraft.client.render.entity.GiantBrainyZombieRenderer;
+import thaumcraft.client.render.entity.WispRenderer;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.client.extensions.JarClientExtensions;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
@@ -72,6 +73,7 @@ import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
 import thaumcraft.network.NodeZapPayload;
+import thaumcraft.network.WispZapPayload;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.client.research.ResearchTexts;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
@@ -151,6 +153,7 @@ public final class ThaumcraftClient {
         event.registerEntityRenderer(ModEntities.BRAINY_ZOMBIE.get(), BrainyZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
+        event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
     }
 
     @SubscribeEvent
@@ -195,6 +198,7 @@ public final class ThaumcraftClient {
         event.register(AuraDeletePayload.TYPE, ClientPayloadHandlers::auraDelete);
         event.register(AuraTransferFxPayload.TYPE, ClientPayloadHandlers::auraTransferFx);
         event.register(NodeZapPayload.TYPE, ClientPayloadHandlers::nodeZap);
+        event.register(WispZapPayload.TYPE, ClientPayloadHandlers::wispZap);
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
         event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
         event.register(BlockSparklePayload.TYPE, ClientPayloadHandlers::blockSparkle);

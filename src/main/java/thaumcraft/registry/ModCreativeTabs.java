@@ -19,7 +19,7 @@ public final class ModCreativeTabs {
         .icon(() -> new ItemStack(ModItems.THAUMIUM_INGOT.get()))
         .displayItems((parameters, output) -> {
             for (DeferredHolder<net.minecraft.world.item.Item, ? extends net.minecraft.world.item.Item> item : ModItems.ITEMS.getEntries()) {
-                if (item.get() == ModItems.ESSENCE.get()) {
+                if (item.get() == ModItems.ESSENCE.get() || item.get() == ModItems.WISP_ESSENCE.get()) {
                     for (Aspect aspect : Aspect.values()) {
                         if (aspect != Aspect.UNKNOWN) {
                             ItemStack essence = new ItemStack(item.get());

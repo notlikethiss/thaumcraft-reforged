@@ -368,6 +368,15 @@ public final class ClientFx implements FxProxy {
     }
 
     @Override
+    public void bolt(Level level, Entity source, Entity target) {
+        LightningBolt bolt = new LightningBolt(source.getX(), source.getY(), source.getZ(), target.getX(), target.getEyeY() - 0.7, target.getZ(), level.getRandom().nextLong())
+            .setMultiplier(0.4F)
+            .setSpeed(4)
+            .setType(0);
+        BoltRenderer.add(bolt.defaultFractal());
+    }
+
+    @Override
     public void nodeBolt(Level level, float x, float y, float z, Entity target) {
         double targetY = target instanceof Player ? target.getEyeY() : target.getY();
         bolt(level, x, y, z, target.getX(), targetY, target.getZ(), 10, 2.0F, 5, 3);

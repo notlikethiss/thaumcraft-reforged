@@ -13,6 +13,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.entity.monster.BrainyZombie;
 import thaumcraft.entity.monster.FireBat;
 import thaumcraft.entity.monster.GiantBrainyZombie;
+import thaumcraft.entity.monster.Wisp;
 
 public final class ModEntities {
     private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Thaumcraft.MODID);
@@ -36,6 +37,13 @@ public final class ModEntities {
         builder -> builder.sized(0.5F, 0.9F).eyeHeight(0.45F).fireImmune().clientTrackingRange(4).updateInterval(3).notInPeaceful()
     );
 
+    public static final DeferredHolder<EntityType<?>, EntityType<Wisp>> WISP = ENTITIES.registerEntityType(
+        "wisp",
+        Wisp::new,
+        MobCategory.MONSTER,
+        builder -> builder.sized(0.9F, 0.9F).eyeHeight(0.45F).clientTrackingRange(4).updateInterval(3).notInPeaceful()
+    );
+
     private ModEntities() {
     }
 
@@ -49,6 +57,7 @@ public final class ModEntities {
         event.put(BRAINY_ZOMBIE.get(), BrainyZombie.createAttributes().build());
         event.put(GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombie.createAttributes().build());
         event.put(FIRE_BAT.get(), FireBat.createAttributes().build());
+        event.put(WISP.get(), Wisp.createAttributes().build());
     }
 
     private static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {

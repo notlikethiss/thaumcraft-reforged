@@ -16,6 +16,7 @@ import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
 import thaumcraft.network.NodeZapPayload;
+import thaumcraft.network.WispZapPayload;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.client.research.ResearchToast;
 import thaumcraft.registry.ModItems;
@@ -51,6 +52,15 @@ public final class ClientPayloadHandlers {
                 payload.to().y(),
                 payload.to().z()
             );
+        }
+    }
+
+    public static void wispZap(WispZapPayload payload, IPayloadContext context) {
+        Player player = context.player();
+        Entity source = player.level().getEntity(payload.sourceId());
+        Entity target = player.level().getEntity(payload.targetId());
+        if (source != null && target != null) {
+            Fx.get().bolt(player.level(), source, target);
         }
     }
 

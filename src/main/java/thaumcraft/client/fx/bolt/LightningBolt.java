@@ -16,7 +16,7 @@ public final class LightningBolt {
     List<Segment> segments = new ArrayList<>();
     private final Map<Integer, Integer> splitParents = new HashMap<>();
     private final Random random;
-    float multiplier;
+    float multiplier = 1.0F;
     int numSegments0 = 1;
     int increment = 1;
     int type;
@@ -26,7 +26,7 @@ public final class LightningBolt {
     private int numSplits;
     private boolean finalized;
 
-    public LightningBolt(double x1, double y1, double z1, double x2, double y2, double z2, long seed, int duration, float multiplier, int speed) {
+    public LightningBolt(double x1, double y1, double z1, double x2, double y2, double z2, long seed) {
         start = new BoltVector(x1, y1, z1);
         end = new BoltVector(x2, y2, z2);
         random = new Random(seed);
@@ -34,6 +34,10 @@ public final class LightningBolt {
         particleMaxAge = 3 + random.nextInt(3) - 1;
         particleAge = -((int) (length * 3.0F));
         segments.add(new Segment(start, end));
+    }
+
+    public LightningBolt(double x1, double y1, double z1, double x2, double y2, double z2, long seed, int duration, float multiplier, int speed) {
+        this(x1, y1, z1, x2, y2, z2, seed);
         particleMaxAge = duration + random.nextInt(duration) - duration / 2;
         this.multiplier = multiplier;
         increment = speed;
@@ -46,6 +50,11 @@ public final class LightningBolt {
 
     public LightningBolt setWidth(float width) {
         this.width = width;
+        return this;
+    }
+
+    public LightningBolt setSpeed(int speed) {
+        increment = speed;
         return this;
     }
 
