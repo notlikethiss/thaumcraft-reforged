@@ -5,6 +5,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
+import thaumcraft.entity.golem.goal.HomeTakeGoal;
+import thaumcraft.entity.golem.goal.ProvideGotoGoal;
+import thaumcraft.entity.golem.goal.ProvidePlaceGoal;
 import thaumcraft.registry.ModSounds;
 
 public class StoneGolem extends GolemWorker {
@@ -20,6 +23,9 @@ public class StoneGolem extends GolemWorker {
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(1, new ProvidePlaceGoal(this));
+        this.goalSelector.addGoal(2, new ProvideGotoGoal(this));
+        this.goalSelector.addGoal(3, new HomeTakeGoal(this));
         addBasicGoals(false, 4, 5, 7);
     }
 
