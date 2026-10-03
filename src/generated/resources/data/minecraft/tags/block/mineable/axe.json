@@ -6,6 +6,14 @@
       "required": false
     },
     {
+      "id": "thaumcraft:arcane_bore",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:arcane_bore_base",
+      "required": false
+    },
+    {
       "id": "thaumcraft:arcane_ear",
       "required": false
     },

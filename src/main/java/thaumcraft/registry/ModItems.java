@@ -36,6 +36,7 @@ import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
 import thaumcraft.item.ThaumonomiconItem;
 import thaumcraft.item.wand.CastingWandItem;
+import thaumcraft.item.wand.ExcavationWandItem;
 
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Thaumcraft.MODID);
@@ -162,6 +163,12 @@ public final class ModItems {
     public static final DeferredItem<PortableHoleItem> PORTABLE_HOLE = ITEMS.registerItem(
         "portable_hole",
         properties -> new PortableHoleItem(properties.durability(321).rarity(Rarity.RARE).setNoCombineRepair())
+    );
+    public static final DeferredItem<BlockItem> ARCANE_BORE_BASE = block(ModBlocks.ARCANE_BORE_BASE);
+    public static final DeferredItem<BlockItem> ARCANE_BORE = block(ModBlocks.ARCANE_BORE);
+    public static final DeferredItem<ExcavationWandItem> WAND_EXCAVATION = ITEMS.registerItem(
+        "wand_excavation",
+        properties -> new ExcavationWandItem(properties.durability(2000).rarity(Rarity.RARE).setNoCombineRepair())
     );
     public static final DeferredItem<CrystalCapacitorItem> CRYSTAL_CAPACITOR = ITEMS.registerItem(
         "crystal_capacitor",

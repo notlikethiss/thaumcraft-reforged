@@ -20,19 +20,24 @@ public class BeamFx extends WorldFx {
     };
     private static final int ROTATION_SPEED = 5;
 
-    private final Level level;
-    private final double targetX;
-    private final double targetY;
-    private final double targetZ;
-    private final float red;
-    private final float green;
-    private final float blue;
-    private final int type;
-    private final float endMod;
-    private final boolean reverse;
-    private float length;
-    private float yaw;
-    private float pitch;
+    protected final Level level;
+    protected double targetX;
+    protected double targetY;
+    protected double targetZ;
+    protected final float red;
+    protected final float green;
+    protected final float blue;
+    protected final int type;
+    protected float endMod;
+    protected final boolean reverse;
+    protected boolean pulse;
+    protected boolean dayTimeSlide;
+    protected float length;
+    protected float yaw;
+    protected float pitch;
+    protected float prevYaw;
+    protected float prevPitch;
+    protected float prevSize;
 
     public BeamFx(Level level, double x, double y, double z, double targetX, double targetY, double targetZ, int color, int type, boolean reverse, float endMod,
                   int maxAge) {
@@ -48,13 +53,15 @@ public class BeamFx extends WorldFx {
         this.reverse = reverse;
         this.endMod = endMod;
         updateAngles();
+        prevYaw = yaw;
+        prevPitch = pitch;
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.getCameraEntity() != null && minecraft.getCameraEntity().position().distanceTo(new Vec3(x, y, z)) > 50.0) {
             this.maxAge = 0;
         }
     }
 
-    private void updateAngles() {
+    protected void updateAngles() {
         float dx = (float) (x - targetX);
         float dy = (float) (y - targetY);
         float dz = (float) (z - targetZ);
@@ -65,13 +72,31 @@ public class BeamFx extends WorldFx {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        prevYaw = yaw;
+        prevPitch = pitch;
+        updateAngles();
+    }
+
+    @Override
     public RenderType renderType() {
         return TcRenderTypes.additive(TEXTURES[type]);
     }
 
     @Override
     public void render(PoseStack.Pose pose, VertexConsumer buffer, float partialTick, Vec3 camera) {
-        float slide = level.getGameTime() + partialTick;
+        float slide = (dayTimeSlide ? level.getDefaultClockTime() : level.getGameTime()) + partialTick;
+        float size = 1.0F;
+        float opacity = 0.4F;
+        if (pulse) {
+            size = Math.min(age / 4.0F, 1.0F);
+            size = prevSize + (size - prevSize) * partialTick;
+            if (maxAge - age <= 4) {
+                opacity = 0.4F - (4 - (maxAge - age)) * 0.1F;
+            }
+            prevSize = size;
+        }
         float rotation = (float) (level.getDefaultClockTime() % (360 / ROTATION_SPEED) * ROTATION_SPEED) + ROTATION_SPEED * partialTick;
         if (reverse) {
             slide *= -1.0F;
@@ -80,23 +105,24 @@ public class BeamFx extends WorldFx {
         Matrix4f matrix = new Matrix4f(pose.pose())
             .translate(renderX(partialTick, camera), renderY(partialTick, camera), renderZ(partialTick, camera))
             .rotateX((float) Math.toRadians(90.0F))
-            .rotateZ((float) Math.toRadians(-(180.0F + yaw)))
-            .rotateX((float) Math.toRadians(pitch))
+            .rotateZ((float) Math.toRadians(-(180.0F + Mth.lerp(partialTick, prevYaw, yaw))))
+            .rotateX((float) Math.toRadians(Mth.lerp(partialTick, prevPitch, pitch)))
             .rotateY((float) Math.toRadians(rotation));
-        float near = 0.15F;
-        float far = 0.15F * endMod;
+        float near = 0.15F * size;
+        float far = 0.15F * size * endMod;
+        float beamLength = length * size;
         for (int pass = 0; pass < 3; pass++) {
             float v0 = -1.0F + offset + pass / 3.0F;
-            float v1 = length + v0;
+            float v1 = beamLength + v0;
             matrix.rotateY((float) Math.toRadians(60.0F));
-            vertex(matrix, buffer, -far, length, 1.0F, v1);
-            vertex(matrix, buffer, -near, 0.0F, 1.0F, v0);
-            vertex(matrix, buffer, near, 0.0F, 0.0F, v0);
-            vertex(matrix, buffer, far, length, 0.0F, v1);
+            vertex(matrix, buffer, -far, beamLength, 1.0F, v1, opacity);
+            vertex(matrix, buffer, -near, 0.0F, 1.0F, v0, opacity);
+            vertex(matrix, buffer, near, 0.0F, 0.0F, v0, opacity);
+            vertex(matrix, buffer, far, beamLength, 0.0F, v1, opacity);
         }
     }
 
-    private void vertex(Matrix4f matrix, VertexConsumer buffer, float x, float y, float u, float v) {
-        buffer.addVertex(matrix, x, y, 0.0F).setUv(u, v).setColor(red, green, blue, 0.4F).setLight(FULL_BRIGHT);
+    private void vertex(Matrix4f matrix, VertexConsumer buffer, float x, float y, float u, float v, float opacity) {
+        buffer.addVertex(matrix, x, y, 0.0F).setUv(u, v).setColor(red, green, blue, opacity).setLight(FULL_BRIGHT);
     }
 }

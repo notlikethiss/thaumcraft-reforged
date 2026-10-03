@@ -55,6 +55,18 @@ public abstract class WorldFx {
         return (float) (Mth.lerp(partialTick, prevZ, z) - camera.z);
     }
 
+    public int passes() {
+        return 1;
+    }
+
+    public RenderType renderType(int pass) {
+        return renderType();
+    }
+
+    public void render(int pass, PoseStack.Pose pose, VertexConsumer buffer, float partialTick, Vec3 camera) {
+        render(pose, buffer, partialTick, camera);
+    }
+
     public abstract RenderType renderType();
 
     public abstract void render(PoseStack.Pose pose, VertexConsumer buffer, float partialTick, Vec3 camera);

@@ -119,5 +119,11 @@
   "tc.thaumcraft.capacitor_vis": "Содержит %s вис",
   "tc.thaumcraft.mirror_already_linked": "Это зеркало уже связано с действующим зеркалом.",
   "tc.thaumcraft.mirror_linked_to": "Связано с %s,%s,%s в %s",
-  "tc.thaumcraft.hand_mirror_linked_to": "Связано с %s,%s,%s в %s"
+  "tc.thaumcraft.hand_mirror_linked_to": "Связано с %s,%s,%s в %s",
+  "tc.thaumcraft.bore.width": "Ширина: %s",
+  "tc.thaumcraft.bore.speed": "Скорость: +%s",
+  "tc.thaumcraft.bore.properties": "Другие свойства:",
+  "tc.thaumcraft.bore.clusters": "Самородные кластеры",
+  "tc.thaumcraft.bore.fortune": "Удача %s",
+  "tc.thaumcraft.bore.silk_touch": "Шёлковое касание"
 }

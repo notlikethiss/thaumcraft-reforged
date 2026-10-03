@@ -118,5 +118,11 @@
   "tc.thaumcraft.capacitor_vis": "Holds %s vis",
   "tc.thaumcraft.mirror_already_linked": "That mirror is already linked to a valid destination.",
   "tc.thaumcraft.mirror_linked_to": "Linked to %s,%s,%s in %s",
-  "tc.thaumcraft.hand_mirror_linked_to": "Linked to %s,%s,%s in %s"
+  "tc.thaumcraft.hand_mirror_linked_to": "Linked to %s,%s,%s in %s",
+  "tc.thaumcraft.bore.width": "Width: %s",
+  "tc.thaumcraft.bore.speed": "Speed: +%s",
+  "tc.thaumcraft.bore.properties": "Other properties:",
+  "tc.thaumcraft.bore.clusters": "Native Clusters",
+  "tc.thaumcraft.bore.fortune": "Fortune %s",
+  "tc.thaumcraft.bore.silk_touch": "Silk Touch"
 }

@@ -15,6 +15,7 @@ public final class ModNetwork {
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToClient(AuraNodePayload.TYPE, AuraNodePayload.STREAM_CODEC);
+        registrar.playToClient(BoreDigPayload.TYPE, BoreDigPayload.STREAM_CODEC);
         registrar.playToClient(AuraTransferFxPayload.TYPE, AuraTransferFxPayload.STREAM_CODEC);
         registrar.playToClient(AuraDeletePayload.TYPE, AuraDeletePayload.STREAM_CODEC);
         registrar.playToClient(NodeZapPayload.TYPE, NodeZapPayload.STREAM_CODEC);

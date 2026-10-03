@@ -3,6 +3,7 @@ package thaumcraft.client.fx;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.util.Mth;
@@ -10,10 +11,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
+import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.fx.bolt.BoltRenderer;
 import thaumcraft.client.fx.bolt.LightningBolt;
-import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.fx.world.BeamFx;
+import thaumcraft.client.fx.world.BoreBeamFx;
 import thaumcraft.client.fx.world.RuneFx;
 import thaumcraft.client.fx.world.WorldFxRenderer;
 import thaumcraft.fx.FxProxy;
@@ -64,6 +68,40 @@ public final class ClientFx implements FxProxy {
         float size = node.level() / 100.0F;
         beam(level, x, y, z, tx, ty, tz, 0, 0xFFFFFF, true, size, 20);
         beam(level, x, y, z, tx, ty, tz, 1, 0xFFFFFF, true, size / 2.0F, 20);
+    }
+
+    @Override
+    public @Nullable Object boreBeam(Level level, double x, double y, double z, double tx, double ty, double tz, int type, int color, boolean reverse,
+                                     float endMod, @Nullable Object previous, int impact) {
+        if (previous instanceof BoreBeamFx beam && !beam.isDead()) {
+            beam.update(tx, ty, tz, endMod, impact);
+            return beam;
+        }
+        BoreBeamFx beam = new BoreBeamFx(level, x, y, z, tx, ty, tz, color, type, reverse, endMod);
+        WorldFxRenderer.add(beam);
+        return beam;
+    }
+
+    @Override
+    public void boreDigFx(Level level, BlockPos pos, BlockPos target, BlockState state) {
+        if (!(level instanceof ClientLevel clientLevel)) {
+            return;
+        }
+        RandomSource random = level.getRandom();
+        double px = pos.getX() + random.nextFloat();
+        double py = pos.getY() + random.nextFloat();
+        double pz = pos.getZ() + random.nextFloat();
+        double tx = target.getX() + 0.5;
+        double ty = target.getY() + 0.5;
+        double tz = target.getZ() + 0.5;
+        if (random.nextInt(10) == 0) {
+            SparkleParticle fx = new SparkleParticle(clientLevel, px, py, pz, random.nextFloat() * 0.5F + 0.5F, 0.2F, 0.6F + random.nextFloat() * 0.3F, 0.2F, 1);
+            fx.setParticleSpeed((tx - px) / fx.getLifetime(), (ty - py) / fx.getLifetime(), (tz - pz) / fx.getLifetime());
+            fx.setNoClip(true);
+            add(fx);
+        } else {
+            add(new BoreDigParticle(clientLevel, px, py, pz, tx, ty, tz, state, pos));
+        }
     }
 
     @Override

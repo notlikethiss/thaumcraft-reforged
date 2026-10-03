@@ -644,7 +644,7 @@ def arcane_stone():
     mineable("pickaxe", "arcane_stone")
 
 
-WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge"}
+WANDS = {"wand_apprentice": "wandapprentice", "wand_adept": "wandadept", "wand_thaumaturge": "wandthaumaturge", "wand_excavation": "wandexcavation"}
 
 
 def full_cube(texture, tintindex=None):
@@ -1055,6 +1055,7 @@ def owned_devices():
 
     crystals()
     mirrors_and_hole()
+    bore()
 
     mineable("axe", "arcane_ear", "arcane_pressure_plate", "arcane_levitator", "hungry_chest")
     mineable("pickaxe", "arcane_door")
@@ -1147,6 +1148,18 @@ def mirrors_and_hole():
     block_tags[f"{NS}:portable_hole_blacklist"].update({
         f"{NS}:arcane_stone", f"{NS}:arcane_wood", "#minecraft:beds", "minecraft:oak_door", "minecraft:iron_door",
     })
+
+
+def bore():
+    block_model("arcane_bore", {"textures": {"particle": ref("woodplain")}})
+    item_model("arcane_bore", {"parent": "minecraft:block/block", "textures": {"particle": ref("woodplain")}})
+    blockstate("arcane_bore_base", {"variants": {f"facing={facing}": {"model": ref("arcane_bore")} for facing in FACING_ROTATION}})
+    blockstate("arcane_bore", {"variants": {f"base_below={value}": {"model": ref("arcane_bore")} for value in ["true", "false"]}})
+    special_item("arcane_bore_base", ref("arcane_bore", "item"), {"type": f"{NS}:bore", "base": True})
+    special_item("arcane_bore", ref("arcane_bore", "item"), {"type": f"{NS}:bore"})
+    self_drop("arcane_bore_base")
+    self_drop("arcane_bore")
+    mineable("axe", "arcane_bore_base", "arcane_bore")
 
 
 def devices():

@@ -1,7 +1,10 @@
 package thaumcraft.fx;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 public interface FxProxy {
     default int particleCount(int base) {
@@ -75,6 +78,14 @@ public interface FxProxy {
     }
 
     default void crystalCoreBeam(Level level, double x, double y, double z, int nodeKey) {
+    }
+
+    default @Nullable Object boreBeam(Level level, double x, double y, double z, double tx, double ty, double tz, int type, int color, boolean reverse,
+                                      float endMod, @Nullable Object previous, int impact) {
+        return null;
+    }
+
+    default void boreDigFx(Level level, BlockPos pos, BlockPos target, BlockState state) {
     }
 
     default void blockRunes(Level level, int x, int y, int z, float red, float green, float blue, int duration) {

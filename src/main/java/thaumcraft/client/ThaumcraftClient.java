@@ -23,6 +23,9 @@ import thaumcraft.research.ResearchClientHooks;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.render.CrucibleRenderer;
 import thaumcraft.client.render.BellowsRenderer;
+import thaumcraft.client.render.ArcaneBoreBaseRenderer;
+import thaumcraft.client.render.ArcaneBoreRenderer;
+import thaumcraft.client.render.BoreSpecialRenderer;
 import thaumcraft.client.render.CrystalCapacitorRenderer;
 import thaumcraft.client.render.CrystalClusterRenderer;
 import thaumcraft.client.render.CrystalCoreRenderer;
@@ -30,6 +33,7 @@ import thaumcraft.client.render.CrystalSpecialRenderer;
 import thaumcraft.client.render.HoleRenderer;
 import thaumcraft.client.render.HungryChestRenderer;
 import thaumcraft.client.render.MirrorRenderer;
+import thaumcraft.client.screen.ArcaneBoreScreen;
 import thaumcraft.client.screen.HandMirrorScreen;
 import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
@@ -59,6 +63,7 @@ import thaumcraft.client.fx.ModRenderPipelines;
 import thaumcraft.fx.Fx;
 import thaumcraft.network.AspectTagsPayload;
 import thaumcraft.network.BlockSparklePayload;
+import thaumcraft.network.BoreDigPayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
@@ -134,6 +139,8 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MIRROR.get(), MirrorRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HOLE.get(), HoleRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE.get(), ArcaneBoreRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE_BASE.get(), ArcaneBoreBaseRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CLUSTER.get(), CrystalClusterRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CORE.get(), CrystalCoreRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CAPACITOR.get(), CrystalCapacitorRenderer::new);
@@ -150,12 +157,14 @@ public final class ThaumcraftClient {
         event.register(Thaumcraft.id("bellows"), BellowsSpecialRenderer.Unbaked.MAP_CODEC);
         event.register(Thaumcraft.id("hungry_chest"), HungryChestSpecialRenderer.Unbaked.MAP_CODEC);
         event.register(Thaumcraft.id("crystal"), CrystalSpecialRenderer.Unbaked.MAP_CODEC);
+        event.register(Thaumcraft.id("bore"), BoreSpecialRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.HAND_MIRROR.get(), HandMirrorScreen::new);
+        event.register(ModMenus.ARCANE_BORE.get(), ArcaneBoreScreen::new);
         event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }
@@ -182,6 +191,7 @@ public final class ThaumcraftClient {
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
         event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
         event.register(BlockSparklePayload.TYPE, ClientPayloadHandlers::blockSparkle);
+        event.register(BoreDigPayload.TYPE, ClientPayloadHandlers::boreDig);
     }
 
     @SubscribeEvent

@@ -60,7 +60,10 @@ public final class WorldFxRenderer {
         PoseStack poseStack = event.getPoseStack();
         SubmitNodeCollector collector = event.getSubmitNodeCollector();
         for (WorldFx fx : frame.effects()) {
-            collector.submitCustomGeometry(poseStack, fx.renderType(), (pose, buffer) -> fx.render(pose, buffer, frame.partialTick(), camera));
+            for (int pass = 0; pass < fx.passes(); pass++) {
+                int current = pass;
+                collector.submitCustomGeometry(poseStack, fx.renderType(pass), (pose, buffer) -> fx.render(current, pose, buffer, frame.partialTick(), camera));
+            }
         }
     }
 

@@ -11,6 +11,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.ArcaneEarBlockEntity;
+import thaumcraft.blockentity.ArcaneBoreBaseBlockEntity;
+import thaumcraft.blockentity.ArcaneBoreBlockEntity;
 import thaumcraft.blockentity.CrystalCapacitorBlockEntity;
 import thaumcraft.blockentity.CrystalClusterBlockEntity;
 import thaumcraft.blockentity.CrystalCoreBlockEntity;
@@ -113,6 +115,14 @@ public final class ModBlockEntities {
     public static final Supplier<BlockEntityType<HoleBlockEntity>> HOLE = BLOCK_ENTITIES.register(
         "hole",
         () -> new BlockEntityType<>(HoleBlockEntity::new, ModBlocks.HOLE.get())
+    );
+    public static final Supplier<BlockEntityType<ArcaneBoreBaseBlockEntity>> ARCANE_BORE_BASE = BLOCK_ENTITIES.register(
+        "arcane_bore_base",
+        () -> new BlockEntityType<>(ArcaneBoreBaseBlockEntity::new, ModBlocks.ARCANE_BORE_BASE.get())
+    );
+    public static final Supplier<BlockEntityType<ArcaneBoreBlockEntity>> ARCANE_BORE = BLOCK_ENTITIES.register(
+        "arcane_bore",
+        () -> new BlockEntityType<>(ArcaneBoreBlockEntity::new, ModBlocks.ARCANE_BORE.get())
     );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",

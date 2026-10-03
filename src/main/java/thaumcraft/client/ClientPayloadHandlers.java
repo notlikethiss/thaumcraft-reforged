@@ -5,11 +5,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import thaumcraft.blockentity.ArcaneBoreBlockEntity;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.fx.Fx;
 import thaumcraft.aspect.AspectRegistry;
 import thaumcraft.network.AspectTagsPayload;
 import thaumcraft.network.BlockSparklePayload;
+import thaumcraft.network.BoreDigPayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
 import thaumcraft.network.AuraTransferFxPayload;
@@ -63,6 +65,12 @@ public final class ClientPayloadHandlers {
     public static void blockSparkle(BlockSparklePayload payload, IPayloadContext context) {
         Player player = context.player();
         Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.color(), payload.count());
+    }
+
+    public static void boreDig(BoreDigPayload payload, IPayloadContext context) {
+        if (context.player().level().getBlockEntity(payload.pos()) instanceof ArcaneBoreBlockEntity bore) {
+            bore.receiveDig(payload.target());
+        }
     }
 
     public static void researchComplete(ResearchCompletePayload payload, IPayloadContext context) {

@@ -19,6 +19,8 @@ import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.block.device.ArcaneDoorBlock;
 import thaumcraft.block.device.ArcaneEarBlock;
 import thaumcraft.block.device.ArcanePressurePlateBlock;
+import thaumcraft.block.bore.ArcaneBoreBaseBlock;
+import thaumcraft.block.bore.ArcaneBoreBlock;
 import thaumcraft.block.crystal.CrystalCapacitorBlock;
 import thaumcraft.block.crystal.CrystalClusterBlock;
 import thaumcraft.block.crystal.CrystalCoreBlock;
@@ -241,6 +243,16 @@ public final class ModBlocks {
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos, aabb) -> false)
+    );
+    public static final DeferredBlock<ArcaneBoreBaseBlock> ARCANE_BORE_BASE = BLOCKS.registerBlock(
+        "arcane_bore_base",
+        ArcaneBoreBaseBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
+    );
+    public static final DeferredBlock<ArcaneBoreBlock> ARCANE_BORE = BLOCKS.registerBlock(
+        "arcane_bore",
+        ArcaneBoreBlock::new,
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
     );
 
     private ModBlocks() {
