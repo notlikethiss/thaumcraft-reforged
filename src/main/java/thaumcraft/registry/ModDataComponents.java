@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
@@ -37,6 +38,19 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<Integer>> VIS_DISCOUNT = COMPONENTS.registerComponentType(
         "vis_discount",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+
+    public static final Supplier<DataComponentType<Boolean>> HOVER = COMPONENTS.registerComponentType(
+        "hover",
+        builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL.cast())
+    );
+    public static final Supplier<DataComponentType<Integer>> HOVER_CHARGE = COMPONENTS.registerComponentType(
+        "hover_charge",
+        builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+    public static final Supplier<DataComponentType<ItemStackTemplate>> HARNESS_JAR = COMPONENTS.registerComponentType(
+        "harness_jar",
+        builder -> builder.persistent(ItemStackTemplate.CODEC).networkSynchronized(ItemStackTemplate.STREAM_CODEC.cast())
     );
 
     public static final Supplier<DataComponentType<JarContents>> JAR_CONTENTS = COMPONENTS.registerComponentType(

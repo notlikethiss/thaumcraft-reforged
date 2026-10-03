@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     {
+      "id": "thaumcraft:hover_harness",
+      "required": false
+    },
+    {
       "id": "thaumcraft:robe_chestplate",
       "required": false
     },

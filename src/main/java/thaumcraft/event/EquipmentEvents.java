@@ -13,6 +13,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aura.AuraManager;
+import thaumcraft.item.armor.Hover;
 import thaumcraft.lib.MiningUtils;
 import thaumcraft.lib.MovementModifiers;
 import thaumcraft.registry.ModEnchantments;
@@ -62,6 +63,16 @@ public final class EquipmentEvents {
             MovementModifiers.setAdditive(player, Attributes.STEP_HEIGHT, STEP_ID, 0.0);
             if (haste > 0) {
                 MovementModifiers.addAirSpeed(player, 0.02F + bonus * 0.66F);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    static void onPlayerTickPre(PlayerTickEvent.Pre event) {
+        if (event.getEntity() instanceof ServerPlayer player && !player.getAbilities().flying) {
+            ItemStack harness = Hover.getHarness(player);
+            if (!harness.isEmpty()) {
+                Hover.handleServer(player, harness);
             }
         }
     }

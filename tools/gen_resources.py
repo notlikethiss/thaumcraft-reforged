@@ -318,6 +318,7 @@ SIMPLE_ITEMS = {
     "robe_leggings": "clothlegs",
     "robe_boots": "clothboots",
     "boots_traveller": "bootstraveler",
+    "hover_harness": "hoverharness",
 }
 
 HANDHELD_ITEMS = {
@@ -338,6 +339,7 @@ EQUIPMENT = {
     "robes": ("robes_1", "robes_2"),
     "goggles": ("goggles", None),
     "boots_traveller": ("bootstraveler", None),
+    "hover_harness": ("hoverharness", None),
 }
 
 TOOL_TAGS = {
@@ -370,6 +372,7 @@ def items():
         if suffix in ARMOR_TAGS:
             item_tags[ARMOR_TAGS[suffix]].add(f"{NS}:{name}")
     item_tags["minecraft:head_armor"].add(f"{NS}:goggles_of_revealing")
+    item_tags["minecraft:chest_armor"].add(f"{NS}:hover_harness")
     for asset, (outer, inner) in EQUIPMENT.items():
         layers = {"humanoid": [{"texture": f"{NS}:{asset}"}]}
         copy_texture(f"model/{outer}.png", f"entity/equipment/humanoid/{asset}.png")

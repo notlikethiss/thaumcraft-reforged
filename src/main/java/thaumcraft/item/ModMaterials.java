@@ -24,7 +24,7 @@ public final class ModMaterials {
     public static final ArmorMaterial ROBE_ARMOR = special("robes");
     public static final ArmorMaterial GOGGLES_ARMOR = special("goggles", ModTags.REPAIRS_GOGGLES);
     public static final ArmorMaterial TRAVELLER_ARMOR = special("boots_traveller");
-    public static final ArmorMaterial HARNESS_ARMOR = special("hover_harness");
+    public static final ArmorMaterial HARNESS_ARMOR = special("hover_harness", ModTags.REPAIRS_GOGGLES);
 
     private ModMaterials() {
     }

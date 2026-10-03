@@ -34,6 +34,7 @@ import thaumcraft.item.EssenceItem;
 import thaumcraft.item.EssentiaPhialItem;
 import thaumcraft.item.FilledJarItem;
 import thaumcraft.item.ModMaterials;
+import thaumcraft.item.armor.HoverHarnessItem;
 import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
 import thaumcraft.item.ThaumonomiconItem;
@@ -132,6 +133,10 @@ public final class ModItems {
     public static final DeferredItem<Item> ROBE_LEGGINGS = armor("robe_leggings", ModMaterials.ROBE_ARMOR, ArmorType.LEGGINGS, 2, Rarity.UNCOMMON);
     public static final DeferredItem<Item> ROBE_BOOTS = armor("robe_boots", ModMaterials.ROBE_ARMOR, ArmorType.BOOTS, 1, Rarity.UNCOMMON);
     public static final DeferredItem<Item> BOOTS_TRAVELLER = durableArmor("boots_traveller", ModMaterials.TRAVELLER_ARMOR, ArmorType.BOOTS, 350, Rarity.RARE);
+    public static final DeferredItem<HoverHarnessItem> HOVER_HARNESS = ITEMS.registerItem(
+        "hover_harness",
+        properties -> new HoverHarnessItem(properties.humanoidArmor(ModMaterials.HARNESS_ARMOR, ArmorType.CHESTPLATE).durability(400).rarity(Rarity.EPIC).component(ModDataComponents.VIS_DISCOUNT.get(), 3))
+    );
 
     public static final DeferredItem<Item> THAUMIUM_SWORD = ITEMS.registerSimpleItem("thaumium_sword", properties -> properties.sword(ModMaterials.THAUMIUM_TOOL, 3.0F, -2.4F).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> THAUMIUM_PICKAXE = ITEMS.registerSimpleItem("thaumium_pickaxe", properties -> properties.pickaxe(ModMaterials.THAUMIUM_TOOL, 1.0F, -2.8F).rarity(Rarity.UNCOMMON));

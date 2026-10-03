@@ -12,6 +12,7 @@ import thaumcraft.menu.ArcaneBoreMenu;
 import thaumcraft.menu.ArcaneWorkbenchMenu;
 import thaumcraft.menu.GolemMenu;
 import thaumcraft.menu.HandMirrorMenu;
+import thaumcraft.menu.HoverHarnessMenu;
 import thaumcraft.menu.InfusionWorkbenchMenu;
 import thaumcraft.menu.ResearchTableMenu;
 
@@ -39,6 +40,10 @@ public final class ModMenus {
     public static final Supplier<MenuType<GolemMenu>> GOLEM = MENUS.register(
         "golem",
         () -> IMenuTypeExtension.create(GolemMenu::fromNetwork)
+    );
+    public static final Supplier<MenuType<HoverHarnessMenu>> HOVER_HARNESS = MENUS.register(
+        "hover_harness",
+        () -> IMenuTypeExtension.create(HoverHarnessMenu::fromNetwork)
     );
     public static final Supplier<MenuType<HandMirrorMenu>> HAND_MIRROR = MENUS.register(
         "hand_mirror",

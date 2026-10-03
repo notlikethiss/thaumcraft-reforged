@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.render.AuraNodeRenderer;
 import thaumcraft.client.fx.ModRenderPipelines;
+import thaumcraft.item.armor.Hover;
 import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.EqualTradeWandItem;
 import thaumcraft.item.wand.HellrodItem;
@@ -29,6 +31,10 @@ public final class TcHud {
         Player player = minecraft.player;
         if (player == null || minecraft.level == null || minecraft.gui.screen() != null) {
             return;
+        }
+        ItemStack harness = Hover.getHarness(player);
+        if (!harness.isEmpty()) {
+            renderHover(graphics, harness);
         }
         if (AuraNodeRenderer.hasGoggles(player)) {
             renderGoggles(graphics, minecraft, player);
@@ -47,6 +53,20 @@ public final class TcHud {
                 renderEqualTrade(graphics, minecraft, player, new ItemStack(picked.getBlock().asItem()));
             }
         }
+    }
+
+    private static void renderHover(GuiGraphicsExtractor graphics, ItemStack armor) {
+        int height = graphics.guiHeight();
+        int level = Math.round(Hover.getFuel(armor) / 64.0F * 48.0F);
+        if (level > 0) {
+            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 6, height / 2 + 24 - level, 224.0F, (float) (48 - level), 8, level, 256, 256, ARGB.colorFromFloat(1.0F, 0.0F, 1.0F, 0.75F));
+        }
+        blit(graphics, 5, height / 2 - 28, 240, 0, 10, 56);
+        if (Hover.isHovering(armor)) {
+            int frame = (int) (Util.getMillis() % 700L) / 50;
+            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 2, height / 2 - 43, 16.0F * frame, 32.0F, 16, 16, 256, 256, ARGB.white(0.66F));
+        }
+        graphics.item(armor, 2, height / 2 - 43);
     }
 
     private static void renderGoggles(GuiGraphicsExtractor graphics, Minecraft minecraft, Player player) {

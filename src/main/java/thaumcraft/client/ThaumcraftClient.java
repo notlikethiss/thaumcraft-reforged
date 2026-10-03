@@ -35,6 +35,11 @@ import thaumcraft.client.render.HungryChestRenderer;
 import thaumcraft.client.render.MirrorRenderer;
 import thaumcraft.client.screen.ArcaneBoreScreen;
 import thaumcraft.client.screen.HandMirrorScreen;
+import thaumcraft.client.screen.HoverHarnessScreen;
+import thaumcraft.client.render.HoverHarnessLayer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.world.entity.player.PlayerModelType;
 import thaumcraft.client.screen.GolemScreen;
 import thaumcraft.client.render.HungryChestSpecialRenderer;
 import thaumcraft.client.render.BellowsSpecialRenderer;
@@ -179,6 +184,16 @@ public final class ThaumcraftClient {
     }
 
     @SubscribeEvent
+    static void addLayers(EntityRenderersEvent.AddLayers event) {
+        for (PlayerModelType skin : event.getSkins()) {
+            AvatarRenderer<AbstractClientPlayer> renderer = event.getPlayerRenderer(skin);
+            if (renderer != null) {
+                renderer.addLayer(new HoverHarnessLayer(renderer));
+            }
+        }
+    }
+
+    @SubscribeEvent
     static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         TcModelLayers.register(event);
     }
@@ -197,6 +212,7 @@ public final class ThaumcraftClient {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.HAND_MIRROR.get(), HandMirrorScreen::new);
         event.register(ModMenus.GOLEM.get(), GolemScreen::new);
+        event.register(ModMenus.HOVER_HARNESS.get(), HoverHarnessScreen::new);
         event.register(ModMenus.ARCANE_BORE.get(), ArcaneBoreScreen::new);
         event.register(ModMenus.INFUSION_WORKBENCH.get(), InfusionWorkbenchScreen::new);
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);

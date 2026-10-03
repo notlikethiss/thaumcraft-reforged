@@ -26,5 +26,6 @@ public final class ModNetwork {
         registrar.playToClient(BlockSparklePayload.TYPE, BlockSparklePayload.STREAM_CODEC);
         registrar.playToClient(BlockBoilPayload.TYPE, BlockBoilPayload.STREAM_CODEC);
         registrar.playToClient(BlockTagsPayload.TYPE, BlockTagsPayload.STREAM_CODEC);
+        registrar.playToServer(HoverTogglePayload.TYPE, HoverTogglePayload.STREAM_CODEC, HoverTogglePayload::handle);
     }
 }
