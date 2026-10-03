@@ -24,5 +24,7 @@ public final class ModNetwork {
         registrar.playToClient(AspectTagsPayload.TYPE, AspectTagsPayload.STREAM_CODEC);
         registrar.playToClient(ResearchCompletePayload.TYPE, ResearchCompletePayload.STREAM_CODEC);
         registrar.playToClient(BlockSparklePayload.TYPE, BlockSparklePayload.STREAM_CODEC);
+        registrar.playToClient(BlockBoilPayload.TYPE, BlockBoilPayload.STREAM_CODEC);
+        registrar.playToClient(BlockTagsPayload.TYPE, BlockTagsPayload.STREAM_CODEC);
     }
 }

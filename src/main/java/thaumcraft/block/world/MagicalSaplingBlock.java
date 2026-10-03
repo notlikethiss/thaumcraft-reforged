@@ -26,6 +26,10 @@ public class MagicalSaplingBlock extends VegetationBlock {
         this.silverwood = silverwood;
     }
 
+    public boolean isSilverwood() {
+        return silverwood;
+    }
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;

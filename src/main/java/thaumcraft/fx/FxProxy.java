@@ -1,11 +1,13 @@
 package thaumcraft.fx;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
+import thaumcraft.aspect.AspectList;
 
 public interface FxProxy {
     default int particleCount(int base) {
@@ -102,5 +104,14 @@ public interface FxProxy {
     }
 
     default void blockRunes(Level level, int x, int y, int z, float red, float green, float blue, int duration) {
+    }
+
+    default void blockBoil(Level level, int x, int y, int z, float red, float green, float blue) {
+    }
+
+    default void smokeSpiral(Level level, double x, double y, double z, float radius, int start, int minY) {
+    }
+
+    default void blockTags(BlockPos pos, AspectList aspects, Direction side) {
     }
 }

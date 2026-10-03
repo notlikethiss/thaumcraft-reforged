@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.util.Mth;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
+import thaumcraft.aspect.AspectList;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.fx.bolt.BoltRenderer;
 import thaumcraft.client.fx.bolt.LightningBolt;
@@ -24,6 +26,7 @@ import thaumcraft.client.fx.world.BoreBeamFx;
 import thaumcraft.client.fx.world.RuneFx;
 import thaumcraft.client.fx.world.WandBeamFx;
 import thaumcraft.client.fx.world.WorldFxRenderer;
+import thaumcraft.client.render.GogglesTagRenderer;
 import thaumcraft.fx.FxProxy;
 
 public final class ClientFx implements FxProxy {
@@ -122,6 +125,29 @@ public final class ClientFx implements FxProxy {
         } else {
             add(new BoreDigParticle(clientLevel, px, py, pz, tx, ty, tz, state, pos));
         }
+    }
+
+    @Override
+    public void blockBoil(Level level, int x, int y, int z, float red, float green, float blue) {
+        RandomSource random = level.getRandom();
+        for (int i = 0; i < particleCount(1); i++) {
+            crucibleBubble(level, x, y + random.nextFloat(), z + random.nextFloat(), red, green, blue);
+            crucibleBubble(level, x + 1, y + random.nextFloat(), z + random.nextFloat(), red, green, blue);
+            crucibleBubble(level, x + random.nextFloat(), y + random.nextFloat(), z, red, green, blue);
+            crucibleBubble(level, x + random.nextFloat(), y + random.nextFloat(), z + 1, red, green, blue);
+        }
+    }
+
+    @Override
+    public void smokeSpiral(Level level, double x, double y, double z, float radius, int start, int minY) {
+        if (level instanceof ClientLevel clientLevel) {
+            add(new SmokeSpiralParticle(clientLevel, x, y, z, radius, start, minY));
+        }
+    }
+
+    @Override
+    public void blockTags(BlockPos pos, AspectList aspects, Direction side) {
+        GogglesTagRenderer.showBlockTags(pos, aspects, side);
     }
 
     @Override

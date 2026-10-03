@@ -76,7 +76,9 @@ import thaumcraft.client.fx.ClientFx;
 import thaumcraft.client.fx.ModRenderPipelines;
 import thaumcraft.fx.Fx;
 import thaumcraft.network.AspectTagsPayload;
+import thaumcraft.network.BlockBoilPayload;
 import thaumcraft.network.BlockSparklePayload;
+import thaumcraft.network.BlockTagsPayload;
 import thaumcraft.network.BoreDigPayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
@@ -224,6 +226,8 @@ public final class ThaumcraftClient {
         event.register(AspectTagsPayload.TYPE, ClientPayloadHandlers::aspectTags);
         event.register(ResearchCompletePayload.TYPE, ClientPayloadHandlers::researchComplete);
         event.register(BlockSparklePayload.TYPE, ClientPayloadHandlers::blockSparkle);
+        event.register(BlockBoilPayload.TYPE, ClientPayloadHandlers::blockBoil);
+        event.register(BlockTagsPayload.TYPE, ClientPayloadHandlers::blockTags);
         event.register(BoreDigPayload.TYPE, ClientPayloadHandlers::boreDig);
     }
 

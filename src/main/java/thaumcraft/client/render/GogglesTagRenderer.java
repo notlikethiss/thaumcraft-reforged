@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
@@ -39,6 +40,7 @@ public final class GogglesTagRenderer {
     private static final int ROW_SIZE = 5;
     private static final int BRIGHTNESS = 220;
     private static float tagScale;
+    private static @Nullable PinnedTags pinned;
 
     private GogglesTagRenderer() {
     }
@@ -50,7 +52,7 @@ public final class GogglesTagRenderer {
         }
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (!AuraNodeRenderer.hasGoggles(player)) {
+        if (player == null) {
             return;
         }
         HitResult hitResult = minecraft.hitResult;
@@ -58,6 +60,21 @@ public final class GogglesTagRenderer {
             return;
         }
         BlockPos pos = blockHit.getBlockPos();
+        float partialTick = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        if (pinned != null && pinned.pos().equals(pos)) {
+            if (tagScale < 0.5F) {
+                tagScale += 0.031F - tagScale / 10.0F;
+            }
+            Direction side = pinned.side();
+            event.getRenderState().setRenderData(DATA_KEY, new TagState(
+                pos.getX() + side.getStepX() / 2.0F, pos.getY() + side.getStepY() / 2.0F, pos.getZ() + side.getStepZ() / 2.0F,
+                entriesOf(pinned.aspects()), tagScale, player.getPosition(partialTick), side
+            ));
+            return;
+        }
+        if (!AuraNodeRenderer.hasGoggles(player)) {
+            return;
+        }
         AspectList tags = tagsAt(event.getLevel().getBlockEntity(pos));
         if (tags == null || tags.size() == 0) {
             return;
@@ -65,12 +82,20 @@ public final class GogglesTagRenderer {
         if (tagScale < 0.3F) {
             tagScale += 0.031F - tagScale / 10.0F;
         }
+        event.getRenderState().setRenderData(DATA_KEY, new TagState(pos.getX(), pos.getY() + 0.4, pos.getZ(), entriesOf(tags), tagScale, player.getPosition(partialTick), Direction.UP));
+    }
+
+    private static List<Entry> entriesOf(AspectList tags) {
         List<Entry> entries = new ArrayList<>();
         for (Aspect aspect : tags.getAspects()) {
             entries.add(new Entry(aspect, tags.getAmount(aspect)));
         }
-        float partialTick = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-        event.getRenderState().setRenderData(DATA_KEY, new TagState(pos.getX(), pos.getY() + 0.4, pos.getZ(), entries, tagScale, player.getPosition(partialTick)));
+        return entries;
+    }
+
+    public static void showBlockTags(BlockPos pos, AspectList aspects, Direction side) {
+        tagScale = 0.0F;
+        pinned = aspects.isEmpty() ? null : new PinnedTags(pos.immutable(), aspects, side);
     }
 
     private static @Nullable AspectList tagsAt(@Nullable BlockEntity blockEntity) {
@@ -114,9 +139,9 @@ public final class GogglesTagRenderer {
             shift *= scale;
             poseStack.pushPose();
             poseStack.translate(
-                state.x() + 0.5 - camera.pos.x,
-                state.y() - shiftY + 0.5 + scale * 2.0F - camera.pos.y,
-                state.z() + 0.5 - camera.pos.z
+                state.x() + 0.5 + scale * 2.0F * state.side().getStepX() - camera.pos.x,
+                state.y() - shiftY + 0.5 + scale * 2.0F * state.side().getStepY() - camera.pos.y,
+                state.z() + 0.5 + scale * 2.0F * state.side().getStepZ() - camera.pos.z
             );
             float xd = (float) (state.viewer().x - (state.x() + 0.5));
             float zd = (float) (state.viewer().z - (state.z() + 0.5));
@@ -157,6 +182,9 @@ public final class GogglesTagRenderer {
     private record Entry(Aspect aspect, int amount) {
     }
 
-    private record TagState(double x, double y, double z, List<Entry> entries, float scale, Vec3 viewer) {
+    private record TagState(double x, double y, double z, List<Entry> entries, float scale, Vec3 viewer, Direction side) {
+    }
+
+    private record PinnedTags(BlockPos pos, AspectList aspects, Direction side) {
     }
 }

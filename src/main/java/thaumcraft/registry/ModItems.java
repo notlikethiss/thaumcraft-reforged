@@ -44,6 +44,11 @@ import thaumcraft.item.golem.GolemPlacerItem;
 import thaumcraft.entity.golem.GolemKind;
 import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.EqualTradeWandItem;
+import thaumcraft.item.tool.ElementalAxeItem;
+import thaumcraft.item.tool.ElementalHoeItem;
+import thaumcraft.item.tool.ElementalPickaxeItem;
+import thaumcraft.item.tool.ElementalShovelItem;
+import thaumcraft.item.tool.ElementalSwordItem;
 import thaumcraft.item.wand.ExcavationWandItem;
 import thaumcraft.item.wand.FrostWandItem;
 import thaumcraft.item.wand.FireWandItem;
@@ -133,11 +138,11 @@ public final class ModItems {
     public static final DeferredItem<Item> THAUMIUM_AXE = ITEMS.registerSimpleItem("thaumium_axe", properties -> properties.axe(ModMaterials.THAUMIUM_TOOL, 2.0F, -3.0F).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> THAUMIUM_SHOVEL = ITEMS.registerSimpleItem("thaumium_shovel", properties -> properties.shovel(ModMaterials.THAUMIUM_TOOL, 0.0F, -3.0F).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> THAUMIUM_HOE = ITEMS.registerSimpleItem("thaumium_hoe", properties -> properties.hoe(ModMaterials.THAUMIUM_TOOL, -2.0F, -1.0F).rarity(Rarity.UNCOMMON).enchantable(5));
-    public static final DeferredItem<Item> ELEMENTAL_SWORD = ITEMS.registerSimpleItem("elemental_sword", properties -> properties.sword(ModMaterials.ELEMENTAL_TOOL, 3.0F, -2.4F).rarity(Rarity.RARE));
-    public static final DeferredItem<Item> ELEMENTAL_PICKAXE = ITEMS.registerSimpleItem("elemental_pickaxe", properties -> properties.pickaxe(ModMaterials.ELEMENTAL_TOOL, 1.0F, -2.8F).rarity(Rarity.RARE));
-    public static final DeferredItem<Item> ELEMENTAL_AXE = ITEMS.registerSimpleItem("elemental_axe", properties -> properties.axe(ModMaterials.ELEMENTAL_TOOL, 2.0F, -3.0F).rarity(Rarity.RARE));
-    public static final DeferredItem<Item> ELEMENTAL_SHOVEL = ITEMS.registerSimpleItem("elemental_shovel", properties -> properties.shovel(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F).rarity(Rarity.RARE));
-    public static final DeferredItem<Item> ELEMENTAL_HOE = ITEMS.registerSimpleItem("elemental_hoe", properties -> properties.hoe(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F).rarity(Rarity.RARE).enchantable(5));
+    public static final DeferredItem<ElementalSwordItem> ELEMENTAL_SWORD = ITEMS.registerItem("elemental_sword", properties -> new ElementalSwordItem(properties.sword(ModMaterials.ELEMENTAL_TOOL, 3.0F, -2.4F).rarity(Rarity.RARE)));
+    public static final DeferredItem<ElementalPickaxeItem> ELEMENTAL_PICKAXE = ITEMS.registerItem("elemental_pickaxe", properties -> new ElementalPickaxeItem(properties.pickaxe(ModMaterials.ELEMENTAL_TOOL, 1.0F, -2.8F).rarity(Rarity.RARE)));
+    public static final DeferredItem<ElementalAxeItem> ELEMENTAL_AXE = ITEMS.registerItem("elemental_axe", properties -> new ElementalAxeItem(properties.axe(ModMaterials.ELEMENTAL_TOOL, 2.0F, -3.0F).rarity(Rarity.RARE)));
+    public static final DeferredItem<ElementalShovelItem> ELEMENTAL_SHOVEL = ITEMS.registerItem("elemental_shovel", properties -> new ElementalShovelItem(properties.shovel(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F).rarity(Rarity.RARE)));
+    public static final DeferredItem<ElementalHoeItem> ELEMENTAL_HOE = ITEMS.registerItem("elemental_hoe", properties -> new ElementalHoeItem(properties.hoe(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F).rarity(Rarity.RARE).enchantable(5)));
 
     public static final DeferredItem<BlockItem> CRUCIBLE = block(ModBlocks.CRUCIBLE);
     public static final DeferredItem<BlockItem> ALEMBIC = block(ModBlocks.ALEMBIC);

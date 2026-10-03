@@ -10,7 +10,9 @@ import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.fx.Fx;
 import thaumcraft.aspect.AspectRegistry;
 import thaumcraft.network.AspectTagsPayload;
+import thaumcraft.network.BlockBoilPayload;
 import thaumcraft.network.BlockSparklePayload;
+import thaumcraft.network.BlockTagsPayload;
 import thaumcraft.network.BoreDigPayload;
 import thaumcraft.network.AuraDeletePayload;
 import thaumcraft.network.AuraNodePayload;
@@ -87,6 +89,17 @@ public final class ClientPayloadHandlers {
     public static void blockSparkle(BlockSparklePayload payload, IPayloadContext context) {
         Player player = context.player();
         Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.color(), payload.count());
+    }
+
+    public static void blockBoil(BlockBoilPayload payload, IPayloadContext context) {
+        Player player = context.player();
+        Fx.get().blockBoil(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), payload.red(), payload.green(), payload.blue());
+    }
+
+    public static void blockTags(BlockTagsPayload payload, IPayloadContext context) {
+        Player player = context.player();
+        Fx.get().blockSparkle(player.level(), payload.pos().getX(), payload.pos().getY(), payload.pos().getZ(), 4, 4);
+        Fx.get().blockTags(payload.pos(), payload.aspects(), payload.side());
     }
 
     public static void boreDig(BoreDigPayload payload, IPayloadContext context) {
