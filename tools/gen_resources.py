@@ -1392,6 +1392,7 @@ def worldgen():
     chest_loot("hilltop_stones", ["minecraft:chests/simple_dungeon", "minecraft:chests/simple_dungeon"], 1 / 10)
     chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
     wizard_tower_loot()
+    chest_injections()
     gen_structures.generate(DATA)
 
 
@@ -1406,6 +1407,56 @@ TOWER_CHEST_CONTENTS = [
     (f"{NS}:nitor", 1, 1, 5),
     (f"{NS}:thaumium_ingot", 1, 2, 5),
 ]
+
+
+CHEST_INJECTIONS = [
+    ("simple_dungeon", "minecraft:chests/simple_dungeon", {"type": "minecraft:uniform", "min": 1, "max": 3}, 144, 5, 4),
+    ("jungle_temple", "minecraft:chests/jungle_temple", {"type": "minecraft:uniform", "min": 2, "max": 6}, 89, 5, 4),
+    ("desert_pyramid", "minecraft:chests/desert_pyramid", {"type": "minecraft:uniform", "min": 2, "max": 4}, 247, 5, 4),
+    ("abandoned_mineshaft", "minecraft:chests/abandoned_mineshaft", {"type": "minecraft:uniform", "min": 2, "max": 4}, 98, 4, 3),
+    ("stronghold_corridor", "minecraft:chests/stronghold_corridor", {"type": "minecraft:uniform", "min": 2, "max": 3}, 101, 4, 3),
+    ("stronghold_crossing", "minecraft:chests/stronghold_crossing", {"type": "minecraft:uniform", "min": 1, "max": 4}, 62, 4, 3),
+    ("stronghold_library", "minecraft:chests/stronghold_library", {"type": "minecraft:uniform", "min": 2, "max": 10}, 52, 4, 3),
+]
+CHEST_RARE_LOOT = ["thaumium_sword", "thaumium_pickaxe", "thaumium_axe", "thaumium_hoe"]
+
+
+def count_modifier(minimum, maximum):
+    return {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": minimum, "max": maximum}}
+
+
+def chest_injection(name, target, pools):
+    write(DATA / NS / "loot_table" / "inject" / f"{name}.json", {
+        "type": "minecraft:chest",
+        "pools": pools,
+        "random_sequence": f"{NS}:inject/{name}",
+    })
+    write(DATA / NS / "loot_modifiers" / f"{name}.json", {
+        "type": "neoforge:add_table",
+        "condition": {"type": "neoforge:loot_table_id", "loot_table_id": target},
+        "table": f"{NS}:inject/{name}",
+    })
+
+
+def chest_injections():
+    for name, target, rolls, empty_weight, common_weight, uncommon_weight in CHEST_INJECTIONS:
+        entries = [
+            {"type": "minecraft:item", "name": f"{NS}:thaumium_ingot", "weight": common_weight, "modifier": count_modifier(1, 3)},
+            {"type": "minecraft:item", "name": f"{NS}:amber", "weight": common_weight, "modifier": count_modifier(1, 3)},
+            {"type": "minecraft:item", "name": f"{NS}:knowledge_fragment", "weight": uncommon_weight, "modifier": count_modifier(1, 2)},
+        ]
+        if name == "stronghold_library":
+            entries.append({"type": "minecraft:item", "name": f"{NS}:knowledge_fragment", "weight": 20, "modifier": count_modifier(3, 6)})
+        entries += [{"type": "minecraft:item", "name": f"{NS}:{tool}", "weight": 1} for tool in CHEST_RARE_LOOT]
+        entries.append({"type": "minecraft:empty", "weight": empty_weight})
+        chest_injection(name, target, [{"rolls": rolls, "entries": entries}])
+    chest_injection("village_weaponsmith", "minecraft:chests/village/village_weaponsmith", [{
+        "rolls": {"type": "minecraft:uniform", "min": 3, "max": 8},
+        "entries": [
+            {"type": "minecraft:item", "name": f"{NS}:thaumium_ingot", "weight": 10, "modifier": count_modifier(1, 3)},
+            {"type": "minecraft:empty", "weight": 107},
+        ],
+    }])
 
 
 def wizard_tower_loot():
