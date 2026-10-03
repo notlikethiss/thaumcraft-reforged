@@ -51,8 +51,10 @@ jobs:
           tag="nightly-$MC"
           notes="$(git log -1 --format='%h: %s')"
           gh release delete "$tag" --cleanup-tag --yes || true
+          latest=false
+          if [ "$GITHUB_REF_NAME" = "main" ]; then latest=true; fi
           gh release create "$tag" build/libs/*.jar \
-            --prerelease \
+            --latest="$latest" \
             --target "$GITHUB_SHA" \
             --title "Nightly $MC" \
             --notes "$notes"
