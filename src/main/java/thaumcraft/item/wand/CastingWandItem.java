@@ -3,7 +3,10 @@ package thaumcraft.item.wand;
 import java.util.function.Consumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
@@ -13,6 +16,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aura.AuraManager;
+import thaumcraft.entity.golem.GolemBase;
+import thaumcraft.registry.ModSounds;
 import thaumcraft.registry.ModDataComponents;
 
 public class CastingWandItem extends Item {
@@ -50,6 +55,22 @@ public class CastingWandItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         recharge(stack, level, owner.tickCount, owner.getX(), owner.getY(), owner.getZ());
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        if (!(target instanceof GolemBase golem) || !golem.isAlive()) {
+            return InteractionResult.PASS;
+        }
+        if (!(golem.level() instanceof ServerLevel level)) {
+            golem.spawnAnim();
+            return InteractionResult.SUCCESS;
+        }
+        golem.spawnAtLocation(level, golem.toItem(), 0.5F);
+        golem.playSound(ModSounds.ZAP.get(), 0.5F, 1.0F);
+        golem.dropContents(level);
+        golem.discard();
+        return InteractionResult.SUCCESS;
     }
 
     @Override

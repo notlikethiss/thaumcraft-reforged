@@ -1,5 +1,6 @@
 package thaumcraft.registry;
 
+import java.util.List;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -12,6 +13,16 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.entity.FollowingItem;
 import thaumcraft.entity.SpecialItem;
+import thaumcraft.entity.golem.AdvancedClayGolem;
+import thaumcraft.entity.golem.AdvancedStoneGolem;
+import thaumcraft.entity.golem.ClayGolem;
+import thaumcraft.entity.golem.DecantingGolem;
+import thaumcraft.entity.golem.GolemBase;
+import thaumcraft.entity.golem.IronGuardianGolem;
+import thaumcraft.entity.golem.StoneGolem;
+import thaumcraft.entity.golem.StrawGolem;
+import thaumcraft.entity.golem.TallowGolem;
+import thaumcraft.entity.golem.WoodGolem;
 import thaumcraft.entity.monster.BrainyZombie;
 import thaumcraft.entity.monster.FireBat;
 import thaumcraft.entity.monster.GiantBrainyZombie;
@@ -80,7 +91,24 @@ public final class ModEntities {
         builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
     );
 
+    public static final DeferredHolder<EntityType<?>, EntityType<WoodGolem>> WOOD_GOLEM = golem("wood_golem", WoodGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<ClayGolem>> CLAY_GOLEM = golem("clay_golem", ClayGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<StoneGolem>> STONE_GOLEM = golem("stone_golem", StoneGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<TallowGolem>> TALLOW_GOLEM = golem("tallow_golem", TallowGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<StrawGolem>> STRAW_GOLEM = golem("straw_golem", StrawGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<AdvancedClayGolem>> ADVANCED_CLAY_GOLEM = golem("advanced_clay_golem", AdvancedClayGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<AdvancedStoneGolem>> ADVANCED_STONE_GOLEM = golem("advanced_stone_golem", AdvancedStoneGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<IronGuardianGolem>> IRON_GUARDIAN_GOLEM = golem("iron_guardian_golem", IronGuardianGolem::new);
+    public static final DeferredHolder<EntityType<?>, EntityType<DecantingGolem>> DECANTING_GOLEM = golem("decanting_golem", DecantingGolem::new);
+    public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends GolemBase>>> GOLEMS = List.of(
+        WOOD_GOLEM, CLAY_GOLEM, STONE_GOLEM, TALLOW_GOLEM, STRAW_GOLEM, ADVANCED_CLAY_GOLEM, ADVANCED_STONE_GOLEM, IRON_GUARDIAN_GOLEM, DECANTING_GOLEM
+    );
+
     private ModEntities() {
+    }
+
+    private static <T extends GolemBase> DeferredHolder<EntityType<?>, EntityType<T>> golem(String name, EntityType.EntityFactory<T> factory) {
+        return ENTITIES.registerEntityType(name, factory, MobCategory.MISC, builder -> builder.sized(0.4F, 0.95F).eyeHeight(0.8F).clientTrackingRange(4).updateInterval(3));
     }
 
     public static void register(IEventBus modEventBus) {
@@ -94,6 +122,9 @@ public final class ModEntities {
         event.put(GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombie.createAttributes().build());
         event.put(FIRE_BAT.get(), FireBat.createAttributes().build());
         event.put(WISP.get(), Wisp.createAttributes().build());
+        for (DeferredHolder<EntityType<?>, ? extends EntityType<? extends GolemBase>> golem : GOLEMS) {
+            event.put(golem.get(), GolemBase.createAttributes().build());
+        }
     }
 
     private static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {

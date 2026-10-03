@@ -1,5 +1,6 @@
 package thaumcraft.registry;
 
+import thaumcraft.item.golem.GolemPlacerItem;
 import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,14 @@ public final class ModCreativeTabs {
                             ItemStack essence = new ItemStack(item.get());
                             essence.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
                             output.accept(essence);
+                        }
+                    }
+                } else if (item.get() instanceof GolemPlacerItem placer) {
+                    for (int core = 0; core < 5; core++) {
+                        if (placer.kind().allowsCore(core)) {
+                            ItemStack golem = new ItemStack(placer);
+                            golem.set(ModDataComponents.GOLEM_CORE.get(), core);
+                            output.accept(golem);
                         }
                     }
                 } else if (CreativeTabFilter.visible(item.get(), parameters)) {

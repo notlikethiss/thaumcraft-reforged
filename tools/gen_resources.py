@@ -1305,6 +1305,41 @@ def add_spawns(name, biomes, entity, weight):
     })
 
 
+GOLEM_ICONS = {
+    "wood_golem": "golemwood", "clay_golem": "golemclay", "stone_golem": "golemstone", "tallow_golem": "golemtallow",
+    "straw_golem": "golemstraw", "advanced_clay_golem": "golemclayadv", "advanced_stone_golem": "golemstoneadv",
+    "iron_guardian_golem": "golemiron", "decanting_golem": "golemdecant",
+}
+GOLEM_CORE_ICONS = {"basic": "golemcorebasic", "speed": "golemcorespeed", "intelligence": "golemcoresmart", "perception": "golemcorevision", "strength": "golemcorestrong"}
+GOLEM_DECORATION_ICONS = {
+    "top_hat": "golemdecotophat", "spectacles": "golemdecoglasses", "bowtie": "golemdecobowtie", "fez": "golemdecofez",
+    "dart_launcher": "golemdecodart", "visor": "golemdecovisor", "iron_plating": "golemdecoarmor",
+}
+GOLEM_TYPE_OVERLAYS = {1: "golemtypefast", 2: "golemtypesmart", 3: "golemtypevision", 4: "golemtypestrong"}
+
+
+def golems():
+    for core, icon in GOLEM_CORE_ICONS.items():
+        generated_item(f"golem_core_{core}", icon)
+    for decoration, icon in GOLEM_DECORATION_ICONS.items():
+        generated_item(f"golem_{decoration}", icon)
+    for golem, icon in GOLEM_ICONS.items():
+        item_model(golem, {"parent": "minecraft:item/generated", "textures": {"layer0": ref(icon, "item")}})
+        cases = []
+        for core, overlay in GOLEM_TYPE_OVERLAYS.items():
+            name = f"{golem}_{overlay}"
+            item_model(name, {"parent": "minecraft:item/generated", "textures": {"layer0": ref(icon, "item"), "layer1": ref(overlay, "item")}})
+            cases.append({"when": core, "model": {"type": "minecraft:model", "model": ref(name, "item")}})
+        write(ASSETS / "items" / f"{golem}.json", {"model": {
+            "type": "minecraft:select",
+            "property": "minecraft:component",
+            "component": f"{NS}:golem_core",
+            "cases": cases,
+            "fallback": {"type": "minecraft:model", "model": ref(golem, "item")},
+        }})
+    block_tags[f"{NS}:golem_harvestable"]
+
+
 def entities():
     flesh = "minecraft:rotten_flesh"
     entity_loot("brainy_zombie", [
@@ -1463,6 +1498,7 @@ def main():
     items()
     worldgen()
     entities()
+    golems()
     recipes()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))

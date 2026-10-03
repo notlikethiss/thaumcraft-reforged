@@ -145,5 +145,13 @@
   "entity.thaumcraft.decanting_golem": "Decanting Golem",
   "item.thaumcraft.brainy_zombie_spawn_egg": "Angry Zombie Spawn Egg",
   "item.thaumcraft.wisp_spawn_egg": "Wisp Spawn Egg",
-  "item.thaumcraft.fire_bat_spawn_egg": "Firebat Spawn Egg"
+  "item.thaumcraft.fire_bat_spawn_egg": "Firebat Spawn Egg",
+  "tc.thaumcraft.golem_decoration.named": "%s: %s",
+  "tc.thaumcraft.golem.fast": "Fast",
+  "tc.thaumcraft.golem.smart": "Smart",
+  "tc.thaumcraft.golem.perceptive": "Perceptive",
+  "tc.thaumcraft.golem.strong": "Strong",
+  "tc.thaumcraft.golem.cannot_place": "The golem cannot be placed here.",
+  "tc.thaumcraft.golem.invalid_inventory": "Not a valid inventory.",
+  "tc.thaumcraft.golem.not_master": "You are not my Master!"
 }

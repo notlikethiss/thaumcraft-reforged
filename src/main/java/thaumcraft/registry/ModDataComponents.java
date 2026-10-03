@@ -38,6 +38,10 @@ public final class ModDataComponents {
         "golem_core",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
     );
+    public static final Supplier<DataComponentType<String>> GOLEM_DECORATION = COMPONENTS.registerComponentType(
+        "golem_decoration",
+        builder -> builder.persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8.cast())
+    );
 
     public static final Supplier<DataComponentType<ResearchNote>> RESEARCH_NOTE = COMPONENTS.registerComponentType(
         "research_note",

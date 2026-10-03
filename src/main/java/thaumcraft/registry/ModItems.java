@@ -38,6 +38,10 @@ import thaumcraft.item.ResearchNotesItem;
 import thaumcraft.item.ScribingToolsItem;
 import thaumcraft.item.ThaumonomiconItem;
 import thaumcraft.item.WispEssenceItem;
+import thaumcraft.item.golem.GolemCoreItem;
+import thaumcraft.item.golem.GolemDecorationItem;
+import thaumcraft.item.golem.GolemPlacerItem;
+import thaumcraft.entity.golem.GolemKind;
 import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.ExcavationWandItem;
 
@@ -206,6 +210,15 @@ public final class ModItems {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.RARE)));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS = ITEMS.registerItem("scribing_tools", properties -> new ScribingToolsItem(properties.durability(50)));
+    public static final Map<Integer, DeferredItem<GolemCoreItem>> GOLEM_CORES = golemCores();
+    public static final DeferredItem<GolemDecorationItem> GOLEM_TOP_HAT = decoration("top_hat", "H");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_SPECTACLES = decoration("spectacles", "G");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_BOWTIE = decoration("bowtie", "B");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_FEZ = decoration("fez", "F");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_DART_LAUNCHER = decoration("dart_launcher", "R");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_VISOR = decoration("visor", "V");
+    public static final DeferredItem<GolemDecorationItem> GOLEM_IRON_PLATING = decoration("iron_plating", "P");
+    public static final Map<GolemKind, DeferredItem<GolemPlacerItem>> GOLEMS = golems();
     public static final DeferredItem<SpawnEggItem> BRAINY_ZOMBIE_SPAWN_EGG = ITEMS.registerItem(
         "brainy_zombie_spawn_egg",
         SpawnEggItem::new,
@@ -249,6 +262,30 @@ public final class ModItems {
         Map<String, DeferredItem<BlockItem>> items = new LinkedHashMap<>();
         blocks.forEach((color, block) -> items.put(color, ITEMS.registerSimpleBlockItem(block, properties)));
         return items;
+    }
+
+    private static Map<Integer, DeferredItem<GolemCoreItem>> golemCores() {
+        Map<Integer, DeferredItem<GolemCoreItem>> cores = new LinkedHashMap<>();
+        for (int core = 0; core < GolemCoreItem.NAMES.length; core++) {
+            int index = core;
+            cores.put(core, ITEMS.registerItem("golem_core_" + GolemCoreItem.NAMES[core], properties -> new GolemCoreItem(index, properties.rarity(Rarity.RARE))));
+        }
+        return cores;
+    }
+
+    private static DeferredItem<GolemDecorationItem> decoration(String name, String letter) {
+        return ITEMS.registerItem("golem_" + name, properties -> new GolemDecorationItem(letter, name, properties));
+    }
+
+    private static Map<GolemKind, DeferredItem<GolemPlacerItem>> golems() {
+        Map<GolemKind, DeferredItem<GolemPlacerItem>> golems = new LinkedHashMap<>();
+        for (GolemKind kind : GolemKind.values()) {
+            golems.put(kind, ITEMS.registerItem(
+                kind.id(),
+                properties -> new GolemPlacerItem(kind, properties.stacksTo(16).component(ModDataComponents.GOLEM_CORE.get(), 0))
+            ));
+        }
+        return golems;
     }
 
     private static DeferredItem<BlockItem> block(DeferredBlock<?> block) {

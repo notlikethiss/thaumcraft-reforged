@@ -47,6 +47,10 @@ import thaumcraft.client.render.entity.WispRenderer;
 import thaumcraft.client.render.entity.DartRenderer;
 import thaumcraft.client.render.entity.FrostShardRenderer;
 import thaumcraft.client.render.entity.SpecialItemRenderer;
+import thaumcraft.client.render.entity.GolemRenderer;
+import thaumcraft.entity.golem.GolemBase;
+import thaumcraft.entity.golem.GolemKind;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.client.extensions.JarClientExtensions;
@@ -138,6 +142,7 @@ public final class ThaumcraftClient {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unchecked")
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
@@ -163,6 +168,10 @@ public final class ThaumcraftClient {
         event.registerEntityRenderer(ModEntities.FROST_SHARD.get(), FrostShardRenderer::new);
         event.registerEntityRenderer(ModEntities.SPECIAL_ITEM.get(), context -> new SpecialItemRenderer(context, true));
         event.registerEntityRenderer(ModEntities.FOLLOWING_ITEM.get(), context -> new SpecialItemRenderer(context, false));
+        for (GolemKind kind : GolemKind.values()) {
+            EntityType<GolemBase> type = (EntityType<GolemBase>) kind.entityType();
+            event.registerEntityRenderer(type, context -> new GolemRenderer(context, kind.advanced()));
+        }
     }
 
     @SubscribeEvent

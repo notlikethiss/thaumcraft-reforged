@@ -32,6 +32,10 @@ public final class TcModelLayers {
         layer("brainy_zombie_baby", "boots")
     );
     public static final ModelLayerLocation FIRE_BAT = layer("fire_bat");
+    public static final ModelLayerLocation GOLEM = layer("golem");
+    public static final ModelLayerLocation GOLEM_ADVANCED = layer("golem_advanced");
+    public static final ModelLayerLocation GOLEM_MARKER = layer("golem_marker");
+    public static final ModelLayerLocation GOLEM_ACCESSORIES = layer("golem_accessories");
 
     private TcModelLayers() {
     }
@@ -63,6 +67,10 @@ public final class TcModelLayers {
         event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.legs(), babyArmor::legs);
         event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.feet(), babyArmor::feet);
         event.registerLayerDefinition(FIRE_BAT, TcModelLayers::fireBat);
+        event.registerLayerDefinition(GOLEM, TcModelLayers::golem);
+        event.registerLayerDefinition(GOLEM_ADVANCED, TcModelLayers::golemAdvanced);
+        event.registerLayerDefinition(GOLEM_MARKER, TcModelLayers::golemMarker);
+        event.registerLayerDefinition(GOLEM_ACCESSORIES, TcModelLayers::golemAccessories);
     }
 
     private static LayerDefinition jar() {
@@ -200,5 +208,78 @@ public final class TcModelLayers {
             PartPose.offset(12.0F, 1.0F, 1.5F)
         );
         return LayerDefinition.create(mesh, 64, 64);
+    }
+
+    private static void golemPart(PartDefinition parent, String name, CubeListBuilder cubes, float x, float y, float z) {
+        parent.addOrReplaceChild(name, cubes, PartPose.offset(x, y + 30.0F, z));
+    }
+
+    private static CubeListBuilder cubes(int u, int v, float x, float y, float z, float width, float height, float depth) {
+        return CubeListBuilder.create().texOffs(u, v).addBox(x, y, z, width, height, depth);
+    }
+
+    private static CubeListBuilder mirrored(int u, int v, float x, float y, float z, float width, float height, float depth) {
+        return CubeListBuilder.create().texOffs(u, v).mirror().addBox(x, y, z, width, height, depth);
+    }
+
+    private static void golemLimbs(PartDefinition golem, String suffix, int armV, int legU) {
+        golemPart(golem, "right_arm" + suffix, cubes(60, armV, -12.0F, -2.5F, -3.0F, 4.0F, 25.0F, 6.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "left_arm" + suffix, mirrored(60, armV, 8.0F, -2.5F, -3.0F, 4.0F, 25.0F, 6.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "right_leg" + suffix, cubes(legU, 0, -3.5F, -3.0F, -3.0F, 6.0F, 16.0F, 5.0F), -4.0F, 18.0F, 0.0F);
+        golemPart(golem, "left_leg" + suffix, mirrored(legU, 0, -3.5F, -3.0F, -3.0F, 6.0F, 16.0F, 5.0F), 5.0F, 18.0F, 0.0F);
+    }
+
+    private static CubeListBuilder golemBody() {
+        return CubeListBuilder.create()
+            .texOffs(0, 40)
+            .addBox(-8.0F, -2.0F, -6.0F, 16.0F, 12.0F, 11.0F)
+            .texOffs(0, 70)
+            .addBox(-4.5F, 10.0F, -3.0F, 9.0F, 5.0F, 6.0F, new CubeDeformation(0.5F));
+    }
+
+    private static LayerDefinition golem() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        golemPart(golem, "head", cubes(0, 0, -4.0F, -11.0F, -5.5F, 8.0F, 9.0F, 8.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "head_smart", cubes(0, 96, -4.0F, -13.0F, -5.5F, 8.0F, 11.0F, 8.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "head_observer", cubes(0, 17, -4.0F, -11.0F, -5.5F, 8.0F, 9.0F, 8.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "body", golemBody(), 0.0F, 0.0F, 0.0F);
+        golemLimbs(golem, "", 21, 37);
+        golemLimbs(golem, "_strong", 58, 60);
+        return LayerDefinition.create(mesh, 128, 128);
+    }
+
+    private static LayerDefinition golemAdvanced() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        golemPart(golem, "head", cubes(64, 113, -4.0F, -9.0F, -5.5F, 8.0F, 7.0F, 8.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "head_brain", cubes(96, 118, -3.5F, -12.0F, -5.0F, 7.0F, 3.0F, 7.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "head_jar", cubes(96, 104, -4.0F, -13.0F, -5.5F, 8.0F, 4.0F, 8.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "body", golemBody(), 0.0F, 0.0F, 0.0F);
+        golemLimbs(golem, "", 21, 37);
+        return LayerDefinition.create(mesh, 128, 128);
+    }
+
+    private static LayerDefinition golemMarker() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        golemPart(golem, "marker", cubes(0, 88, -2.0F, 3.0F, -7.0F, 4.0F, 6.0F, 1.0F), 0.0F, 0.0F, 0.0F);
+        return LayerDefinition.create(mesh, 128, 128);
+    }
+
+    private static LayerDefinition golemAccessories() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        golemPart(golem, "fez", cubes(0, 94, -4.5F, -15.0F, -6.0F, 9.0F, 7.0F, 9.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "plate", cubes(32, 40, -6.5F, -1.0F, -7.0F, 13.0F, 12.0F, 13.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "plate_left", cubes(0, 44, -8.5F, -4.0F, -6.5F, 3.0F, 6.0F, 12.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "plate_right", mirrored(0, 44, 5.5F, -4.0F, -6.5F, 3.0F, 6.0F, 12.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "hat", cubes(0, 110, -4.5F, -17.0F, -6.0F, 9.0F, 9.0F, 9.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "glasses", cubes(0, 80, -4.5F, -8.0F, -6.0F, 9.0F, 4.0F, 9.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "visor", cubes(0, 70, -5.0F, -8.0F, -6.0F, 10.0F, 5.0F, 5.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "hat_rim", cubes(36, 114, -6.5F, -9.0F, -8.0F, 13.0F, 1.0F, 13.0F), 0.0F, 0.0F, -2.0F);
+        golemPart(golem, "dartgun", cubes(80, 80, 7.9F, 7.5F, -3.5F, 6.0F, 16.0F, 7.0F), 0.0F, 0.0F, 0.0F);
+        golemPart(golem, "bowtie", cubes(0, 0, -8.5F, -2.0F, -6.5F, 17.0F, 4.0F, 12.0F), 0.0F, 0.0F, 0.0F);
+        return LayerDefinition.create(mesh, 128, 128);
     }
 }

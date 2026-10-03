@@ -146,5 +146,13 @@
   "entity.thaumcraft.decanting_golem": "Голем-сцеживатель",
   "item.thaumcraft.brainy_zombie_spawn_egg": "Яйцо призыва злого зомби",
   "item.thaumcraft.wisp_spawn_egg": "Яйцо призыва виспа",
-  "item.thaumcraft.fire_bat_spawn_egg": "Яйцо призыва огненной летучей мыши"
+  "item.thaumcraft.fire_bat_spawn_egg": "Яйцо призыва огненной летучей мыши",
+  "tc.thaumcraft.golem_decoration.named": "%s: %s",
+  "tc.thaumcraft.golem.fast": "Быстрый",
+  "tc.thaumcraft.golem.smart": "Умный",
+  "tc.thaumcraft.golem.perceptive": "Восприимчивый",
+  "tc.thaumcraft.golem.strong": "Сильный",
+  "tc.thaumcraft.golem.cannot_place": "Голема нельзя поставить сюда.",
+  "tc.thaumcraft.golem.invalid_inventory": "Это не подходящий инвентарь.",
+  "tc.thaumcraft.golem.not_master": "Ты не мой хозяин!"
 }

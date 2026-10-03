@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thaumcraft:item/golemstoneadv",
+    "layer1": "thaumcraft:item/golemtypesmart"
+  }
+}
