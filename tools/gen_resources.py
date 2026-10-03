@@ -1,9 +1,12 @@
 import json
 import shutil
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import gen_structures
 OUT = ROOT / "src" / "generated" / "resources"
 ASSETS = OUT / "assets" / "thaumcraft"
 DATA = OUT / "data"
@@ -1388,6 +1391,35 @@ def worldgen():
     chest_loot("mound", ["minecraft:chests/simple_dungeon"], 1 / 20)
     chest_loot("hilltop_stones", ["minecraft:chests/simple_dungeon", "minecraft:chests/simple_dungeon"], 1 / 10)
     chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
+    wizard_tower_loot()
+    gen_structures.generate(DATA)
+
+
+TOWER_CHEST_CONTENTS = [
+    ("minecraft:glowstone_dust", 1, 3, 3),
+    ("minecraft:glass_bottle", 1, 5, 10),
+    ("minecraft:gold_nugget", 1, 3, 5),
+    ("minecraft:fire_charge", 1, 1, 5),
+    ("minecraft:skeleton_skull", 1, 1, 3),
+    (f"{NS}:knowledge_fragment", 1, 3, 20),
+    (f"{NS}:alumentum", 1, 1, 5),
+    (f"{NS}:nitor", 1, 1, 5),
+    (f"{NS}:thaumium_ingot", 1, 2, 5),
+]
+
+
+def wizard_tower_loot():
+    entries = []
+    for item, minimum, maximum, weight in TOWER_CHEST_CONTENTS:
+        entry = {"type": "minecraft:item", "name": item, "weight": weight}
+        if maximum > minimum:
+            entry["modifier"] = {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": minimum, "max": maximum}}
+        entries.append(entry)
+    write(DATA / NS / "loot_table" / "chests" / "wizard_tower.json", {
+        "type": "minecraft:chest",
+        "pools": [{"rolls": {"type": "minecraft:uniform", "min": 4, "max": 9}, "entries": entries}],
+        "random_sequence": f"{NS}:chests/wizard_tower",
+    })
 
 
 
