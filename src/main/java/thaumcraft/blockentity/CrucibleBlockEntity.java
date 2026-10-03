@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,6 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.item.ItemEntity;
+import thaumcraft.entity.SpecialItem;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectHelper;
 import thaumcraft.aspect.AspectList;
@@ -247,13 +248,12 @@ public class CrucibleBlockEntity extends TcBlockEntity implements AspectSource {
         boolean first = true;
         while (!remaining.isEmpty()) {
             ItemStack part = remaining.split(remaining.getMaxStackSize());
-            ItemEntity entity = new ItemEntity(serverLevel, worldPosition.getX() + 0.5, worldPosition.getY() + 0.71, worldPosition.getZ() + 0.5, part);
+            SpecialItem entity = new SpecialItem(serverLevel, worldPosition.getX() + 0.5, worldPosition.getY() + 0.71, worldPosition.getZ() + 0.5, part);
             RandomSource random = serverLevel.getRandom();
             double motionX = first ? 0.0 : (random.nextFloat() - random.nextFloat()) * 0.01F;
             double motionZ = first ? 0.0 : (random.nextFloat() - random.nextFloat()) * 0.01F;
-            entity.setDeltaMovement(new Vec3(motionX, 0.1, motionZ));
-            entity.setNoGravity(true);
-            entity.setDefaultPickUpDelay();
+            entity.setDeltaMovement(new Vec3(motionX, 0.1F, motionZ));
+            entity.setGravity(0.0);
             serverLevel.addFreshEntity(entity);
             first = false;
         }

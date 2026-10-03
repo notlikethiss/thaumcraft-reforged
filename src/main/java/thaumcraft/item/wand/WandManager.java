@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
+import thaumcraft.entity.SpecialItem;
 import thaumcraft.block.WandTarget;
 import thaumcraft.block.crystal.CrystalCapacitorBlock;
 import thaumcraft.block.crystal.CrystalClusterBlock;
@@ -192,10 +192,9 @@ public final class WandManager {
         }
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.removeBlock(pos, false);
-            ItemEntity book = new ItemEntity(serverLevel, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, new ItemStack(ModItems.THAUMONOMICON.get()));
+            SpecialItem book = new SpecialItem(serverLevel, pos.getX() + 0.5F, pos.getY() + 0.3F, pos.getZ() + 0.5F, new ItemStack(ModItems.THAUMONOMICON.get()));
+            book.setGravity(0.0);
             book.setDeltaMovement(Vec3.ZERO);
-            book.setNoGravity(true);
-            book.setDefaultPickUpDelay();
             serverLevel.addFreshEntity(book);
             PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 0, 5));
         }

@@ -2,6 +2,7 @@ package thaumcraft;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -48,6 +49,7 @@ public class Thaumcraft {
             ResearchList.init();
             ThaumcraftRecipes.init();
             AspectSync.addProvider(TcRecipeAspectSource::collect);
+            DispenserBlock.registerProjectileBehavior(ModItems.ALUMENTUM.get());
         });
     }
 

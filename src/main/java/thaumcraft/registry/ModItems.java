@@ -24,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.item.AlumentumItem;
 import thaumcraft.item.ArcaneKeyItem;
 import thaumcraft.item.CrystalCapacitorItem;
 import thaumcraft.item.HandMirrorItem;
@@ -65,7 +66,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> SHIMMERLEAF = block(ModBlocks.SHIMMERLEAF);
     public static final DeferredItem<BlockItem> CINDERPEARL = block(ModBlocks.CINDERPEARL);
 
-    public static final DeferredItem<Item> ALUMENTUM = ITEMS.registerSimpleItem("alumentum", properties -> properties.cookingFuel(fuel("alumentum")));
+    public static final DeferredItem<AlumentumItem> ALUMENTUM = ITEMS.registerItem("alumentum", AlumentumItem::new, properties -> properties.cookingFuel(fuel("alumentum")));
     public static final DeferredItem<BlockItem> NITOR = block(ModBlocks.NITOR);
     public static final DeferredItem<Item> THAUMIUM_INGOT = ITEMS.registerSimpleItem("thaumium_ingot");
     public static final DeferredItem<Item> QUICKSILVER = ITEMS.registerSimpleItem("quicksilver");

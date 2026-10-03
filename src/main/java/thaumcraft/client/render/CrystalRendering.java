@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.joml.Matrix4f;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.crystal.CrystalColors;
 import thaumcraft.blockentity.CrystalCapacitorBlockEntity;
@@ -22,7 +21,6 @@ import thaumcraft.client.render.model.TcModelLayers;
 public final class CrystalRendering {
     private static final Identifier CRYSTAL_TEXTURE = Thaumcraft.id("textures/model/crystal.png");
     private static final Identifier CAPACITOR_TEXTURE = Thaumcraft.id("textures/model/crystalcapacitor.png");
-    private static final float HALF_SQRT_3 = 0.866F;
 
     private CrystalRendering() {
     }
@@ -143,33 +141,7 @@ public final class CrystalRendering {
     private static void submitRays(PoseStack poseStack, SubmitNodeCollector collector, float speed, int age) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F + speed, 0.5F);
-        collector.submitCustomGeometry(poseStack, RenderTypes.dragonRays(), (pose, buffer) -> {
-            int count = 20;
-            float time = age / 500.0F;
-            float grow = 30.0F / (Math.min(age, 10) / 10.0F);
-            Random random = new Random(245L);
-            Matrix4f matrix = new Matrix4f(pose.pose());
-            for (int index = 0; index < count; index++) {
-                matrix.rotateX((float) Math.toRadians(random.nextFloat() * 360.0F));
-                matrix.rotateY((float) Math.toRadians(random.nextFloat() * 360.0F));
-                matrix.rotateZ((float) Math.toRadians(random.nextFloat() * 360.0F));
-                matrix.rotateX((float) Math.toRadians(random.nextFloat() * 360.0F));
-                matrix.rotateY((float) Math.toRadians(random.nextFloat() * 360.0F));
-                matrix.rotateZ((float) Math.toRadians(random.nextFloat() * 360.0F + time * 360.0F));
-                float length = (random.nextFloat() * 20.0F + 5.0F) / grow;
-                float width = (random.nextFloat() * 2.0F + 1.0F) / grow;
-                int inner = 0xFFFFFFFF;
-                int outer = 0x00FFCCFF;
-                float[][] corners = {{-HALF_SQRT_3 * width, length, -0.5F * width}, {HALF_SQRT_3 * width, length, -0.5F * width}, {0.0F, length, width}};
-                for (int side = 0; side < 3; side++) {
-                    float[] first = corners[side];
-                    float[] second = corners[(side + 1) % 3];
-                    buffer.addVertex(matrix, 0.0F, 0.0F, 0.0F).setColor(inner);
-                    buffer.addVertex(matrix, first[0], first[1], first[2]).setColor(outer);
-                    buffer.addVertex(matrix, second[0], second[1], second[2]).setColor(outer);
-                }
-            }
-        });
+        RayRendering.submitRays(poseStack, collector, 20, age, 0x00FFCCFF);
         poseStack.popPose();
     }
 

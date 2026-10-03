@@ -10,10 +10,15 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.entity.FollowingItem;
+import thaumcraft.entity.SpecialItem;
 import thaumcraft.entity.monster.BrainyZombie;
 import thaumcraft.entity.monster.FireBat;
 import thaumcraft.entity.monster.GiantBrainyZombie;
 import thaumcraft.entity.monster.Wisp;
+import thaumcraft.entity.projectile.Alumentum;
+import thaumcraft.entity.projectile.Dart;
+import thaumcraft.entity.projectile.FrostShard;
 
 public final class ModEntities {
     private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Thaumcraft.MODID);
@@ -42,6 +47,37 @@ public final class ModEntities {
         Wisp::new,
         MobCategory.MONSTER,
         builder -> builder.sized(0.9F, 0.9F).eyeHeight(0.45F).clientTrackingRange(4).updateInterval(3).notInPeaceful()
+    );
+
+    public static final DeferredHolder<EntityType<?>, EntityType<Alumentum>> ALUMENTUM = ENTITIES.registerEntityType(
+        "alumentum",
+        Alumentum::new,
+        MobCategory.MISC,
+        builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10)
+    );
+    public static final DeferredHolder<EntityType<?>, EntityType<Dart>> DART = ENTITIES.registerEntityType(
+        "dart",
+        Dart::new,
+        MobCategory.MISC,
+        builder -> builder.sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20)
+    );
+    public static final DeferredHolder<EntityType<?>, EntityType<FrostShard>> FROST_SHARD = ENTITIES.registerEntityType(
+        "frost_shard",
+        FrostShard::new,
+        MobCategory.MISC,
+        builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
+    );
+    public static final DeferredHolder<EntityType<?>, EntityType<SpecialItem>> SPECIAL_ITEM = ENTITIES.registerEntityType(
+        "special_item",
+        SpecialItem::new,
+        MobCategory.MISC,
+        builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
+    );
+    public static final DeferredHolder<EntityType<?>, EntityType<FollowingItem>> FOLLOWING_ITEM = ENTITIES.registerEntityType(
+        "following_item",
+        FollowingItem::new,
+        MobCategory.MISC,
+        builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
     );
 
     private ModEntities() {

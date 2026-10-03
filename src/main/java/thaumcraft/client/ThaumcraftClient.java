@@ -44,6 +44,10 @@ import thaumcraft.client.render.entity.BrainyZombieRenderer;
 import thaumcraft.client.render.entity.FireBatRenderer;
 import thaumcraft.client.render.entity.GiantBrainyZombieRenderer;
 import thaumcraft.client.render.entity.WispRenderer;
+import thaumcraft.client.render.entity.DartRenderer;
+import thaumcraft.client.render.entity.FrostShardRenderer;
+import thaumcraft.client.render.entity.SpecialItemRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.client.extensions.JarClientExtensions;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
@@ -154,6 +158,11 @@ public final class ThaumcraftClient {
         event.registerEntityRenderer(ModEntities.GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
         event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
+        event.registerEntityRenderer(ModEntities.ALUMENTUM.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.DART.get(), DartRenderer::new);
+        event.registerEntityRenderer(ModEntities.FROST_SHARD.get(), FrostShardRenderer::new);
+        event.registerEntityRenderer(ModEntities.SPECIAL_ITEM.get(), context -> new SpecialItemRenderer(context, true));
+        event.registerEntityRenderer(ModEntities.FOLLOWING_ITEM.get(), context -> new SpecialItemRenderer(context, false));
     }
 
     @SubscribeEvent
