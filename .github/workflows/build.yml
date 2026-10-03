@@ -1,0 +1,58 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - "mc/**"
+    paths-ignore:
+      - "**.md"
+      - "tools/**"
+      - "research.xml"
+      - "cmds"
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Read versions
+        id: props
+        run: |
+          echo "java=$(grep '^java_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+          echo "mc=$(grep '^minecraft_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.props.outputs.java }}
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      - name: Publish nightly
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MC: ${{ steps.props.outputs.mc }}
+        run: |
+          tag="nightly-$MC"
+          notes="$(git log -1 --format='%h: %s')"
+          gh release delete "$tag" --cleanup-tag --yes || true
+          gh release create "$tag" build/libs/*.jar \
+            --prerelease \
+            --target "$GITHUB_SHA" \
+            --title "Nightly $MC" \
+            --notes "$notes"

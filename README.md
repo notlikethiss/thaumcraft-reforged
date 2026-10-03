@@ -37,6 +37,10 @@ Versions used by the build:
 - ModDevGradle `2.0.148`
 - JEI `31.8.0.53`
 
+## Nightly builds
+
+Every push to `main` builds the mod on GitHub Actions and replaces the `nightly-26.3` pre-release on the [Releases](https://github.com/notlikethiss/thaumcraft-reforged/releases) page. Backports for other Minecraft versions live in `mc/<version>` branches and publish to `nightly-<version>`.
+
 ## Building and running
 
 ```sh

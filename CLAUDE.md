@@ -6,6 +6,10 @@
 - Java 25: `JAVA_HOME=/opt/homebrew/opt/openjdk@25 ./gradlew ...`
 - NeoForge `26.3.0.40-beta`, ModDevGradle `2.0.148`, JEI `31.8.0.53`
 - Сборка: `./gradlew compileJava`, запуск: `./gradlew runClient`
+- CI: `.github/workflows/build.yml` на пуш в `main` и `mc/**` собирает jar (`thaumcraft-<mc>-<версия>.jar`) и пересоздаёт pre-release `nightly-<mc>`; версия Java и MC берутся из `gradle.properties` ветки (`java_version`, `minecraft_version`)
+- Ветки: `main` = 26.3, `mc/<версия>` = бэкпорты (создаются в начале бэкпорта, ветка с кодом 26.3 на старой версии не соберётся); правки workflow на `main` переносить в `mc/*` cherry-pick-ом
+  - `mc/1.21.1`: NeoForge 21.1.x, Java 21, ModDevGradle 2.x, JEI 19.x
+  - `mc/1.19.2`: Forge 43.x через плагин `net.neoforged.moddev.legacyforge`, Java 17, `META-INF/mods.toml` вместо `neoforge.mods.toml`, JEI 11.x
 
 ## Справочники (в .gitignore)
 - `reference/decompiled/` декомпилированный TC3 (Vineflower) с MCP-именами 1.5.2 (`tools/remap_srg.py`)
