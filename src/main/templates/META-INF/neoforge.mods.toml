@@ -7,6 +7,8 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 bannerFile="thaumcraft_logo.png"
+iconFile="thaumcraft_icon.png"
+logoFile="thaumcraft_icon.png"
 authors="${mod_authors}"
 description='''
 Adding a touch of magic to Minecraft. Unofficial port of Thaumcraft 3.0.5e.
