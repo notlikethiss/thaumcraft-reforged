@@ -43,6 +43,7 @@ import thaumcraft.item.golem.GolemDecorationItem;
 import thaumcraft.item.golem.GolemPlacerItem;
 import thaumcraft.entity.golem.GolemKind;
 import thaumcraft.item.wand.CastingWandItem;
+import thaumcraft.item.wand.EqualTradeWandItem;
 import thaumcraft.item.wand.ExcavationWandItem;
 import thaumcraft.item.wand.FrostWandItem;
 import thaumcraft.item.wand.FireWandItem;
@@ -180,6 +181,10 @@ public final class ModItems {
     public static final DeferredItem<ExcavationWandItem> WAND_EXCAVATION = ITEMS.registerItem(
         "wand_excavation",
         properties -> new ExcavationWandItem(properties.durability(2000))
+    );
+    public static final DeferredItem<EqualTradeWandItem> WAND_EQUAL_TRADE = ITEMS.registerItem(
+        "wand_equal_trade",
+        properties -> new EqualTradeWandItem(properties.durability(1500))
     );
     public static final DeferredItem<FrostWandItem> WAND_FROST = ITEMS.registerItem(
         "wand_frost",

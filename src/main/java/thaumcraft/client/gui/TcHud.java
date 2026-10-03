@@ -10,9 +10,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.render.AuraNodeRenderer;
+import thaumcraft.client.fx.ModRenderPipelines;
 import thaumcraft.item.wand.CastingWandItem;
+import thaumcraft.item.wand.EqualTradeWandItem;
 import thaumcraft.item.wand.HellrodItem;
 import thaumcraft.item.wand.WandManager;
 import thaumcraft.registry.ModDataComponents;
@@ -38,6 +41,11 @@ public final class TcHud {
             }
         } else if (held.getItem() instanceof HellrodItem) {
             renderHellrod(graphics, player, HellrodItem.getCharges(held));
+        } else if (held.getItem() instanceof EqualTradeWandItem) {
+            BlockState picked = EqualTradeWandItem.getPickedBlock(held);
+            if (picked != null) {
+                renderEqualTrade(graphics, minecraft, player, new ItemStack(picked.getBlock().asItem()));
+            }
         }
     }
 
@@ -136,6 +144,30 @@ public final class TcHud {
             blit(graphics, index * 17, 0, 160 + (index >= charges ? 16 : 0), 0, 16, 16);
             graphics.pose().popMatrix();
         }
+        graphics.pose().popMatrix();
+    }
+
+    private static void renderEqualTrade(GuiGraphicsExtractor graphics, Minecraft minecraft, Player player, ItemStack picked) {
+        int amount = 0;
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+            if (ItemStack.isSameItemSameComponents(stack, picked)) {
+                amount += stack.getCount();
+            }
+        }
+        int slot = player.getInventory().getSelectedSlot() * 20;
+        int shift = player.isCreative() ? 0 : 20;
+        int width = graphics.guiWidth();
+        int height = graphics.guiHeight();
+        int frameU = 32 * (player.tickCount % 16);
+        int frameV = 32 * (player.tickCount % 32 / 16);
+        graphics.blit(ModRenderPipelines.GUI_ADDITIVE, AspectRenderer.PARTICLES, width / 2 - 96 + slot, height - 58 - shift, frameU, 96 + frameV, 32, 32, 256, 256);
+        graphics.item(picked, width / 2 - 96 + 8 + slot, height - 50 - shift);
+        Font font = minecraft.font;
+        String text = String.valueOf(amount);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(width / 2 - 96 + 24 + slot, height - 30 - shift - font.lineHeight);
+        graphics.pose().scale(0.5F, 0.5F);
+        graphics.text(font, text, -font.width(text), 0, 0xFFFFFFFF, true);
         graphics.pose().popMatrix();
     }
 

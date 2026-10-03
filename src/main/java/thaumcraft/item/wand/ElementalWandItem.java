@@ -1,6 +1,7 @@
 package thaumcraft.item.wand;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -31,6 +32,16 @@ public class ElementalWandItem extends Item {
         for (int index = 0; index < amount; index++) {
             if (player.getRandom().nextFloat() < 1.0F - frugal / 5.0F) {
                 stack.hurtAndBreak(1, player, hand);
+            }
+        }
+    }
+
+    public void damageWand(ItemStack stack, ServerPlayer player, int amount) {
+        int frugal = MiningUtils.enchantmentLevel(player.level(), stack, ModEnchantments.FRUGAL);
+        for (int index = 0; index < amount; index++) {
+            if (player.getRandom().nextFloat() < 1.0F - frugal / 5.0F) {
+                stack.hurtAndBreak(1, player.level(), player, brokenItem -> {
+                });
             }
         }
     }

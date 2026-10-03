@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
@@ -27,6 +29,10 @@ public final class ModDataComponents {
     public static final Supplier<DataComponentType<Integer>> HELLROD_CHARGES = COMPONENTS.registerComponentType(
         "hellrod_charges",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
+    );
+    public static final Supplier<DataComponentType<BlockState>> TRADE_BLOCK = COMPONENTS.registerComponentType(
+        "trade_block",
+        builder -> builder.persistent(BlockState.CODEC).networkSynchronized(ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY).cast())
     );
     public static final Supplier<DataComponentType<Integer>> VIS_DISCOUNT = COMPONENTS.registerComponentType(
         "vis_discount",
