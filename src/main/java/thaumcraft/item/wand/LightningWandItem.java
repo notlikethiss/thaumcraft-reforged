@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -74,7 +74,7 @@ public class LightningWandItem extends ElementalWandItem {
         if (pointedEntity != null) {
             pointedEntity.hurtServer(serverLevel, player.damageSources().playerAttack(player), 3 + potency);
             if (serverLevel.getRandom().nextInt(16 - Math.min(15, potency * 2)) == 0) {
-                LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.TRIGGERED);
+                LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.TRIGGERED);
                 if (bolt != null) {
                     bolt.setVisualOnly(true);
                     bolt.snapTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ());
