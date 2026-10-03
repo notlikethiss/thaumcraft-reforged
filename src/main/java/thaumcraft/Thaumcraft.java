@@ -17,6 +17,7 @@ import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModCreativeTabs;
 import thaumcraft.registry.ModDataComponents;
+import thaumcraft.registry.ModEntities;
 import thaumcraft.registry.ModFeatures;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModMenus;
@@ -29,6 +30,7 @@ public class Thaumcraft {
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModCreativeTabs.register(modEventBus);

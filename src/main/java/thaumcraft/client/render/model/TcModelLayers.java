@@ -1,11 +1,15 @@
 package thaumcraft.client.render.model;
 
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import thaumcraft.Thaumcraft;
 
@@ -19,12 +23,25 @@ public final class TcModelLayers {
     public static final ModelLayerLocation CUBE = layer("cube");
     public static final ModelLayerLocation BORE = layer("bore");
     public static final ModelLayerLocation BORE_BASE = layer("bore_base");
+    public static final ModelLayerLocation BRAINY_ZOMBIE = layer("brainy_zombie");
+    public static final ModelLayerLocation BRAINY_ZOMBIE_BABY = layer("brainy_zombie_baby");
+    public static final ArmorModelSet<ModelLayerLocation> BRAINY_ZOMBIE_BABY_ARMOR = new ArmorModelSet<>(
+        layer("brainy_zombie_baby", "helmet"),
+        layer("brainy_zombie_baby", "chestplate"),
+        layer("brainy_zombie_baby", "leggings"),
+        layer("brainy_zombie_baby", "boots")
+    );
+    public static final ModelLayerLocation FIRE_BAT = layer("fire_bat");
 
     private TcModelLayers() {
     }
 
     private static ModelLayerLocation layer(String name) {
-        return new ModelLayerLocation(Thaumcraft.id(name), "main");
+        return layer(name, "main");
+    }
+
+    private static ModelLayerLocation layer(String name, String part) {
+        return new ModelLayerLocation(Thaumcraft.id(name), part);
     }
 
     public static void register(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -37,6 +54,15 @@ public final class TcModelLayers {
         event.registerLayerDefinition(CUBE, TcModelLayers::cube);
         event.registerLayerDefinition(BORE, TcModelLayers::bore);
         event.registerLayerDefinition(BORE_BASE, TcModelLayers::boreBase);
+        event.registerLayerDefinition(BRAINY_ZOMBIE, TcModelLayers::legacyHumanoid);
+        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY, () -> legacyHumanoid().apply(HumanoidModel.BABY_TRANSFORMER));
+        ArmorModelSet<LayerDefinition> babyArmor = HumanoidModel.createArmorMeshSet(LayerDefinitions.INNER_ARMOR_DEFORMATION, LayerDefinitions.OUTER_ARMOR_DEFORMATION)
+            .map(mesh -> LayerDefinition.create(mesh, 64, 32).apply(HumanoidModel.BABY_TRANSFORMER));
+        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.head(), babyArmor::head);
+        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.chest(), babyArmor::chest);
+        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.legs(), babyArmor::legs);
+        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.feet(), babyArmor::feet);
+        event.registerLayerDefinition(FIRE_BAT, TcModelLayers::fireBat);
     }
 
     private static LayerDefinition jar() {
@@ -136,5 +162,43 @@ public final class TcModelLayers {
         box(root, "nozzle1", 106, 42, 2.5F, -2.0F, -2.0F, 5.0F, 4.0F, 4.0F, PartPose.offset(0.0F, 8.0F, 0.0F));
         box(root, "nozzle2", 106, 51, 7.0F, -2.5F, -2.5F, 1.0F, 5.0F, 5.0F, PartPose.offset(0.0F, 8.0F, 0.0F));
         return LayerDefinition.create(mesh, 128, 64);
+    }
+
+    private static LayerDefinition legacyHumanoid() {
+        return LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64);
+    }
+
+    private static LayerDefinition fireBat() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F), PartPose.ZERO);
+        head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(24, 0).addBox(-4.0F, -6.0F, -2.0F, 3.0F, 4.0F, 1.0F), PartPose.ZERO);
+        head.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(24, 0).mirror().addBox(1.0F, -6.0F, -2.0F, 3.0F, 4.0F, 1.0F), PartPose.ZERO);
+        PartDefinition body = root.addOrReplaceChild(
+            "body",
+            CubeListBuilder.create().texOffs(0, 16).addBox(-3.0F, 4.0F, -3.0F, 6.0F, 12.0F, 6.0F).texOffs(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10.0F, 6.0F, 1.0F),
+            PartPose.ZERO
+        );
+        PartDefinition rightWing = body.addOrReplaceChild(
+            "right_wing",
+            CubeListBuilder.create().texOffs(42, 0).addBox(-12.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F),
+            PartPose.ZERO
+        );
+        rightWing.addOrReplaceChild(
+            "right_wing_tip",
+            CubeListBuilder.create().texOffs(24, 16).addBox(-8.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F),
+            PartPose.offset(-12.0F, 1.0F, 1.5F)
+        );
+        PartDefinition leftWing = body.addOrReplaceChild(
+            "left_wing",
+            CubeListBuilder.create().texOffs(42, 0).mirror().addBox(2.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F),
+            PartPose.ZERO
+        );
+        leftWing.addOrReplaceChild(
+            "left_wing_tip",
+            CubeListBuilder.create().texOffs(24, 16).mirror().addBox(0.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F),
+            PartPose.offset(12.0F, 1.0F, 1.5F)
+        );
+        return LayerDefinition.create(mesh, 64, 64);
     }
 }

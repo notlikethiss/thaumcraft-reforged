@@ -1203,6 +1203,141 @@ def chest_loot(name, base_tables, elemental_chance):
     write(DATA / NS / "loot_table" / "chests" / f"{name}.json", {"type": "minecraft:chest", "pools": pools, "random_sequence": f"{NS}:chests/{name}"})
 
 
+EGG_SHAPE = [
+    "................",
+    "......####......",
+    ".....######.....",
+    "....########....",
+    "....########....",
+    "...##########...",
+    "...##########...",
+    "..############..",
+    "..############..",
+    "..############..",
+    "..############..",
+    "..############..",
+    "...##########...",
+    "...##########...",
+    "....########....",
+    "......####......",
+]
+EGG_SPOTS = [(6, 3), (9, 5), (5, 7), (10, 9), (7, 11), (4, 10), (11, 6), (8, 8), (6, 13)]
+EGG_HIGHLIGHTS = [(5, 4), (6, 4), (5, 5)]
+
+
+def spawn_egg(name, base, spots):
+    from PIL import Image
+
+    image = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    inside = lambda x, y: 0 <= x < 16 and 0 <= y < 16 and EGG_SHAPE[y][x] == "#"
+    for y in range(16):
+        for x in range(16):
+            if not inside(x, y):
+                continue
+            color = spots if (x, y) in EGG_SPOTS else base
+            factor = 1.0
+            if not inside(x + 1, y) or not inside(x, y + 1):
+                factor = 0.6
+            elif not inside(x - 1, y) or not inside(x, y - 1):
+                factor = 0.85
+            if (x, y) in EGG_HIGHLIGHTS:
+                factor = 1.3
+            channels = [min(255, int(((color >> shift) & 0xFF) * factor)) for shift in (16, 8, 0)]
+            image.putpixel((x, y), (*channels, 255))
+    destination = ASSETS / "textures" / "item" / f"{name}.png"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    image.save(destination)
+    generated_item(name, name)
+
+
+def entity_loot(name, pools):
+    write(DATA / NS / "loot_table" / "entities" / f"{name}.json", {
+        "type": "minecraft:entity",
+        "pools": pools,
+        "random_sequence": f"{NS}:entities/{name}",
+    })
+
+
+def chance_pool(item, rolls, chance, count=1):
+    entry = {"type": "minecraft:item", "name": item}
+    if count > 1:
+        entry["modifier"] = {"type": "minecraft:set_count", "count": count}
+    return {"rolls": rolls, "entries": [entry], "condition": {"type": "minecraft:random_chance", "chance": chance}}
+
+
+def brain_pool():
+    return {
+        "rolls": 1,
+        "entries": [{"type": "minecraft:item", "name": f"{NS}:zombie_brain"}],
+        "condition": {
+            "type": "minecraft:random_chance_with_enchanted_bonus",
+            "enchantment": "minecraft:looting",
+            "unenchanted_chance": 0.5,
+            "enchanted_chance": {"type": "minecraft:linear", "base": 0.6, "per_level_above_first": 0.1},
+        },
+    }
+
+
+def rare_pool(items):
+    return {
+        "rolls": 1,
+        "entries": [{"type": "minecraft:item", "name": item} for item in items],
+        "condition": {
+            "type": "minecraft:all_of",
+            "terms": [
+                {"type": "minecraft:killed_by_player"},
+                {
+                    "type": "minecraft:random_chance_with_enchanted_bonus",
+                    "enchantment": "minecraft:looting",
+                    "unenchanted_chance": 0.025,
+                    "enchanted_chance": {"type": "minecraft:linear", "base": 0.035, "per_level_above_first": 0.01},
+                },
+            ],
+        },
+    }
+
+
+def add_spawns(name, biomes, entity, weight):
+    write(DATA / NS / "neoforge" / "biome_modifier" / f"spawn_{name}.json", {
+        "type": "neoforge:add_spawns",
+        "biomes": biomes,
+        "spawners": {"type": f"{NS}:{entity}", "count": 1, "weight": weight},
+    })
+
+
+def entities():
+    flesh = "minecraft:rotten_flesh"
+    entity_loot("brainy_zombie", [
+        chance_pool(flesh, 3, 0.5),
+        brain_pool(),
+        rare_pool(["minecraft:iron_ingot", "minecraft:carrot", "minecraft:potato"]),
+    ])
+    entity_loot("giant_brainy_zombie", [
+        chance_pool(flesh, 12, 0.5, 2),
+        brain_pool(),
+        rare_pool([f"{NS}:thaumium_ingot", "minecraft:carrot", "minecraft:potato", f"{NS}:amber"]),
+    ])
+    entity_loot("fire_bat", [{
+        "rolls": 1,
+        "entries": [{
+            "type": "minecraft:item",
+            "name": "minecraft:gunpowder",
+            "modifier": [
+                {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 0, "max": 2}},
+                {
+                    "type": "minecraft:enchanted_count_increase",
+                    "enchantment": "minecraft:looting",
+                    "count": {"type": "minecraft:uniform", "min": 0, "max": 1},
+                },
+            ],
+        }],
+    }])
+    add_spawns("brainy_zombie", "#minecraft:is_overworld", "brainy_zombie", 6)
+    add_spawns("fire_bat", "#minecraft:is_nether", "fire_bat", 10)
+    spawn_egg("brainy_zombie_spawn_egg", 44975, 16729224)
+    spawn_egg("fire_bat_spawn_egg", 16733525, 15602158)
+
+
 def worldgen():
     write(DATA / NS / "worldgen" / "feature" / "world_generation.json", {"type": f"{NS}:world_generation"})
     write(DATA / NS / "worldgen" / "placed_feature" / "world_generation.json", {"feature": f"{NS}:world_generation", "placement": []})
@@ -1325,6 +1460,7 @@ def main():
     devices()
     items()
     worldgen()
+    entities()
     recipes()
     write_tags()
     count = sum(1 for _ in OUT.rglob("*.json"))

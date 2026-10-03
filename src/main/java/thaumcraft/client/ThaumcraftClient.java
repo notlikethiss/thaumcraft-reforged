@@ -40,6 +40,10 @@ import thaumcraft.client.render.BellowsSpecialRenderer;
 import thaumcraft.client.render.JarRenderer;
 import thaumcraft.client.render.JarSpecialRenderer;
 import thaumcraft.client.render.model.TcModelLayers;
+import thaumcraft.client.render.entity.BrainyZombieRenderer;
+import thaumcraft.client.render.entity.FireBatRenderer;
+import thaumcraft.client.render.entity.GiantBrainyZombieRenderer;
+import thaumcraft.registry.ModEntities;
 import thaumcraft.client.extensions.JarClientExtensions;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import thaumcraft.client.render.WorkbenchWandRenderer;
@@ -144,6 +148,9 @@ public final class ThaumcraftClient {
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CLUSTER.get(), CrystalClusterRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CORE.get(), CrystalCoreRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CAPACITOR.get(), CrystalCapacitorRenderer::new);
+        event.registerEntityRenderer(ModEntities.BRAINY_ZOMBIE.get(), BrainyZombieRenderer::new);
+        event.registerEntityRenderer(ModEntities.GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombieRenderer::new);
+        event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
     }
 
     @SubscribeEvent

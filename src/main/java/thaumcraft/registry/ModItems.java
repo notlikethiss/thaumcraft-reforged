@@ -12,6 +12,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -203,6 +204,16 @@ public final class ModItems {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.RARE)));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties.stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredItem<ScribingToolsItem> SCRIBING_TOOLS = ITEMS.registerItem("scribing_tools", properties -> new ScribingToolsItem(properties.durability(50)));
+    public static final DeferredItem<SpawnEggItem> BRAINY_ZOMBIE_SPAWN_EGG = ITEMS.registerItem(
+        "brainy_zombie_spawn_egg",
+        SpawnEggItem::new,
+        properties -> properties.spawnEgg(ModEntities.BRAINY_ZOMBIE.get())
+    );
+    public static final DeferredItem<SpawnEggItem> FIRE_BAT_SPAWN_EGG = ITEMS.registerItem(
+        "fire_bat_spawn_egg",
+        SpawnEggItem::new,
+        properties -> properties.spawnEgg(ModEntities.FIRE_BAT.get())
+    );
 
     private ModItems() {
     }

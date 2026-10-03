@@ -44,7 +44,8 @@
 - [x] 5 крафт: `ThaumcraftRecipes` + `ConfigRecipes`, JSON-рецепты верстака, тигель (BE + BER, плавление, флюкс, крафт `CrucibleCrafting`), перегонный куб, жезлы (`CastingWandItem`, `WAND_VIS`, скидка `VIS_DISCOUNT`), `WandManager` (книга, тигель из котла, интерфейс `WandTarget` на блоках), фиалы и эссенции, стол → магический верстак, инфузионный верстак (2×2 `arcane_stone`); адская печь и магнит нод ждут фазы 7
 - [x] 6 исследования: `ResearchList` + `ConfigResearch` (89 записей), знания игрока (attachment), `ResearchManager`, тост «узнали новое», загрузчик текстов `client/research/ResearchTexts`; заметки/открытия (компонент `RESEARCH_NOTE`, `ResearchNoteData`), чернильница, эксперименты в тигле, исследовательский стол (`research_table` из двух столов + чернильница, BE, меню, экран с диаграммой), Таумономикон (`client/research/ResearchBookScreen` карта, `ResearchPageScreen` страницы всех типов, ванильные рецепты на клиенте через `ClientRecipes`), шпаргалка `thaumonomicon_cheat`, таумометр и заметки в руках как карта (`client/render/HandheldItemRenderer`, `RenderHandEvent`); `ScanManager` не переносится (в оригинале мёртвый код)
 - [x] 7 устройства (план `~/.claude/plans/claude-md-glowing-sprout.md`): arcane wood, варды (камень, стекло, восстановление, жемчуг), свечи, маркеры (без логики до фазы 8), банки, мехи, адская печь, магическое ухо, плита, дверь, ключи, левитатор, голодный сундук, кристаллы/ядро-магнит/конденсатор (`block/crystal`), зеркала и портативная дыра (`block/mirror`, туннель через `END_PORTAL`), чародейский бур (`block/bore`, меню `ArcaneBoreMenu`, `BoreDigPayload`); мировые эффекты с произвольной геометрией `client/fx/world` (`WorldFxRenderer`, `BeamFx`, `BoreBeamFx`, `RuneFx`)
-- [ ] 8 существа и големы
+- [~] 8 существа и големы (план `~/.claude/plans/swift-puzzling-key.md`): сущности в `thaumcraft/entity` (`monster`), регистр `registry/ModEntities` (атрибуты, правила спавна), рендеры `client/render/entity`; злые зомби (обычный и гигант), огненная летучая мышь, яйца призыва, спавны через biome modifier
+- [ ] 8.1 волшебник-житель (рабочий блок TC) и башня волшебника (остаток фазы 3)
 - [ ] 9 снаряжение (особые свойства)
 - [ ] 10 клиент и JEI
 - [ ] 11 конфиг и локализация
@@ -60,5 +61,6 @@
 - Блочные модели из `ModelRenderer` оригинала генерируются хелпером `model_box` в `gen_resources.py` (текстура копируется в `textures/block/*_model.png`, иначе её нет в атласе блоков)
 - Теги с id мода пишутся с `"required": false`
 - Мехи ускоряют ванильную печь через access transformer (`META-INF/accesstransformer.cfg`, `AbstractFurnaceBlockEntity.cookingTimer`/`cookingTotalTime`)
-- Модели из `ModelRenderer` 1.5.2 переносятся без `.mirror()`: в оригинале `mirror = true` ставится после `addBox` и на бокс не влияет
+- Модели из `ModelRenderer` 1.5.2 переносятся без `.mirror()`, если в оригинале `mirror = true` ставится после `addBox` (на бокс не влияет); если до `addBox`, то с `.mirror()`
+- Текстуры гуманоидов 1.5.2 в раскладке 64×32 (низ пустой): слой `HumanoidModel.createMesh` + `LayerDefinition.create(mesh, 64, 64)`, малыш через `HumanoidModel.BABY_TRANSFORMER` (ванильная модель малыша 26.3 другая)
 - Баги оригинала: чиним только поломки (уничтожение предметов, NPE, рассинхрон), игровые особенности 1:1
