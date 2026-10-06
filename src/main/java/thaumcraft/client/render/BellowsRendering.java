@@ -1,12 +1,12 @@
 package thaumcraft.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -26,8 +26,8 @@ public final class BellowsRendering {
         }
     }
 
-    public static void submit(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, Direction facing, float inflation) {
-        RenderType renderType = RenderTypes.entityTranslucent(TEXTURE);
+    public static void render(Models models, PoseStack poseStack, MultiBufferSource buffers, int light, Direction facing, float inflation) {
+        VertexConsumer buffer = buffers.getBuffer(RenderType.entityTranslucent(TEXTURE));
         float plankScale = 0.125F + inflation * 0.875F;
         poseStack.pushPose();
         poseStack.translate(0.5F, -0.5F, 0.5F);
@@ -41,19 +41,19 @@ public final class BellowsRendering {
         poseStack.translate(0.0F, 1.0F, 0.0F);
         poseStack.pushPose();
         poseStack.scale(0.5F, (inflation + 0.1F) / 2.0F, 0.5F);
-        collector.submitModelPart(models.bag(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
+        models.bag().render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         poseStack.translate(0.0F, -1.0F, 0.0F);
         poseStack.pushPose();
         poseStack.translate(0.0F, -plankScale / 2.0F + 0.5F, 0.0F);
-        collector.submitModelPart(models.topPlank(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
+        models.topPlank().render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         poseStack.pushPose();
         poseStack.translate(0.0F, plankScale / 2.0F - 0.5F, 0.0F);
-        collector.submitModelPart(models.bottomPlank(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
+        models.bottomPlank().render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
-        collector.submitModelPart(models.middlePlank(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
-        collector.submitModelPart(models.nozzle(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
+        models.middlePlank().render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
+        models.nozzle().render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }
 }

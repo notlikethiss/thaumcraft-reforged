@@ -1,51 +1,31 @@
 package thaumcraft.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.blockentity.CrucibleBlockEntity;
 
-public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity, CrucibleRenderer.State> {
+public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity> {
     private static final ResourceLocation WATER = ResourceLocation.withDefaultNamespace("block/water_still");
-
-    public static class State extends BlockEntityRenderState {
-        boolean liquid;
-        float height;
-        int color;
-    }
 
     public CrucibleRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public State createRenderState() {
-        return new State();
-    }
-
-    @Override
-    public void extractRenderState(
-        CrucibleBlockEntity crucible,
-        State state,
-        float partialTicks,
-        Vec3 cameraPosition,
-        ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress
-    ) {
-        BlockEntityRenderer.super.extractRenderState(crucible, state, partialTicks, cameraPosition, breakProgress);
-        state.liquid = crucible.hasLiquid();
-        state.height = crucible.getFluidHeight();
+    public void render(CrucibleBlockEntity crucible, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
+        if (!crucible.hasLiquid()) {
+            return;
+        }
+        float y = crucible.getFluidHeight();
         float recolor = crucible.getTags().visSize() / (float) CrucibleBlockEntity.MAX_TAGS;
         if (recolor > 0.0F) {
             recolor = 0.5F + recolor / 2.0F;
@@ -56,21 +36,13 @@ public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity
         float red = Math.max(0.0F, 1.0F - recolor / 3.0F) * FastColor.ARGB32.red(water) / 255.0F;
         float green = Math.max(0.0F, 1.0F - recolor) * FastColor.ARGB32.green(water) / 255.0F;
         float blue = Math.max(0.0F, 1.0F - recolor / 2.0F) * FastColor.ARGB32.blue(water) / 255.0F;
-        state.color = FastColor.ARGB32.colorFromFloat(1.0F, red, green, blue);
-    }
-
-    @Override
-    public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-        if (!state.liquid) {
-            return;
-        }
+        int color = FastColor.ARGB32.color(255, (int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
         TextureAtlasSprite sprite = TcRenderUtil.blockSprite(WATER);
-        collector.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (pose, buffer) -> {
-            float y = state.height;
-            TcRenderUtil.vertex(pose, buffer, 0.0F, y, 0.0F, sprite.getU0(), sprite.getV0(), state.color, state.lightCoords, 0, 1, 0);
-            TcRenderUtil.vertex(pose, buffer, 0.0F, y, 1.0F, sprite.getU0(), sprite.getV1(), state.color, state.lightCoords, 0, 1, 0);
-            TcRenderUtil.vertex(pose, buffer, 1.0F, y, 1.0F, sprite.getU1(), sprite.getV1(), state.color, state.lightCoords, 0, 1, 0);
-            TcRenderUtil.vertex(pose, buffer, 1.0F, y, 0.0F, sprite.getU1(), sprite.getV0(), state.color, state.lightCoords, 0, 1, 0);
-        });
+        VertexConsumer buffer = buffers.getBuffer(RenderType.entityTranslucent(TextureAtlas.LOCATION_BLOCKS));
+        PoseStack.Pose pose = poseStack.last();
+        TcRenderUtil.vertex(pose, buffer, 0.0F, y, 0.0F, sprite.getU0(), sprite.getV0(), color, light, 0, 1, 0);
+        TcRenderUtil.vertex(pose, buffer, 0.0F, y, 1.0F, sprite.getU0(), sprite.getV1(), color, light, 0, 1, 0);
+        TcRenderUtil.vertex(pose, buffer, 1.0F, y, 1.0F, sprite.getU1(), sprite.getV1(), color, light, 0, 1, 0);
+        TcRenderUtil.vertex(pose, buffer, 1.0F, y, 0.0F, sprite.getU1(), sprite.getV0(), color, light, 0, 1, 0);
     }
 }

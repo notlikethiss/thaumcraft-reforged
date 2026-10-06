@@ -1,13 +1,13 @@
 package thaumcraft.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import java.util.List;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -41,17 +41,17 @@ public final class BoreRendering {
     public record BoreState(float yaw, float pitch, boolean baseAbove, boolean hasWand, float topRotation, float vortex) {
     }
 
-    private static void parts(List<ModelPart> parts, PoseStack poseStack, SubmitNodeCollector collector, int light) {
-        RenderType renderType = RenderTypes.entityCutout(TEXTURE);
+    private static void parts(List<ModelPart> parts, PoseStack poseStack, MultiBufferSource buffers, int light) {
+        VertexConsumer buffer = buffers.getBuffer(RenderType.entityCutout(TEXTURE));
         for (ModelPart part : parts) {
-            collector.submitModelPart(part, poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);
+            part.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         }
     }
 
-    public static void submitBase(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, Direction facing) {
+    public static void renderBase(Models models, PoseStack poseStack, MultiBufferSource buffers, int light, Direction facing) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        parts(models.stand(), poseStack, collector, light);
+        parts(models.stand(), poseStack, buffers, light);
         float rotation = switch (facing) {
             case NORTH -> 90.0F;
             case SOUTH -> 270.0F;
@@ -59,11 +59,11 @@ public final class BoreRendering {
             default -> 0.0F;
         };
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
-        parts(models.standNozzle(), poseStack, collector, light);
+        parts(models.standNozzle(), poseStack, buffers, light);
         poseStack.popPose();
     }
 
-    public static void submitBore(Models models, PoseStack poseStack, SubmitNodeCollector collector, int light, BoreState state) {
+    public static void renderBore(Models models, PoseStack poseStack, MultiBufferSource buffers, int light, BoreState state) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
         poseStack.mulPose(Axis.YP.rotationDegrees(state.yaw()));
@@ -72,46 +72,46 @@ public final class BoreRendering {
             poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
         poseStack.translate(0.0F, -0.5F, 0.0F);
-        parts(models.base(), poseStack, collector, light);
+        parts(models.base(), poseStack, buffers, light);
         poseStack.popPose();
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.pitch()));
         poseStack.pushPose();
         poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
         poseStack.translate(0.0F, -0.5F, 0.0F);
-        parts(models.nozzle(), poseStack, collector, light);
+        parts(models.nozzle(), poseStack, buffers, light);
         poseStack.popPose();
         if (state.hasWand()) {
             poseStack.pushPose();
             poseStack.mulPose(Axis.YP.rotationDegrees(state.topRotation()));
             poseStack.translate(0.0F, 0.5F, 0.0F);
-            parts(models.emitter(), poseStack, collector, light);
+            parts(models.emitter(), poseStack, buffers, light);
             poseStack.popPose();
         }
-        vortex(poseStack, collector, -0.17F, -(state.vortex() * 8.0F), 10.0F, 0.4F, 1.0F);
-        vortex(poseStack, collector, -0.21F, state.vortex() * 8.0F, 10.0F, 0.3F, 0.8F);
-        vortex(poseStack, collector, -0.25F, -(state.vortex() * 8.0F), -10.0F, 0.2F, 0.8F);
+        vortex(poseStack, buffers, -0.17F, -(state.vortex() * 8.0F), 10.0F, 0.4F, 1.0F);
+        vortex(poseStack, buffers, -0.21F, state.vortex() * 8.0F, 10.0F, 0.3F, 0.8F);
+        vortex(poseStack, buffers, -0.25F, -(state.vortex() * 8.0F), -10.0F, 0.2F, 0.8F);
         poseStack.pushPose();
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         poseStack.translate(0.0F, 0.3F, 0.0F);
         poseStack.scale(0.6F, 0.6F, 0.6F);
-        collector.submitModelPart(models.jarCore(), poseStack, RenderTypes.entityTranslucent(JAR), light, OverlayTexture.NO_OVERLAY, null);
+        models.jarCore().render(poseStack, buffers.getBuffer(RenderType.entityTranslucent(JAR)), light, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         poseStack.popPose();
     }
 
-    private static void vortex(PoseStack poseStack, SubmitNodeCollector collector, float offset, float spin, float tilt, float scale, float opacity) {
+    private static void vortex(PoseStack poseStack, MultiBufferSource buffers, float offset, float spin, float tilt, float scale, float opacity) {
         poseStack.pushPose();
         poseStack.translate(0.0F, offset, 0.0F);
         poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(spin));
         poseStack.mulPose(Axis.YP.rotationDegrees(tilt));
         poseStack.scale(scale, scale, scale);
-        collector.submitCustomGeometry(poseStack, TcRenderTypes.translucent(VORTEX), (pose, buffer) -> {
-            buffer.addVertex(pose, -0.5F, 0.5F, 0.0F).setUv(1.0F, 0.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
-            buffer.addVertex(pose, 0.5F, 0.5F, 0.0F).setUv(0.0F, 0.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
-            buffer.addVertex(pose, 0.5F, -0.5F, 0.0F).setUv(0.0F, 1.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
-            buffer.addVertex(pose, -0.5F, -0.5F, 0.0F).setUv(1.0F, 1.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
-        });
+        VertexConsumer buffer = buffers.getBuffer(TcRenderTypes.translucent(VORTEX));
+        PoseStack.Pose pose = poseStack.last();
+        buffer.addVertex(pose, -0.5F, 0.5F, 0.0F).setUv(1.0F, 0.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
+        buffer.addVertex(pose, 0.5F, 0.5F, 0.0F).setUv(0.0F, 0.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
+        buffer.addVertex(pose, 0.5F, -0.5F, 0.0F).setUv(0.0F, 1.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
+        buffer.addVertex(pose, -0.5F, -0.5F, 0.0F).setUv(1.0F, 1.0F).setColor(1.0F, 1.0F, 1.0F, opacity).setLight(200);
         poseStack.popPose();
     }
 }
