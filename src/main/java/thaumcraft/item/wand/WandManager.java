@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.entity.SpecialItem;
 import thaumcraft.block.WandTarget;
@@ -196,7 +196,7 @@ public final class WandManager {
             book.setGravity(0.0);
             book.setDeltaMovement(Vec3.ZERO);
             serverLevel.addFreshEntity(book);
-            PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 0, 5));
+            ModNetwork.sendToNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 0, 5));
         }
         return InteractionResult.SUCCESS;
     }

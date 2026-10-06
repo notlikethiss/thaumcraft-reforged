@@ -25,7 +25,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.Thaumcraft;
 import thaumcraft.lib.Utils;
 import thaumcraft.network.BlockSparklePayload;
@@ -106,7 +106,7 @@ public final class SwapperManager {
         wand.damageWand(wandStack, player, 1);
         level.levelEvent(2001, pos, Block.getId(current));
         level.setBlock(pos, swapper.target(), Block.UPDATE_ALL);
-        PacketDistributor.sendToPlayersNear(level, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 3, 5));
+        ModNetwork.sendToNear(level, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 3, 5));
         if (swapper.life() > 0) {
             for (int offsetX = -1; offsetX <= 1; offsetX++) {
                 for (int offsetY = -1; offsetY <= 1; offsetY++) {

@@ -40,7 +40,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.block.bore.ArcaneBoreBlock;
@@ -378,7 +378,7 @@ public class ArcaneBoreBlockEntity extends BaseContainerBlockEntity {
                     digPos = hit.getBlockPos();
                 }
             }
-            PacketDistributor.sendToPlayersNear(serverLevel, null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 96.0,
+            ModNetwork.sendToNear(serverLevel, null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 96.0,
                 new BoreDigPayload(worldPosition, digPos));
             break;
         }

@@ -18,7 +18,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.Thaumcraft;
 import thaumcraft.network.AspectTagsPayload;
 
@@ -48,7 +48,7 @@ public final class AspectSync {
             rebuild(event.getPlayerList().getServer());
         }
         AspectTagsPayload payload = new AspectTagsPayload(AspectRegistry.active());
-        event.getRelevantPlayers().forEach(player -> PacketDistributor.sendToPlayer(player, payload));
+        event.getRelevantPlayers().forEach(player -> ModNetwork.sendToPlayer(player, payload));
     }
 
     public static void rebuild(MinecraftServer server) {

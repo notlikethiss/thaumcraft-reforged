@@ -32,7 +32,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Thaumcraft;
@@ -350,14 +350,14 @@ public final class AuraManager {
     }
 
     public static void sendNodePacket(ServerLevel level, AuraNode node) {
-        PacketDistributor.sendToPlayersNear(level, null, node.x, node.y, node.z, Math.max(32.0F, node.baseLevel / 4.0F), AuraNodePayload.of(node));
+        ModNetwork.sendToNear(level, null, node.x, node.y, node.z, Math.max(32.0F, node.baseLevel / 4.0F), AuraNodePayload.of(node));
     }
 
     static void sendNodeTransferFxPacket(ServerLevel level, AuraNode node, AuraNode target, double distanceSq) {
         double x = (node.x + target.x) / 2.0;
         double y = (node.y + target.y) / 2.0;
         double z = (node.z + target.z) / 2.0;
-        PacketDistributor.sendToPlayersNear(
+        ModNetwork.sendToNear(
             level,
             null,
             x,
@@ -372,7 +372,7 @@ public final class AuraManager {
     }
 
     static void sendNodeDeletionPacket(AuraNode node) {
-        PacketDistributor.sendToAllPlayers(new AuraDeletePayload(node.key));
+        ModNetwork.sendToAll(new AuraDeletePayload(node.key));
     }
 
     public static void addFluxToClosest(Level level, float x, float y, float z, AspectList tags) {
@@ -553,7 +553,7 @@ public final class AuraManager {
         AABB box = new AABB(node.x - 1, node.y - 1, node.z - 1, node.x + 1, node.y + 1, node.z + 1).inflate(range);
         for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, box)) {
             if (Utils.isChunkLoaded(level, entity.getX(), entity.getZ())) {
-                PacketDistributor.sendToPlayersNear(
+                ModNetwork.sendToNear(
                     level,
                     null,
                     node.x,

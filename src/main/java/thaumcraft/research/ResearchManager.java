@@ -15,7 +15,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Config;
 import thaumcraft.Thaumcraft;
@@ -275,7 +275,7 @@ public final class ResearchManager {
         if (knowledge.complete(key)) {
             player.setData(ModAttachments.KNOWLEDGE, knowledge);
             if (notify && player instanceof ServerPlayer serverPlayer) {
-                PacketDistributor.sendToPlayer(serverPlayer, new ResearchCompletePayload(key));
+                ModNetwork.sendToPlayer(serverPlayer, new ResearchCompletePayload(key));
             }
         }
     }

@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.entity.FollowingItem;
 import thaumcraft.network.BlockBoilPayload;
 import thaumcraft.registry.ModSounds;
@@ -103,8 +103,8 @@ public class ElementalAxeItem extends Item {
         } finally {
             breaking = false;
         }
-        PacketDistributor.sendToPlayersNear(level, null, furthest.getX(), furthest.getY(), furthest.getZ(), 64.0, new BlockBoilPayload(furthest, 0.33F, 0.33F, 1.0F));
-        PacketDistributor.sendToPlayersNear(level, null, origin.getX(), origin.getY(), origin.getZ(), 64.0, new BlockBoilPayload(origin, 0.33F, 0.33F, 1.0F));
+        ModNetwork.sendToNear(level, null, furthest.getX(), furthest.getY(), furthest.getZ(), 64.0, new BlockBoilPayload(furthest, 0.33F, 0.33F, 1.0F));
+        ModNetwork.sendToNear(level, null, origin.getX(), origin.getY(), origin.getZ(), 64.0, new BlockBoilPayload(origin, 0.33F, 0.33F, 1.0F));
         BlockEntity blockEntity = furthestState.hasBlockEntity() ? level.getBlockEntity(furthest) : null;
         List<ItemStack> drops = Block.getDrops(furthestState, level, furthest, blockEntity, player, stack);
         level.destroyBlock(furthest, false, player);

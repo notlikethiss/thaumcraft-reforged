@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.entity.FollowingItem;
 import thaumcraft.lib.Utils;
 import thaumcraft.network.BlockSparklePayload;
@@ -70,7 +70,7 @@ public class ElementalShovelItem extends Item {
         level.playSound(null, target, state.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 0.6F, 0.9F + level.getRandom().nextFloat() * 0.2F);
         level.setBlock(target, state, Block.UPDATE_ALL);
         stack.hurtAndBreak(1, player, context.getHand().asEquipmentSlot());
-        PacketDistributor.sendToPlayersNear(level, null, target.getX(), target.getY(), target.getZ(), 64.0, new BlockSparklePayload(target, 3, 4));
+        ModNetwork.sendToNear(level, null, target.getX(), target.getY(), target.getZ(), 64.0, new BlockSparklePayload(target, 3, 4));
     }
 
     @Override

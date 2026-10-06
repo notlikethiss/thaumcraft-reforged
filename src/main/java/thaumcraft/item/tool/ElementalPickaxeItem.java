@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectHelper;
 import thaumcraft.aspect.AspectList;
@@ -53,7 +53,7 @@ public class ElementalPickaxeItem extends Item {
         context.getItemInHand().hurtAndBreak(5, player, context.getHand().asEquipmentSlot());
         level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.WAND.value(), SoundSource.PLAYERS, 0.1F, 0.2F + level.getRandom().nextFloat() * 0.2F);
         Direction side = context.getClickedFace();
-        PacketDistributor.sendToPlayer(serverPlayer, new BlockTagsPayload(pos, side, scan(level, pos, side)));
+        ModNetwork.sendToPlayer(serverPlayer, new BlockTagsPayload(pos, side, scan(level, pos, side)));
         return InteractionResult.SUCCESS_SERVER;
     }
 

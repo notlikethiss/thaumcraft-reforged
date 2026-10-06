@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Config;
 import thaumcraft.fx.Fx;
@@ -70,7 +70,7 @@ public class HoleBlockEntity extends TcBlockEntity {
             hole.sync();
         }
         if (level instanceof ServerLevel serverLevel) {
-            PacketDistributor.sendToPlayersNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 5, 1));
+            ModNetwork.sendToNear(serverLevel, null, pos.getX(), pos.getY(), pos.getZ(), 64.0, new BlockSparklePayload(pos, 5, 1));
         }
         return true;
     }

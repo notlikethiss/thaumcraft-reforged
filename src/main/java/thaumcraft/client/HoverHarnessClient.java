@@ -20,7 +20,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.bolt.BoltRenderer;
 import thaumcraft.client.fx.bolt.LightningBolt;
@@ -42,7 +42,7 @@ public final class HoverHarnessClient {
 
     private static void toggleHover(LocalPlayer player) {
         hovering = !hovering;
-        ClientPacketDistributor.sendToServer(new HoverTogglePayload(hovering));
+        ModNetwork.sendToServer(new HoverTogglePayload(hovering));
         player.level().playLocalSound(
             player.getX(), player.getY(), player.getZ(),
             hovering ? ModSounds.HHON.get() : ModSounds.HHOFF.get(),

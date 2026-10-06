@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import thaumcraft.lib.Utils;
 import thaumcraft.network.LightningWandPayload;
 import thaumcraft.registry.ModSounds;
@@ -67,7 +67,7 @@ public class LightningWandItem extends ElementalWandItem {
                 end = new Vec3(pointedEntity.getX(), pointedEntity.getY() + pointedEntity.getBbHeight() / 2.0F, pointedEntity.getZ());
             }
             Vec3 blockPoint = hasBlock ? blockHit.getLocation() : end;
-            PacketDistributor.sendToPlayersNear(serverLevel, null, player.getX(), player.getY(), player.getZ(), 64.0, new LightningWandPayload(
+            ModNetwork.sendToNear(serverLevel, null, player.getX(), player.getY(), player.getZ(), 64.0, new LightningWandPayload(
                 player.getId(), end.x, end.y, end.z, hasBlock, blockPoint.x, blockPoint.y, blockPoint.z, hasEntity
             ));
         }

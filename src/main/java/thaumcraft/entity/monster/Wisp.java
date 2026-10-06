@@ -31,7 +31,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+import thaumcraft.network.ModNetwork;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aura.AuraManager;
@@ -212,7 +212,7 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
 
     private void zap(ServerLevel level, LivingEntity target) {
         this.playSound(ModSounds.ZAP.get(), 1.0F, 1.1F);
-        PacketDistributor.sendToPlayersNear(level, null, this.getX(), this.getY(), this.getZ(), 64.0, new WispZapPayload(this.getId(), target.getId()));
+        ModNetwork.sendToNear(level, null, this.getX(), this.getY(), this.getZ(), 64.0, new WispZapPayload(this.getId(), target.getId()));
         Vec3 motion = target.getDeltaMovement();
         if (Math.abs(motion.x) <= 0.1F && Math.abs(motion.y) <= 0.1F && Math.abs(motion.z) <= 0.1F) {
             if (this.random.nextFloat() < 0.66F) {
