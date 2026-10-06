@@ -1,15 +1,15 @@
 package thaumcraft.blockentity;
 
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
-import thaumcraft.compat.ValueInput;
-import thaumcraft.compat.ValueOutput;
 import thaumcraft.registry.ModBlockEntities;
 
 public class HungryChestBlockEntity extends BaseContainerBlockEntity {
@@ -131,22 +129,17 @@ public class HungryChestBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public void startOpen(ContainerUser user) {
-        if (!remove && !user.getLivingEntity().isSpectator() && level != null) {
-            openersCounter.incrementOpeners(user.getLivingEntity(), level, getBlockPos(), getBlockState(), user.getContainerInteractionRange());
+    public void startOpen(Player player) {
+        if (!remove && !player.isSpectator() && level != null) {
+            openersCounter.incrementOpeners(player, level, getBlockPos(), getBlockState());
         }
     }
 
     @Override
-    public void stopOpen(ContainerUser user) {
-        if (!remove && !user.getLivingEntity().isSpectator() && level != null) {
-            openersCounter.decrementOpeners(user.getLivingEntity(), level, getBlockPos(), getBlockState());
+    public void stopOpen(Player player) {
+        if (!remove && !player.isSpectator() && level != null) {
+            openersCounter.decrementOpeners(player, level, getBlockPos(), getBlockState());
         }
-    }
-
-    @Override
-    public List<ContainerUser> getEntitiesWithContainerOpen() {
-        return level == null ? List.of() : openersCounter.getEntitiesWithContainerOpen(level, getBlockPos());
     }
 
     public void recheckOpen() {
@@ -181,15 +174,15 @@ public class HungryChestBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(input, items);
+        ContainerHelper.loadAllItems(tag, items, registries);
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
-        ContainerHelper.saveAllItems(output, items);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        ContainerHelper.saveAllItems(tag, items, registries);
     }
 }

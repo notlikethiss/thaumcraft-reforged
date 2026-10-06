@@ -1,9 +1,9 @@
 package thaumcraft.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.compat.ValueInput;
 import thaumcraft.compat.ValueOutput;
@@ -122,7 +122,7 @@ public class JarBlockEntity extends AbstractJarBlockEntity implements EssentiaCo
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentGetter components) {
+    protected void applyImplicitComponents(BlockEntity.DataComponentInput components) {
         super.applyImplicitComponents(components);
         JarContents contents = components.get(ModDataComponents.JAR_CONTENTS.get());
         if (contents != null) {

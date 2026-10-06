@@ -1,5 +1,6 @@
 package thaumcraft.block.device;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import java.util.Locale;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 import thaumcraft.block.WandTarget;
@@ -65,6 +65,12 @@ public class ArcaneStoneBlock extends Block implements EntityBlock, WandTarget {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(PART);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override
@@ -127,13 +133,13 @@ public class ArcaneStoneBlock extends Block implements EntityBlock, WandTarget {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
         Part part = state.getValue(PART);
         if (part != Part.NONE && !isComplete(level, origin(pos, part))) {
             level.setBlockAndUpdate(pos, defaultBlockState());
             level.blockEvent(pos, this, 2, 6);
         }
-        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
+        super.neighborChanged(state, level, pos, block, fromPos, movedByPiston);
     }
 
     private boolean isComplete(Level level, BlockPos origin) {

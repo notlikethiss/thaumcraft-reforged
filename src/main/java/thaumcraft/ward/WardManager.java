@@ -1,6 +1,5 @@
 package thaumcraft.ward;
 
-import com.mojang.logging.LogUtils;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.level.Level;
@@ -19,19 +17,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.storage.TagValueInput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import org.slf4j.Logger;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.OwnedBlockEntity;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class WardManager {
-    private static final Logger LOGGER = LogUtils.getLogger();
     private static final int PEARL_RANGE = 5;
     private static final Map<ResourceKey<Level>, Queue<RestorableBlock>> RESTORE = new HashMap<>();
 
@@ -63,9 +58,7 @@ public final class WardManager {
         if (blockEntity == null) {
             return;
         }
-        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(blockEntity.problemPath(), LOGGER)) {
-            blockEntity.loadWithComponents(TagValueInput.create(reporter, level.registryAccess(), restorable.tag()));
-        }
+        blockEntity.loadWithComponents(restorable.tag(), level.registryAccess());
         blockEntity.setChanged();
         level.sendBlockUpdated(restorable.pos(), restorable.state(), restorable.state(), Block.UPDATE_ALL);
     }

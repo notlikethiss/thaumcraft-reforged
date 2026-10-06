@@ -1,5 +1,6 @@
 package thaumcraft.block.device;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -8,8 +9,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,6 +46,12 @@ public class ResearchTableBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return state.getValue(PART) == Part.MAIN ? new ResearchTableBlockEntity(pos, state) : null;
     }
@@ -61,16 +68,7 @@ public class ResearchTableBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected BlockState updateShape(
-        BlockState state,
-        LevelReader level,
-        ScheduledTickAccess ticks,
-        BlockPos pos,
-        Direction directionToNeighbour,
-        BlockPos neighbourPos,
-        BlockState neighbourState,
-        RandomSource random
-    ) {
+    protected BlockState updateShape(BlockState state, Direction directionToNeighbour, BlockState neighbourState, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         if (directionToNeighbour == state.getValue(FACING) && !isPartner(state, neighbourState)) {
             return ModBlocks.TABLE.get().defaultBlockState();
         }
@@ -99,7 +97,7 @@ public class ResearchTableBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return new ItemStack(ModItems.TABLE.get());
     }
 

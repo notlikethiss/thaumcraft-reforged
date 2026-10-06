@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.redstone.Orientation;
 import javax.annotation.Nullable;
 import thaumcraft.blockentity.LevitatorBlockEntity;
 import thaumcraft.fx.Fx;
@@ -39,7 +38,7 @@ public class LevitatorBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
         boolean powered = level.hasNeighborSignal(pos);
         if (powered != state.getValue(POWERED)) {
             level.setBlock(pos, state.setValue(POWERED, powered), Block.UPDATE_CLIENTS);
@@ -55,8 +54,11 @@ public class LevitatorBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        updateStack(level, pos);
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        if (!state.is(newState.getBlock()) && level instanceof ServerLevel) {
+            updateStack(level, pos);
+        }
     }
 
     private void updateStack(Level level, BlockPos pos) {

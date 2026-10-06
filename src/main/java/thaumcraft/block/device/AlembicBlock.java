@@ -1,5 +1,7 @@
 package thaumcraft.block.device;
 
+import com.mojang.serialization.MapCodec;
+import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -36,6 +38,11 @@ public class AlembicBlock extends HorizontalDirectionalBlock implements EntityBl
     }
 
     @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return simpleCodec(AlembicBlock::new);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
@@ -66,6 +73,12 @@ public class AlembicBlock extends HorizontalDirectionalBlock implements EntityBl
 
     private static boolean isCrucible(LevelReader level, BlockPos pos) {
         return level.getBlockState(pos).is(ModBlocks.CRUCIBLE.get());
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

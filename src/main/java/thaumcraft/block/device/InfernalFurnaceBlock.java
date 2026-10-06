@@ -7,9 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Blaze;
@@ -106,7 +104,7 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state) {
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
         return isLava(state) || isGrate(state) ? Shapes.empty() : Shapes.block();
     }
 
@@ -138,7 +136,7 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!isLava(state)) {
             return;
         }
@@ -161,14 +159,21 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
-        if (disassembling) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (state.is(newState.getBlock())) {
+            super.onRemove(state, level, pos, newState, movedByPiston);
+            return;
+        }
+        if (level.getBlockEntity(pos) instanceof InfernalFurnaceBlockEntity furnace) {
+            furnace.preRemoveSideEffects(pos, state);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        if (disassembling || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
         BlockPos center = center(pos, state);
         if (isLava(state)) {
-            disassemble(level, center, null);
+            disassemble(serverLevel, center, null);
         } else {
             BlockState centerState = level.getBlockState(center);
             if (centerState.is(this) && isLava(centerState)) {
@@ -180,9 +185,9 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
     public static void disassemble(ServerLevel level, BlockPos center, @Nullable InfernalFurnaceBlockEntity furnace) {
         disassembling = true;
         try {
-            Blaze blaze = EntityType.BLAZE.create(level, MobSpawnType.TRIGGERED);
+            Blaze blaze = EntityType.BLAZE.create(level);
             if (blaze != null) {
-                blaze.snapTo(center.getX() + 0.5, center.getY() + 1.0, center.getZ() + 0.5, 0.0F, 0.0F);
+                blaze.moveTo(center.getX() + 0.5, center.getY() + 1.0, center.getZ() + 0.5, 0.0F, 0.0F);
                 level.addFreshEntity(blaze);
             }
             for (BlockPos pos : BlockPos.betweenClosed(center.offset(-1, -1, -1), center.offset(1, 1, 1))) {

@@ -1,5 +1,8 @@
 package thaumcraft.block.world;
 
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
@@ -9,6 +12,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -21,6 +25,14 @@ public class MagicalFlowerBlock extends BushBlock {
     public MagicalFlowerBlock(boolean cinderpearl, Properties properties) {
         super(properties);
         this.cinderpearl = cinderpearl;
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return RecordCodecBuilder.<MagicalFlowerBlock>mapCodec(instance -> instance.group(
+            Codec.BOOL.fieldOf("cinderpearl").forGetter(flower -> flower.cinderpearl),
+            BlockBehaviour.<MagicalFlowerBlock>propertiesCodec()
+        ).apply(instance, MagicalFlowerBlock::new));
     }
 
     @Override

@@ -1,5 +1,8 @@
 package thaumcraft.block.world;
 
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -9,6 +12,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,6 +28,14 @@ public class MagicalSaplingBlock extends BushBlock {
     public MagicalSaplingBlock(boolean silverwood, Properties properties) {
         super(properties);
         this.silverwood = silverwood;
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return RecordCodecBuilder.<MagicalSaplingBlock>mapCodec(instance -> instance.group(
+            Codec.BOOL.fieldOf("silverwood").forGetter(MagicalSaplingBlock::isSilverwood),
+            BlockBehaviour.<MagicalSaplingBlock>propertiesCodec()
+        ).apply(instance, MagicalSaplingBlock::new));
     }
 
     public boolean isSilverwood() {

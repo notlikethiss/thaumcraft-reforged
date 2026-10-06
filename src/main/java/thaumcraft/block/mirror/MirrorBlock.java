@@ -1,12 +1,12 @@
 package thaumcraft.block.mirror;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,8 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -68,20 +68,11 @@ public class MirrorBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected BlockState updateShape(
-        BlockState state,
-        LevelReader level,
-        ScheduledTickAccess ticks,
-        BlockPos pos,
-        Direction directionToNeighbour,
-        BlockPos neighbourPos,
-        BlockState neighbourState,
-        RandomSource random
-    ) {
+    protected BlockState updateShape(BlockState state, Direction directionToNeighbour, BlockState neighbourState, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         if (directionToNeighbour == state.getValue(DirectionalBlock.FACING).getOpposite() && !canSurvive(state, level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+        return super.updateShape(state, directionToNeighbour, neighbourState, level, pos, neighbourPos);
     }
 
     @Override
@@ -108,7 +99,7 @@ public class MirrorBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide()
             && entity instanceof ItemEntity item
             && item.isAlive()
@@ -132,6 +123,12 @@ public class MirrorBlock extends Block implements EntityBlock {
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(DirectionalBlock.FACING)));
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

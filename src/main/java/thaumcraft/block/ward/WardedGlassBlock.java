@@ -8,8 +8,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,16 +49,7 @@ public class WardedGlassBlock extends WardedBlock {
     }
 
     @Override
-    protected BlockState updateShape(
-        BlockState state,
-        LevelReader level,
-        ScheduledTickAccess ticks,
-        BlockPos pos,
-        Direction directionToNeighbour,
-        BlockPos neighbourPos,
-        BlockState neighbourState,
-        RandomSource random
-    ) {
+    protected BlockState updateShape(BlockState state, Direction directionToNeighbour, BlockState neighbourState, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         return state.setValue(CONNECTIONS.get(directionToNeighbour), neighbourState.is(this));
     }
 
@@ -78,7 +69,7 @@ public class WardedGlassBlock extends WardedBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state) {
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
 

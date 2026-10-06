@@ -1,5 +1,6 @@
 package thaumcraft.block.device;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -58,6 +59,12 @@ public class JarBlock extends Block implements EntityBlock {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

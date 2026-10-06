@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +11,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -54,7 +52,7 @@ public abstract class MagicWorkbenchMenu extends AbstractContainerMenu {
             }
         }
         playerSlotsStart = slots.size();
-        addStandardInventorySlots(inventory, 8, inventoryY);
+        InventorySlots.add(this::addSlot, inventory, 8, inventoryY);
         workbench.addListener(this);
         slotsChanged(workbench);
     }
@@ -75,8 +73,8 @@ public abstract class MagicWorkbenchMenu extends AbstractContainerMenu {
 
     protected ItemStack vanillaResult(ServerLevel level) {
         CraftingInput input = craftingInput();
-        Optional<RecipeHolder<CraftingRecipe>> recipe = level.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, level);
-        return recipe.map(holder -> holder.value().assemble(input)).orElse(ItemStack.EMPTY);
+        Optional<RecipeHolder<CraftingRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
+        return recipe.map(holder -> holder.value().assemble(input, level.registryAccess())).orElse(ItemStack.EMPTY);
     }
 
     protected @Nullable WorkbenchRecipe findRecipe(WorkbenchRecipe.Kind kind) {
@@ -99,21 +97,20 @@ public abstract class MagicWorkbenchMenu extends AbstractContainerMenu {
     protected abstract void onCrafted(Player player, ItemStack result);
 
     void handleTake(Player taker, ItemStack result) {
-        result.onCraftedBy(taker, result.getCount());
+        result.onCraftedBy(taker.level(), taker, result.getCount());
         onCrafted(taker, result);
         for (int slot = 0; slot < MagicWorkbenchBlockEntity.GRID_SIZE; slot++) {
             ItemStack stack = workbench.getItem(slot);
             if (stack.isEmpty()) {
                 continue;
             }
-            ItemStackTemplate remainder = stack.getItem().getCraftingRemainder();
+            ItemStack replacement = stack.getCraftingRemainingItem();
             workbench.removeItem(slot, 1);
-            if (remainder != null) {
-                ItemStack replacement = remainder.create();
+            if (!replacement.isEmpty()) {
                 if (workbench.getItem(slot).isEmpty()) {
                     workbench.setItem(slot, replacement);
                 } else if (!taker.getInventory().add(replacement)) {
-                    taker.drop(replacement, false, Prediction.PREDICTED);
+                    taker.drop(replacement, false);
                 }
             }
         }

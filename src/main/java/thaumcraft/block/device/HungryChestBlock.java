@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -70,7 +69,7 @@ public class HungryChestBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide() || !(entity instanceof ItemEntity item) || !(level.getBlockEntity(pos) instanceof HungryChestBlockEntity chest)) {
             return;
         }
@@ -82,7 +81,7 @@ public class HungryChestBlock extends Block implements EntityBlock {
                 item.setItem(stack);
             }
             RandomSource random = level.getRandom();
-            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EAT.value(), SoundSource.BLOCKS, 0.25F,
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 0.25F,
                 (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
             level.blockEvent(pos, this, HungryChestBlockEntity.EVENT_CHOMP, 2);
         }

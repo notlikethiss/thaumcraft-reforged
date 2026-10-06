@@ -6,8 +6,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -45,16 +45,7 @@ public class ObsidianTotemBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(
-        BlockState state,
-        LevelReader level,
-        ScheduledTickAccess ticks,
-        BlockPos pos,
-        Direction direction,
-        BlockPos neighbourPos,
-        BlockState neighbourState,
-        RandomSource random
-    ) {
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         return direction.getAxis() == Direction.Axis.Y ? shapeFor(level, pos) : state;
     }
 

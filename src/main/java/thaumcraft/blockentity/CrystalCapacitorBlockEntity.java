@@ -1,10 +1,10 @@
 package thaumcraft.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.compat.ValueInput;
 import thaumcraft.compat.ValueOutput;
@@ -57,7 +57,7 @@ public class CrystalCapacitorBlockEntity extends TcBlockEntity {
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentGetter components) {
+    protected void applyImplicitComponents(BlockEntity.DataComponentInput components) {
         super.applyImplicitComponents(components);
         Integer vis = components.get(ModDataComponents.STORED_VIS.get());
         if (vis != null) {

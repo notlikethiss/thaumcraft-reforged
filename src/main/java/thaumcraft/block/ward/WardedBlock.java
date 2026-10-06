@@ -1,5 +1,6 @@
 package thaumcraft.block.ward;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +23,12 @@ import thaumcraft.blockentity.OwnedBlockEntity;
 public class WardedBlock extends Block implements EntityBlock, WandTarget {
     public WardedBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

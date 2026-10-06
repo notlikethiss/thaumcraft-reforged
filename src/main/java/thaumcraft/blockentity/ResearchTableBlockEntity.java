@@ -12,7 +12,8 @@ import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.ContainerUser;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -201,10 +202,10 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
         BlockPos above = worldPosition.above();
         int light = level.getMaxLocalRawBrightness(above);
         boolean sky = level.canSeeSky(above);
-        if (!level.isBrightOutside() && light < 4 && !sky) {
+        if (!level.isDay() && light < 4 && !sky) {
             bonus(1.0F, Aspect.DARK);
         }
-        if (level.isBrightOutside() && light > 11 && sky) {
+        if (level.isDay() && light > 11 && sky) {
             bonus(1.0F, Aspect.LIGHT);
         }
         int logicalHeight = level.dimensionType().logicalHeight();
@@ -471,7 +472,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
     }
 
     @Override
-    public void startOpen(ContainerUser user) {
+    public void startOpen(Player player) {
         recalc = true;
     }
 
@@ -499,10 +500,21 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
     }
 
     @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        items.clear();
+        ContainerHelper.loadAllItems(tag, items, registries);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        ContainerHelper.saveAllItems(tag, items, true, registries);
+    }
+
+    @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        items.clear();
-        ContainerHelper.loadAllItems(input, items);
         safe = input.getBooleanOr("Safe", true);
         recalc = true;
     }
@@ -511,6 +523,5 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         output.putBoolean("Safe", safe);
-        ContainerHelper.saveAllItems(output, items, true);
     }
 }

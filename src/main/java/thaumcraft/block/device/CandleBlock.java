@@ -6,8 +6,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,20 +33,11 @@ public class CandleBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(
-        BlockState state,
-        LevelReader level,
-        ScheduledTickAccess ticks,
-        BlockPos pos,
-        Direction directionToNeighbour,
-        BlockPos neighbourPos,
-        BlockState neighbourState,
-        RandomSource random
-    ) {
+    protected BlockState updateShape(BlockState state, Direction directionToNeighbour, BlockState neighbourState, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         if (directionToNeighbour == Direction.DOWN && !canSurvive(state, level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+        return super.updateShape(state, directionToNeighbour, neighbourState, level, pos, neighbourPos);
     }
 
     @Override

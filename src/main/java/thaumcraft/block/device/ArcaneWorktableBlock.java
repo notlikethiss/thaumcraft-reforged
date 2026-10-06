@@ -1,5 +1,6 @@
 package thaumcraft.block.device;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,12 @@ import thaumcraft.registry.ModBlockEntities;
 public class ArcaneWorktableBlock extends Block implements EntityBlock {
     public ArcaneWorktableBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

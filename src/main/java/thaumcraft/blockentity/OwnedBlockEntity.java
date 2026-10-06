@@ -38,7 +38,7 @@ public class OwnedBlockEntity extends TcBlockEntity {
 
     public void setOwner(Player player) {
         owner = player.getUUID();
-        ownerName = player.getGameProfile().name();
+        ownerName = player.getGameProfile().getName();
         setChanged();
     }
 

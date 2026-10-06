@@ -110,7 +110,8 @@ public class HoleBlockEntity extends TcBlockEntity {
     private void surroundWithSparkles(Level level) {
         for (Edge edge : EDGES) {
             BlockState open = level.getBlockState(worldPosition.relative(edge.open()));
-            if (!open.isSolidRender() && level.getBlockState(worldPosition.relative(edge.wall())).isSolidRender() && !open.is(ModBlocks.HOLE.get())) {
+            BlockPos wallPos = worldPosition.relative(edge.wall());
+            if (!open.isSolidRender(level, worldPosition.relative(edge.open())) && level.getBlockState(wallPos).isSolidRender(level, wallPos) && !open.is(ModBlocks.HOLE.get())) {
                 Fx.get().sparkle(
                     worldPosition.getX() + edge.coordinate(edge.x(), level),
                     worldPosition.getY() + edge.coordinate(edge.y(), level),

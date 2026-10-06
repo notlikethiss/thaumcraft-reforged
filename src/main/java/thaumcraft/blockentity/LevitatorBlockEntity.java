@@ -81,7 +81,7 @@ public class LevitatorBlockEntity extends BlockEntity {
             max += 10;
         }
         int range = 0;
-        while (range < max && !level.getBlockState(pos.above(direction * (1 + range))).isSolidRender()) {
+        while (range < max && !level.getBlockState(pos.above(direction * (1 + range))).isSolidRender(level, pos.above(direction * (1 + range)))) {
             range++;
         }
         return range;

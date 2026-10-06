@@ -1,5 +1,7 @@
 package thaumcraft.block.device;
 
+import com.mojang.serialization.MapCodec;
+import thaumcraft.blockentity.TcBlockEntity;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,6 +42,11 @@ public class ArcanePressurePlateBlock extends BasePressurePlateBlock implements 
     public ArcanePressurePlateBlock(Properties properties) {
         super(properties, BlockSetType.STONE);
         registerDefaultState(stateDefinition.any().setValue(POWERED, false).setValue(MODE, 0));
+    }
+
+    @Override
+    protected MapCodec<? extends BasePressurePlateBlock> codec() {
+        return simpleCodec(ArcanePressurePlateBlock::new);
     }
 
     @Override
@@ -116,6 +123,12 @@ public class ArcanePressurePlateBlock extends BasePressurePlateBlock implements 
     @Override
     public InteractionResult onWandUse(Level level, BlockPos pos, BlockState state, Player player, ItemStack wand, Direction side) {
         return WardHelper.removeWithWand(level, pos, state, player, new ItemStack(this));
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package thaumcraft.block.device;
 
+import thaumcraft.blockentity.TcBlockEntity;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
@@ -80,7 +80,7 @@ public class ArcaneDoorBlock extends DoorBlock implements EntityBlock, WandTarge
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
         if (!(block instanceof ArcanePressurePlateBlock)) {
             return;
         }
@@ -136,6 +136,12 @@ public class ArcaneDoorBlock extends DoorBlock implements EntityBlock, WandTarge
             other.markSafeToRemove();
         }
         return WardHelper.removeWithWand(level, pos, state, player, new ItemStack(ModItems.ARCANE_DOOR.get()));
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override

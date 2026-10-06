@@ -40,7 +40,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
                 return stack.is(Items.PAPER);
             }
         });
-        addStandardInventorySlots(inventory, 40, 160);
+        InventorySlots.add(this::addSlot, inventory, 40, 160);
         addDataSlots(data);
     }
 

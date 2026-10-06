@@ -584,10 +584,21 @@ public class ArcaneBoreBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         items = NonNullList.withSize(2, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(input, items);
+        ContainerHelper.loadAllItems(tag, items, registries);
+        loadAdditional(ValueInput.of(tag, registries));
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        saveAdditional(ValueOutput.of(tag, registries));
+        ContainerHelper.saveAllItems(tag, items, registries);
+    }
+
+    private void loadAdditional(ValueInput input) {
         Direction loaded = input.read("orientation", Direction.CODEC).orElse(Direction.UP);
         boolean client = level != null && level.isClientSide();
         if (!client) {
@@ -598,10 +609,7 @@ public class ArcaneBoreBlockEntity extends BaseContainerBlockEntity {
         propertiesDirty = true;
     }
 
-    @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
-        ContainerHelper.saveAllItems(output, items);
+    private void saveAdditional(ValueOutput output) {
         output.store("orientation", Direction.CODEC, orientation);
     }
 }

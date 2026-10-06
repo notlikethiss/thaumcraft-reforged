@@ -40,7 +40,7 @@ public final class WardHelper {
         if (drop != null && !drop.isEmpty()) {
             Block.popResource(level, pos, drop);
         }
-        level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, pos, Block.getId(state));
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         level.removeBlock(pos, false);
         return InteractionResult.SUCCESS;
     }

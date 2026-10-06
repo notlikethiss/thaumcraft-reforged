@@ -1,5 +1,7 @@
 package thaumcraft.block.device;
 
+import net.minecraft.world.ItemInteractionResult;
+import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -66,6 +66,12 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     }
 
     @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        TcBlockEntity.beforeRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CrucibleBlockEntity(pos, state);
     }
@@ -82,7 +88,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!(level instanceof ServerLevel serverLevel) || !(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)) {
             return;
         }
@@ -109,7 +115,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     }
 
     @Override
-    protected InteractionResult useItemOn(
+    protected ItemInteractionResult useItemOn(
         ItemStack stack,
         BlockState state,
         Level level,
@@ -119,7 +125,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
         BlockHitResult hitResult
     ) {
         if (!stack.is(Items.WATER_BUCKET) || !(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) || crucible.hasLiquid()) {
-            return InteractionResult.TRY_WITH_EMPTY_HAND;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         if (!level.isClientSide()) {
             crucible.fill();
@@ -127,7 +133,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
             RandomSource random = level.getRandom();
             level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.33F, 1.0F + (random.nextFloat() - random.nextFloat()) * 0.3F);
         }
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override
@@ -149,11 +155,11 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
         if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
             crucible.updateBellows();
         }
-        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
+        super.neighborChanged(state, level, pos, block, fromPos, movedByPiston);
     }
 
     @Override

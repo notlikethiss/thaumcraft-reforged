@@ -95,8 +95,9 @@ public class ArcaneEarBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        if (!movedByPiston && state.getValue(POWERED)) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        if (!state.is(newState.getBlock()) && !movedByPiston && state.getValue(POWERED) && level instanceof ServerLevel) {
             level.updateNeighborsAt(pos, this);
             level.updateNeighborsAt(pos.below(), this);
         }

@@ -123,7 +123,7 @@ public class BrainJarBlockEntity extends AbstractJarBlockEntity {
         RandomSource random = level.getRandom();
         for (ExperienceOrb orb : level.getEntitiesOfClass(ExperienceOrb.class, new AABB(worldPosition))) {
             xp += orb.getValue() * orb.count;
-            level.playSound(null, orb.getX(), orb.getY(), orb.getZ(), SoundEvents.GENERIC_EAT.value(), SoundSource.BLOCKS, 0.1F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+            level.playSound(null, orb.getX(), orb.getY(), orb.getZ(), SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 0.1F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
             orb.discard();
             setChanged();
         }

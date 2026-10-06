@@ -1,7 +1,6 @@
 package thaumcraft.menu;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -110,7 +109,7 @@ public class HoverHarnessMenu extends AbstractContainerMenu {
             if (player.getItemInHand(hand) == armor) {
                 Hover.setJar(armor, jar);
             } else if (!jar.isEmpty()) {
-                player.getInventory().placeItemBackInInventory(jar, Prediction.SERVER_ONLY);
+                player.getInventory().placeItemBackInInventory(jar);
             }
         }
     }

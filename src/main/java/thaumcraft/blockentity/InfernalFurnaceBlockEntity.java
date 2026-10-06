@@ -3,7 +3,9 @@ package thaumcraft.blockentity;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -92,8 +94,8 @@ public class InfernalFurnaceBlockEntity extends BlockEntity {
             Optional<RecipeHolder<SmeltingRecipe>> recipe = smeltingRecipe(level, stack);
             if (recipe.isPresent()
                 && AuraManager.decreaseClosestAura(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 1)) {
-                ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(stack));
-                ejectItem(level, result, recipe.get().value().experience(), stack.is(BONUS_EXCLUDED));
+                ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(stack), level.registryAccess());
+                ejectItem(level, result, recipe.get().value().getExperience(), stack.is(BONUS_EXCLUDED));
                 level.blockEvent(worldPosition, getBlockState().getBlock(), 3, 0);
                 stack.shrink(1);
                 setChanged();
@@ -103,7 +105,7 @@ public class InfernalFurnaceBlockEntity extends BlockEntity {
     }
 
     private Optional<RecipeHolder<SmeltingRecipe>> smeltingRecipe(ServerLevel level, ItemStack stack) {
-        return level.recipeAccess().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(stack), level);
+        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(stack), level);
     }
 
     private int bellows() {
@@ -176,7 +178,7 @@ public class InfernalFurnaceBlockEntity extends BlockEntity {
                         }
                     }
                 }
-                Item bonus = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(bonusId));
+                Item bonus = BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(bonusId)).orElse(null);
                 if (count > 0 && bonus != null) {
                     spawn(level, new ItemEntity(level, x, y, z, new ItemStack(bonus, count)), facingX, facingZ, 0.03F, random);
                 }
@@ -231,26 +233,24 @@ public class InfernalFurnaceBlockEntity extends BlockEntity {
         return super.triggerEvent(type, param);
     }
 
-    @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
-        super.preRemoveSideEffects(pos, state);
         if (level != null) {
             Containers.dropContents(level, pos, items);
         }
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         items.clear();
-        ContainerHelper.loadAllItems(input, items);
-        cookTime = input.getShortOr("CookTime", (short) 0);
+        ContainerHelper.loadAllItems(tag, items, registries);
+        cookTime = ValueInput.of(tag, registries).getShortOr("CookTime", (short) 0);
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
-        ContainerHelper.saveAllItems(output, items);
-        output.putShort("CookTime", (short) cookTime);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        ContainerHelper.saveAllItems(tag, items, registries);
+        ValueOutput.of(tag, registries).putShort("CookTime", (short) cookTime);
     }
 }
