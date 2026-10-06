@@ -161,7 +161,7 @@ public final class WandManager {
                         if (layer != 1 || grate != null || center || corner || !state.is(Blocks.IRON_BARS)) {
                             return null;
                         }
-                        grate = Direction.getApproximateNearest(x - 1, 0, z - 1);
+                        grate = Direction.getNearest(x - 1, 0, z - 1);
                     }
                 }
             }

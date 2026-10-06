@@ -1,15 +1,14 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import thaumcraft.Config;
 import thaumcraft.registry.ModSounds;
@@ -28,7 +27,7 @@ public class ThaumonomiconItem extends Item {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             if (cheatSheet && Config.ALLOW_CHEAT_SHEET.getAsBoolean()) {
                 PlayerKnowledge knowledge = ResearchManager.knowledge(player);
@@ -41,13 +40,13 @@ public class ThaumonomiconItem extends Item {
             level.playLocalSound(player.getX(), player.getY(), player.getZ(), ModSounds.PAGE.get(), SoundSource.PLAYERS, 1.0F, 1.0F, false);
             ResearchClientHooks.openBook();
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (cheatSheet) {
-            builder.accept(Component.translatable("tc.thaumcraft.cheat_sheet"));
+            tooltip.add(Component.translatable("tc.thaumcraft.cheat_sheet"));
         }
     }
 }

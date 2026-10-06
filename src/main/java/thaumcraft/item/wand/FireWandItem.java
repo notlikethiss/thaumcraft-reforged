@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -39,9 +39,9 @@ public class FireWandItem extends ElementalWandItem {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResult.CONSUME;
+        return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class FireWandItem extends ElementalWandItem {
             if (box.clip(start, end).isEmpty() && !box.contains(start)) {
                 continue;
             }
-            if (player.hasLineOfSight(target) && !target.fireImmune() && (!(target instanceof Player) || level.isPvpAllowed())) {
+            if (player.hasLineOfSight(target) && !target.fireImmune() && (!(target instanceof Player) || level.getServer().isPvpAllowed())) {
                 target.igniteForSeconds(4 + potency);
                 target.hurt(source, 2 + potency);
             }
@@ -91,13 +91,12 @@ public class FireWandItem extends ElementalWandItem {
     }
 
     @Override
-    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
         if (level.isClientSide() || !(entity instanceof Player player)) {
-            return false;
+            return;
         }
         int charges = Math.min(USE_DURATION - remainingTime, stack.getMaxDamage() - stack.getDamageValue() + 1);
         damageWand(stack, player, player.getUsedItemHand(), charges);
-        return true;
     }
 
     @Override
@@ -110,14 +109,15 @@ public class FireWandItem extends ElementalWandItem {
     }
 
     @Override
-    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (target.level() instanceof ServerLevel serverLevel && attacker instanceof Player player) {
-            if (target instanceof Player && !serverLevel.isPvpAllowed()) {
-                return;
+            if (target instanceof Player && !serverLevel.getServer().isPvpAllowed()) {
+                return false;
             }
             target.igniteForSeconds(5.0F);
             damageWand(stack, player, InteractionHand.MAIN_HAND, 1);
             serverLevel.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1.0F, serverLevel.getRandom().nextFloat() * 0.4F + 0.8F);
         }
+        return false;
     }
 }

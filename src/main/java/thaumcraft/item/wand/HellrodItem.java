@@ -5,16 +5,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.entity.monster.FireBat;
 import thaumcraft.lib.Utils;
@@ -42,7 +40,10 @@ public class HellrodItem extends ElementalWandItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
+    public void inventoryTick(ItemStack stack, Level level, Entity owner, int slotId, boolean isSelected) {
+        if (level.isClientSide()) {
+            return;
+        }
         int interval = canCharge(level, stack) ? 25 : 50;
         if (!hasCharges(stack)) {
             setCharges(stack, 0);
@@ -55,19 +56,19 @@ public class HellrodItem extends ElementalWandItem {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int charges = getCharges(stack);
         if (charges <= 0) {
-            return InteractionResult.PASS;
+            return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         Entity pointed = Utils.getPointedEntity(level, player, 32.0, FireBat.class);
         if (!(pointed instanceof LivingEntity target)) {
-            return InteractionResult.PASS;
+            return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         if (level instanceof ServerLevel serverLevel) {
-            if (target instanceof Player && !serverLevel.isPvpAllowed()) {
-                return InteractionResult.PASS;
+            if (target instanceof Player && !serverLevel.getServer().isPvpAllowed()) {
+                return InteractionResultHolder.pass(player.getItemInHand(hand));
             }
             float yaw = player.getYRot();
             double px = player.getX() - Mth.cos(yaw / 180.0F * (float) Math.PI) * 0.16F;
@@ -78,7 +79,7 @@ public class HellrodItem extends ElementalWandItem {
             py += look.y * 0.5;
             pz += look.z * 0.5;
             FireBat bat = new FireBat(ModEntities.FIRE_BAT.get(), serverLevel);
-            bat.snapTo(px, py + bat.getBbHeight(), pz, yaw, 0.0F);
+            bat.moveTo(px, py + bat.getBbHeight(), pz, yaw, 0.0F);
             bat.setTarget(target);
             bat.setSummoned(true);
             bat.setHanging(false);
@@ -90,6 +91,6 @@ public class HellrodItem extends ElementalWandItem {
             }
             serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.WANDFAIL.value(), SoundSource.PLAYERS, 0.4F, 0.9F + serverLevel.getRandom().nextFloat() * 0.2F);
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
     }
 }

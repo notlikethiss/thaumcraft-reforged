@@ -21,9 +21,8 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<PlayerKnowledge>> KNOWLEDGE = ATTACHMENTS.register(
         "knowledge",
         () -> AttachmentType.builder(() -> new PlayerKnowledge())
-            .serialize(PlayerKnowledge.CODEC)
+            .serialize(PlayerKnowledge.CODEC.codec())
             .copyOnDeath()
-            .sync((holder, player) -> holder == player, PlayerKnowledge.STREAM_CODEC)
             .build()
     );
 

@@ -3,7 +3,6 @@ package thaumcraft.item.armor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.FilledJarItem;
@@ -54,8 +53,8 @@ public final class Hover {
     }
 
     public static ItemStack getJar(ItemStack armor) {
-        ItemStackTemplate template = armor.get(ModDataComponents.HARNESS_JAR.get());
-        return template == null ? ItemStack.EMPTY : template.create();
+        ItemStack jar = armor.get(ModDataComponents.HARNESS_JAR.get());
+        return jar == null ? ItemStack.EMPTY : jar.copy();
     }
 
     public static int getFuel(ItemStack armor) {
@@ -67,7 +66,7 @@ public final class Hover {
         if (jar.isEmpty()) {
             armor.remove(ModDataComponents.HARNESS_JAR.get());
         } else {
-            armor.set(ModDataComponents.HARNESS_JAR.get(), ItemStackTemplate.fromNonEmptyStack(jar));
+            armor.set(ModDataComponents.HARNESS_JAR.get(), jar.copy());
         }
     }
 
@@ -96,7 +95,7 @@ public final class Hover {
     public static void handleServer(Player player, ItemStack armor) {
         boolean hover = isHovering(armor);
         if (hover && expendCharge(armor)) {
-            player.fallDistance = 0.0;
+            player.fallDistance = 0.0F;
         } else {
             if (hover) {
                 setHovering(armor, false);

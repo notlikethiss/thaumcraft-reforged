@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import thaumcraft.Thaumcraft;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
@@ -15,7 +15,7 @@ public final class ElementalToolEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    static void onBreakBlock(BreakBlockEvent event) {
+    static void onBreakBlock(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
         ItemStack stack = player.getMainHandItem();
         Level level = player.level();

@@ -1,6 +1,6 @@
 package thaumcraft.item.golem;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,12 +9,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -67,10 +65,10 @@ public class GolemPlacerItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         int core = getCore(stack);
         if (core > 0 && core < CORE_NAMES.length) {
-            builder.accept(Component.translatable("tc.thaumcraft.golem." + CORE_NAMES[core]).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tc.thaumcraft.golem." + CORE_NAMES[core]).withStyle(ChatFormatting.GRAY));
         }
         String decoration = getDecoration(stack);
         if (decoration != null && !decoration.isEmpty()) {
@@ -80,7 +78,7 @@ public class GolemPlacerItem extends Item {
                     line.append(GolemDecorationItem.decorationName(entry[1])).append(" ");
                 }
             }
-            builder.accept(line);
+            tooltip.add(line);
         }
     }
 
@@ -122,11 +120,11 @@ public class GolemPlacerItem extends Item {
     }
 
     private boolean spawnGolem(ServerLevel level, double x, double y, double z, Direction side, ItemStack stack, Player player) {
-        if (!(kind.entityType().create(level, MobSpawnType.SPAWN_EGG) instanceof GolemBase golem)) {
+        if (!(kind.entityType().create(level) instanceof GolemBase golem)) {
             return false;
         }
-        golem.snapTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
-        golem.setHomeTo(BlockPos.containing(x, y, z), 32);
+        golem.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
+        golem.restrictTo(BlockPos.containing(x, y, z), 32);
         golem.setup(getCore(stack), -1, side);
         String decoration = getDecoration(stack);
         if (decoration != null) {

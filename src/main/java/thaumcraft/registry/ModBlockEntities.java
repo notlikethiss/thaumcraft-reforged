@@ -36,61 +36,61 @@ public final class ModBlockEntities {
 
     public static final Supplier<BlockEntityType<NitorBlockEntity>> NITOR = BLOCK_ENTITIES.register(
         "nitor",
-        () -> new BlockEntityType<>(NitorBlockEntity::new, ModBlocks.NITOR.get())
+        () -> BlockEntityType.Builder.of(NitorBlockEntity::new, ModBlocks.NITOR.get()).build(null)
     );
 
     public static final Supplier<BlockEntityType<CrucibleBlockEntity>> CRUCIBLE = BLOCK_ENTITIES.register(
         "crucible",
-        () -> new BlockEntityType<>(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE.get())
+        () -> BlockEntityType.Builder.of(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<AlembicBlockEntity>> ALEMBIC = BLOCK_ENTITIES.register(
         "alembic",
-        () -> new BlockEntityType<>(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get())
+        () -> BlockEntityType.Builder.of(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get()).build(null)
     );
     public static final Supplier<BlockEntityType<ArcaneWorktableBlockEntity>> ARCANE_WORKTABLE = BLOCK_ENTITIES.register(
         "arcane_worktable",
-        () -> new BlockEntityType<>(ArcaneWorktableBlockEntity::new, ModBlocks.ARCANE_WORKTABLE.get())
+        () -> BlockEntityType.Builder.of(ArcaneWorktableBlockEntity::new, ModBlocks.ARCANE_WORKTABLE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE = BLOCK_ENTITIES.register(
         "research_table",
-        () -> new BlockEntityType<>(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
+        () -> BlockEntityType.Builder.of(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<InfusionWorkbenchBlockEntity>> INFUSION_WORKBENCH = BLOCK_ENTITIES.register(
         "infusion_workbench",
-        () -> new BlockEntityType<>(InfusionWorkbenchBlockEntity::new, ModBlocks.ARCANE_STONE.get())
+        () -> BlockEntityType.Builder.of(InfusionWorkbenchBlockEntity::new, ModBlocks.ARCANE_STONE.get()).build(null)
     );
 
     public static final Supplier<BlockEntityType<JarBlockEntity>> WARDED_JAR = BLOCK_ENTITIES.register(
         "warded_jar",
-        () -> new BlockEntityType<>(JarBlockEntity::new, ModBlocks.WARDED_JAR.get())
+        () -> BlockEntityType.Builder.of(JarBlockEntity::new, ModBlocks.WARDED_JAR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<BrainJarBlockEntity>> BRAIN_JAR = BLOCK_ENTITIES.register(
         "brain_jar",
-        () -> new BlockEntityType<>(BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get())
+        () -> BlockEntityType.Builder.of(BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<BellowsBlockEntity>> BELLOWS = BLOCK_ENTITIES.register(
         "arcane_bellows",
-        () -> new BlockEntityType<>(BellowsBlockEntity::new, ModBlocks.ARCANE_BELLOWS.get())
+        () -> BlockEntityType.Builder.of(BellowsBlockEntity::new, ModBlocks.ARCANE_BELLOWS.get()).build(null)
     );
     public static final Supplier<BlockEntityType<InfernalFurnaceBlockEntity>> INFERNAL_FURNACE = BLOCK_ENTITIES.register(
         "infernal_furnace",
-        () -> new BlockEntityType<>(InfernalFurnaceBlockEntity::new, ModBlocks.INFERNAL_FURNACE.get())
+        () -> BlockEntityType.Builder.of(InfernalFurnaceBlockEntity::new, ModBlocks.INFERNAL_FURNACE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<ArcaneEarBlockEntity>> ARCANE_EAR = BLOCK_ENTITIES.register(
         "arcane_ear",
-        () -> new BlockEntityType<>(ArcaneEarBlockEntity::new, ModBlocks.ARCANE_EAR.get())
+        () -> BlockEntityType.Builder.of(ArcaneEarBlockEntity::new, ModBlocks.ARCANE_EAR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<LevitatorBlockEntity>> LEVITATOR = BLOCK_ENTITIES.register(
         "arcane_levitator",
-        () -> new BlockEntityType<>(LevitatorBlockEntity::new, ModBlocks.ARCANE_LEVITATOR.get())
+        () -> BlockEntityType.Builder.of(LevitatorBlockEntity::new, ModBlocks.ARCANE_LEVITATOR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST = BLOCK_ENTITIES.register(
         "hungry_chest",
-        () -> new BlockEntityType<>(HungryChestBlockEntity::new, ModBlocks.HUNGRY_CHEST.get())
+        () -> BlockEntityType.Builder.of(HungryChestBlockEntity::new, ModBlocks.HUNGRY_CHEST.get()).build(null)
     );
     public static final Supplier<BlockEntityType<CrystalClusterBlockEntity>> CRYSTAL_CLUSTER = BLOCK_ENTITIES.register(
         "crystal_cluster",
-        () -> new BlockEntityType<>(
+        () -> BlockEntityType.Builder.of(
             CrystalClusterBlockEntity::new,
             ModBlocks.AIR_CRYSTAL_CLUSTER.get(),
             ModBlocks.FIRE_CRYSTAL_CLUSTER.get(),
@@ -98,35 +98,35 @@ public final class ModBlockEntities {
             ModBlocks.EARTH_CRYSTAL_CLUSTER.get(),
             ModBlocks.VIS_CRYSTAL_CLUSTER.get(),
             ModBlocks.MIXED_CRYSTAL_CLUSTER.get()
-        )
+        ).build(null)
     );
     public static final Supplier<BlockEntityType<CrystalCoreBlockEntity>> CRYSTAL_CORE = BLOCK_ENTITIES.register(
         "crystal_core",
-        () -> new BlockEntityType<>(CrystalCoreBlockEntity::new, ModBlocks.CRYSTAL_CORE.get())
+        () -> BlockEntityType.Builder.of(CrystalCoreBlockEntity::new, ModBlocks.CRYSTAL_CORE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<CrystalCapacitorBlockEntity>> CRYSTAL_CAPACITOR = BLOCK_ENTITIES.register(
         "crystal_capacitor",
-        () -> new BlockEntityType<>(CrystalCapacitorBlockEntity::new, ModBlocks.CRYSTAL_CAPACITOR.get())
+        () -> BlockEntityType.Builder.of(CrystalCapacitorBlockEntity::new, ModBlocks.CRYSTAL_CAPACITOR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<MirrorBlockEntity>> MIRROR = BLOCK_ENTITIES.register(
         "magic_mirror",
-        () -> new BlockEntityType<>(MirrorBlockEntity::new, ModBlocks.MAGIC_MIRROR.get())
+        () -> BlockEntityType.Builder.of(MirrorBlockEntity::new, ModBlocks.MAGIC_MIRROR.get()).build(null)
     );
     public static final Supplier<BlockEntityType<HoleBlockEntity>> HOLE = BLOCK_ENTITIES.register(
         "hole",
-        () -> new BlockEntityType<>(HoleBlockEntity::new, ModBlocks.HOLE.get())
+        () -> BlockEntityType.Builder.of(HoleBlockEntity::new, ModBlocks.HOLE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<ArcaneBoreBaseBlockEntity>> ARCANE_BORE_BASE = BLOCK_ENTITIES.register(
         "arcane_bore_base",
-        () -> new BlockEntityType<>(ArcaneBoreBaseBlockEntity::new, ModBlocks.ARCANE_BORE_BASE.get())
+        () -> BlockEntityType.Builder.of(ArcaneBoreBaseBlockEntity::new, ModBlocks.ARCANE_BORE_BASE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<ArcaneBoreBlockEntity>> ARCANE_BORE = BLOCK_ENTITIES.register(
         "arcane_bore",
-        () -> new BlockEntityType<>(ArcaneBoreBlockEntity::new, ModBlocks.ARCANE_BORE.get())
+        () -> BlockEntityType.Builder.of(ArcaneBoreBlockEntity::new, ModBlocks.ARCANE_BORE.get()).build(null)
     );
     public static final Supplier<BlockEntityType<OwnedBlockEntity>> OWNED = BLOCK_ENTITIES.register(
         "owned",
-        () -> new BlockEntityType<>(OwnedBlockEntity::new, owned())
+        () -> BlockEntityType.Builder.of(OwnedBlockEntity::new, owned().toArray(new Block[0])).build(null)
     );
 
     private ModBlockEntities() {

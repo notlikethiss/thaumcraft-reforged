@@ -1,47 +1,67 @@
 package thaumcraft.item;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ToolMaterial;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.SimpleTier;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.registry.ModTags;
 
 public final class ModMaterials {
-    public static final ToolMaterial THAUMIUM_TOOL = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 400, 7.0F, 2.0F, 22, ModTags.THAUMIUM_TOOL_MATERIALS);
-    public static final ToolMaterial ELEMENTAL_TOOL = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1500, 10.0F, 3.0F, 18, ModTags.THAUMIUM_TOOL_MATERIALS);
+    private static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, Thaumcraft.MODID);
 
-    public static final ArmorMaterial THAUMIUM_ARMOR = new ArmorMaterial(
-        25, defense(2, 5, 6, 2), 25, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, ModTags.REPAIRS_THAUMIUM_ARMOR, asset("thaumium")
+    public static final int ARMOR_DURABILITY = 25;
+
+    public static final Tier THAUMIUM_TOOL = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 400, 7.0F, 2.0F, 22, () -> Ingredient.of(ModTags.THAUMIUM_TOOL_MATERIALS));
+    public static final Tier ELEMENTAL_TOOL = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1500, 10.0F, 3.0F, 18, () -> Ingredient.of(ModTags.THAUMIUM_TOOL_MATERIALS));
+
+    public static final Holder<ArmorMaterial> THAUMIUM_ARMOR = register(
+        "thaumium", defense(2, 5, 6, 2), 25, SoundEvents.ARMOR_EQUIP_IRON, ModTags.REPAIRS_THAUMIUM_ARMOR
     );
-    public static final ArmorMaterial ROBE_ARMOR = special("robes");
-    public static final ArmorMaterial GOGGLES_ARMOR = special("goggles", ModTags.REPAIRS_GOGGLES);
-    public static final ArmorMaterial TRAVELLER_ARMOR = special("boots_traveller");
-    public static final ArmorMaterial HARNESS_ARMOR = special("hover_harness", ModTags.REPAIRS_GOGGLES);
+    public static final Holder<ArmorMaterial> ROBE_ARMOR = special("robes", ModTags.REPAIRS_SPECIAL_ARMOR);
+    public static final Holder<ArmorMaterial> GOGGLES_ARMOR = special("goggles", ModTags.REPAIRS_GOGGLES);
+    public static final Holder<ArmorMaterial> TRAVELLER_ARMOR = special("boots_traveller", ModTags.REPAIRS_SPECIAL_ARMOR);
+    public static final Holder<ArmorMaterial> HARNESS_ARMOR = special("hover_harness", ModTags.REPAIRS_GOGGLES);
 
     private ModMaterials() {
     }
 
-    private static ArmorMaterial special(String assetName) {
-        return special(assetName, ModTags.REPAIRS_SPECIAL_ARMOR);
+    public static void register(IEventBus bus) {
+        ARMOR_MATERIALS.register(bus);
     }
 
-    private static ArmorMaterial special(String assetName, TagKey<Item> repairs) {
-        return new ArmorMaterial(25, defense(1, 2, 3, 1), 25, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, repairs, asset(assetName));
+    private static Holder<ArmorMaterial> special(String name, TagKey<Item> repairs) {
+        return register(name, defense(1, 2, 3, 1), 25, SoundEvents.ARMOR_EQUIP_LEATHER, repairs);
     }
 
-    private static Map<ArmorType, Integer> defense(int boots, int legs, int chest, int helmet) {
-        return Map.of(ArmorType.BOOTS, boots, ArmorType.LEGGINGS, legs, ArmorType.CHESTPLATE, chest, ArmorType.HELMET, helmet, ArmorType.BODY, chest);
+    private static Holder<ArmorMaterial> register(String name, Map<ArmorItem.Type, Integer> defense, int enchantability, Holder<net.minecraft.sounds.SoundEvent> sound, TagKey<Item> repairs) {
+        DeferredHolder<ArmorMaterial, ArmorMaterial> holder = ARMOR_MATERIALS.register(
+            name,
+            () -> new ArmorMaterial(defense, enchantability, sound, () -> Ingredient.of(repairs), List.of(new ArmorMaterial.Layer(Thaumcraft.id(name))), 0.0F, 0.0F)
+        );
+        return holder;
     }
 
-    private static ResourceKey<EquipmentAsset> asset(String name) {
-        return ResourceKey.create(EquipmentAssets.ROOT_ID, Thaumcraft.id(name));
+    private static Map<ArmorItem.Type, Integer> defense(int boots, int legs, int chest, int helmet) {
+        Map<ArmorItem.Type, Integer> defense = new EnumMap<>(ArmorItem.Type.class);
+        defense.put(ArmorItem.Type.BOOTS, boots);
+        defense.put(ArmorItem.Type.LEGGINGS, legs);
+        defense.put(ArmorItem.Type.CHESTPLATE, chest);
+        defense.put(ArmorItem.Type.HELMET, helmet);
+        defense.put(ArmorItem.Type.BODY, chest);
+        return defense;
     }
 }

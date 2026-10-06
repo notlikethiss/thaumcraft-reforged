@@ -1,12 +1,11 @@
 package thaumcraft.item.golem;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 
 public class GolemCoreItem extends Item {
     public static final String[] NAMES = {"basic", "speed", "intelligence", "perception", "strength"};
@@ -28,7 +27,7 @@ public class GolemCoreItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        builder.accept(Component.translatable("tc.thaumcraft.golem_core." + NAMES[core]).withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tc.thaumcraft.golem_core." + NAMES[core]).withStyle(ChatFormatting.GRAY));
     }
 }

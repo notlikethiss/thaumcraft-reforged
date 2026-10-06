@@ -1,15 +1,14 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModSounds;
@@ -25,11 +24,11 @@ public class ResearchNotesItem extends Item {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         ResearchNoteData data = ResearchManager.getData(stack);
         if (data.key == null || data.getTotalProgress() != 1.0F || ResearchManager.isResearchComplete(player, data.key)) {
-            return InteractionResult.PASS;
+            return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         if (!level.isClientSide()) {
             if (ResearchManager.doesPlayerHaveRequisites(player, data.key)) {
@@ -49,20 +48,20 @@ public class ResearchNotesItem extends Item {
                 player.sendSystemMessage(Component.translatable("tc.thaumcraft.discoveryerror"));
             }
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         ResearchNoteData data = ResearchManager.getData(stack);
         float progress = data.getTotalProgress();
         if (progress >= 0.2F && data.key != null) {
-            builder.accept(Component.literal(ResearchClientHooks.name(data.key)));
+            tooltip.add(Component.literal(ResearchClientHooks.name(data.key)));
         } else {
-            builder.accept(Component.translatable("tc.thaumcraft.discoveryunknown"));
+            tooltip.add(Component.translatable("tc.thaumcraft.discoveryunknown"));
         }
         if (stack.is(ModItems.RESEARCH_NOTES.get()) && progress > 0.333332F) {
-            builder.accept(Component.literal(String.valueOf((int) (progress * 100.0F))).append(Component.translatable("tc.thaumcraft.discoveryprogress")));
+            tooltip.add(Component.literal(String.valueOf((int) (progress * 100.0F))).append(Component.translatable("tc.thaumcraft.discoveryprogress")));
         }
     }
 }

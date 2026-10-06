@@ -11,8 +11,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
@@ -21,18 +23,19 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.CommonHooks;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.network.ModNetwork;
 import thaumcraft.entity.FollowingItem;
 import thaumcraft.network.BlockBoilPayload;
 import thaumcraft.registry.ModSounds;
 
-public class ElementalAxeItem extends Item {
+public class ElementalAxeItem extends AxeItem {
     private static final int MAX_BLOCKS = 1024;
     private static boolean breaking;
     private static boolean alternate;
 
     public ElementalAxeItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.ELEMENTAL_TOOL, properties.attributes(DiggerItem.createAttributes(ModMaterials.ELEMENTAL_TOOL, 2.0F, -3.0F)));
     }
 
     @Override
@@ -53,9 +56,9 @@ public class ElementalAxeItem extends Item {
             ItemStack stack = context.getItemInHand();
             breakFurthest(serverLevel, serverPlayer, stack, pos, state);
             level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.BUBBLE.value(), SoundSource.BLOCKS, 0.15F, 1.0F);
-            stack.hurtAndBreak(alternate ? 1 : 2, player, context.getHand().asEquipmentSlot());
+            stack.hurtAndBreak(alternate ? 1 : 2, player, LivingEntity.getSlotForHand(context.getHand()));
             alternate = !alternate;
-            return InteractionResult.SUCCESS_SERVER;
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }

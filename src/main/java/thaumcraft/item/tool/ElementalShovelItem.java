@@ -10,6 +10,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,14 +22,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.CommonHooks;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.network.ModNetwork;
 import thaumcraft.entity.FollowingItem;
 import thaumcraft.lib.Utils;
 import thaumcraft.network.BlockSparklePayload;
 
-public class ElementalShovelItem extends Item {
+public class ElementalShovelItem extends ShovelItem {
     public ElementalShovelItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.ELEMENTAL_TOOL, properties.attributes(DiggerItem.createAttributes(ModMaterials.ELEMENTAL_TOOL, 0.0F, -3.0F)));
     }
 
     @Override
@@ -47,7 +50,7 @@ public class ElementalShovelItem extends Item {
         for (int offsetX = -1; offsetX <= 1; offsetX++) {
             for (int offsetZ = -1; offsetZ <= 1; offsetZ++) {
                 if (stack.isEmpty()) {
-                    return placed ? InteractionResult.SUCCESS_SERVER : InteractionResult.PASS;
+                    return placed ? InteractionResult.SUCCESS : InteractionResult.PASS;
                 }
                 BlockPos target = pos.offset(offsetX, 0, offsetZ).relative(face);
                 if (!level.getBlockState(target).canBeReplaced() || !level.mayInteract(player, target)) {
@@ -63,13 +66,13 @@ public class ElementalShovelItem extends Item {
                 }
             }
         }
-        return placed ? InteractionResult.SUCCESS_SERVER : InteractionResult.PASS;
+        return placed ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
 
     private static void place(ServerLevel level, ServerPlayer player, ItemStack stack, UseOnContext context, BlockPos target, BlockState state) {
         level.playSound(null, target, state.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 0.6F, 0.9F + level.getRandom().nextFloat() * 0.2F);
         level.setBlock(target, state, Block.UPDATE_ALL);
-        stack.hurtAndBreak(1, player, context.getHand().asEquipmentSlot());
+        stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
         ModNetwork.sendToNear(level, null, target.getX(), target.getY(), target.getZ(), 64.0, new BlockSparklePayload(target, 3, 4));
     }
 

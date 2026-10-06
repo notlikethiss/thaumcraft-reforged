@@ -1,6 +1,9 @@
 package thaumcraft.registry;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -32,59 +35,59 @@ import thaumcraft.entity.projectile.Dart;
 import thaumcraft.entity.projectile.FrostShard;
 
 public final class ModEntities {
-    private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Thaumcraft.MODID);
+    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Thaumcraft.MODID);
 
-    public static final DeferredHolder<EntityType<?>, EntityType<BrainyZombie>> BRAINY_ZOMBIE = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<BrainyZombie>> BRAINY_ZOMBIE = entity(
         "brainy_zombie",
         BrainyZombie::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).ridingOffset(-0.7F).clientTrackingRange(4).updateInterval(3).notInPeaceful()
+        builder -> builder.sized(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).ridingOffset(-0.7F).clientTrackingRange(4).updateInterval(3)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<GiantBrainyZombie>> GIANT_BRAINY_ZOMBIE = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<GiantBrainyZombie>> GIANT_BRAINY_ZOMBIE = entity(
         "giant_brainy_zombie",
         GiantBrainyZombie::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.6F, 1.8F).eyeHeight(1.62F).clientTrackingRange(4).updateInterval(3).notInPeaceful()
+        builder -> builder.sized(0.6F, 1.8F).eyeHeight(1.62F).clientTrackingRange(4).updateInterval(3)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<FireBat>> FIRE_BAT = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<FireBat>> FIRE_BAT = entity(
         "fire_bat",
         FireBat::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.5F, 0.9F).eyeHeight(0.45F).fireImmune().clientTrackingRange(4).updateInterval(3).notInPeaceful()
+        builder -> builder.sized(0.5F, 0.9F).eyeHeight(0.45F).fireImmune().clientTrackingRange(4).updateInterval(3)
     );
 
-    public static final DeferredHolder<EntityType<?>, EntityType<Wisp>> WISP = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<Wisp>> WISP = entity(
         "wisp",
         Wisp::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.9F, 0.9F).eyeHeight(0.45F).clientTrackingRange(4).updateInterval(3).notInPeaceful()
+        builder -> builder.sized(0.9F, 0.9F).eyeHeight(0.45F).clientTrackingRange(4).updateInterval(3)
     );
 
-    public static final DeferredHolder<EntityType<?>, EntityType<Alumentum>> ALUMENTUM = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<Alumentum>> ALUMENTUM = entity(
         "alumentum",
         Alumentum::new,
         MobCategory.MISC,
         builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<Dart>> DART = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<Dart>> DART = entity(
         "dart",
         Dart::new,
         MobCategory.MISC,
         builder -> builder.sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<FrostShard>> FROST_SHARD = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<FrostShard>> FROST_SHARD = entity(
         "frost_shard",
         FrostShard::new,
         MobCategory.MISC,
         builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<SpecialItem>> SPECIAL_ITEM = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<SpecialItem>> SPECIAL_ITEM = entity(
         "special_item",
         SpecialItem::new,
         MobCategory.MISC,
         builder -> builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<FollowingItem>> FOLLOWING_ITEM = ENTITIES.registerEntityType(
+    public static final DeferredHolder<EntityType<?>, EntityType<FollowingItem>> FOLLOWING_ITEM = entity(
         "following_item",
         FollowingItem::new,
         MobCategory.MISC,
@@ -107,8 +110,17 @@ public final class ModEntities {
     private ModEntities() {
     }
 
+    private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> entity(
+        String name,
+        EntityType.EntityFactory<T> factory,
+        MobCategory category,
+        UnaryOperator<EntityType.Builder<T>> builder
+    ) {
+        return ENTITIES.register(name, () -> builder.apply(EntityType.Builder.of(factory, category)).build(Thaumcraft.id(name).toString()));
+    }
+
     private static <T extends GolemBase> DeferredHolder<EntityType<?>, EntityType<T>> golem(String name, EntityType.EntityFactory<T> factory) {
-        return ENTITIES.registerEntityType(name, factory, MobCategory.MISC, builder -> builder.sized(0.4F, 0.95F).eyeHeight(0.8F).clientTrackingRange(4).updateInterval(3));
+        return entity(name, factory, MobCategory.MISC, builder -> builder.sized(0.4F, 0.95F).eyeHeight(0.8F).clientTrackingRange(4).updateInterval(3));
     }
 
     public static void register(IEventBus modEventBus) {

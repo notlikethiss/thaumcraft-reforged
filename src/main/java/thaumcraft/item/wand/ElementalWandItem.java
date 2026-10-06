@@ -1,16 +1,15 @@
 package thaumcraft.item.wand;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.lib.MiningUtils;
 import thaumcraft.registry.ModEnchantments;
@@ -23,7 +22,7 @@ public class ElementalWandItem extends Item {
     }
 
     public ElementalWandItem(int chargeAmount, Properties properties) {
-        super(properties.stacksTo(1).enchantable(5).rarity(Rarity.RARE).setNoCombineRepair());
+        super(properties.stacksTo(1).rarity(Rarity.RARE).setNoRepair());
         this.chargeAmount = chargeAmount;
     }
 
@@ -31,7 +30,7 @@ public class ElementalWandItem extends Item {
         int frugal = MiningUtils.enchantmentLevel(player.level(), stack, ModEnchantments.FRUGAL);
         for (int index = 0; index < amount; index++) {
             if (player.getRandom().nextFloat() < 1.0F - frugal / 5.0F) {
-                stack.hurtAndBreak(1, player, hand);
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
         }
     }
@@ -40,8 +39,7 @@ public class ElementalWandItem extends Item {
         int frugal = MiningUtils.enchantmentLevel(player.level(), stack, ModEnchantments.FRUGAL);
         for (int index = 0; index < amount; index++) {
             if (player.getRandom().nextFloat() < 1.0F - frugal / 5.0F) {
-                stack.hurtAndBreak(1, player.level(), player, brokenItem -> {
-                });
+                stack.hurtAndBreak(1, player, stack == player.getOffhandItem() ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
             }
         }
     }
@@ -59,8 +57,14 @@ public class ElementalWandItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
-        if (canCharge(level, stack)
+    public int getEnchantmentValue() {
+        return 5;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity owner, int slotId, boolean isSelected) {
+        if (!level.isClientSide()
+            && canCharge(level, stack)
             && owner.tickCount % 50 == 0
             && stack.getDamageValue() > 0
             && AuraManager.decreaseClosestAura(level, owner.getX(), owner.getY(), owner.getZ(), 1)) {

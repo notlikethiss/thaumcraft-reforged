@@ -1,17 +1,15 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -39,7 +37,7 @@ public class MirrorItem extends BlockItem {
             level.playSound(null, context.getClickedPos(), ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
             stack.consume(1, player);
             if (!player.getInventory().add(linked)) {
-                player.drop(linked, false, Prediction.SERVER_ONLY);
+                player.drop(linked, false);
             }
         } else {
             player.sendSystemMessage(Component.translatable("tc.thaumcraft.mirror_already_linked").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
@@ -52,10 +50,10 @@ public class MirrorItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         GlobalPos link = HandMirrorItem.getLink(stack);
         if (link != null) {
-            builder.accept(linkText("tc.thaumcraft.mirror_linked_to", link));
+            tooltip.add(linkText("tc.thaumcraft.mirror_linked_to", link));
         }
     }
 }

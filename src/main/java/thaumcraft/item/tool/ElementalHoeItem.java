@@ -4,26 +4,34 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.block.world.MagicalSaplingBlock;
 import thaumcraft.fx.Fx;
 import thaumcraft.lib.Utils;
 import thaumcraft.registry.ModSounds;
 
-public class ElementalHoeItem extends Item {
+public class ElementalHoeItem extends HoeItem {
     private static final int GREAT_TREE_COST = 20;
     private static final int SILVER_TREE_COST = 150;
     private static final int BONE_MEAL_COST = 5;
 
     public ElementalHoeItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.ELEMENTAL_TOOL, properties.attributes(DiggerItem.createAttributes(ModMaterials.ELEMENTAL_TOOL, -3.0F, -1.0F)));
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 5;
     }
 
     @Override
@@ -58,7 +66,7 @@ public class ElementalHoeItem extends Item {
 
     private boolean growAt(Level level, Player player, UseOnContext context, ItemStack stack, BlockPos pos) {
         if (Utils.useBonemealAtLoc(level, pos)) {
-            stack.hurtAndBreak(BONE_MEAL_COST, player, context.getHand().asEquipmentSlot());
+            stack.hurtAndBreak(BONE_MEAL_COST, player, LivingEntity.getSlotForHand(context.getHand()));
             Fx.get().blockSparkle(level, pos.getX(), pos.getY(), pos.getZ(), 0, 3);
             return true;
         }
@@ -76,7 +84,7 @@ public class ElementalHoeItem extends Item {
             } else {
                 sapling.growGreatTree(serverLevel, pos, level.getRandom());
             }
-            stack.hurtAndBreak(cost, player, context.getHand().asEquipmentSlot());
+            stack.hurtAndBreak(cost, player, LivingEntity.getSlotForHand(context.getHand()));
         }
         Fx.get().blockSparkle(level, pos.getX(), pos.getY(), pos.getZ(), 0, 2);
         return true;

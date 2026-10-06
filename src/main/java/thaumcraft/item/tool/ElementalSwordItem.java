@@ -6,21 +6,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.fx.Fx;
 import thaumcraft.registry.ModSounds;
 
-public class ElementalSwordItem extends Item {
+public class ElementalSwordItem extends SwordItem {
     private static final int USE_DURATION = 72000;
     private static final double PUSH_RANGE = 2.5;
     private static final double SWEEP_RANGE = 1.1;
@@ -30,7 +31,7 @@ public class ElementalSwordItem extends Item {
     private static boolean sweeping;
 
     public ElementalSwordItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.ELEMENTAL_TOOL, properties.attributes(SwordItem.createAttributes(ModMaterials.ELEMENTAL_TOOL, 3.0F, -2.4F)));
     }
 
     @Override
@@ -44,9 +45,9 @@ public class ElementalSwordItem extends Item {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResult.CONSUME;
+        return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
     @Override
@@ -88,13 +89,13 @@ public class ElementalSwordItem extends Item {
             double deltaZ = target.getZ() - player.getZ();
             double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) + 0.1;
             target.setDeltaMovement(target.getDeltaMovement().add(deltaX / PUSH_RANGE / distance, deltaY / PUSH_RANGE / distance, deltaZ / PUSH_RANGE / distance));
-            target.needsSync = true;
+            target.hurtMarked = true;
         }
         if (ticks == 0 || ticks % 20 == 0) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.WIND.value(), SoundSource.PLAYERS, 0.5F, 0.9F + level.getRandom().nextFloat() * 0.2F);
         }
         if (ticks % 20 == 0) {
-            stack.hurtAndBreak(1, player, player.getUsedItemHand().asEquipmentSlot());
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
         }
     }
 

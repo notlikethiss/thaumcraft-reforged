@@ -1,6 +1,6 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -77,11 +76,11 @@ public class FilledJarItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         JarContents contents = getContents(stack);
         if (contents != null) {
-            builder.accept(contents.aspect().getMeaning());
-            builder.accept(Component.translatable("tc.thaumcraft.jaressentia", contents.amount()));
+            tooltip.add(contents.aspect().getMeaning());
+            tooltip.add(Component.translatable("tc.thaumcraft.jaressentia", contents.amount()));
         }
     }
 }

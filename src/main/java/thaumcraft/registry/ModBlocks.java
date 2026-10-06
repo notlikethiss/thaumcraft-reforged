@@ -52,76 +52,76 @@ import thaumcraft.block.world.TravelPavingStoneBlock;
 public final class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
 
-    public static final DeferredBlock<Block> CINNABAR_ORE = BLOCKS.registerSimpleBlock("cinnabar_ore", ModBlocks::stone);
+    public static final DeferredBlock<Block> CINNABAR_ORE = simple("cinnabar_ore", ModBlocks::stone);
     public static final DeferredBlock<InfusedStoneBlock> AIR_INFUSED_STONE = infusedStone("air_infused_stone", 1);
     public static final DeferredBlock<InfusedStoneBlock> FIRE_INFUSED_STONE = infusedStone("fire_infused_stone", 2);
     public static final DeferredBlock<InfusedStoneBlock> WATER_INFUSED_STONE = infusedStone("water_infused_stone", 3);
     public static final DeferredBlock<InfusedStoneBlock> EARTH_INFUSED_STONE = infusedStone("earth_infused_stone", 4);
     public static final DeferredBlock<InfusedStoneBlock> VIS_INFUSED_STONE = infusedStone("vis_infused_stone", 5);
     public static final DeferredBlock<InfusedStoneBlock> DULL_INFUSED_STONE = infusedStone("dull_infused_stone", 6);
-    public static final DeferredBlock<Block> AMBER_ORE = BLOCKS.registerSimpleBlock("amber_ore", ModBlocks::stone);
-    public static final DeferredBlock<AmberBlock> AMBER_BLOCK = BLOCKS.registerBlock("amber_block", AmberBlock::new, ModBlocks::amber);
-    public static final DeferredBlock<AmberBlock> AMBER_BRICKS = BLOCKS.registerBlock("amber_bricks", AmberBlock::new, ModBlocks::amber);
-    public static final DeferredBlock<ObsidianTotemBlock> OBSIDIAN_TOTEM = BLOCKS.registerBlock(
+    public static final DeferredBlock<Block> AMBER_ORE = simple("amber_ore", ModBlocks::stone);
+    public static final DeferredBlock<AmberBlock> AMBER_BLOCK = block("amber_block", AmberBlock::new, ModBlocks::amber);
+    public static final DeferredBlock<AmberBlock> AMBER_BRICKS = block("amber_bricks", AmberBlock::new, ModBlocks::amber);
+    public static final DeferredBlock<ObsidianTotemBlock> OBSIDIAN_TOTEM = block(
         "obsidian_totem",
         ObsidianTotemBlock::new,
         properties -> obsidian(properties)
     );
-    public static final DeferredBlock<Block> OBSIDIAN_TILE = BLOCKS.registerSimpleBlock("obsidian_tile", ModBlocks::obsidian);
-    public static final DeferredBlock<TravelPavingStoneBlock> TRAVEL_PAVING_STONE = BLOCKS.registerBlock(
+    public static final DeferredBlock<Block> OBSIDIAN_TILE = simple("obsidian_tile", ModBlocks::obsidian);
+    public static final DeferredBlock<TravelPavingStoneBlock> TRAVEL_PAVING_STONE = block(
         "travel_paving_stone",
         TravelPavingStoneBlock::new,
         properties -> stone(properties).lightLevel(state -> 9)
     );
-    public static final DeferredBlock<RotatedPillarBlock> GREATWOOD_LOG = BLOCKS.registerBlock("greatwood_log", RotatedPillarBlock::new, ModBlocks::log);
-    public static final DeferredBlock<RotatedPillarBlock> SILVERWOOD_LOG = BLOCKS.registerBlock("silverwood_log", RotatedPillarBlock::new, ModBlocks::log);
-    public static final DeferredBlock<MagicalLeavesBlock> GREATWOOD_LEAVES = BLOCKS.registerBlock("greatwood_leaves", MagicalLeavesBlock::new, ModBlocks::leaves);
-    public static final DeferredBlock<MagicalLeavesBlock> SILVERWOOD_LEAVES = BLOCKS.registerBlock(
+    public static final DeferredBlock<RotatedPillarBlock> GREATWOOD_LOG = block("greatwood_log", RotatedPillarBlock::new, ModBlocks::log);
+    public static final DeferredBlock<RotatedPillarBlock> SILVERWOOD_LOG = block("silverwood_log", RotatedPillarBlock::new, ModBlocks::log);
+    public static final DeferredBlock<MagicalLeavesBlock> GREATWOOD_LEAVES = block("greatwood_leaves", MagicalLeavesBlock::new, ModBlocks::leaves);
+    public static final DeferredBlock<MagicalLeavesBlock> SILVERWOOD_LEAVES = block(
         "silverwood_leaves",
         MagicalLeavesBlock::new,
         properties -> leaves(properties).lightLevel(state -> 7)
     );
-    public static final DeferredBlock<MagicalSaplingBlock> GREATWOOD_SAPLING = BLOCKS.registerBlock(
+    public static final DeferredBlock<MagicalSaplingBlock> GREATWOOD_SAPLING = block(
         "greatwood_sapling",
         properties -> new MagicalSaplingBlock(false, properties),
         ModBlocks::plant
     );
-    public static final DeferredBlock<MagicalSaplingBlock> SILVERWOOD_SAPLING = BLOCKS.registerBlock(
+    public static final DeferredBlock<MagicalSaplingBlock> SILVERWOOD_SAPLING = block(
         "silverwood_sapling",
         properties -> new MagicalSaplingBlock(true, properties),
         properties -> plant(properties).lightLevel(state -> 7)
     );
-    public static final DeferredBlock<MagicalFlowerBlock> SHIMMERLEAF = BLOCKS.registerBlock(
+    public static final DeferredBlock<MagicalFlowerBlock> SHIMMERLEAF = block(
         "shimmerleaf",
         properties -> new MagicalFlowerBlock(false, properties),
         properties -> plant(properties).lightLevel(state -> 7)
     );
-    public static final DeferredBlock<MagicalFlowerBlock> CINDERPEARL = BLOCKS.registerBlock(
+    public static final DeferredBlock<MagicalFlowerBlock> CINDERPEARL = block(
         "cinderpearl",
         properties -> new MagicalFlowerBlock(true, properties),
         properties -> plant(properties).lightLevel(state -> 7)
     );
-    public static final DeferredBlock<NitorBlock> NITOR = BLOCKS.registerBlock(
+    public static final DeferredBlock<NitorBlock> NITOR = block(
         "nitor",
         NitorBlock::new,
-        properties -> properties.noCollision().instabreak().sound(SoundType.WOOL).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)
+        properties -> properties.noCollission().instabreak().sound(SoundType.WOOL).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)
     );
 
-    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = BLOCKS.registerBlock("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
-    public static final DeferredBlock<AlembicBlock> ALEMBIC = BLOCKS.registerBlock("alembic", AlembicBlock::new, ModBlocks::metalDevice);
-    public static final DeferredBlock<TableBlock> TABLE = BLOCKS.registerBlock("table", TableBlock::new, ModBlocks::table);
-    public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = BLOCKS.registerBlock(
+    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = block("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
+    public static final DeferredBlock<AlembicBlock> ALEMBIC = block("alembic", AlembicBlock::new, ModBlocks::metalDevice);
+    public static final DeferredBlock<TableBlock> TABLE = block("table", TableBlock::new, ModBlocks::table);
+    public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = block(
         "research_table",
         ResearchTableBlock::new,
         properties -> table(properties).pushReaction(PushReaction.BLOCK)
     );
-    public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = BLOCKS.registerBlock("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
-    public static final DeferredBlock<ArcaneStoneBlock> ARCANE_STONE = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = block("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
+    public static final DeferredBlock<ArcaneStoneBlock> ARCANE_STONE = block(
         "arcane_stone",
         ArcaneStoneBlock::new,
         properties -> stone(properties).strength(4.0F, 100.0F).noOcclusion()
     );
-    public static final DeferredBlock<Block> ARCANE_WOOD = BLOCKS.registerSimpleBlock(
+    public static final DeferredBlock<Block> ARCANE_WOOD = simple(
         "arcane_wood",
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 6.0F).sound(SoundType.WOOD)
     );
@@ -129,9 +129,9 @@ public final class ModBlocks {
         ConfigRecipes.DYE_COLORS,
         "_warded_stone",
         WardedBlock::new,
-        properties -> stone(properties).strength(10.0F, 599.0F).pushReaction(PushReaction.BLOCK).overrideDescription("block.thaumcraft.warded_stone")
+        properties -> stone(properties).strength(10.0F, 599.0F).pushReaction(PushReaction.BLOCK)
     );
-    public static final DeferredBlock<WardedGlassBlock> WARDED_GLASS = BLOCKS.registerBlock(
+    public static final DeferredBlock<WardedGlassBlock> WARDED_GLASS = block(
         "warded_glass",
         WardedGlassBlock::new,
         properties -> properties
@@ -144,7 +144,7 @@ public final class ModBlocks {
             .isValidSpawn((state, level, pos, entity) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, aabb) -> false)
+            .isViewBlocking((state, level, pos) -> false)
     );
     public static final Map<String, DeferredBlock<CandleBlock>> CANDLES = colored(
         ConfigRecipes.WOOL_COLORS,
@@ -152,7 +152,7 @@ public final class ModBlocks {
         CandleBlock::new,
         properties -> properties
             .mapColor(MapColor.WOOL)
-            .noCollision()
+            .noCollission()
             .strength(0.1F)
             .sound(SoundType.WOOL)
             .lightLevel(state -> 14)
@@ -164,14 +164,14 @@ public final class ModBlocks {
         Block::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD)
     );
-    public static final DeferredBlock<JarBlock> WARDED_JAR = BLOCKS.registerBlock("warded_jar", properties -> new JarBlock(false, properties), ModBlocks::jar);
-    public static final DeferredBlock<JarBlock> BRAIN_JAR = BLOCKS.registerBlock("brain_jar", properties -> new JarBlock(true, properties), ModBlocks::jar);
-    public static final DeferredBlock<BellowsBlock> ARCANE_BELLOWS = BLOCKS.registerBlock(
+    public static final DeferredBlock<JarBlock> WARDED_JAR = block("warded_jar", properties -> new JarBlock(false, properties), ModBlocks::jar);
+    public static final DeferredBlock<JarBlock> BRAIN_JAR = block("brain_jar", properties -> new JarBlock(true, properties), ModBlocks::jar);
+    public static final DeferredBlock<BellowsBlock> ARCANE_BELLOWS = block(
         "arcane_bellows",
         BellowsBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.DESTROY)
     );
-    public static final DeferredBlock<InfernalFurnaceBlock> INFERNAL_FURNACE = BLOCKS.registerBlock(
+    public static final DeferredBlock<InfernalFurnaceBlock> INFERNAL_FURNACE = block(
         "infernal_furnace",
         InfernalFurnaceBlock::new,
         properties -> properties
@@ -183,33 +183,33 @@ public final class ModBlocks {
             .pushReaction(PushReaction.BLOCK)
             .noLootTable()
     );
-    public static final DeferredBlock<ArcaneEarBlock> ARCANE_EAR = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcaneEarBlock> ARCANE_EAR = block(
         "arcane_ear",
         ArcaneEarBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
     );
-    public static final DeferredBlock<ArcanePressurePlateBlock> ARCANE_PRESSURE_PLATE = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcanePressurePlateBlock> ARCANE_PRESSURE_PLATE = block(
         "arcane_pressure_plate",
         ArcanePressurePlateBlock::new,
         properties -> properties
             .mapColor(MapColor.WOOD)
             .instrument(NoteBlockInstrument.BASS)
-            .noCollision()
+            .noCollission()
             .strength(2.0F, 999.0F)
             .sound(SoundType.WOOD)
             .pushReaction(PushReaction.BLOCK)
     );
-    public static final DeferredBlock<ArcaneDoorBlock> ARCANE_DOOR = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcaneDoorBlock> ARCANE_DOOR = block(
         "arcane_door",
         ArcaneDoorBlock::new,
         properties -> properties.mapColor(MapColor.METAL).strength(15.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK)
     );
-    public static final DeferredBlock<LevitatorBlock> ARCANE_LEVITATOR = BLOCKS.registerBlock(
+    public static final DeferredBlock<LevitatorBlock> ARCANE_LEVITATOR = block(
         "arcane_levitator",
         LevitatorBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 15.0F).sound(SoundType.WOOD)
     );
-    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = BLOCKS.registerBlock(
+    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = block(
         "hungry_chest",
         HungryChestBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD).noOcclusion()
@@ -220,14 +220,14 @@ public final class ModBlocks {
     public static final DeferredBlock<CrystalClusterBlock> EARTH_CRYSTAL_CLUSTER = crystal("earth_crystal_cluster", 3);
     public static final DeferredBlock<CrystalClusterBlock> VIS_CRYSTAL_CLUSTER = crystal("vis_crystal_cluster", 4);
     public static final DeferredBlock<CrystalClusterBlock> MIXED_CRYSTAL_CLUSTER = crystal("mixed_crystal_cluster", 5);
-    public static final DeferredBlock<CrystalCoreBlock> CRYSTAL_CORE = BLOCKS.registerBlock("crystal_core", CrystalCoreBlock::new, ModBlocks::crystal);
-    public static final DeferredBlock<CrystalCapacitorBlock> CRYSTAL_CAPACITOR = BLOCKS.registerBlock("crystal_capacitor", CrystalCapacitorBlock::new, ModBlocks::crystal);
-    public static final DeferredBlock<MirrorBlock> MAGIC_MIRROR = BLOCKS.registerBlock(
+    public static final DeferredBlock<CrystalCoreBlock> CRYSTAL_CORE = block("crystal_core", CrystalCoreBlock::new, ModBlocks::crystal);
+    public static final DeferredBlock<CrystalCapacitorBlock> CRYSTAL_CAPACITOR = block("crystal_capacitor", CrystalCapacitorBlock::new, ModBlocks::crystal);
+    public static final DeferredBlock<MirrorBlock> MAGIC_MIRROR = block(
         "magic_mirror",
         MirrorBlock::new,
-        properties -> properties.mapColor(MapColor.NONE).strength(1.0F, 10.0F).sound(ModSounds.MIRROR_SOUND).noOcclusion().noCollision()
+        properties -> properties.mapColor(MapColor.NONE).strength(1.0F, 10.0F).sound(ModSounds.MIRROR_SOUND).noOcclusion().noCollission()
     );
-    public static final DeferredBlock<HoleBlock> HOLE = BLOCKS.registerBlock(
+    public static final DeferredBlock<HoleBlock> HOLE = block(
         "hole",
         HoleBlock::new,
         properties -> properties
@@ -235,27 +235,35 @@ public final class ModBlocks {
             .strength(-1.0F, 6000000.0F)
             .sound(SoundType.STONE)
             .lightLevel(state -> 10)
-            .noCollision()
+            .noCollission()
             .noOcclusion()
             .noLootTable()
             .pushReaction(PushReaction.BLOCK)
             .isValidSpawn((state, level, pos, entity) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, aabb) -> false)
+            .isViewBlocking((state, level, pos) -> false)
     );
-    public static final DeferredBlock<ArcaneBoreBaseBlock> ARCANE_BORE_BASE = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcaneBoreBaseBlock> ARCANE_BORE_BASE = block(
         "arcane_bore_base",
         ArcaneBoreBaseBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
     );
-    public static final DeferredBlock<ArcaneBoreBlock> ARCANE_BORE = BLOCKS.registerBlock(
+    public static final DeferredBlock<ArcaneBoreBlock> ARCANE_BORE = block(
         "arcane_bore",
         ArcaneBoreBlock::new,
         properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 10.0F).sound(SoundType.WOOD).noOcclusion()
     );
 
     private ModBlocks() {
+    }
+
+    private static <B extends Block> DeferredBlock<B> block(String name, Function<BlockBehaviour.Properties, ? extends B> factory, UnaryOperator<BlockBehaviour.Properties> properties) {
+        return BLOCKS.registerBlock(name, factory, properties.apply(BlockBehaviour.Properties.of()));
+    }
+
+    private static DeferredBlock<Block> simple(String name, UnaryOperator<BlockBehaviour.Properties> properties) {
+        return BLOCKS.registerSimpleBlock(name, properties.apply(BlockBehaviour.Properties.of()));
     }
 
     private static <B extends Block> Map<String, DeferredBlock<B>> colored(
@@ -266,13 +274,13 @@ public final class ModBlocks {
     ) {
         Map<String, DeferredBlock<B>> blocks = new LinkedHashMap<>();
         for (String color : colors) {
-            blocks.put(color, BLOCKS.registerBlock(color + suffix, factory, properties));
+            blocks.put(color, block(color + suffix, factory, properties));
         }
         return blocks;
     }
 
     private static DeferredBlock<CrystalClusterBlock> crystal(String name, int type) {
-        return BLOCKS.registerBlock(name, properties -> new CrystalClusterBlock(type, properties), ModBlocks::crystal);
+        return block(name, properties -> new CrystalClusterBlock(type, properties), ModBlocks::crystal);
     }
 
     private static BlockBehaviour.Properties crystal(BlockBehaviour.Properties properties) {
@@ -285,11 +293,11 @@ public final class ModBlocks {
             .noOcclusion()
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, aabb) -> false);
+            .isViewBlocking((state, level, pos) -> false);
     }
 
     private static DeferredBlock<InfusedStoneBlock> infusedStone(String name, int type) {
-        return BLOCKS.registerBlock(name, properties -> new InfusedStoneBlock(type, properties), ModBlocks::stone);
+        return block(name, properties -> new InfusedStoneBlock(type, properties), ModBlocks::stone);
     }
 
     static BlockBehaviour.Properties stone(BlockBehaviour.Properties properties) {
@@ -319,7 +327,7 @@ public final class ModBlocks {
             .noOcclusion()
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, aabb) -> false);
+            .isViewBlocking((state, level, pos) -> false);
     }
 
     private static BlockBehaviour.Properties table(BlockBehaviour.Properties properties) {
@@ -358,7 +366,7 @@ public final class ModBlocks {
     private static BlockBehaviour.Properties plant(BlockBehaviour.Properties properties) {
         return properties
             .mapColor(MapColor.PLANT)
-            .noCollision()
+            .noCollission()
             .instabreak()
             .randomTicks()
             .sound(SoundType.GRASS)

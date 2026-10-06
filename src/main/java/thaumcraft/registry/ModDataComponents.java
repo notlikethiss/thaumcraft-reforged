@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
@@ -48,9 +48,9 @@ public final class ModDataComponents {
         "hover_charge",
         builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT.cast())
     );
-    public static final Supplier<DataComponentType<ItemStackTemplate>> HARNESS_JAR = COMPONENTS.registerComponentType(
+    public static final Supplier<DataComponentType<ItemStack>> HARNESS_JAR = COMPONENTS.registerComponentType(
         "harness_jar",
-        builder -> builder.persistent(ItemStackTemplate.CODEC).networkSynchronized(ItemStackTemplate.STREAM_CODEC.cast())
+        builder -> builder.persistent(ItemStack.OPTIONAL_CODEC).networkSynchronized(ItemStack.OPTIONAL_STREAM_CODEC)
     );
 
     public static final Supplier<DataComponentType<JarContents>> JAR_CONTENTS = COMPONENTS.registerComponentType(

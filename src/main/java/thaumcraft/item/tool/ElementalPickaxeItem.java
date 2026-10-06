@@ -11,8 +11,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.network.ModNetwork;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectHelper;
@@ -28,16 +31,16 @@ import thaumcraft.lib.MiningUtils;
 import thaumcraft.network.BlockTagsPayload;
 import thaumcraft.registry.ModSounds;
 
-public class ElementalPickaxeItem extends Item {
+public class ElementalPickaxeItem extends PickaxeItem {
     private static final int SCAN_DEPTH = 8;
 
     public ElementalPickaxeItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.ELEMENTAL_TOOL, properties.attributes(DiggerItem.createAttributes(ModMaterials.ELEMENTAL_TOOL, 1.0F, -2.8F)));
     }
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (player.level() instanceof ServerLevel level && (!(entity instanceof Player) || level.isPvpAllowed())) {
+        if (player.level() instanceof ServerLevel level && (!(entity instanceof Player) || level.getServer().isPvpAllowed())) {
             entity.igniteForSeconds(2.0F);
         }
         return false;
@@ -50,11 +53,11 @@ public class ElementalPickaxeItem extends Item {
             return InteractionResult.PASS;
         }
         BlockPos pos = context.getClickedPos();
-        context.getItemInHand().hurtAndBreak(5, player, context.getHand().asEquipmentSlot());
+        context.getItemInHand().hurtAndBreak(5, player, LivingEntity.getSlotForHand(context.getHand()));
         level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.WAND.value(), SoundSource.PLAYERS, 0.1F, 0.2F + level.getRandom().nextFloat() * 0.2F);
         Direction side = context.getClickedFace();
         ModNetwork.sendToPlayer(serverPlayer, new BlockTagsPayload(pos, side, scan(level, pos, side)));
-        return InteractionResult.SUCCESS_SERVER;
+        return InteractionResult.SUCCESS;
     }
 
     private static AspectList scan(ServerLevel level, BlockPos origin, Direction side) {

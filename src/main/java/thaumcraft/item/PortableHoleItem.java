@@ -3,18 +3,15 @@ package thaumcraft.item;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import javax.annotation.Nullable;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.blockentity.HoleBlockEntity;
 
@@ -26,7 +23,10 @@ public class PortableHoleItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
+    public void inventoryTick(ItemStack stack, Level level, Entity owner, int slotId, boolean isSelected) {
+        if (level.isClientSide()) {
+            return;
+        }
         if (stack.getDamageValue() >= 10 && AuraManager.decreaseClosestAura(level, owner.getX(), owner.getY(), owner.getZ(), 1)) {
             stack.setDamageValue(stack.getDamageValue() - 10);
         }

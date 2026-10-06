@@ -1,18 +1,16 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,7 +58,7 @@ public class ArcaneKeyItem extends Item {
                 ItemStack key = new ItemStack(this);
                 setLink(key, new KeyLink(target, type));
                 if (!player.getInventory().add(key)) {
-                    player.drop(key, false, Prediction.SERVER_ONLY);
+                    player.drop(key, false);
                 }
                 stack.consume(1, player);
                 player.sendSystemMessage(message(type == KeyLink.DOOR ? "key1" : "key2"));
@@ -109,14 +107,14 @@ public class ArcaneKeyItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         KeyLink link = getLink(stack);
         if (link == null) {
             return;
         }
         BlockPos pos = link.pos();
-        builder.accept(message("key9"));
-        builder.accept(message(link.type() == KeyLink.DOOR ? "key10" : "key11"));
-        builder.accept(Component.literal("x " + pos.getX() + ", z " + pos.getZ() + ", y " + pos.getY()).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
+        tooltip.add(message("key9"));
+        tooltip.add(message(link.type() == KeyLink.DOOR ? "key10" : "key11"));
+        tooltip.add(Component.literal("x " + pos.getX() + ", z " + pos.getZ() + ", y " + pos.getY()).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
     }
 }

@@ -3,10 +3,9 @@ package thaumcraft.item.wand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,9 +39,9 @@ public class LightningWandItem extends ElementalWandItem {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResult.CONSUME;
+        return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
     @Override
@@ -74,10 +73,10 @@ public class LightningWandItem extends ElementalWandItem {
         if (pointedEntity != null) {
             pointedEntity.hurt(player.damageSources().playerAttack(player), 3 + potency);
             if (serverLevel.getRandom().nextInt(16 - Math.min(15, potency * 2)) == 0) {
-                LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(serverLevel, MobSpawnType.TRIGGERED);
+                LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(serverLevel);
                 if (bolt != null) {
                     bolt.setVisualOnly(true);
-                    bolt.snapTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ());
+                    bolt.moveTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ());
                     pointedEntity.thunderHit(serverLevel, bolt);
                 }
             }
@@ -88,13 +87,12 @@ public class LightningWandItem extends ElementalWandItem {
     }
 
     @Override
-    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingTime) {
         if (level.isClientSide() || !(entity instanceof Player player)) {
-            return false;
+            return;
         }
         int charges = Math.min(USE_DURATION - remainingTime, stack.getMaxDamage() - stack.getDamageValue() + 1);
         damageWand(stack, player, player.getUsedItemHand(), charges);
-        return true;
     }
 
     @Override
@@ -107,11 +105,12 @@ public class LightningWandItem extends ElementalWandItem {
     }
 
     @Override
-    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (target.level() instanceof ServerLevel serverLevel && attacker instanceof Player player) {
             target.hurt(player.damageSources().playerAttack(player), 4.0F);
             damageWand(stack, player, InteractionHand.MAIN_HAND, 1);
             serverLevel.playSound(null, target.getX(), target.getY(), target.getZ(), ModSounds.SHOCK.value(), SoundSource.PLAYERS, 0.25F, 1.0F);
         }
+        return false;
     }
 }

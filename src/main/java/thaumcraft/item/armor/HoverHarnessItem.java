@@ -1,21 +1,22 @@
 package thaumcraft.item.armor;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import thaumcraft.item.ModMaterials;
 import thaumcraft.menu.HoverHarnessMenu;
 
-public class HoverHarnessItem extends Item {
+public class HoverHarnessItem extends ArmorItem {
     public HoverHarnessItem(Properties properties) {
-        super(properties);
+        super(ModMaterials.HARNESS_ARMOR, ArmorItem.Type.CHESTPLATE, properties);
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             ItemStack stack = player.getItemInHand(hand);
             int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : -1;
@@ -24,6 +25,6 @@ public class HoverHarnessItem extends Item {
                 buffer -> buffer.writeVarInt(slot)
             );
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
     }
 }
