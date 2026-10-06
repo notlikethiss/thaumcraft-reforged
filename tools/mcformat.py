@@ -125,6 +125,7 @@ class Profile:
 
 class Legacy(Profile):
     modern = False
+    feature_folder = "configured_feature"
 
     def recipe_ingredient(self, value):
         if value.startswith("#"):
@@ -283,7 +284,6 @@ class Profile1192(Legacy):
     common_namespace = "forge"
     biome_modifier_namespace = "forge"
     loot_modifier_namespace = "forge"
-    feature_folder = "configured_feature"
     pack_mcmeta = {
         "pack": {"description": "Thaumcraft Reforged resources", "pack_format": 9, "forge:resource_pack_format": 9, "forge:data_pack_format": 10}
     }
