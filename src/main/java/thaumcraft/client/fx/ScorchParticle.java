@@ -1,7 +1,7 @@
 package thaumcraft.client.fx;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -32,11 +32,15 @@ public class ScorchParticle extends TcParticle {
     }
 
     @Override
-    protected SingleQuadParticle.Layer getLayer() {
+    protected void prepareRender() {
         float color = Math.min(1.0F, this.age * 9.0F / this.lifetime);
         this.rCol = color;
         this.gCol = color;
         this.bCol = 1.0F;
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
         return TcParticleLayers.translucent(FLAME);
     }
 
@@ -55,7 +59,7 @@ public class ScorchParticle extends TcParticle {
         this.yd += this.random.nextFloat() * 0.07F - 0.035F;
         this.zd += this.random.nextFloat() * 0.07F - 0.035F;
         BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
-        if (this.age > 1 && this.level.getBlockState(pos).isSolidRender()) {
+        if (this.age > 1 && this.level.getBlockState(pos).isSolidRender(this.level, pos)) {
             this.xd = 0.0;
             this.yd = 0.0;
             this.zd = 0.0;

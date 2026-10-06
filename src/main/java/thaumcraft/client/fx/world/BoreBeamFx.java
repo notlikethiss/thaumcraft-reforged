@@ -4,11 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3fc;
+import org.joml.Vector3f;
 import thaumcraft.client.fx.TcParticleLayers;
 import thaumcraft.client.render.TcRenderTypes;
 
@@ -74,9 +74,9 @@ public class BoreBeamFx extends BeamFx {
         float cx = (float) (Mth.lerp(partialTick, prevTargetX, targetX) - camera.x);
         float cy = (float) (Mth.lerp(partialTick, prevTargetY, targetY) - camera.y);
         float cz = (float) (Mth.lerp(partialTick, prevTargetZ, targetZ) - camera.z);
-        Camera view = Minecraft.getInstance().gameRenderer.mainCamera();
-        Vector3fc left = view.leftVector();
-        Vector3fc up = view.upVector();
+        Camera view = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Vector3f left = view.getLeftVector();
+        Vector3f up = view.getUpVector();
         float lx = left.x() * size;
         float ly = left.y() * size;
         float lz = left.z() * size;

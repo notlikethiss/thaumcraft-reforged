@@ -3,7 +3,7 @@ package thaumcraft.client.fx.world;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -86,7 +86,7 @@ public class BeamFx extends WorldFx {
 
     @Override
     public void render(PoseStack.Pose pose, VertexConsumer buffer, float partialTick, Vec3 camera) {
-        float slide = (dayTimeSlide ? level.getDefaultClockTime() : level.getGameTime()) + partialTick;
+        float slide = (dayTimeSlide ? level.getDayTime() : level.getGameTime()) + partialTick;
         float size = 1.0F;
         float opacity = 0.4F;
         if (pulse) {
@@ -97,7 +97,7 @@ public class BeamFx extends WorldFx {
             }
             prevSize = size;
         }
-        float rotation = (float) (level.getDefaultClockTime() % (360 / ROTATION_SPEED) * ROTATION_SPEED) + ROTATION_SPEED * partialTick;
+        float rotation = (float) (level.getDayTime() % (360 / ROTATION_SPEED) * ROTATION_SPEED) + ROTATION_SPEED * partialTick;
         if (reverse) {
             slide *= -1.0F;
         }

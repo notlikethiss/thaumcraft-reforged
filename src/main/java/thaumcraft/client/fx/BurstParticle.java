@@ -1,7 +1,7 @@
 package thaumcraft.client.fx;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 
 public class BurstParticle extends TcParticle {
     private final float particleScale;
@@ -18,9 +18,13 @@ public class BurstParticle extends TcParticle {
     }
 
     @Override
-    protected SingleQuadParticle.Layer getLayer() {
+    protected void prepareRender() {
         float u0 = this.age % 32 / 32.0F;
         setUv(u0, u0 + 0.03125F, 0.0F, 1.0F);
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
         return TcParticleLayers.additive(TcParticleLayers.BURST);
     }
 

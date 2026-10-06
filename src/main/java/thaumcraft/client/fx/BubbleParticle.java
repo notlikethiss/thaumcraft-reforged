@@ -2,7 +2,7 @@ package thaumcraft.client.fx;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.world.entity.Entity;
 
 public class BubbleParticle extends TcParticle {
@@ -53,10 +53,14 @@ public class BubbleParticle extends TcParticle {
     }
 
     @Override
-    protected SingleQuadParticle.Layer getLayer() {
+    protected void prepareRender() {
         float u0 = particle % 16 / 16.0F;
         float v0 = particle / 16 / 16.0F;
         setUv(u0, u0 + 0.0624375F, v0, v0 + 0.0624375F);
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
         return TcParticleLayers.additive(TcParticleLayers.PARTICLES);
     }
 

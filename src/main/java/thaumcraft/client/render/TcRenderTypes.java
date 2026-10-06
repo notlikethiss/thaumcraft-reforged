@@ -1,48 +1,67 @@
 package thaumcraft.client.render;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderSetup;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
-import thaumcraft.client.fx.ModRenderPipelines;
 
-public final class TcRenderTypes {
+public final class TcRenderTypes extends RenderType {
+    private static final ShaderStateShard PARTICLE_SHADER = new ShaderStateShard(GameRenderer::getParticleShader);
     private static final Map<ResourceLocation, RenderType> ADDITIVE = new HashMap<>();
     private static final Map<ResourceLocation, RenderType> TRANSLUCENT = new HashMap<>();
     private static final RenderType TUNNEL = RenderType.create(
         "thaumcraft_tunnel",
-        RenderSetup.builder(RenderPipelines.END_PORTAL)
-            .withTexture("Sampler0", Thaumcraft.id("textures/misc/tunnel.png"))
-            .withTexture("Sampler1", Thaumcraft.id("textures/misc/particlefield.png"))
-            .createRenderSetup()
+        DefaultVertexFormat.POSITION,
+        VertexFormat.Mode.QUADS,
+        1536,
+        false,
+        false,
+        RenderType.CompositeState.builder()
+            .setShaderState(RENDERTYPE_END_PORTAL_SHADER)
+            .setTextureState(
+                MultiTextureStateShard.builder()
+                    .add(Thaumcraft.id("textures/misc/tunnel.png"), false, false)
+                    .add(Thaumcraft.id("textures/misc/particlefield.png"), false, false)
+                    .build()
+            )
+            .createCompositeState(false)
     );
 
-    private TcRenderTypes() {
+    private TcRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload,
+                          Runnable setupState, Runnable clearState) {
+        super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
+    }
+
+    private static RenderType particleLike(String name, ResourceLocation texture, TransparencyStateShard transparency) {
+        return RenderType.create(
+            name,
+            DefaultVertexFormat.PARTICLE,
+            VertexFormat.Mode.QUADS,
+            1536,
+            false,
+            true,
+            RenderType.CompositeState.builder()
+                .setShaderState(PARTICLE_SHADER)
+                .setTextureState(new TextureStateShard(texture, false, false))
+                .setTransparencyState(transparency)
+                .setLightmapState(LIGHTMAP)
+                .setCullState(NO_CULL)
+                .setDepthTestState(LEQUAL_DEPTH_TEST)
+                .setWriteMaskState(COLOR_WRITE)
+                .createCompositeState(false)
+        );
     }
 
     public static RenderType additive(ResourceLocation texture) {
-        return ADDITIVE.computeIfAbsent(texture, key -> RenderType.create(
-            "thaumcraft_additive",
-            RenderSetup.builder(ModRenderPipelines.ADDITIVE_PARTICLE)
-                .setOitPipelines(RenderPipelines.OIT_PARTICLE)
-                .withTexture("Sampler0", key)
-                .useLightmap()
-                .createRenderSetup()
-        ));
+        return ADDITIVE.computeIfAbsent(texture, key -> particleLike("thaumcraft_additive", key, LIGHTNING_TRANSPARENCY));
     }
 
     public static RenderType translucent(ResourceLocation texture) {
-        return TRANSLUCENT.computeIfAbsent(texture, key -> RenderType.create(
-            "thaumcraft_translucent",
-            RenderSetup.builder(ModRenderPipelines.TRANSLUCENT_PARTICLE)
-                .setOitPipelines(RenderPipelines.OIT_PARTICLE)
-                .withTexture("Sampler0", key)
-                .useLightmap()
-                .createRenderSetup()
-        ));
+        return TRANSLUCENT.computeIfAbsent(texture, key -> particleLike("thaumcraft_translucent", key, TRANSLUCENT_TRANSPARENCY));
     }
 
     public static RenderType tunnel() {

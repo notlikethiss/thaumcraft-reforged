@@ -1,8 +1,10 @@
 package thaumcraft.client.fx;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.client.renderer.LightTexture;
 
 public abstract class TcParticle extends SingleQuadParticle {
     protected float u0;
@@ -11,7 +13,7 @@ public abstract class TcParticle extends SingleQuadParticle {
     protected float v1 = 1.0F;
 
     protected TcParticle(ClientLevel level, double x, double y, double z) {
-        super(level, x, y, z, null);
+        super(level, x, y, z);
         this.gravity = 0.0F;
         this.xd = 0.0;
         this.yd = 0.0;
@@ -47,8 +49,17 @@ public abstract class TcParticle extends SingleQuadParticle {
     }
 
     @Override
-    protected int getLightCoords(float partialTick) {
-        return LightCoordsUtil.FULL_BRIGHT;
+    protected int getLightColor(float partialTick) {
+        return LightTexture.FULL_BRIGHT;
+    }
+
+    protected void prepareRender() {
+    }
+
+    @Override
+    public void render(VertexConsumer buffer, Camera camera, float partialTick) {
+        prepareRender();
+        super.render(buffer, camera, partialTick);
     }
 
     public void setGravity(float gravity) {

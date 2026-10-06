@@ -2,7 +2,7 @@ package thaumcraft.client.fx;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -78,7 +78,7 @@ public class WispParticle extends TcParticle {
     }
 
     @Override
-    protected SingleQuadParticle.Layer getLayer() {
+    public ParticleRenderType getRenderType() {
         return TcParticleLayers.byBlend(TcParticleLayers.P_LARGE, blendMode);
     }
 

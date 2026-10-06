@@ -3,27 +3,26 @@ package thaumcraft.client.fx.bolt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
-import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.TcParticleLayers;
 import thaumcraft.client.render.TcRenderTypes;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class BoltRenderer {
-    private static final ContextKey<Frame> DATA_KEY = new ContextKey<>(Thaumcraft.id("lightning_bolts"));
     private static final float[][] OUTER_COLORS = {
         {0.6F, 0.3F, 0.6F},
         {0.6F, 0.6F, 0.1F},
@@ -70,49 +69,38 @@ public final class BoltRenderer {
     }
 
     @SubscribeEvent
-    static void onExtract(ExtractLevelRenderStateEvent event) {
-        if (BOLTS.isEmpty()) {
+    static void onRender(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || BOLTS.isEmpty()) {
             return;
         }
-        List<Snapshot> snapshots = new ArrayList<>(BOLTS.size());
-        for (LightningBolt bolt : BOLTS) {
-            snapshots.add(new Snapshot(bolt, bolt.particleAge));
-        }
-        event.getRenderState().setRenderData(DATA_KEY, new Frame(snapshots, event.getDeltaTracker().getGameTimeDeltaPartialTick(false)));
-    }
-
-    @SubscribeEvent
-    static void onSubmit(SubmitCustomGeometryEvent event) {
-        Frame frame = event.getLevelRenderState().getRenderData(DATA_KEY);
-        if (frame == null) {
-            return;
-        }
-        CameraRenderState camera = event.getLevelRenderState().cameraRenderState;
-        Vec3 look = Vec3.directionFromRotation(camera.xRot, camera.yRot);
+        Camera camera = event.getCamera();
+        Vec3 cameraPos = camera.getPosition();
+        Vec3 look = Vec3.directionFromRotation(camera.getXRot(), camera.getYRot());
         BoltVector viewVector = new BoltVector(look.x, look.y, look.z);
-        PoseStack poseStack = event.getPoseStack();
-        SubmitNodeCollector collector = event.getSubmitNodeCollector();
-        for (Snapshot snapshot : frame.bolts()) {
-            LightningBolt bolt = snapshot.bolt();
-            if (camera.pos.distanceTo(new Vec3(bolt.start.x, bolt.start.y, bolt.start.z)) > VISIBLE_DISTANCE) {
+        float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+        PoseStack.Pose pose = event.getPoseStack().last();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        Set<RenderType> used = new LinkedHashSet<>();
+        for (LightningBolt bolt : List.copyOf(BOLTS)) {
+            if (cameraPos.distanceTo(new Vec3(bolt.start.x, bolt.start.y, bolt.start.z)) > VISIBLE_DISTANCE) {
                 continue;
             }
             int type = Math.clamp(bolt.type, 0, OUTER_COLORS.length - 1);
             boolean translucent = type == 5 || type == 6;
-            submitPass(collector, poseStack, renderType(TcParticleLayers.P_LARGE, translucent), bolt, snapshot.age(), frame.partialTick(), camera.pos,
-                viewVector, OUTER_COLORS[type], 0);
-            submitPass(collector, poseStack, renderType(TcParticleLayers.P_SMALL, translucent), bolt, snapshot.age(), frame.partialTick(), camera.pos,
-                viewVector, INNER_COLORS[type], 1);
+            RenderType outer = renderType(TcParticleLayers.P_LARGE, translucent);
+            used.add(outer);
+            renderBolt(pose, bufferSource.getBuffer(outer), bolt, bolt.particleAge, partialTick, cameraPos, viewVector, OUTER_COLORS[type], 0);
+            RenderType inner = renderType(TcParticleLayers.P_SMALL, translucent);
+            used.add(inner);
+            renderBolt(pose, bufferSource.getBuffer(inner), bolt, bolt.particleAge, partialTick, cameraPos, viewVector, INNER_COLORS[type], 1);
+        }
+        for (RenderType renderType : used) {
+            bufferSource.endBatch(renderType);
         }
     }
 
     private static RenderType renderType(ResourceLocation texture, boolean translucent) {
         return translucent ? TcRenderTypes.translucent(texture) : TcRenderTypes.additive(texture);
-    }
-
-    private static void submitPass(SubmitNodeCollector collector, PoseStack poseStack, RenderType renderType, LightningBolt bolt, int age, float partialTick,
-                                   Vec3 cameraPos, BoltVector viewVector, float[] color, int pass) {
-        collector.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> renderBolt(pose, buffer, bolt, age, partialTick, cameraPos, viewVector, color, pass));
     }
 
     private static void renderBolt(PoseStack.Pose pose, VertexConsumer buffer, LightningBolt bolt, int age, float partialTick, Vec3 cameraPos,
@@ -170,11 +158,5 @@ public final class BoltRenderer {
 
     private static void vertex(PoseStack.Pose pose, VertexConsumer buffer, float x, float y, float z, float u, float v, float[] color, float alpha) {
         buffer.addVertex(pose, x, y, z).setUv(u, v).setColor(color[0], color[1], color[2], alpha).setLight(FULL_BRIGHT);
-    }
-
-    private record Snapshot(LightningBolt bolt, int age) {
-    }
-
-    private record Frame(List<Snapshot> bolts, float partialTick) {
     }
 }

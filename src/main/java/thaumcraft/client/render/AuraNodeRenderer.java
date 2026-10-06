@@ -3,15 +3,18 @@ package thaumcraft.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -20,8 +23,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
-import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import javax.annotation.Nullable;
@@ -32,7 +34,6 @@ import thaumcraft.registry.ModItems;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class AuraNodeRenderer {
-    private static final ContextKey<List<Quad>> DATA_KEY = new ContextKey<>(Thaumcraft.id("aura_nodes"));
     private static final ResourceLocation AURA_1 = Thaumcraft.id("textures/misc/aura_1.png");
     private static final ResourceLocation AURA_2 = Thaumcraft.id("textures/misc/aura_2.png");
     private static final ResourceLocation AURA_3 = Thaumcraft.id("textures/misc/aura_3.png");
@@ -68,7 +69,7 @@ public final class AuraNodeRenderer {
             previousDimension = level.dimension();
         }
         Player player = minecraft.player;
-        if (minecraft.gui.screen() != null || !hasGoggles(player)) {
+        if (minecraft.screen != null || !hasGoggles(player)) {
             return;
         }
         RandomSource random = level.getRandom();
@@ -101,14 +102,17 @@ public final class AuraNodeRenderer {
     }
 
     @SubscribeEvent
-    static void onExtract(ExtractLevelRenderStateEvent event) {
-        Minecraft minecraft = Minecraft.getInstance();
-        Player player = minecraft.player;
-        if (!hasGoggles(player)) {
+    static void onRender(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
             return;
         }
-        ClientLevel level = event.getLevel();
-        float partialTick = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
+        ClientLevel level = minecraft.level;
+        if (level == null || !hasGoggles(player)) {
+            return;
+        }
+        float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
         long time = level.getGameTime();
         List<Quad> quads = new ArrayList<>();
         int limit = 0;
@@ -138,8 +142,20 @@ public final class AuraNodeRenderer {
                 quads.add(new Quad(LOCK, false, x, y, z, 0.0F, base * 3.5F));
             }
         }
-        if (!quads.isEmpty()) {
-            event.getRenderState().setRenderData(DATA_KEY, quads);
+        if (quads.isEmpty()) {
+            return;
+        }
+        Camera camera = event.getCamera();
+        PoseStack.Pose pose = event.getPoseStack().last();
+        MultiBufferSource.BufferSource bufferSource = minecraft.renderBuffers().bufferSource();
+        Set<RenderType> used = new LinkedHashSet<>();
+        for (Quad quad : quads) {
+            RenderType renderType = quad.translucent() ? TcRenderTypes.translucent(quad.texture()) : TcRenderTypes.additive(quad.texture());
+            used.add(renderType);
+            facingQuad(pose, bufferSource.getBuffer(renderType), camera, quad.x(), quad.y(), quad.z(), quad.angle(), quad.scale(), 0xFFFFFFFF);
+        }
+        for (RenderType renderType : used) {
+            bufferSource.endBatch(renderType);
         }
     }
 
@@ -147,27 +163,10 @@ public final class AuraNodeRenderer {
         return new Quad(texture, translucent, x, y, z, time % 90L / -90.0F * TAU, Mth.sin((time + x) / 10.0F) * base / 4.0F + base * 1.75F);
     }
 
-    @SubscribeEvent
-    static void onSubmit(SubmitCustomGeometryEvent event) {
-        List<Quad> quads = event.getLevelRenderState().getRenderData(DATA_KEY);
-        if (quads == null) {
-            return;
-        }
-        CameraRenderState camera = event.getLevelRenderState().cameraRenderState;
-        PoseStack poseStack = event.getPoseStack();
-        for (Quad quad : quads) {
-            event.getSubmitNodeCollector().submitCustomGeometry(
-                poseStack,
-                quad.translucent() ? TcRenderTypes.translucent(quad.texture()) : TcRenderTypes.additive(quad.texture()),
-                (pose, buffer) -> facingQuad(pose, buffer, camera, quad.x(), quad.y(), quad.z(), quad.angle(), quad.scale(), 0xFFFFFFFF)
-            );
-        }
-    }
-
-    public static void facingQuad(PoseStack.Pose pose, VertexConsumer buffer, CameraRenderState camera, float x, float y, float z, float angle, float scale,
+    public static void facingQuad(PoseStack.Pose pose, VertexConsumer buffer, Camera camera, float x, float y, float z, float angle, float scale,
                                   int color) {
-        float yaw = camera.yRot * Mth.DEG_TO_RAD;
-        float pitch = camera.xRot * Mth.DEG_TO_RAD;
+        float yaw = camera.getYRot() * Mth.DEG_TO_RAD;
+        float pitch = camera.getXRot() * Mth.DEG_TO_RAD;
         float arX = Mth.cos(yaw);
         float arZ = Mth.sin(yaw);
         float arYZ = -arZ * Mth.sin(pitch);
@@ -179,7 +178,7 @@ public final class AuraNodeRenderer {
             new Vector3f(arX * scale + arYZ * scale, arXZ * scale, arZ * scale + arXY * scale),
             new Vector3f(arX * scale - arYZ * scale, -arXZ * scale, arZ * scale - arXY * scale)
         };
-        Vec3 cameraPos = camera.pos;
+        Vec3 cameraPos = camera.getPosition();
         if (angle != 0.0F) {
             Vector3f axis = new Vector3f((float) (cameraPos.x - x), (float) (cameraPos.y - y), (float) (cameraPos.z - z)).normalize();
             Quaternionf rotation = new Quaternionf().rotateAxis(angle, axis);

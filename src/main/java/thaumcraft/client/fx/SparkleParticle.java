@@ -2,7 +2,7 @@ package thaumcraft.client.fx;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -63,11 +63,15 @@ public class SparkleParticle extends TcParticle {
     }
 
     @Override
-    protected SingleQuadParticle.Layer getLayer() {
+    protected void prepareRender() {
         int part = particle + this.age / multiplier;
         float u0 = part % 8 / 8.0F;
         float v0 = part / 8 / 8.0F;
         setUv(u0, u0 + 0.124875F, v0, v0 + 0.124875F);
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
         return TcParticleLayers.byBlend(TcParticleLayers.PARTICLES, blendMode);
     }
 
