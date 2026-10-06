@@ -1,7 +1,7 @@
 package thaumcraft.client.research;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
@@ -10,7 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
@@ -21,7 +21,7 @@ public final class ClientRecipes {
     }
 
     public static @Nullable RecipeHolder<?> get(String id) {
-        return recipes.byKey(ResourceKey.create(Registries.RECIPE, Identifier.parse(id)));
+        return recipes.byKey(ResourceKey.create(Registries.RECIPE, ResourceLocation.parse(id)));
     }
 
     @SubscribeEvent

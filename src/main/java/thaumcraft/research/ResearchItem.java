@@ -2,9 +2,9 @@ package thaumcraft.research;
 
 import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 
@@ -47,7 +47,7 @@ public class ResearchItem {
         if (iconItem == null) {
             return ItemStack.EMPTY;
         }
-        return BuiltInRegistries.ITEM.getOptional(Identifier.parse(iconItem)).map(ItemStack::new).orElse(ItemStack.EMPTY);
+        return BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(iconItem)).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
     public ResearchItem setSpecial() {

@@ -3,7 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.GolemUtils;
 import thaumcraft.entity.golem.GolemWorker;
 import thaumcraft.entity.golem.MultiColorGolem;

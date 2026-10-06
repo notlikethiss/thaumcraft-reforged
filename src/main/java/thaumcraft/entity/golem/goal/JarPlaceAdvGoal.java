@@ -3,7 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.EnumSet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.blockentity.JarBlockEntity;
 import thaumcraft.entity.golem.DecantingGolem;

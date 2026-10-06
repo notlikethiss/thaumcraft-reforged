@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -24,7 +24,7 @@ import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
 import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.client.fx.ClientFx;
@@ -33,13 +33,13 @@ import thaumcraft.registry.ModItems;
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class AuraNodeRenderer {
     private static final ContextKey<List<Quad>> DATA_KEY = new ContextKey<>(Thaumcraft.id("aura_nodes"));
-    private static final Identifier AURA_1 = Thaumcraft.id("textures/misc/aura_1.png");
-    private static final Identifier AURA_2 = Thaumcraft.id("textures/misc/aura_2.png");
-    private static final Identifier AURA_3 = Thaumcraft.id("textures/misc/aura_3.png");
-    private static final Identifier PURE = Thaumcraft.id("textures/misc/pure.png");
-    private static final Identifier VORTEX = Thaumcraft.id("textures/misc/vortex.png");
-    private static final Identifier CHAOS = Thaumcraft.id("textures/misc/chaos.png");
-    private static final Identifier LOCK = Thaumcraft.id("textures/misc/aura_lock.png");
+    private static final ResourceLocation AURA_1 = Thaumcraft.id("textures/misc/aura_1.png");
+    private static final ResourceLocation AURA_2 = Thaumcraft.id("textures/misc/aura_2.png");
+    private static final ResourceLocation AURA_3 = Thaumcraft.id("textures/misc/aura_3.png");
+    private static final ResourceLocation PURE = Thaumcraft.id("textures/misc/pure.png");
+    private static final ResourceLocation VORTEX = Thaumcraft.id("textures/misc/vortex.png");
+    private static final ResourceLocation CHAOS = Thaumcraft.id("textures/misc/chaos.png");
+    private static final ResourceLocation LOCK = Thaumcraft.id("textures/misc/aura_lock.png");
     private static final float TAU = (float) (Math.PI * 2);
     private static final int MAX_NODES = 10;
     private static @Nullable ResourceKey<Level> previousDimension;
@@ -143,7 +143,7 @@ public final class AuraNodeRenderer {
         }
     }
 
-    private static Quad typeQuad(Identifier texture, boolean translucent, float x, float y, float z, long time, float base) {
+    private static Quad typeQuad(ResourceLocation texture, boolean translucent, float x, float y, float z, long time, float base) {
         return new Quad(texture, translucent, x, y, z, time % 90L / -90.0F * TAU, Mth.sin((time + x) / 10.0F) * base / 4.0F + base * 1.75F);
     }
 
@@ -199,6 +199,6 @@ public final class AuraNodeRenderer {
         }
     }
 
-    private record Quad(Identifier texture, boolean translucent, float x, float y, float z, float angle, float scale) {
+    private record Quad(ResourceLocation texture, boolean translucent, float x, float y, float z, float angle, float scale) {
     }
 }

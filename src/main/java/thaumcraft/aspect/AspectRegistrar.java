@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
@@ -71,13 +71,13 @@ public abstract class AspectRegistrar {
     private static List<Item> resolve(String target) {
         List<Item> items = new ArrayList<>();
         if (target.startsWith("#")) {
-            TagKey<Item> tag = TagKey.create(Registries.ITEM, Identifier.parse(target.substring(1)));
+            TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(target.substring(1)));
             for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
                 items.add(holder.value());
             }
             return items;
         }
-        Identifier id = Identifier.parse(target);
+        ResourceLocation id = ResourceLocation.parse(target);
         BuiltInRegistries.ITEM.getOptional(id).ifPresentOrElse(
             items::add,
             () -> Thaumcraft.LOGGER.debug("Aspect target {} is not registered", target)

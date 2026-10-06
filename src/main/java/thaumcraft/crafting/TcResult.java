@@ -1,10 +1,10 @@
 package thaumcraft.crafting;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.golem.GolemPlacerItem;
@@ -23,11 +23,11 @@ public record TcResult(String id, int count, @Nullable Aspect aspect, int core) 
     }
 
     public boolean isResolvable() {
-        return BuiltInRegistries.ITEM.getOptional(Identifier.parse(id)).isPresent();
+        return BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(id)).isPresent();
     }
 
     public @Nullable Item item() {
-        return BuiltInRegistries.ITEM.getOptional(Identifier.parse(id)).orElse(null);
+        return BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(id)).orElse(null);
     }
 
     public ItemStack create() {

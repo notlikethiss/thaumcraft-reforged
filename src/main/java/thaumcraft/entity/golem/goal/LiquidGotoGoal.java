@@ -1,7 +1,7 @@
 package thaumcraft.entity.golem.goal;
 
 import net.minecraft.core.BlockPos;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.DecantingGolem;
 
 public class LiquidGotoGoal extends GolemMoveGoal {

@@ -26,15 +26,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.monster.FireBat;
 import thaumcraft.fx.Fx;
 import thaumcraft.registry.ModEntities;
@@ -114,7 +114,7 @@ public class FrostShard extends Projectile {
     }
 
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         return false;
     }
 
@@ -253,7 +253,7 @@ public class FrostShard extends Projectile {
         int amount = Mth.ceil(speed * this.damage);
         Entity owner = this.getOwner();
         DamageSource source = this.damageSources().thrown(this, owner == null ? this : owner);
-        if (target.hurtServer(level, source, amount)) {
+        if (target.hurt(source, amount)) {
             if (target instanceof LivingEntity living) {
                 if (this.knockbackStrength > 0) {
                     double horizontal = motion.horizontalDistance();

@@ -3,11 +3,11 @@ package thaumcraft.client.fx;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class ScorchParticle extends TcParticle {
-    private static final Identifier FLAME = Identifier.withDefaultNamespace("textures/particle/flame.png");
+    private static final ResourceLocation FLAME = ResourceLocation.withDefaultNamespace("textures/particle/flame.png");
 
     private final double targetX;
     private final double targetY;

@@ -16,7 +16,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.block.device.ArcaneDoorBlock;
 import thaumcraft.block.device.ArcanePressurePlateBlock;
 import thaumcraft.blockentity.OwnedBlockEntity;

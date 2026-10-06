@@ -27,7 +27,7 @@ public final class Utils {
     }
 
     public static int getFirstUncoveredBlockHeight(Level level, int x, int z) {
-        int y = Math.max(10, level.getMinY());
+        int y = Math.max(10, level.getMinBuildHeight());
         while (y < level.getMaxY() && !level.isEmptyBlock(new BlockPos(x, y + 1, z))) {
             y++;
         }
@@ -115,7 +115,7 @@ public final class Utils {
     }
 
     public static boolean consumeInventoryItem(Player player, Predicate<ItemStack> matcher) {
-        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+        for (ItemStack stack : player.getInventory().items) {
             if (!stack.isEmpty() && matcher.test(stack)) {
                 stack.shrink(1);
                 return true;

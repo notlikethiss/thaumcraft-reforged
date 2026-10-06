@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +13,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.TcRenderTypes;
 
 public class BeamFx extends WorldFx {
-    private static final Identifier[] TEXTURES = {
+    private static final ResourceLocation[] TEXTURES = {
         Thaumcraft.id("textures/misc/beam.png"),
         Thaumcraft.id("textures/misc/beam1.png"),
         Thaumcraft.id("textures/misc/beam2.png")

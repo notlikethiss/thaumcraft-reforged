@@ -48,7 +48,7 @@ public class MirrorItem extends BlockItem {
     }
 
     public static Component linkText(String key, GlobalPos link) {
-        return Component.translatable(key, link.pos().getX(), link.pos().getY(), link.pos().getZ(), link.dimension().identifier().toString());
+        return Component.translatable(key, link.pos().getX(), link.pos().getY(), link.pos().getZ(), link.dimension().location().toString());
     }
 
     @Override

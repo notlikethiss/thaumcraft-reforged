@@ -3,10 +3,10 @@ package thaumcraft.client.color;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.EssenceItem;
 
@@ -16,7 +16,7 @@ public record EssenceTint() implements ItemTintSource {
     @Override
     public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
         Aspect aspect = EssenceItem.getAspect(stack);
-        return aspect == null ? -1 : ARGB.opaque(aspect.color);
+        return aspect == null ? -1 : FastColor.ARGB32.opaque(aspect.color);
     }
 
     @Override

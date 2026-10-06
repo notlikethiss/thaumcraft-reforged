@@ -12,13 +12,13 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.gui.TcFonts;
 import thaumcraft.research.PlayerKnowledge;
@@ -27,9 +27,9 @@ import thaumcraft.research.ResearchList;
 import thaumcraft.research.ResearchManager;
 
 public class ResearchBookScreen extends Screen {
-    private static final Identifier BACKGROUND = Thaumcraft.id("textures/gui/gui_researchback.png");
-    private static final Identifier FRAME = Thaumcraft.id("textures/gui/gui_research.png");
-    private static final Identifier ICONS = Thaumcraft.id("textures/misc/ss_research.png");
+    private static final ResourceLocation BACKGROUND = Thaumcraft.id("textures/gui/gui_researchback.png");
+    private static final ResourceLocation FRAME = Thaumcraft.id("textures/gui/gui_research.png");
+    private static final ResourceLocation ICONS = Thaumcraft.id("textures/misc/ss_research.png");
     private static final int PANE_WIDTH = 256;
     private static final int PANE_HEIGHT = 230;
 
@@ -254,7 +254,7 @@ public class ResearchBookScreen extends Screen {
                     brightness = 0.3F;
                 }
             }
-            int frameColor = ARGB.colorFromFloat(1.0F, brightness, brightness, brightness);
+            int frameColor = FastColor.ARGB32.colorFromFloat(1.0F, brightness, brightness, brightness);
             int x = originX + dx;
             int y = originY + dy;
             float frameU = item.getStub() ? 54.0F : item.getLost() ? 86.0F : 0.0F;
@@ -271,7 +271,7 @@ public class ResearchBookScreen extends Screen {
                 }
             } else if (item.iconIndex >= 0) {
                 float iconBrightness = unlockable ? brightness : 0.1F;
-                int iconColor = ARGB.colorFromFloat(1.0F, iconBrightness, iconBrightness, iconBrightness);
+                int iconColor = FastColor.ARGB32.colorFromFloat(1.0F, iconBrightness, iconBrightness, iconBrightness);
                 graphics.blit(
                     RenderPipelines.GUI_TEXTURED,
                     ICONS,

@@ -19,12 +19,12 @@ public class TravelPavingStoneBlock extends Block {
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         if (entity instanceof LivingEntity living) {
             int strength = 0;
-            MobEffectInstance speed = living.getEffect(MobEffects.SPEED);
+            MobEffectInstance speed = living.getEffect(MobEffects.MOVEMENT_SPEED);
             if (speed != null) {
                 strength = Math.min(3, speed.getAmplifier() + 1);
             }
-            living.addEffect(new MobEffectInstance(MobEffects.SPEED, 20, strength));
-            living.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20, strength));
+            living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, strength));
+            living.addEffect(new MobEffectInstance(MobEffects.JUMP, 20, strength));
             if (level.isClientSide()) {
                 Fx.get().blockSparkle(level, pos.getX(), pos.getY(), pos.getZ(), 3, 5);
             }

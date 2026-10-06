@@ -4,10 +4,10 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.MagicWorkbenchBlockEntity;
 import thaumcraft.crafting.ThaumcraftRecipes;
 import thaumcraft.crafting.WorkbenchRecipe;
@@ -20,9 +20,9 @@ public abstract class MagicWorkbenchScreen<T extends MagicWorkbenchMenu> extends
     private static final int COST_COLOR = 0xFFEEEEEE;
     private static final int CHARGE_COLOR = 0xFFFFFFFF;
 
-    private final Identifier texture;
+    private final ResourceLocation texture;
 
-    protected MagicWorkbenchScreen(T menu, Inventory inventory, Component title, Identifier texture, int imageHeight) {
+    protected MagicWorkbenchScreen(T menu, Inventory inventory, Component title, ResourceLocation texture, int imageHeight) {
         super(menu, inventory, title, 176, imageHeight);
         this.texture = texture;
     }

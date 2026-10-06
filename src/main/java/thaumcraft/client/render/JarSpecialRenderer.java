@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.JarBlockEntity;
 import thaumcraft.item.FilledJarItem;
 import thaumcraft.item.JarContents;

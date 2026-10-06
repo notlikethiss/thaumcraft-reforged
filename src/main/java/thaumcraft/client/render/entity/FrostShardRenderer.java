@@ -11,14 +11,14 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.model.TcModelLayers;
 import thaumcraft.entity.projectile.FrostShard;
 
 public class FrostShardRenderer extends EntityRenderer<FrostShard, FrostShardRenderState> {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/model/frostshard.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/model/frostshard.png");
     private final ModelPart crystal;
 
     public FrostShardRenderer(EntityRendererProvider.Context context) {
@@ -45,15 +45,15 @@ public class FrostShardRenderer extends EntityRenderer<FrostShard, FrostShardRen
     public void submit(FrostShardRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         Random random = new Random(state.seed);
         float alpha = Math.min(1.0F, (200.0F - state.ticksInGround) / 150.0F);
-        int color = ARGB.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F);
+        int color = FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F);
         RenderType renderType = RenderTypes.entityTranslucent(TEXTURE);
         poseStack.pushPose();
         poseStack.translate(0.0F, -0.1F - state.ticksInGround / 200.0F * 0.2F, 0.0F);
-        poseStack.rotateDegrees(Axis.YP, state.yRot);
-        poseStack.rotateDegrees(Axis.ZP, state.xRot);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
         for (int index = 0; index < 2; index++) {
             if (index == 1) {
-                poseStack.rotateDegrees(Axis.YP, 45.0F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
             }
             poseStack.pushPose();
             poseStack.scale(0.1F + random.nextFloat() * 0.1F, 0.1F + random.nextFloat() * 0.1F, 0.1F + random.nextFloat() * 0.1F);

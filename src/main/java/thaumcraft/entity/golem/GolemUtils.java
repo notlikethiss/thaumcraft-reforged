@@ -25,7 +25,7 @@ import net.minecraft.world.level.material.Fluids;
 import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.JarBlockEntity;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Config;
 import thaumcraft.crafting.ConfigRecipes;
 import thaumcraft.registry.ModBlocks;

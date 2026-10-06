@@ -16,7 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -28,10 +28,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Config;
 
 public class FireBat extends Monster {
@@ -206,9 +206,9 @@ public class FireBat extends Monster {
         LivingEntity target = this.getTarget();
         if (target == null) {
             if (this.isSummoned()) {
-                this.hurtServer(level, this.damageSources().generic(), 2.0F);
+                this.hurt(this.damageSources().generic(), 2.0F);
             }
-            if (this.flightTarget != null && (!level.isEmptyBlock(this.flightTarget) || this.flightTarget.getY() < level.getMinY() + 1)) {
+            if (this.flightTarget != null && (!level.isEmptyBlock(this.flightTarget) || this.flightTarget.getY() < level.getMinBuildHeight() + 1)) {
                 this.flightTarget = null;
             }
             if (this.flightTarget == null || this.random.nextInt(30) == 0 || this.flightTarget.distSqr(pos) < 4.0) {
@@ -282,7 +282,7 @@ public class FireBat extends Monster {
     }
 
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         if (this.isInvulnerableTo(level, source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION)) {
             return false;
         }
@@ -292,7 +292,7 @@ public class FireBat extends Monster {
         if (source.getEntity() instanceof LivingEntity attacker && attacker != this) {
             this.setTarget(attacker);
         }
-        return super.hurtServer(level, source, damage);
+        return super.hurt(source, damage);
     }
 
     @Override
@@ -315,11 +315,11 @@ public class FireBat extends Monster {
     public static boolean checkFireBatSpawnRules(
         EntityType<? extends Monster> type,
         ServerLevelAccessor level,
-        EntitySpawnReason spawnReason,
+        MobSpawnType spawnReason,
         BlockPos pos,
         RandomSource random
     ) {
-        if (spawnReason == EntitySpawnReason.NATURAL && !Config.SPAWN_FIRE_BATS.getAsBoolean()) {
+        if (spawnReason == MobSpawnType.NATURAL && !Config.SPAWN_FIRE_BATS.getAsBoolean()) {
             return false;
         }
         if (level.getBrightness(LightLayer.BLOCK, pos) > random.nextInt(7)) {

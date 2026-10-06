@@ -3,7 +3,7 @@ package thaumcraft.block.device;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -32,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.block.WandTarget;
 import thaumcraft.blockentity.CrucibleBlockEntity;
@@ -41,8 +41,8 @@ import thaumcraft.item.wand.WandManager;
 import thaumcraft.registry.ModBlockEntities;
 
 public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
-    private static final Identifier TALLOW_GOLEM = Identifier.fromNamespaceAndPath("thaumcraft", "tallow_golem");
-    private static final Identifier ADVANCED_TALLOW_GOLEM = Identifier.fromNamespaceAndPath("thaumcraft", "decanting_golem");
+    private static final ResourceLocation TALLOW_GOLEM = ResourceLocation.fromNamespaceAndPath("thaumcraft", "tallow_golem");
+    private static final ResourceLocation ADVANCED_TALLOW_GOLEM = ResourceLocation.fromNamespaceAndPath("thaumcraft", "decanting_golem");
     private static final VoxelShape COLLISION = Shapes.or(
         Block.box(0.0, 0.0, 0.0, 16.0, 5.0, 16.0),
         Block.box(0.0, 0.0, 0.0, 2.0, 13.6, 16.0),
@@ -94,7 +94,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
             return;
         }
         if (entity instanceof LivingEntity && !isTallowGolem(entity) && crucible.isBoiling()) {
-            entity.hurtServer(serverLevel, level.damageSources().magic(), 1.0F);
+            entity.hurt(level.damageSources().magic(), 1.0F);
             RandomSource random = level.getRandom();
             level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 0.4F, 2.0F + random.nextFloat() * 0.4F);
             if (random.nextInt(25) == 0) {
@@ -104,7 +104,7 @@ public class CrucibleBlock extends Block implements EntityBlock, WandTarget {
     }
 
     private static boolean isTallowGolem(Entity entity) {
-        Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
         return TALLOW_GOLEM.equals(id) || ADVANCED_TALLOW_GOLEM.equals(id);
     }
 

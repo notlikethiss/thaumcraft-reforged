@@ -3,7 +3,7 @@ package thaumcraft.entity.golem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 final class ClayLogic {
     private ClayLogic() {

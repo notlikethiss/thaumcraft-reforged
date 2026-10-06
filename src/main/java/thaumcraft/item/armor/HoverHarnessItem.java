@@ -18,7 +18,7 @@ public class HoverHarnessItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             ItemStack stack = player.getItemInHand(hand);
-            int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().getSelectedSlot() : -1;
+            int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : -1;
             player.openMenu(
                 new SimpleMenuProvider((id, inventory, opener) -> new HoverHarnessMenu(id, inventory, hand, slot), stack.getHoverName()),
                 buffer -> buffer.writeVarInt(slot)

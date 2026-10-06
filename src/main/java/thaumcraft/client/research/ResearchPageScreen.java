@@ -11,8 +11,8 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextMap;
@@ -23,7 +23,7 @@ import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
 import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Config;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
@@ -40,8 +40,8 @@ import thaumcraft.research.ResearchItem;
 import thaumcraft.research.ResearchList;
 
 public class ResearchPageScreen extends Screen {
-    private static final Identifier BOOK = Thaumcraft.id("textures/gui/gui_researchbook.png");
-    private static final Identifier OVERLAY = Thaumcraft.id("textures/gui/gui_researchbook_overlay.png");
+    private static final ResourceLocation BOOK = Thaumcraft.id("textures/gui/gui_researchbook.png");
+    private static final ResourceLocation OVERLAY = Thaumcraft.id("textures/gui/gui_researchbook_overlay.png");
     private static final int PANE_WIDTH = 256;
     private static final int PANE_HEIGHT = 181;
     private static final int TITLE_COLOR = 0xFF505050;
@@ -135,7 +135,7 @@ public class ResearchPageScreen extends Screen {
         graphics.pose().pushMatrix();
         graphics.pose().translate(x + 6.0F, y + 4.0F);
         graphics.pose().scale(1.0F + scale, 1.0F + scale);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, -6, -4, u, 184.0F, 12, 8, 256, 256, ARGB.white(Mth.clamp(alpha, 0.0F, 1.0F)));
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, -6, -4, u, 184.0F, 12, 8, 256, 256, FastColor.ARGB32.white(Mth.clamp(alpha, 0.0F, 1.0F)));
         graphics.pose().popMatrix();
     }
 

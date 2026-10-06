@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -29,8 +29,8 @@ public class FireWandItem extends ElementalWandItem {
     }
 
     @Override
-    public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.BOW;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class FireWandItem extends ElementalWandItem {
             }
             if (player.hasLineOfSight(target) && !target.fireImmune() && (!(target instanceof Player) || level.isPvpAllowed())) {
                 target.igniteForSeconds(4 + potency);
-                target.hurtServer(level, source, 2 + potency);
+                target.hurt(source, 2 + potency);
             }
         }
     }

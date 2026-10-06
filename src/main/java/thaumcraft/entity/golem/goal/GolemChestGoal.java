@@ -3,7 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.GolemUtils;
 import thaumcraft.entity.golem.GolemWorker;
 

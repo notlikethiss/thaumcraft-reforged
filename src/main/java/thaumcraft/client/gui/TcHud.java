@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
@@ -58,12 +58,12 @@ public final class TcHud {
         int height = graphics.guiHeight();
         int level = Math.round(Hover.getFuel(armor) / 64.0F * 48.0F);
         if (level > 0) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 6, height / 2 + 24 - level, 224.0F, (float) (48 - level), 8, level, 256, 256, ARGB.colorFromFloat(1.0F, 0.0F, 1.0F, 0.75F));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 6, height / 2 + 24 - level, 224.0F, (float) (48 - level), 8, level, 256, 256, FastColor.ARGB32.colorFromFloat(1.0F, 0.0F, 1.0F, 0.75F));
         }
         blit(graphics, 5, height / 2 - 28, 240, 0, 10, 56);
         if (Hover.isHovering(armor)) {
             int frame = (int) (Util.getMillis() % 700L) / 50;
-            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 2, height / 2 - 43, 16.0F * frame, 32.0F, 16, 16, 256, 256, ARGB.white(0.66F));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, AspectRenderer.PARTICLES, 2, height / 2 - 43, 16.0F * frame, 32.0F, 16, 16, 256, 256, FastColor.ARGB32.white(0.66F));
         }
         graphics.item(armor, 2, height / 2 - 43);
     }
@@ -168,12 +168,12 @@ public final class TcHud {
 
     private static void renderEqualTrade(GuiGraphicsExtractor graphics, Minecraft minecraft, Player player, ItemStack picked) {
         int amount = 0;
-        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+        for (ItemStack stack : player.getInventory().items) {
             if (ItemStack.isSameItemSameComponents(stack, picked)) {
                 amount += stack.getCount();
             }
         }
-        int slot = player.getInventory().getSelectedSlot() * 20;
+        int slot = player.getInventory().selected * 20;
         int shift = player.isCreative() ? 0 : 20;
         int width = graphics.guiWidth();
         int height = graphics.guiHeight();

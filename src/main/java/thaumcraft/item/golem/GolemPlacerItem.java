@@ -9,7 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +26,7 @@ import thaumcraft.blockentity.MagicWorkbenchBlockEntity;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.golem.GolemInventories;
 import thaumcraft.entity.golem.GolemKind;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.registry.ModDataComponents;
 
 public class GolemPlacerItem extends Item {
@@ -122,7 +122,7 @@ public class GolemPlacerItem extends Item {
     }
 
     private boolean spawnGolem(ServerLevel level, double x, double y, double z, Direction side, ItemStack stack, Player player) {
-        if (!(kind.entityType().create(level, EntitySpawnReason.SPAWN_ITEM_USE) instanceof GolemBase golem)) {
+        if (!(kind.entityType().create(level, MobSpawnType.SPAWN_EGG) instanceof GolemBase golem)) {
             return false;
         }
         golem.snapTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);

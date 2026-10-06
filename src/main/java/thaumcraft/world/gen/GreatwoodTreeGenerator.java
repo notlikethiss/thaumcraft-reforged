@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -49,7 +49,7 @@ public class GreatwoodTreeGenerator extends MagicalTreeGenerator {
         if (!(level.getBlockEntity(spawnerPos) instanceof SpawnerBlockEntity spawner)) {
             return;
         }
-        spawner.setEntityId(EntityTypes.CAVE_SPIDER, level.getRandom());
+        spawner.setEntityId(EntityType.CAVE_SPIDER, level.getRandom());
         for (int i = 0; i < 50; i++) {
             BlockPos web = new BlockPos(
                 pos.getX() - 7 + random.nextInt(14),

@@ -7,16 +7,16 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.TcRenderTypes;
 import thaumcraft.entity.monster.Wisp;
 
 public class WispRenderer extends EntityRenderer<Wisp, WispRenderState> {
-    private static final Identifier WISP = Thaumcraft.id("textures/misc/wisp.png");
+    private static final ResourceLocation WISP = Thaumcraft.id("textures/misc/wisp.png");
     private static final int FULL_BRIGHT = 0xF000F0;
-    private static final Identifier PARTICLES = Thaumcraft.id("textures/misc/particles.png");
+    private static final ResourceLocation PARTICLES = Thaumcraft.id("textures/misc/particles.png");
 
     public WispRenderer(EntityRendererProvider.Context context) {
         super(context);

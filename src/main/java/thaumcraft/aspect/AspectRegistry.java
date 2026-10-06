@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public final class AspectRegistry {
     private static final int HISTORY_LIMIT = 100;

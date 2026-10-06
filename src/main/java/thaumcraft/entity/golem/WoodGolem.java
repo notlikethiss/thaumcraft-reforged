@@ -4,7 +4,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.goal.HomePlaceGoal;
 import thaumcraft.entity.golem.goal.ItemEntityGotoGoal;
 import thaumcraft.entity.golem.goal.ItemEntityPickupGoal;

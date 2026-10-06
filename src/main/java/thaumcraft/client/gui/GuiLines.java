@@ -3,7 +3,7 @@ package thaumcraft.client.gui;
 import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import thaumcraft.client.fx.ModRenderPipelines;
 
@@ -41,7 +41,7 @@ public final class GuiLines {
         float red = Mth.sin((count + x2) / 10.0F) * 0.15F + 0.15F;
         float green = Mth.sin((count + x + y2) / 11.0F) * 0.15F + 0.15F;
         float blue = Mth.sin((count + y) / 12.0F) * 0.15F + 0.15F;
-        int color = ARGB.colorFromFloat(opacity, red, green, blue);
+        int color = FastColor.ARGB32.colorFromFloat(opacity, red, green, blue);
         int dx = Math.abs(x2 - x);
         int dy = -Math.abs(y2 - y);
         int sx = x < x2 ? 1 : -1;

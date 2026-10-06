@@ -7,7 +7,7 @@ import java.util.Map;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.pools.LegacySinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -37,14 +37,14 @@ public final class VillageTowers {
         Registry<StructureTemplatePool> pools = event.getServer().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL);
         Registry<StructureProcessorList> processorLists = event.getServer().registryAccess().lookupOrThrow(Registries.PROCESSOR_LIST);
         BIOMES.forEach((biome, processorName) -> {
-            StructureTemplatePool pool = pools.getValueOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, Identifier.withDefaultNamespace("village/" + biome + "/houses")));
+            StructureTemplatePool pool = pools.getValueOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, ResourceLocation.withDefaultNamespace("village/" + biome + "/houses")));
             String location = Thaumcraft.MODID + ":village/" + biome + "/wizard_tower";
             for (Pair<StructurePoolElement, Integer> entry : pool.rawTemplates) {
                 if (entry.getFirst() instanceof LegacySinglePoolElement single && single.toString().contains(location)) {
                     return;
                 }
             }
-            Holder<StructureProcessorList> processors = processorLists.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, Identifier.withDefaultNamespace(processorName)));
+            Holder<StructureProcessorList> processors = processorLists.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, ResourceLocation.withDefaultNamespace(processorName)));
             StructurePoolElement element = StructurePoolElement.legacy(location, processors).apply(StructureTemplatePool.Projection.RIGID);
             List<Pair<StructurePoolElement, Integer>> raw = new ArrayList<>(pool.rawTemplates);
             raw.add(Pair.of(element, WEIGHT));

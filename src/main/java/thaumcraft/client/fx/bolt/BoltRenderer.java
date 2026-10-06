@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -106,7 +106,7 @@ public final class BoltRenderer {
         }
     }
 
-    private static RenderType renderType(Identifier texture, boolean translucent) {
+    private static RenderType renderType(ResourceLocation texture, boolean translucent) {
         return translucent ? TcRenderTypes.translucent(texture) : TcRenderTypes.additive(texture);
     }
 

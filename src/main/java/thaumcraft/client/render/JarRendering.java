@@ -9,15 +9,15 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.model.TcModelLayers;
 
 public final class JarRendering {
-    private static final Identifier JAR_TEXTURE = Thaumcraft.id("textures/model/jar.png");
-    private static final Identifier BRINE_TEXTURE = Thaumcraft.id("textures/model/jarbrine.png");
-    private static final Identifier BRAIN_TEXTURE = Thaumcraft.id("textures/model/brain2.png");
+    private static final ResourceLocation JAR_TEXTURE = Thaumcraft.id("textures/model/jar.png");
+    private static final ResourceLocation BRINE_TEXTURE = Thaumcraft.id("textures/model/jarbrine.png");
+    private static final ResourceLocation BRAIN_TEXTURE = Thaumcraft.id("textures/model/brain2.png");
 
     private JarRendering() {
     }
@@ -44,14 +44,14 @@ public final class JarRendering {
         float wobble = Math.max(Math.abs(wobbleX), Math.abs(wobbleZ)) / 150.0F;
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.01F + wobble, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
-        poseStack.rotateDegrees(Axis.ZP, wobbleX);
-        poseStack.rotateDegrees(Axis.XP, wobbleZ);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(wobbleX));
+        poseStack.mulPose(Axis.XP.rotationDegrees(wobbleZ));
         if (brain) {
             poseStack.pushPose();
             poseStack.translate(0.0F, -0.8F + bob, 0.0F);
             poseStack.rotate(Axis.YP, brainYaw);
-            poseStack.rotateDegrees(Axis.YP, -90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
             poseStack.scale(0.4F, 0.4F, 0.4F);
             collector.order(0).submitModelPart(models.brain(), poseStack, RenderTypes.entityCutout(BRAIN_TEXTURE), light, OverlayTexture.NO_OVERLAY, null);
             poseStack.popPose();
@@ -59,10 +59,10 @@ public final class JarRendering {
         }
         if (fill > 0.0F) {
             poseStack.pushPose();
-            poseStack.rotateDegrees(Axis.XP, 180.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             TextureAtlasSprite sprite = TcRenderUtil.blockSprite(Thaumcraft.id("block/animatedglow"));
             int liquidLight = Math.max(light & 0xFFFF, 0xC8) | (light & 0xFFFF0000);
-            int liquidColor = ARGB.opaque(color);
+            int liquidColor = FastColor.ARGB32.opaque(color);
             collector.order(1).submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (pose, buffer) ->
                 TcRenderUtil.box(pose, buffer, sprite, -0.25F, 0.0625F, -0.25F, 0.25F, 0.0625F + fill, 0.25F, liquidColor, liquidLight)
             );

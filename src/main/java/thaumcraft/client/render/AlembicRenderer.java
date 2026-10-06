@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.AlembicBlockEntity;
 
@@ -40,7 +40,7 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity, 
     ) {
         BlockEntityRenderer.super.extractRenderState(alembic, state, partialTicks, cameraPosition, breakProgress);
         state.level = alembic.getAmount() / (float) AlembicBlockEntity.MAX_AMOUNT * 0.5625F;
-        state.color = ARGB.opaque(alembic.getAspect().color);
+        state.color = FastColor.ARGB32.opaque(alembic.getAspect().color);
     }
 
     @Override

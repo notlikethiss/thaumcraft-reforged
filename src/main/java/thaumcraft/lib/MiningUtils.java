@@ -2,7 +2,7 @@ package thaumcraft.lib;
 
 import java.util.List;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -55,7 +55,7 @@ public final class MiningUtils {
         }
 
         private static TagKey<Item> tag(String path) {
-            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", path));
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
         }
     }
 }

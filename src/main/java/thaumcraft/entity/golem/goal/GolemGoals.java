@@ -3,7 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.golem.GolemUtils;
 

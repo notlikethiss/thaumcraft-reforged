@@ -4,15 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 
 public final class AspectRenderer {
-    public static final Identifier TAGS = Thaumcraft.id("textures/misc/ss_tags_1.png");
-    public static final Identifier TAGS_BW = Thaumcraft.id("textures/misc/ss_tags_2.png");
-    public static final Identifier PARTICLES = Thaumcraft.id("textures/misc/particles.png");
+    public static final ResourceLocation TAGS = Thaumcraft.id("textures/misc/ss_tags_1.png");
+    public static final ResourceLocation TAGS_BW = Thaumcraft.id("textures/misc/ss_tags_2.png");
+    public static final ResourceLocation PARTICLES = Thaumcraft.id("textures/misc/particles.png");
 
     private AspectRenderer() {
     }
@@ -44,7 +44,7 @@ public final class AspectRenderer {
         int u = aspect.id % 8 * 32;
         int v = aspect.id / 8 * 32;
         float alpha = blackAndWhite ? Math.min(opacity, 0.8F) : opacity;
-        int color = ARGB.color(Math.round(alpha * 255), aspect.color);
+        int color = FastColor.ARGB32.color(Math.round(alpha * 255), aspect.color);
         graphics.blit(RenderPipelines.GUI_TEXTURED, blackAndWhite ? TAGS_BW : TAGS, sx, sy, u, v, 32, 32, 256, 256, color);
         if (amount > 1) {
             drawOutlined(graphics, font, String.valueOf(amount), 33 - font.width(String.valueOf(amount)) + sx, 33 - font.lineHeight + sy);

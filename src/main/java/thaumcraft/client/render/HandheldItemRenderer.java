@@ -17,8 +17,8 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -45,8 +45,8 @@ public final class HandheldItemRenderer {
     private static final RenderType PARCHMENT = RenderTypes.text(Thaumcraft.id("textures/misc/parchment.png"));
     private static final RenderType TAGS = RenderTypes.text(AspectRenderer.TAGS_BW);
     private static final RenderType ITEMS = RenderTypes.text(TextureAtlas.LOCATION_ITEMS);
-    private static final Identifier RING = Thaumcraft.id("item/thaumometerring");
-    private static final Identifier CORE = Thaumcraft.id("item/thaumometercore");
+    private static final ResourceLocation RING = Thaumcraft.id("item/thaumometerring");
+    private static final ResourceLocation CORE = Thaumcraft.id("item/thaumometercore");
     private static final int TEXT_COLOR = 0xFF685E4A;
 
     private static float angleH;
@@ -79,20 +79,20 @@ public final class HandheldItemRenderer {
         poseStack.translate(0.0F, -ySwing / 2.0F, zSwing);
         float tilt = mapTilt(event.getInterpolatedPitch());
         poseStack.translate(0.0F, 0.04F + event.getEquipProgress() * -1.2F + tilt * -0.5F, -0.72F);
-        poseStack.rotateDegrees(Axis.XP, tilt * -85.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(tilt * -85.0F));
         PlayerRenderState playerState = event.getPlayerState();
         AvatarRenderState avatar = playerState.avatarRenderState;
         if (avatar != null && !avatar.isInvisible) {
             poseStack.pushPose();
-            poseStack.rotateDegrees(Axis.YP, 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             renderMapHand(minecraft, poseStack, collector, light, HumanoidArm.RIGHT, avatar);
             renderMapHand(minecraft, poseStack, collector, light, HumanoidArm.LEFT, avatar);
             poseStack.popPose();
         }
-        poseStack.rotateDegrees(Axis.XP, Mth.sin(sqrtAttack * Mth.PI) * 20.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(sqrtAttack * Mth.PI) * 20.0F));
         poseStack.scale(2.0F, 2.0F, 2.0F);
-        poseStack.rotateDegrees(Axis.YP, 180.0F);
-        poseStack.rotateDegrees(Axis.ZP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         poseStack.scale(0.38F, 0.38F, 0.38F);
         poseStack.translate(-0.5F, -0.5F, 0.0F);
         if (thaumometer) {
@@ -111,12 +111,12 @@ public final class HandheldItemRenderer {
     private static void renderMapHand(Minecraft minecraft, PoseStack poseStack, SubmitNodeCollector collector, int light, HumanoidArm arm, AvatarRenderState avatar) {
         poseStack.pushPose();
         float invert = arm == HumanoidArm.RIGHT ? 1.0F : -1.0F;
-        poseStack.rotateDegrees(Axis.YP, 92.0F);
-        poseStack.rotateDegrees(Axis.XP, 45.0F);
-        poseStack.rotateDegrees(Axis.ZP, invert * -41.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(92.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(45.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(invert * -41.0F));
         poseStack.translate(invert * 0.3F, -1.1F, 0.45F);
         AvatarRenderer<?> renderer = (AvatarRenderer<?>) minecraft.getEntityRenderDispatcher().getRenderer(avatar);
-        Identifier skin = avatar.skin.body().texturePath();
+        ResourceLocation skin = avatar.skin.body().texturePath();
         if (arm == HumanoidArm.RIGHT) {
             renderer.renderRightHand(poseStack, collector, light, skin, avatar.showRightSleeve);
         } else {
@@ -196,8 +196,8 @@ public final class HandheldItemRenderer {
         poseStack.translate(0.1F, 0.1F, 0.0F);
         poseStack.scale(0.8F, 0.8F, 0.8F);
         poseStack.translate(0.5F, 0.5F + bob, 0.0F);
-        poseStack.rotateDegrees(Axis.ZP, angleH);
-        poseStack.rotateDegrees(Axis.XP, angleV);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(angleH));
+        poseStack.mulPose(Axis.XP.rotationDegrees(angleV));
         poseStack.translate(-0.5F, -0.5F, 0.0F);
         quad(poseStack, collector, ITEMS, 0.0F, 0.0F, 1.0F, 1.0F, -0.01F, core.getU0(), core.getV0(), core.getU1(), core.getV1(), -1, light);
         poseStack.popPose();
@@ -235,7 +235,7 @@ public final class HandheldItemRenderer {
             float y = 28.0F + index / 4 * 13;
             float u0 = icon.getId() % 8 / 8.0F;
             float v0 = icon.getId() / 8 / 8.0F;
-            int color = tagProgress >= 0.3F ? ARGB.color(150, tag.color) : -1;
+            int color = tagProgress >= 0.3F ? FastColor.ARGB32.color(150, tag.color) : -1;
             poseStack.pushPose();
             poseStack.translate(x, y, -0.02F);
             poseStack.scale(6.0F, 6.0F, 3.0F);

@@ -1,7 +1,7 @@
 package thaumcraft.item.wand;
 
 import net.minecraft.core.BlockPos;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class ExcavationState {
     public @Nullable BlockPos target;

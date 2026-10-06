@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.MagicWorkbenchBlockEntity;
 
 public class WorkbenchWandRenderer<T extends MagicWorkbenchBlockEntity> implements BlockEntityRenderer<T, WorkbenchWandRenderer.State> {
@@ -52,10 +52,10 @@ public class WorkbenchWandRenderer<T extends MagicWorkbenchBlockEntity> implemen
             float bob = (float) Math.sin(state.time / 14.0F) * 0.03F + 0.03F;
             float weave = (float) Math.sin(state.time / 10.0F) * 0.5F + 0.5F;
             poseStack.translate(1.0F, 1.1F + bob, 1.0F);
-            poseStack.rotateDegrees(Axis.XP, 85.0F + weave * 10.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(85.0F + weave * 10.0F));
         } else {
             poseStack.translate(0.5F, 1.02F, 0.5F);
-            poseStack.rotateDegrees(Axis.XP, 90.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         }
         poseStack.scale(1.5F, 1.5F, 1.5F);
         state.wand.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);

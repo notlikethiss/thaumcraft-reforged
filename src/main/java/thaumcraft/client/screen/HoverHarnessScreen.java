@@ -4,13 +4,13 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.menu.HoverHarnessMenu;
 
 public class HoverHarnessScreen extends AbstractContainerScreen<HoverHarnessMenu> {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/gui/guihoverharness.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/gui/guihoverharness.png");
 
     public HoverHarnessScreen(HoverHarnessMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title, 176, 166);

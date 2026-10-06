@@ -1,6 +1,6 @@
 package thaumcraft.aspect;
 
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public interface EssentiaContainer extends AspectSource {
     @Nullable Aspect getContainedAspect();

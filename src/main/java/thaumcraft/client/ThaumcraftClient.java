@@ -9,7 +9,7 @@ import net.neoforged.fml.common.Mod;
 import java.util.List;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.color.block.BlockTintSources;
-import net.minecraft.util.ARGB;
+import net.minecraft.util.FastColor;
 import thaumcraft.crafting.ConfigRecipes;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -146,7 +146,7 @@ public final class ThaumcraftClient {
     }
 
     private static BlockTintSource tint(int color) {
-        return BlockTintSources.constant(ARGB.opaque(color));
+        return BlockTintSources.constant(FastColor.ARGB32.opaque(color));
     }
 
     @SubscribeEvent

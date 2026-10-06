@@ -1,7 +1,7 @@
 package thaumcraft.entity.golem;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
@@ -31,7 +31,7 @@ public enum GolemKind {
         return id;
     }
 
-    public Identifier texture() {
+    public ResourceLocation texture() {
         return Thaumcraft.id("textures/model/" + texture + ".png");
     }
 

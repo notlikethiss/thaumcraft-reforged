@@ -7,14 +7,14 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.blockentity.ResearchTableBlockEntity;
@@ -28,8 +28,8 @@ import thaumcraft.research.ResearchManager;
 import thaumcraft.research.ResearchNoteData;
 
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/gui/guiresearchtable.png");
-    private static final Identifier PARCHMENT = Thaumcraft.id("textures/misc/parchment.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/gui/guiresearchtable.png");
+    private static final ResourceLocation PARCHMENT = Thaumcraft.id("textures/misc/parchment.png");
 
     private final List<int[]> coords = new ArrayList<>();
     private final List<Aspect> diagramTags = new ArrayList<>();

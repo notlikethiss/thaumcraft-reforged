@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.model.FireBatModel;
@@ -12,14 +12,14 @@ import thaumcraft.client.render.model.TcModelLayers;
 import thaumcraft.entity.monster.FireBat;
 
 public class FireBatRenderer extends MobRenderer<FireBat, FireBatRenderState, FireBatModel> {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/model/firebat.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/model/firebat.png");
 
     public FireBatRenderer(EntityRendererProvider.Context context) {
         super(context, new FireBatModel(context.bakeLayer(TcModelLayers.FIRE_BAT)), 0.25F);
     }
 
     @Override
-    public Identifier getTextureLocation(FireBatRenderState state) {
+    public ResourceLocation getTextureLocation(FireBatRenderState state) {
         return TEXTURE;
     }
 

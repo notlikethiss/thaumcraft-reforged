@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.crystal.CrystalColors;
@@ -19,8 +19,8 @@ import thaumcraft.blockentity.CrystalCapacitorBlockEntity;
 import thaumcraft.client.render.model.TcModelLayers;
 
 public final class CrystalRendering {
-    private static final Identifier CRYSTAL_TEXTURE = Thaumcraft.id("textures/model/crystal.png");
-    private static final Identifier CAPACITOR_TEXTURE = Thaumcraft.id("textures/model/crystalcapacitor.png");
+    private static final ResourceLocation CRYSTAL_TEXTURE = Thaumcraft.id("textures/model/crystal.png");
+    private static final ResourceLocation CAPACITOR_TEXTURE = Thaumcraft.id("textures/model/crystalcapacitor.png");
 
     private CrystalRendering() {
     }
@@ -43,7 +43,7 @@ public final class CrystalRendering {
         return 0xFF000000 | red << 16 | green << 8 | blue;
     }
 
-    private static void submitPart(ModelPart part, Identifier texture, PoseStack poseStack, SubmitNodeCollector collector, float shade, int color) {
+    private static void submitPart(ModelPart part, ResourceLocation texture, PoseStack poseStack, SubmitNodeCollector collector, float shade, int color) {
         RenderType renderType = RenderTypes.entityTranslucent(texture);
         collector.submitModelPart(part, poseStack, renderType, (int) (210.0F * shade), OverlayTexture.NO_OVERLAY, null, tint(color));
     }
@@ -60,23 +60,23 @@ public final class CrystalRendering {
         switch (facing) {
             case DOWN -> {
                 poseStack.translate(0.5F, 1.3F, 0.5F);
-                poseStack.rotateDegrees(Axis.XP, 180.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             }
             case NORTH -> {
                 poseStack.translate(0.5F, 0.5F, 1.3F);
-                poseStack.rotateDegrees(Axis.XP, -90.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             }
             case SOUTH -> {
                 poseStack.translate(0.5F, 0.5F, -0.3F);
-                poseStack.rotateDegrees(Axis.XP, 90.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             }
             case WEST -> {
                 poseStack.translate(1.3F, 0.5F, 0.5F);
-                poseStack.rotateDegrees(Axis.ZP, 90.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
             }
             case EAST -> {
                 poseStack.translate(-0.3F, 0.5F, 0.5F);
-                poseStack.rotateDegrees(Axis.ZP, -90.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
             }
             default -> poseStack.translate(0.5F, -0.3F, 0.5F);
         }
@@ -87,8 +87,8 @@ public final class CrystalRendering {
         float shade = Mth.sin((ticks + random.nextInt(10)) / (5.0F + random.nextFloat())) * 0.075F + 0.925F;
         poseStack.pushPose();
         orient(poseStack, facing);
-        poseStack.rotateDegrees(Axis.YP, angle1);
-        poseStack.rotateDegrees(Axis.XP, angle2);
+        poseStack.mulPose(Axis.YP.rotationDegrees(angle1));
+        poseStack.mulPose(Axis.XP.rotationDegrees(angle2));
         scaleCrystal(poseStack, random, size);
         submitPart(models.crystal(), CRYSTAL_TEXTURE, poseStack, collector, shade, color);
         poseStack.popPose();
@@ -127,9 +127,9 @@ public final class CrystalRendering {
             float shade = Mth.sin((ticks + random.nextInt(10)) / (5.0F + random.nextFloat())) * 0.075F + 0.925F;
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F + speed, 0.5F);
-            poseStack.rotateDegrees(Axis.ZP, spin * 2.0F);
-            poseStack.rotateDegrees(Axis.YP, angle1);
-            poseStack.rotateDegrees(Axis.XP, angle2);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(spin * 2.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(angle1));
+            poseStack.mulPose(Axis.XP.rotationDegrees(angle2));
             poseStack.translate(0.0F, -0.1F + speed / 4.0F, 0.0F);
             scaleCrystal(poseStack, random, 0.7F);
             submitPart(models.crystal(), CRYSTAL_TEXTURE, poseStack, collector, shade, CrystalColors.ORE[col]);

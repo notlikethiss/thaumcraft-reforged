@@ -5,12 +5,12 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.model.HungryChestModel;
 
 public final class HungryChestRendering {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/model/chesthungry.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/model/chesthungry.png");
 
     private HungryChestRendering() {
     }
@@ -26,7 +26,7 @@ public final class HungryChestRendering {
             case EAST -> -90.0F;
             default -> 0.0F;
         };
-        poseStack.rotateDegrees(Axis.YP, rotation);
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
         poseStack.translate(-0.5F, -0.5F, -0.5F);
         collector.submitModel(model, openness, poseStack, model.renderType(TEXTURE), light, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();

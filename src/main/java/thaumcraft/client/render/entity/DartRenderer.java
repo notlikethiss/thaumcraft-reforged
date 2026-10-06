@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ArrowRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import thaumcraft.entity.projectile.Dart;
 
 public class DartRenderer extends EntityRenderer<Dart, ArrowRenderState> {
-    private static final Identifier TEXTURE = Identifier.withDefaultNamespace("textures/entity/projectiles/arrow.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/projectiles/arrow.png");
     private static final int TINT = 0xFF7F7F99;
     private final ArrowModel model;
 
@@ -39,8 +39,8 @@ public class DartRenderer extends EntityRenderer<Dart, ArrowRenderState> {
     @Override
     public void submit(ArrowRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.YP, state.yRot - 90.0F);
-        poseStack.rotateDegrees(Axis.ZP, state.xRot);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
         poseStack.scale(0.75F, 1.0F, 1.0F);
         submitNodeCollector.submitModel(
             this.model,

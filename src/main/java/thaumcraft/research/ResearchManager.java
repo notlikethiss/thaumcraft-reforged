@@ -16,7 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.network.ModNetwork;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Config;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
@@ -117,7 +117,7 @@ public final class ResearchManager {
     }
 
     private static boolean consumePaper(Player player) {
-        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+        for (ItemStack stack : player.getInventory().items) {
             if (stack.is(Items.PAPER)) {
                 stack.shrink(1);
                 return true;
@@ -127,7 +127,7 @@ public final class ResearchManager {
     }
 
     public static boolean consumeInk(Player player, boolean doIt) {
-        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+        for (ItemStack stack : player.getInventory().items) {
             if (stack.is(ModItems.SCRIBING_TOOLS.get()) && stack.getDamageValue() < stack.getMaxDamage()) {
                 if (doIt && !player.hasInfiniteMaterials()) {
                     stack.setDamageValue(stack.getDamageValue() + 1);
@@ -139,7 +139,7 @@ public final class ResearchManager {
     }
 
     public static int getResearchSlot(Player player, String key) {
-        List<ItemStack> items = player.getInventory().getNonEquipmentItems();
+        List<ItemStack> items = player.getInventory().items;
         for (int slot = 0; slot < items.size(); slot++) {
             ItemStack stack = items.get(slot);
             if (stack.is(ModItems.RESEARCH_NOTES.get()) && key.equals(getData(stack).key)) {

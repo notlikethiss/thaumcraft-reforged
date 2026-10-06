@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -27,12 +27,12 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.network.ModNetwork;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.fx.Fx;
@@ -108,12 +108,12 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor level, EntitySpawnReason spawnReason) {
+    public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
         return level.getDifficulty() != Difficulty.PEACEFUL;
     }
 
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         if (source.getDirectEntity() instanceof LivingEntity living) {
             this.targetedEntity = living;
             this.aggroCooldown = 200;
@@ -122,7 +122,7 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
             this.targetedEntity = living;
             this.aggroCooldown = 200;
         }
-        return super.hurtServer(level, source, damage);
+        return super.hurt(source, damage);
     }
 
     @Override
@@ -216,10 +216,10 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
         Vec3 motion = target.getDeltaMovement();
         if (Math.abs(motion.x) <= 0.1F && Math.abs(motion.y) <= 0.1F && Math.abs(motion.z) <= 0.1F) {
             if (this.random.nextFloat() < 0.66F) {
-                target.hurtServer(level, this.damageSources().mobAttack(this), 4.0F);
+                target.hurt(this.damageSources().mobAttack(this), 4.0F);
             }
         } else if (this.random.nextFloat() < 0.4F) {
-            target.hurtServer(level, this.damageSources().mobAttack(this), 3.0F);
+            target.hurt(this.damageSources().mobAttack(this), 3.0F);
         }
     }
 

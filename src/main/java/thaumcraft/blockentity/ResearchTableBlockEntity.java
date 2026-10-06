@@ -16,13 +16,13 @@ import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.golem.IronGolem;
-import net.minecraft.world.entity.animal.golem.SnowGolem;
-import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.spider.Spider;
-import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -32,12 +32,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractSkullBlock;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.VegetationBlock;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 import net.minecraft.world.phys.AABB;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Config;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectHelper;
@@ -208,7 +208,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
             bonus(1.0F, Aspect.LIGHT);
         }
         int logicalHeight = level.dimensionType().logicalHeight();
-        int relativeY = worldPosition.getY() - level.getMinY();
+        int relativeY = worldPosition.getY() - level.getMinBuildHeight();
         if (relativeY > logicalHeight * 0.5F) {
             bonus(1.0F, Aspect.WIND);
         }
@@ -232,7 +232,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
             for (int z = -10; z <= 10; z++) {
                 for (int y = -10; y <= 10; y++) {
                     int worldY = worldPosition.getY() + y;
-                    if (worldY > level.getMinY() && worldY < level.getMinY() + logicalHeight) {
+                    if (worldY > level.getMinBuildHeight() && worldY < level.getMinBuildHeight() + logicalHeight) {
                         cursor.set(worldPosition.getX() + x, worldY, worldPosition.getZ() + z);
                         if (serverLevel.isLoaded(cursor)) {
                             blockBonus(level.getBlockState(cursor));
@@ -260,13 +260,13 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
         if (entity.hasEffect(MobEffects.REGENERATION)) {
             bonus(0.5F, Aspect.HEAL);
         }
-        if (entity.hasEffect(MobEffects.RESISTANCE)) {
+        if (entity.hasEffect(MobEffects.DAMAGE_RESISTANCE)) {
             bonus(0.5F, Aspect.ARMOR);
         }
         if (entity.hasEffect(MobEffects.NIGHT_VISION)) {
             bonus(0.5F, Aspect.VISION);
         }
-        if (entity.hasEffect(MobEffects.NAUSEA)) {
+        if (entity.hasEffect(MobEffects.CONFUSION)) {
             bonus(0.5F, Aspect.FLUX);
         }
         if (entity instanceof Spider) {
@@ -297,7 +297,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
     }
 
     private void blockBonus(BlockState state) {
-        String id = state.getBlock().builtInRegistryHolder().key().identifier().toString();
+        String id = state.getBlock().builtInRegistryHolder().key().location().toString();
         if (state.is(Blocks.JUKEBOX)) {
             bonus(0.5F, Aspect.SOUND);
         } else if (state.is(Blocks.BEACON)) {
@@ -379,7 +379,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
             bonus(2.0F, Aspect.ELDRITCH, Aspect.EVIL, Aspect.MAGIC);
         } else if (state.is(BlockTags.ICE)) {
             bonus(0.2F, Aspect.COLD);
-        } else if (state.getBlock() instanceof VegetationBlock) {
+        } else if (state.getBlock() instanceof BushBlock) {
             bonus(0.2F, Aspect.PLANT);
         } else if (state.is(Blocks.REDSTONE_LAMP)) {
             bonus(0.25F, Aspect.LIGHT);

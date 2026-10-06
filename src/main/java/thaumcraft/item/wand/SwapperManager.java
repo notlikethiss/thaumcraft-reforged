@@ -125,7 +125,7 @@ public final class SwapperManager {
     }
 
     private static boolean hasItem(ServerPlayer player, Item item) {
-        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+        for (ItemStack stack : player.getInventory().items) {
             if (!stack.isEmpty() && stack.is(item)) {
                 return true;
             }

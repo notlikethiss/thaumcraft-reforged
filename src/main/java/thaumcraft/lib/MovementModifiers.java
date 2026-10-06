@@ -1,7 +1,7 @@
 package thaumcraft.lib;
 
 import net.minecraft.core.Holder;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -16,7 +16,7 @@ public final class MovementModifiers {
     private MovementModifiers() {
     }
 
-    public static void setAdditive(Player player, Holder<Attribute> attribute, Identifier id, double amount) {
+    public static void setAdditive(Player player, Holder<Attribute> attribute, ResourceLocation id, double amount) {
         AttributeInstance instance = player.getAttribute(attribute);
         if (instance == null) {
             return;

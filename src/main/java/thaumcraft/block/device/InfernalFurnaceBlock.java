@@ -7,8 +7,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,7 +32,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.InfernalFurnaceBlockEntity;
 import thaumcraft.fx.Fx;
 import thaumcraft.registry.ModBlockEntities;
@@ -155,7 +155,7 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
                 item.discard();
             }
         } else if (entity instanceof LivingEntity && !entity.fireImmune()) {
-            entity.hurtServer(serverLevel, level.damageSources().lava(), 3.0F);
+            entity.hurt(level.damageSources().lava(), 3.0F);
             entity.igniteForSeconds(10.0F);
         }
     }
@@ -180,7 +180,7 @@ public class InfernalFurnaceBlock extends Block implements EntityBlock {
     public static void disassemble(ServerLevel level, BlockPos center, @Nullable InfernalFurnaceBlockEntity furnace) {
         disassembling = true;
         try {
-            Blaze blaze = EntityTypes.BLAZE.create(level, EntitySpawnReason.TRIGGERED);
+            Blaze blaze = EntityType.BLAZE.create(level, MobSpawnType.TRIGGERED);
             if (blaze != null) {
                 blaze.snapTo(center.getX() + 0.5, center.getY() + 1.0, center.getZ() + 0.5, 0.0F, 0.0F);
                 level.addFreshEntity(blaze);

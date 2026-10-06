@@ -3,7 +3,7 @@ package thaumcraft.client.render.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
-import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.Zombie;
 import thaumcraft.entity.monster.GiantBrainyZombie;
 
 public class GiantBrainyZombieRenderer extends BrainyZombieRenderer {

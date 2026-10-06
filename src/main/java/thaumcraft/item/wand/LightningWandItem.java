@@ -6,13 +6,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -30,8 +30,8 @@ public class LightningWandItem extends ElementalWandItem {
     }
 
     @Override
-    public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.BOW;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -72,9 +72,9 @@ public class LightningWandItem extends ElementalWandItem {
             ));
         }
         if (pointedEntity != null) {
-            pointedEntity.hurtServer(serverLevel, player.damageSources().playerAttack(player), 3 + potency);
+            pointedEntity.hurt(player.damageSources().playerAttack(player), 3 + potency);
             if (serverLevel.getRandom().nextInt(16 - Math.min(15, potency * 2)) == 0) {
-                LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(serverLevel, EntitySpawnReason.TRIGGERED);
+                LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(serverLevel, MobSpawnType.TRIGGERED);
                 if (bolt != null) {
                     bolt.setVisualOnly(true);
                     bolt.snapTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ());
@@ -109,7 +109,7 @@ public class LightningWandItem extends ElementalWandItem {
     @Override
     public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (target.level() instanceof ServerLevel serverLevel && attacker instanceof Player player) {
-            target.hurtServer(serverLevel, player.damageSources().playerAttack(player), 4.0F);
+            target.hurt(player.damageSources().playerAttack(player), 4.0F);
             damageWand(stack, player, InteractionHand.MAIN_HAND, 1);
             serverLevel.playSound(null, target.getX(), target.getY(), target.getZ(), ModSounds.SHOCK.value(), SoundSource.PLAYERS, 0.25F, 1.0F);
         }

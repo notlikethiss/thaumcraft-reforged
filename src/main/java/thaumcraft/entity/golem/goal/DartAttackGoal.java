@@ -3,7 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.EnumSet;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.entity.golem.IronGuardianGolem;
 
 public class DartAttackGoal extends Goal {

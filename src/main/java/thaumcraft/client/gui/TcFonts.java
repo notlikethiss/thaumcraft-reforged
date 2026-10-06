@@ -4,12 +4,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public final class TcFonts {
-    private static final FontDescription GALACTIC = new FontDescription.Resource(Identifier.withDefaultNamespace("alt"));
+    private static final FontDescription GALACTIC = new FontDescription.Resource(ResourceLocation.withDefaultNamespace("alt"));
     private static final Style GALACTIC_STYLE = Style.EMPTY.withFont(GALACTIC);
-    private static final Style UNIFORM_STYLE = Style.EMPTY.withFont(new FontDescription.Resource(Identifier.withDefaultNamespace("uniform")));
+    private static final Style UNIFORM_STYLE = Style.EMPTY.withFont(new FontDescription.Resource(ResourceLocation.withDefaultNamespace("uniform")));
 
     private TcFonts() {
     }

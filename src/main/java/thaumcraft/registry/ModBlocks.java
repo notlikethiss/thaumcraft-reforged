@@ -104,7 +104,7 @@ public final class ModBlocks {
     public static final DeferredBlock<NitorBlock> NITOR = BLOCKS.registerBlock(
         "nitor",
         NitorBlock::new,
-        properties -> properties.noCollision().instabreak().sound(SoundType.WOOL).lightLevel(state -> 15).pushReaction(PushReaction.POPPED)
+        properties -> properties.noCollision().instabreak().sound(SoundType.WOOL).lightLevel(state -> 15).pushReaction(PushReaction.DESTROY)
     );
 
     public static final DeferredBlock<CrucibleBlock> CRUCIBLE = BLOCKS.registerBlock("crucible", CrucibleBlock::new, ModBlocks::metalDevice);
@@ -113,7 +113,7 @@ public final class ModBlocks {
     public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = BLOCKS.registerBlock(
         "research_table",
         ResearchTableBlock::new,
-        properties -> table(properties).pushReaction(PushReaction.IMMOVEABLE)
+        properties -> table(properties).pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = BLOCKS.registerBlock("arcane_worktable", ArcaneWorktableBlock::new, ModBlocks::table);
     public static final DeferredBlock<ArcaneStoneBlock> ARCANE_STONE = BLOCKS.registerBlock(
@@ -129,7 +129,7 @@ public final class ModBlocks {
         ConfigRecipes.DYE_COLORS,
         "_warded_stone",
         WardedBlock::new,
-        properties -> stone(properties).strength(10.0F, 599.0F).pushReaction(PushReaction.IMMOVEABLE).overrideDescription("block.thaumcraft.warded_stone")
+        properties -> stone(properties).strength(10.0F, 599.0F).pushReaction(PushReaction.BLOCK).overrideDescription("block.thaumcraft.warded_stone")
     );
     public static final DeferredBlock<WardedGlassBlock> WARDED_GLASS = BLOCKS.registerBlock(
         "warded_glass",
@@ -140,7 +140,7 @@ public final class ModBlocks {
             .strength(5.0F, 999.0F)
             .sound(SoundType.STONE)
             .noOcclusion()
-            .pushReaction(PushReaction.IMMOVEABLE)
+            .pushReaction(PushReaction.BLOCK)
             .isValidSpawn((state, level, pos, entity) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
@@ -156,7 +156,7 @@ public final class ModBlocks {
             .strength(0.1F)
             .sound(SoundType.WOOL)
             .lightLevel(state -> 14)
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
     );
     public static final Map<String, DeferredBlock<Block>> MARKERS = colored(
         ConfigRecipes.WOOL_COLORS,
@@ -169,7 +169,7 @@ public final class ModBlocks {
     public static final DeferredBlock<BellowsBlock> ARCANE_BELLOWS = BLOCKS.registerBlock(
         "arcane_bellows",
         BellowsBlock::new,
-        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.POPPED)
+        properties -> properties.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5F, 6.0F).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.DESTROY)
     );
     public static final DeferredBlock<InfernalFurnaceBlock> INFERNAL_FURNACE = BLOCKS.registerBlock(
         "infernal_furnace",
@@ -180,7 +180,7 @@ public final class ModBlocks {
             .requiresCorrectToolForDrops()
             .strength(10.0F, 599.0F)
             .lightLevel(InfernalFurnaceBlock::lightLevel)
-            .pushReaction(PushReaction.IMMOVEABLE)
+            .pushReaction(PushReaction.BLOCK)
             .noLootTable()
     );
     public static final DeferredBlock<ArcaneEarBlock> ARCANE_EAR = BLOCKS.registerBlock(
@@ -197,12 +197,12 @@ public final class ModBlocks {
             .noCollision()
             .strength(2.0F, 999.0F)
             .sound(SoundType.WOOD)
-            .pushReaction(PushReaction.IMMOVEABLE)
+            .pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<ArcaneDoorBlock> ARCANE_DOOR = BLOCKS.registerBlock(
         "arcane_door",
         ArcaneDoorBlock::new,
-        properties -> properties.mapColor(MapColor.METAL).strength(15.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.METAL).strength(15.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<LevitatorBlock> ARCANE_LEVITATOR = BLOCKS.registerBlock(
         "arcane_levitator",
@@ -238,7 +238,7 @@ public final class ModBlocks {
             .noCollision()
             .noOcclusion()
             .noLootTable()
-            .pushReaction(PushReaction.IMMOVEABLE)
+            .pushReaction(PushReaction.BLOCK)
             .isValidSpawn((state, level, pos, entity) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
@@ -351,7 +351,7 @@ public final class ModBlocks {
             .sound(SoundType.GRASS)
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor((state, level, pos) -> false);
     }
 
@@ -363,7 +363,7 @@ public final class ModBlocks {
             .randomTicks()
             .sound(SoundType.GRASS)
             .offsetType(BlockBehaviour.OffsetType.NONE)
-            .pushReaction(PushReaction.POPPED);
+            .pushReaction(PushReaction.DESTROY);
     }
 
     public static void register(IEventBus bus) {

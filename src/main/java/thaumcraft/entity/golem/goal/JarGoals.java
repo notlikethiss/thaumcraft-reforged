@@ -2,7 +2,7 @@ package thaumcraft.entity.golem.goal;
 
 import java.util.function.BiPredicate;
 import net.minecraft.core.BlockPos;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.JarBlockEntity;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.golem.GolemUtils;

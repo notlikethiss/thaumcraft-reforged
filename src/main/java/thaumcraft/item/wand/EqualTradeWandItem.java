@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.registry.ModDataComponents;
 
@@ -54,7 +54,7 @@ public class EqualTradeWandItem extends ElementalWandItem {
             return InteractionResult.PASS;
         }
         if (level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
-            SwapperManager.addSwapper(serverLevel, pos, clicked, picked, 3 + getPotency(level, stack), serverPlayer, serverPlayer.getInventory().getSelectedSlot());
+            SwapperManager.addSwapper(serverLevel, pos, clicked, picked, 3 + getPotency(level, stack), serverPlayer, serverPlayer.getInventory().selected);
         }
         return InteractionResult.SUCCESS;
     }
@@ -76,6 +76,6 @@ public class EqualTradeWandItem extends ElementalWandItem {
         if (picked == null || level.getBlockEntity(event.getPos()) != null) {
             return;
         }
-        SwapperManager.addSwapper(level, event.getPos(), level.getBlockState(event.getPos()), picked, 0, serverPlayer, serverPlayer.getInventory().getSelectedSlot());
+        SwapperManager.addSwapper(level, event.getPos(), level.getBlockState(event.getPos()), picked, 0, serverPlayer, serverPlayer.getInventory().selected);
     }
 }

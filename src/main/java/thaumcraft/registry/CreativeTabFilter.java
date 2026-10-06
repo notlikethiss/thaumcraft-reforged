@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -26,7 +26,7 @@ public final class CreativeTabFilter {
     }
 
     public static boolean visible(Item item, CreativeModeTab.ItemDisplayParameters parameters) {
-        String path = item.builtInRegistryHolder().key().identifier().getPath();
+        String path = item.builtInRegistryHolder().key().location().getPath();
         if (HIDDEN.contains(path)) {
             return false;
         }
@@ -40,7 +40,7 @@ public final class CreativeTabFilter {
         if (metal == null) {
             return true;
         }
-        TagKey<Item> ingots = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "ingots/" + metal));
+        TagKey<Item> ingots = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/" + metal));
         return parameters.holders()
             .lookup(Registries.ITEM)
             .flatMap(lookup -> lookup.get(ingots))

@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.model.TcModelLayers;
 
 public final class BellowsRendering {
-    private static final Identifier TEXTURE = Thaumcraft.id("textures/model/bellows.png");
+    private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/model/bellows.png");
 
     private BellowsRendering() {
     }
@@ -37,7 +37,7 @@ public final class BellowsRendering {
             case EAST -> 90.0F;
             default -> 0.0F;
         };
-        poseStack.rotateDegrees(Axis.YP, rotation);
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
         poseStack.translate(0.0F, 1.0F, 0.0F);
         poseStack.pushPose();
         poseStack.scale(0.5F, (inflation + 0.1F) / 2.0F, 0.5F);

@@ -19,9 +19,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +35,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.phys.AABB;
 import thaumcraft.network.ModNetwork;
 import org.joml.Vector3f;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
@@ -503,13 +502,13 @@ public final class AuraManager {
                 case POWER, DESTRUCTION -> spawnLightning(level, node);
                 case POISON, INSECT -> poisonCreature(level, node, MobEffects.POISON);
                 case DARK, VOID -> poisonCreature(level, node, MobEffects.BLINDNESS);
-                case ARMOR -> poisonCreature(level, node, MobEffects.RESISTANCE);
-                case MOTION -> poisonCreature(level, node, MobEffects.SPEED);
-                case FLIGHT -> poisonCreature(level, node, MobEffects.JUMP_BOOST);
-                case TOOL -> poisonCreature(level, node, MobEffects.HASTE);
-                case ROCK -> poisonCreature(level, node, MobEffects.MINING_FATIGUE);
-                case COLD -> poisonCreature(level, node, MobEffects.SLOWNESS);
-                case SOUND, KNOWLEDGE, FUNGUS -> poisonCreature(level, node, MobEffects.NAUSEA);
+                case ARMOR -> poisonCreature(level, node, MobEffects.DAMAGE_RESISTANCE);
+                case MOTION -> poisonCreature(level, node, MobEffects.MOVEMENT_SPEED);
+                case FLIGHT -> poisonCreature(level, node, MobEffects.JUMP);
+                case TOOL -> poisonCreature(level, node, MobEffects.DIG_SPEED);
+                case ROCK -> poisonCreature(level, node, MobEffects.DIG_SLOWDOWN);
+                case COLD -> poisonCreature(level, node, MobEffects.MOVEMENT_SLOWDOWN);
+                case SOUND, KNOWLEDGE, FUNGUS -> poisonCreature(level, node, MobEffects.CONFUSION);
                 case EVIL -> spawnEvil(level, node);
                 case FIRE -> spawnFire(level, node);
                 case CROP, PLANT, WOOD -> promoteGrowth(level, node);
@@ -573,7 +572,7 @@ public final class AuraManager {
                     new NodeZapPayload(new Vector3f((float) node.x, (float) node.y, (float) node.z), entity.getId())
                 );
                 level.playSound(null, node.x, node.y, node.z, ModSounds.ZAP.get(), SoundSource.AMBIENT, 1.0F, 1.1F);
-                entity.hurtServer(level, level.damageSources().magic(), 5);
+                entity.hurt(level.damageSources().magic(), 5);
                 return true;
             }
         }
@@ -585,13 +584,13 @@ public final class AuraManager {
         if (type == null) {
             return null;
         }
-        Entity entity = type.create(level, EntitySpawnReason.EVENT);
+        Entity entity = type.create(level, MobSpawnType.EVENT);
         return entity instanceof Mob mob ? mob : null;
     }
 
     private static boolean trySpawn(ServerLevel level, Mob mob, double x, double y, double z) {
         mob.snapTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
-        return mob.checkSpawnRules(level, EntitySpawnReason.EVENT) && level.addFreshEntity(mob);
+        return mob.checkSpawnRules(level, MobSpawnType.EVENT) && level.addFreshEntity(mob);
     }
 
     private static boolean spawnGiant(ServerLevel level, AuraNode node) {
@@ -631,7 +630,7 @@ public final class AuraManager {
         if (bat == null) {
             return false;
         }
-        bat.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 32000, 0));
+        bat.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 32000, 0));
         return trySpawn(level, bat, x, y, z);
     }
 
@@ -650,7 +649,7 @@ public final class AuraManager {
         while (level.isEmptyBlock(BlockPos.containing(x, y - 2, z)) && y > 10.0) {
             y--;
         }
-        zombie.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 32000, 0));
+        zombie.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 32000, 0));
         return trySpawn(level, zombie, x, y, z);
     }
 
@@ -662,7 +661,7 @@ public final class AuraManager {
         if (!Utils.isChunkLoaded(level, x, z)) {
             return false;
         }
-        Mob witch = EntityTypes.WITCH.create(level, EntitySpawnReason.EVENT);
+        Mob witch = EntityType.WITCH.create(level, MobSpawnType.EVENT);
         if (witch == null) {
             return false;
         }

@@ -23,7 +23,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Block;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.registry.ModEnchantments;
 
 public final class AspectHelper {
@@ -73,30 +73,30 @@ public final class AspectHelper {
             Holder<MobEffect> type = effect.getEffect();
             if (type.is(MobEffects.BLINDNESS)) {
                 aspects.merge(Aspect.DARK, level * 3);
-            } else if (type.is(MobEffects.NAUSEA)) {
+            } else if (type.is(MobEffects.CONFUSION)) {
                 aspects.merge(Aspect.ELDRITCH, level * 3);
-            } else if (type.is(MobEffects.STRENGTH)) {
+            } else if (type.is(MobEffects.DAMAGE_BOOST)) {
                 aspects.merge(Aspect.WEAPON, level * 3);
-            } else if (type.is(MobEffects.MINING_FATIGUE)) {
+            } else if (type.is(MobEffects.DIG_SLOWDOWN)) {
                 aspects.merge(Aspect.TRAP, level * 3);
-            } else if (type.is(MobEffects.HASTE)) {
+            } else if (type.is(MobEffects.DIG_SPEED)) {
                 aspects.merge(Aspect.TOOL, level * 3);
             } else if (type.is(MobEffects.FIRE_RESISTANCE)) {
                 aspects.merge(Aspect.ARMOR, level);
                 aspects.merge(Aspect.FIRE, level * 2);
-            } else if (type.is(MobEffects.INSTANT_DAMAGE)) {
+            } else if (type.is(MobEffects.HARM)) {
                 aspects.merge(Aspect.DEATH, level * 3);
-            } else if (type.is(MobEffects.INSTANT_HEALTH)) {
+            } else if (type.is(MobEffects.HEAL)) {
                 aspects.merge(Aspect.HEAL, level * 3);
             } else if (type.is(MobEffects.HUNGER)) {
                 aspects.merge(Aspect.DEATH, level * 3);
             } else if (type.is(MobEffects.INVISIBILITY)) {
                 aspects.merge(Aspect.VISION, level * 3);
-            } else if (type.is(MobEffects.JUMP_BOOST)) {
+            } else if (type.is(MobEffects.JUMP)) {
                 aspects.merge(Aspect.FLIGHT, level * 3);
-            } else if (type.is(MobEffects.SLOWNESS)) {
+            } else if (type.is(MobEffects.MOVEMENT_SLOWDOWN)) {
                 aspects.merge(Aspect.TRAP, level * 3);
-            } else if (type.is(MobEffects.SPEED)) {
+            } else if (type.is(MobEffects.MOVEMENT_SPEED)) {
                 aspects.merge(Aspect.MOTION, level * 3);
             } else if (type.is(MobEffects.NIGHT_VISION)) {
                 aspects.merge(Aspect.VISION, level * 3);
@@ -104,7 +104,7 @@ public final class AspectHelper {
                 aspects.merge(Aspect.POISON, level * 3);
             } else if (type.is(MobEffects.REGENERATION)) {
                 aspects.merge(Aspect.HEAL, level * 3);
-            } else if (type.is(MobEffects.RESISTANCE)) {
+            } else if (type.is(MobEffects.DAMAGE_RESISTANCE)) {
                 aspects.merge(Aspect.ARMOR, level * 3);
             } else if (type.is(MobEffects.WATER_BREATHING)) {
                 aspects.merge(Aspect.WIND, level * 3);

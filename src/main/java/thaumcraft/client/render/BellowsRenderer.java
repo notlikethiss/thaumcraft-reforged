@@ -11,7 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.blockentity.BellowsBlockEntity;
 
 public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity, BellowsRenderer.State> {

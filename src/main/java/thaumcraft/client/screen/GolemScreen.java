@@ -6,8 +6,8 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -38,7 +38,7 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
     private static final int[] TARGET_COLORS = {0xFFFFCCCC, 0xFFFFFFCC, 0xFFCCCCFF, 0xFFCCFFCC};
 
     private final GolemBase golem;
-    private final Identifier texture;
+    private final ResourceLocation texture;
     private final int quote;
 
     public GolemScreen(GolemMenu menu, Inventory inventory, Component title) {
@@ -67,7 +67,7 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
 
     private void swatch(GuiGraphicsExtractor graphics, int x, int y, int color) {
         if (color >= 0 && color < MARKER_COLORS.length) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + x, topPos + y, 200.0F, 0.0F, 6, 6, 256, 256, ARGB.opaque(MARKER_COLORS[color]));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + x, topPos + y, 200.0F, 0.0F, 6, 6, 256, 256, FastColor.ARGB32.opaque(MARKER_COLORS[color]));
         }
     }
 

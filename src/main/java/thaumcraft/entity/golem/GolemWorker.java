@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public abstract class GolemWorker extends GolemBase {
     public ItemStack itemWatched = ItemStack.EMPTY;

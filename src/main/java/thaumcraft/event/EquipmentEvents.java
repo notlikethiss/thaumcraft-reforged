@@ -1,6 +1,6 @@
 package thaumcraft.event;
 
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,8 +24,8 @@ import thaumcraft.registry.ModTags;
 public final class EquipmentEvents {
     private static final EquipmentSlot[] ARMOR_SLOTS = {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD};
 
-    private static final Identifier SPEED_ID = Thaumcraft.id("boots_speed");
-    private static final Identifier STEP_ID = Thaumcraft.id("boots_step");
+    private static final ResourceLocation SPEED_ID = Thaumcraft.id("boots_speed");
+    private static final ResourceLocation STEP_ID = Thaumcraft.id("boots_step");
 
     private EquipmentEvents() {
     }

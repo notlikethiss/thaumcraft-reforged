@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.render.TcRenderUtil;
 
@@ -18,7 +18,7 @@ public final class ObjModel {
         this.faces = faces;
     }
 
-    public static ObjModel load(Identifier location) {
+    public static ObjModel load(ResourceLocation location) {
         List<float[]> positions = new ArrayList<>();
         List<float[]> uvs = new ArrayList<>();
         List<float[]> normals = new ArrayList<>();

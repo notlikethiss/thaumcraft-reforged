@@ -8,7 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.VegetationBlock;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -17,7 +17,7 @@ import thaumcraft.aura.NodeType;
 import thaumcraft.world.gen.GreatwoodTreeGenerator;
 import thaumcraft.world.gen.SilverwoodTreeGenerator;
 
-public class MagicalSaplingBlock extends VegetationBlock {
+public class MagicalSaplingBlock extends BushBlock {
     private static final VoxelShape SHAPE = Block.box(1.6, 0.0, 1.6, 14.4, 12.8, 14.4);
     private final boolean silverwood;
 

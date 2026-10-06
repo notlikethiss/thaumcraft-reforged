@@ -46,7 +46,7 @@ public final class HilltopStonesGenerator {
                 LegacyGen.set(level, x, j, z, rand.nextBoolean() ? tile : Blocks.OBSIDIAN.defaultBlockState());
                 boolean stop = false;
                 for (int y = 1; y < 5; y++) {
-                    if (j - y < level.getMinY()) {
+                    if (j - y < level.getMinBuildHeight()) {
                         continue;
                     }
                     BlockState below = LegacyGen.get(level, x, j - y, z);

@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,8 +14,8 @@ import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.zombie.Zombie;
-import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -54,18 +54,18 @@ public class BrainyZombie extends Zombie {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor level, EntitySpawnReason spawnReason) {
+    public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
         return allowedBiome(level.getBiome(this.blockPosition())) && super.checkSpawnRules(level, spawnReason);
     }
 
     public static boolean checkBrainyZombieSpawnRules(
         EntityType<? extends Monster> type,
         ServerLevelAccessor level,
-        EntitySpawnReason spawnReason,
+        MobSpawnType spawnReason,
         BlockPos pos,
         RandomSource random
     ) {
-        if (spawnReason == EntitySpawnReason.NATURAL && !Config.SPAWN_ANGRY_ZOMBIES.getAsBoolean()) {
+        if (spawnReason == MobSpawnType.NATURAL && !Config.SPAWN_ANGRY_ZOMBIES.getAsBoolean()) {
             return false;
         }
         return allowedBiome(level.getBiome(pos)) && Monster.checkMonsterSpawnRules(type, level, spawnReason, pos, random);

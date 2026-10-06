@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
@@ -76,8 +75,8 @@ public final class MoundGenerator {
         loot(level, new BlockPos(i + 9, j + 1, k + 7), BuiltInLootTables.JUNGLE_TEMPLE, random);
         loot(level, new BlockPos(i + 9, j + 1, k + 11), BuiltInLootTables.STRONGHOLD_LIBRARY, random);
         loot(level, new BlockPos(i + 10, j + 1, k + 9), MOUND_LOOT, random);
-        spawner(level, new BlockPos(i + 4, j + 5, k + 4), EntityTypes.SKELETON);
-        spawner(level, new BlockPos(i + 4, j + 5, k + 14), EntityTypes.ZOMBIE);
+        spawner(level, new BlockPos(i + 4, j + 5, k + 4), EntityType.SKELETON);
+        spawner(level, new BlockPos(i + 4, j + 5, k + 14), EntityType.ZOMBIE);
         return true;
     }
 

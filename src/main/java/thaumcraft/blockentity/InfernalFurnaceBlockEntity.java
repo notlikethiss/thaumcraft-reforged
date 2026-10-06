@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,8 +29,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.aura.AuraManager;
@@ -41,7 +41,7 @@ import thaumcraft.fx.Fx;
 import thaumcraft.registry.ModBlockEntities;
 
 public class InfernalFurnaceBlockEntity extends BlockEntity {
-    private static final TagKey<Item> BONUS_EXCLUDED = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "dusts"));
+    private static final TagKey<Item> BONUS_EXCLUDED = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "dusts"));
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(32, ItemStack.EMPTY);
     private int cookTime;
@@ -176,7 +176,7 @@ public class InfernalFurnaceBlockEntity extends BlockEntity {
                         }
                     }
                 }
-                Item bonus = BuiltInRegistries.ITEM.getValue(Identifier.parse(bonusId));
+                Item bonus = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(bonusId));
                 if (count > 0 && bonus != null) {
                     spawn(level, new ItemEntity(level, x, y, z, new ItemStack(bonus, count)), facingX, facingZ, 0.03F, random);
                 }

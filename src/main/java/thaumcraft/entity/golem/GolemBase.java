@@ -27,9 +27,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import org.jspecify.annotations.Nullable;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
+import javax.annotation.Nullable;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -299,9 +299,9 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         paused = false;
-        return !source.is(DamageTypes.CACTUS) && super.hurtServer(level, source, damage);
+        return !source.is(DamageTypes.CACTUS) && super.hurt(source, damage);
     }
 
     @Override
@@ -405,11 +405,11 @@ public abstract class GolemBase extends PathfinderMob {
                 this.playSound(SoundEvents.GENERIC_EAT.value(), 0.3F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 if (!this.level().isClientSide()) {
                     int duration = 600;
-                    MobEffectInstance speed = this.getEffect(MobEffects.SPEED);
+                    MobEffectInstance speed = this.getEffect(MobEffects.MOVEMENT_SPEED);
                     if (speed != null && speed.getDuration() < 2400) {
                         duration += speed.getDuration();
                     }
-                    this.addEffect(new MobEffectInstance(MobEffects.SPEED, duration, 0));
+                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, 0));
                 }
             }
             this.heal(5.0F);

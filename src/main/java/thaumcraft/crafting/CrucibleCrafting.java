@@ -3,7 +3,7 @@ package thaumcraft.crafting;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.research.ResearchManager;

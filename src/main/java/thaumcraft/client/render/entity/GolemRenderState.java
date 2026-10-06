@@ -2,11 +2,11 @@ package thaumcraft.client.render.entity;
 
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class GolemRenderState extends LivingEntityRenderState {
     public final ItemStackRenderState carried = new ItemStackRenderState();
-    public Identifier texture;
+    public ResourceLocation texture;
     public int core;
     public int color;
     public String decoration = "";

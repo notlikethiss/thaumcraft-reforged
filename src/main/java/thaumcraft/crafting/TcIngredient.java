@@ -5,12 +5,12 @@ import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.EssenceItem;
 import thaumcraft.item.golem.GolemPlacerItem;
@@ -37,11 +37,11 @@ public record TcIngredient(String id, boolean tag, @Nullable Aspect aspect, int 
     }
 
     private @Nullable Item resolveItem() {
-        return BuiltInRegistries.ITEM.getOptional(Identifier.parse(id)).orElse(null);
+        return BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(id)).orElse(null);
     }
 
     private TagKey<Item> tagKey() {
-        return TagKey.create(Registries.ITEM, Identifier.parse(id));
+        return TagKey.create(Registries.ITEM, ResourceLocation.parse(id));
     }
 
     public boolean isResolvable() {

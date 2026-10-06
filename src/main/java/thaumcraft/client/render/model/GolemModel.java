@@ -3,7 +3,7 @@ package thaumcraft.client.render.model;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 import thaumcraft.client.render.entity.GolemRenderState;
 
 public class GolemModel extends EntityModel<GolemRenderState> {
