@@ -8,5 +8,6 @@
     "south": "thaumcraft:block/crucible3",
     "east": "thaumcraft:block/crucible3",
     "west": "thaumcraft:block/crucible3"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

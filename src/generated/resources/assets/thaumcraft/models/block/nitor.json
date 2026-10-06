@@ -1,5 +1,6 @@
 {
   "textures": {
     "particle": "thaumcraft:block/nitor"
-  }
+  },
+  "render_type": "minecraft:translucent"
 }

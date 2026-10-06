@@ -3,5 +3,6 @@
   "textures": {
     "bottom": "thaumcraft:block/adoorbot",
     "top": "thaumcraft:block/adoortop"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

@@ -2,5 +2,6 @@
   "parent": "minecraft:block/leaves",
   "textures": {
     "all": "thaumcraft:block/greatwoodleaves"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

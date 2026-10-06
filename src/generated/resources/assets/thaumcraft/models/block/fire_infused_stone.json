@@ -92,5 +92,6 @@
         "sky_light": 10
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:cutout"
 }

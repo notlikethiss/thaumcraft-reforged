@@ -2,5 +2,6 @@
   "parent": "minecraft:block/cube_all",
   "textures": {
     "all": "thaumcraft:block/amberbrick"
-  }
+  },
+  "render_type": "minecraft:translucent"
 }

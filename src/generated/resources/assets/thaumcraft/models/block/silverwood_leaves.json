@@ -2,5 +2,6 @@
   "parent": "minecraft:block/leaves",
   "textures": {
     "all": "thaumcraft:block/silverwoodleaves"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }
