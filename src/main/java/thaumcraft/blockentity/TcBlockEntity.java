@@ -10,10 +10,30 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.compat.ValueInput;
+import thaumcraft.compat.ValueOutput;
 
 public abstract class TcBlockEntity extends BlockEntity {
     protected TcBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        loadAdditional(ValueInput.of(tag, registries));
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        saveAdditional(ValueOutput.of(tag, registries));
+    }
+
+    protected void loadAdditional(ValueInput input) {
+    }
+
+    protected void saveAdditional(ValueOutput output) {
     }
 
     @Override
