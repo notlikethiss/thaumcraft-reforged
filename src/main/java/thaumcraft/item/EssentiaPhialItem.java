@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.EssentiaContainer;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 
 public class EssentiaPhialItem extends Item {
@@ -37,7 +36,7 @@ public class EssentiaPhialItem extends Item {
         if (!level.isClientSide() && container.takeFromSource(aspect, PORTION)) {
             context.getItemInHand().shrink(1);
             ItemStack essence = new ItemStack(ModItems.ESSENCE.get());
-            essence.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+            EssenceItem.setAspect(essence, aspect);
             if (!player.getInventory().add(essence)) {
                 Block.popResource(level, pos, essence);
             }

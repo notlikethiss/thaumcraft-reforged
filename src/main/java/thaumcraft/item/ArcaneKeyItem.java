@@ -16,6 +16,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.block.device.ArcaneDoorBlock;
 import thaumcraft.block.device.ArcanePressurePlateBlock;
 import thaumcraft.blockentity.OwnedBlockEntity;
@@ -53,11 +54,11 @@ public class ArcaneKeyItem extends Item {
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-        KeyLink link = stack.get(ModDataComponents.KEY_LINK.get());
+        KeyLink link = getLink(stack);
         if (link == null) {
             if (owned.isOwner(player) || owned.hasAccess(player, OwnedBlockEntity.ACCESS_GRANT) && accessLevel == OwnedBlockEntity.ACCESS_USE) {
                 ItemStack key = new ItemStack(this);
-                key.set(ModDataComponents.KEY_LINK.get(), new KeyLink(target, type));
+                setLink(key, new KeyLink(target, type));
                 if (!player.getInventory().add(key)) {
                     player.drop(key, false, Prediction.SERVER_ONLY);
                 }
@@ -90,14 +91,26 @@ public class ArcaneKeyItem extends Item {
         return Component.translatable("tc.thaumcraft." + key).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC);
     }
 
+    public static @Nullable KeyLink getLink(ItemStack stack) {
+        return stack.get(ModDataComponents.KEY_LINK.get());
+    }
+
+    public static boolean hasLink(ItemStack stack) {
+        return stack.has(ModDataComponents.KEY_LINK.get());
+    }
+
+    public static void setLink(ItemStack stack, KeyLink link) {
+        stack.set(ModDataComponents.KEY_LINK.get(), link);
+    }
+
     @Override
     public boolean isFoil(ItemStack stack) {
-        return stack.has(ModDataComponents.KEY_LINK.get()) || super.isFoil(stack);
+        return hasLink(stack) || super.isFoil(stack);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        KeyLink link = stack.get(ModDataComponents.KEY_LINK.get());
+        KeyLink link = getLink(stack);
         if (link == null) {
             return;
         }

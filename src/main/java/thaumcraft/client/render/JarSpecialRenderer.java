@@ -12,8 +12,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.blockentity.JarBlockEntity;
+import thaumcraft.item.FilledJarItem;
 import thaumcraft.item.JarContents;
-import thaumcraft.registry.ModDataComponents;
 
 public class JarSpecialRenderer implements SpecialModelRenderer<JarContents> {
     private final JarRendering.Models models;
@@ -52,7 +52,7 @@ public class JarSpecialRenderer implements SpecialModelRenderer<JarContents> {
 
     @Override
     public @Nullable JarContents extractArgument(ItemStack stack) {
-        return stack.get(ModDataComponents.JAR_CONTENTS.get());
+        return FilledJarItem.getContents(stack);
     }
 
     public record Unbaked(boolean brain) implements SpecialModelRenderer.Unbaked<JarContents> {

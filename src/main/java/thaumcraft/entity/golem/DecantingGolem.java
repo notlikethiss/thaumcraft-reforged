@@ -32,8 +32,8 @@ import thaumcraft.entity.golem.goal.JarPlaceAdvGoal;
 import thaumcraft.entity.golem.goal.LiquidEmptyGoal;
 import thaumcraft.entity.golem.goal.LiquidGatherGoal;
 import thaumcraft.entity.golem.goal.LiquidGotoGoal;
+import thaumcraft.item.FilledJarItem;
 import thaumcraft.item.JarContents;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 
 public class DecantingGolem extends GolemWorker {
@@ -172,7 +172,7 @@ public class DecantingGolem extends GolemWorker {
         Aspect aspect = getAspect();
         if (getTallowType() == 1 && aspect != null && getAmount() > 0) {
             jar = new ItemStack(ModItems.FILLED_JAR.get());
-            jar.set(ModDataComponents.JAR_CONTENTS.get(), new JarContents(aspect, getAmount()));
+            FilledJarItem.setContents(jar, new JarContents(aspect, getAmount()));
         } else {
             jar = new ItemStack(ModItems.WARDED_JAR.get());
         }

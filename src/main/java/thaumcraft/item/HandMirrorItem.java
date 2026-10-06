@@ -46,11 +46,27 @@ public class HandMirrorItem extends Item {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide()) {
-            stack.set(ModDataComponents.MIRROR_LINK.get(), GlobalPos.of(level.dimension(), pos));
+            setLink(stack, GlobalPos.of(level.dimension(), pos));
             level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
             player.sendSystemMessage(message("handmirrorlinked"));
         }
         return InteractionResult.SUCCESS;
+    }
+
+    public static @Nullable GlobalPos getLink(ItemStack stack) {
+        return stack.get(ModDataComponents.MIRROR_LINK.get());
+    }
+
+    public static boolean hasLink(ItemStack stack) {
+        return stack.has(ModDataComponents.MIRROR_LINK.get());
+    }
+
+    public static void setLink(ItemStack stack, GlobalPos link) {
+        stack.set(ModDataComponents.MIRROR_LINK.get(), link);
+    }
+
+    public static void clearLink(ItemStack stack) {
+        stack.remove(ModDataComponents.MIRROR_LINK.get());
     }
 
     private static @Nullable ServerLevel targetLevel(Level level, GlobalPos link) {
@@ -58,7 +74,7 @@ public class HandMirrorItem extends Item {
     }
 
     private static void breakLink(ItemStack mirror, Player player, Level level) {
-        mirror.remove(ModDataComponents.MIRROR_LINK.get());
+        clearLink(mirror);
         level.playSound(null, player.blockPosition(), ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F, 0.8F);
         player.sendSystemMessage(message("handmirrorerror"));
     }
@@ -66,7 +82,7 @@ public class HandMirrorItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        GlobalPos link = stack.get(ModDataComponents.MIRROR_LINK.get());
+        GlobalPos link = getLink(stack);
         if (level.isClientSide() || link == null) {
             return super.use(level, player, hand);
         }
@@ -83,7 +99,7 @@ public class HandMirrorItem extends Item {
     }
 
     public static boolean transport(ItemStack mirror, ItemStack items, Player player, Level level) {
-        GlobalPos link = mirror.get(ModDataComponents.MIRROR_LINK.get());
+        GlobalPos link = getLink(mirror);
         if (link == null) {
             return false;
         }
@@ -110,12 +126,12 @@ public class HandMirrorItem extends Item {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        return stack.has(ModDataComponents.MIRROR_LINK.get()) || super.isFoil(stack);
+        return hasLink(stack) || super.isFoil(stack);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        GlobalPos link = stack.get(ModDataComponents.MIRROR_LINK.get());
+        GlobalPos link = getLink(stack);
         if (link != null) {
             builder.accept(MirrorItem.linkText("tc.thaumcraft.hand_mirror_linked_to", link));
         }

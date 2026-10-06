@@ -32,6 +32,10 @@ public class FilledJarItem extends Item {
         return stack.get(ModDataComponents.JAR_CONTENTS.get());
     }
 
+    public static void setContents(ItemStack stack, JarContents contents) {
+        stack.set(ModDataComponents.JAR_CONTENTS.get(), contents);
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext context) {
         BlockPlaceContext placeContext = new BlockPlaceContext(context);

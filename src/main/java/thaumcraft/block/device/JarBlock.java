@@ -24,8 +24,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.blockentity.BrainJarBlockEntity;
 import thaumcraft.blockentity.JarBlockEntity;
+import thaumcraft.item.FilledJarItem;
 import thaumcraft.registry.ModBlockEntities;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModSounds;
 
@@ -101,7 +101,7 @@ public class JarBlock extends Block implements EntityBlock {
         ItemStack drop;
         if (jar.getAmount() > 0) {
             drop = new ItemStack(ModItems.FILLED_JAR.get());
-            drop.set(ModDataComponents.JAR_CONTENTS.get(), jar.getContents());
+            FilledJarItem.setContents(drop, jar.getContents());
         } else {
             drop = new ItemStack(ModItems.WARDED_JAR.get());
         }

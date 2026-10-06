@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.block.mirror.MirrorBlock;
+import thaumcraft.item.HandMirrorItem;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
@@ -185,7 +186,7 @@ public class MirrorBlockEntity extends TcBlockEntity {
         }
         ItemStack drop = new ItemStack(ModItems.MAGIC_MIRROR.get());
         if (linked && link != null) {
-            drop.set(ModDataComponents.MIRROR_LINK.get(), link);
+            HandMirrorItem.setLink(drop, link);
             invalidateLink();
         }
         Block.popResource(serverLevel, pos, drop);

@@ -12,7 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
-import thaumcraft.registry.ModDataComponents;
+import thaumcraft.item.EssenceItem;
+import thaumcraft.item.golem.GolemPlacerItem;
 
 public record TcIngredient(String id, boolean tag, @Nullable Aspect aspect, int core) {
     public static TcIngredient item(String id) {
@@ -61,10 +62,10 @@ public record TcIngredient(String id, boolean tag, @Nullable Aspect aspect, int 
         if (!itemMatches) {
             return false;
         }
-        if (core >= 0 && !Integer.valueOf(core).equals(stack.get(ModDataComponents.GOLEM_CORE.get()))) {
+        if (core >= 0 && !(GolemPlacerItem.hasCore(stack) && GolemPlacerItem.getCore(stack) == core)) {
             return false;
         }
-        return aspect == null || aspect == stack.get(ModDataComponents.ESSENCE_ASPECT.get());
+        return aspect == null || aspect == EssenceItem.getAspect(stack);
     }
 
     public List<ItemStack> displayStacks() {
@@ -78,10 +79,10 @@ public record TcIngredient(String id, boolean tag, @Nullable Aspect aspect, int 
             if (item != null) {
                 ItemStack stack = new ItemStack(item);
                 if (aspect != null) {
-                    stack.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+                    EssenceItem.setAspect(stack, aspect);
                 }
                 if (core >= 0) {
-                    stack.set(ModDataComponents.GOLEM_CORE.get(), core);
+                    GolemPlacerItem.setCore(stack, core);
                 }
                 stacks.add(stack);
             }

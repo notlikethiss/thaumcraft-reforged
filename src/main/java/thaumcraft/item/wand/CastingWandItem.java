@@ -30,6 +30,18 @@ public class CastingWandItem extends Item {
         this.rechargeInterval = rechargeInterval;
     }
 
+    public static @Nullable Integer getVis(ItemStack stack) {
+        return stack.get(ModDataComponents.WAND_VIS.get());
+    }
+
+    public static boolean hasVis(ItemStack stack) {
+        return stack.has(ModDataComponents.WAND_VIS.get());
+    }
+
+    public static void setVis(ItemStack stack, int vis) {
+        stack.set(ModDataComponents.WAND_VIS.get(), vis);
+    }
+
     public int getMaxVis() {
         return maxVis;
     }
@@ -45,7 +57,7 @@ public class CastingWandItem extends Item {
         int vis = WandManager.getCharge(stack);
         if (vis < maxVis) {
             if (AuraManager.decreaseClosestAura(level, x, y, z, 1)) {
-                stack.set(ModDataComponents.WAND_VIS.get(), vis + 1);
+                setVis(stack, vis + 1);
             }
             return true;
         }
@@ -80,7 +92,7 @@ public class CastingWandItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        Integer vis = stack.get(ModDataComponents.WAND_VIS.get());
+        Integer vis = getVis(stack);
         if (vis != null) {
             builder.accept(Component.translatable("tc.thaumcraft.wandcharge", vis));
         }

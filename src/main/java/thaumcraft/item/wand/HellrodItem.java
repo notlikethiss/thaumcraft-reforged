@@ -33,15 +33,23 @@ public class HellrodItem extends ElementalWandItem {
         return stack.getOrDefault(ModDataComponents.HELLROD_CHARGES.get(), 0);
     }
 
+    public static boolean hasCharges(ItemStack stack) {
+        return stack.has(ModDataComponents.HELLROD_CHARGES.get());
+    }
+
+    public static void setCharges(ItemStack stack, int charges) {
+        stack.set(ModDataComponents.HELLROD_CHARGES.get(), charges);
+    }
+
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         int interval = canCharge(level, stack) ? 25 : 50;
-        if (!stack.has(ModDataComponents.HELLROD_CHARGES.get())) {
-            stack.set(ModDataComponents.HELLROD_CHARGES.get(), 0);
+        if (!hasCharges(stack)) {
+            setCharges(stack, 0);
         } else if (owner.tickCount % interval == 0) {
             int charges = getCharges(stack);
             if (charges < MAX_CHARGES && AuraManager.decreaseClosestAura(level, owner.getX(), owner.getY(), owner.getZ(), 6)) {
-                stack.set(ModDataComponents.HELLROD_CHARGES.get(), charges + 1);
+                setCharges(stack, charges + 1);
             }
         }
     }
@@ -78,7 +86,7 @@ public class HellrodItem extends ElementalWandItem {
             bat.setSummoner(player.getUUID());
             if (serverLevel.addFreshEntity(bat)) {
                 serverLevel.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, BlockPos.containing(px, py, pz), 0);
-                stack.set(ModDataComponents.HELLROD_CHARGES.get(), charges - 1);
+                setCharges(stack, charges - 1);
             }
             serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.WANDFAIL.value(), SoundSource.PLAYERS, 0.4F, 0.9F + serverLevel.getRandom().nextFloat() * 0.2F);
         }

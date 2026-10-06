@@ -25,7 +25,6 @@ import thaumcraft.crafting.CrucibleRecipe;
 import thaumcraft.crafting.ThaumcraftRecipes;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.registry.ModAttachments;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
@@ -147,8 +146,8 @@ public final class ResearchManager {
     }
 
     public static ItemStack createNote(ItemStack stack, String key) {
-        if (!stack.has(ModDataComponents.RESEARCH_NOTE.get())) {
-            stack.set(ModDataComponents.RESEARCH_NOTE.get(), ResearchNoteData.create(key));
+        if (!ResearchNoteData.hasNote(stack)) {
+            ResearchNoteData.setNote(stack, ResearchNoteData.create(key));
         }
         return stack;
     }
@@ -158,8 +157,8 @@ public final class ResearchManager {
     }
 
     public static void updateData(ItemStack stack, ResearchNoteData data) {
-        if (stack.has(ModDataComponents.RESEARCH_NOTE.get())) {
-            stack.set(ModDataComponents.RESEARCH_NOTE.get(), data.toNote());
+        if (ResearchNoteData.hasNote(stack)) {
+            ResearchNoteData.setNote(stack, data.toNote());
         }
     }
 
@@ -192,7 +191,7 @@ public final class ResearchManager {
         if (baseLoss <= 0) {
             baseLoss = 1;
         }
-        if (!note.has(ModDataComponents.RESEARCH_NOTE.get())) {
+        if (!ResearchNoteData.hasNote(note)) {
             String key = findLostResearch(researcher);
             if (key != null) {
                 createNote(note, key);

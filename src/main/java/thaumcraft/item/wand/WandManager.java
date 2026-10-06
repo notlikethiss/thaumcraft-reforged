@@ -212,10 +212,14 @@ public final class WandManager {
         return InteractionResult.SUCCESS;
     }
 
+    public static int getVisDiscount(ItemStack stack) {
+        return stack.getOrDefault(ModDataComponents.VIS_DISCOUNT.get(), 0);
+    }
+
     public static int getTotalVisDiscount(Player player) {
         int total = 0;
         for (EquipmentSlot slot : ARMOR_SLOTS) {
-            total += player.getItemBySlot(slot).getOrDefault(ModDataComponents.VIS_DISCOUNT.get(), 0);
+            total += getVisDiscount(player.getItemBySlot(slot));
         }
         return total;
     }
@@ -225,16 +229,17 @@ public final class WandManager {
     }
 
     public static int getCharge(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponents.WAND_VIS.get(), 0);
+        Integer vis = CastingWandItem.getVis(stack);
+        return vis == null ? 0 : vis;
     }
 
     public static boolean hasCharge(ItemStack stack, Player player, int amount) {
-        return stack.has(ModDataComponents.WAND_VIS.get()) && getCharge(stack) >= getDiscountedCost(player, amount);
+        return CastingWandItem.hasVis(stack) && getCharge(stack) >= getDiscountedCost(player, amount);
     }
 
     public static boolean spendCharge(Level level, ItemStack stack, Player player, int amount) {
         amount = getDiscountedCost(player, amount);
-        if (!stack.has(ModDataComponents.WAND_VIS.get())) {
+        if (!CastingWandItem.hasVis(stack)) {
             return false;
         }
         int vis = getCharge(stack);
@@ -243,7 +248,7 @@ public final class WandManager {
         }
         if (vis >= amount) {
             if (!player.getAbilities().instabuild) {
-                stack.set(ModDataComponents.WAND_VIS.get(), vis - amount);
+                CastingWandItem.setVis(stack, vis - amount);
             }
             level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.WAND.value(), SoundSource.PLAYERS, 0.5F, 1.0F);
             return true;
@@ -256,7 +261,7 @@ public final class WandManager {
 
     public static boolean spendCharge(ItemStack stack, Player player, int amount) {
         amount = getDiscountedCost(player, amount);
-        if (!stack.has(ModDataComponents.WAND_VIS.get())) {
+        if (!CastingWandItem.hasVis(stack)) {
             return false;
         }
         int vis = getCharge(stack);
@@ -264,7 +269,7 @@ public final class WandManager {
             return false;
         }
         if (!player.getAbilities().instabuild) {
-            stack.set(ModDataComponents.WAND_VIS.get(), vis - amount);
+            CastingWandItem.setVis(stack, vis - amount);
         }
         return true;
     }

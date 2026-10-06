@@ -16,9 +16,21 @@ public final class ResearchNoteData {
     public int[] progress = new int[0];
     public byte[] failedTags = new byte[FAILED_SIZE];
 
+    public static @Nullable ResearchNote getNote(ItemStack stack) {
+        return stack.get(ModDataComponents.RESEARCH_NOTE.get());
+    }
+
+    public static boolean hasNote(ItemStack stack) {
+        return stack.has(ModDataComponents.RESEARCH_NOTE.get());
+    }
+
+    public static void setNote(ItemStack stack, ResearchNote note) {
+        stack.set(ModDataComponents.RESEARCH_NOTE.get(), note);
+    }
+
     public static ResearchNoteData read(ItemStack stack) {
         ResearchNoteData data = new ResearchNoteData();
-        ResearchNote note = stack.get(ModDataComponents.RESEARCH_NOTE.get());
+        ResearchNote note = getNote(stack);
         if (note == null) {
             return data;
         }

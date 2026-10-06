@@ -36,8 +36,8 @@ import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.fx.Fx;
+import thaumcraft.item.EssenceItem;
 import thaumcraft.network.WispZapPayload;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModSounds;
 
@@ -282,7 +282,7 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
             );
         }
         ItemStack essence = new ItemStack(ModItems.WISP_ESSENCE.get(), 1 + this.random.nextInt(looting + 1) / 2);
-        essence.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+        EssenceItem.setAspect(essence, aspect);
         this.spawnAtLocation(level, essence);
     }
 

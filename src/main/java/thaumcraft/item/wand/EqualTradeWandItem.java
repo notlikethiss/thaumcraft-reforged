@@ -27,6 +27,10 @@ public class EqualTradeWandItem extends ElementalWandItem {
         return stack.get(ModDataComponents.TRADE_BLOCK.get());
     }
 
+    public static void setPickedBlock(ItemStack stack, BlockState state) {
+        stack.set(ModDataComponents.TRADE_BLOCK.get(), state);
+    }
+
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         Level level = context.getLevel();
@@ -41,7 +45,7 @@ public class EqualTradeWandItem extends ElementalWandItem {
                 return InteractionResult.PASS;
             }
             if (!level.isClientSide()) {
-                stack.set(ModDataComponents.TRADE_BLOCK.get(), clicked);
+                setPickedBlock(stack, clicked);
             }
             return InteractionResult.SUCCESS;
         }

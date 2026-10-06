@@ -35,13 +35,13 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.SimpleMenuProvider;
 import thaumcraft.aura.AuraManager;
+import thaumcraft.item.golem.GolemPlacerItem;
 import thaumcraft.menu.GolemMenu;
 import thaumcraft.entity.golem.goal.AvoidCreeperSwellGoal;
 import thaumcraft.entity.golem.goal.GolemDoorGoal;
 import thaumcraft.entity.golem.goal.ReturnHomeGoal;
 import thaumcraft.item.golem.GolemDecorationItem;
 import thaumcraft.item.wand.CastingWandItem;
-import thaumcraft.registry.ModDataComponents;
 
 public abstract class GolemBase extends PathfinderMob {
     private static final EntityDataAccessor<ItemStack> DATA_CARRIED = SynchedEntityData.defineId(GolemBase.class, EntityDataSerializers.ITEM_STACK);
@@ -351,9 +351,9 @@ public abstract class GolemBase extends PathfinderMob {
 
     public ItemStack toItem() {
         ItemStack stack = new ItemStack(kind().item());
-        stack.set(ModDataComponents.GOLEM_CORE.get(), getCore());
+        GolemPlacerItem.setCore(stack, getCore());
         if (!getDecoration().isEmpty()) {
-            stack.set(ModDataComponents.GOLEM_DECORATION.get(), getDecoration());
+            GolemPlacerItem.setDecoration(stack, getDecoration());
         }
         return stack;
     }

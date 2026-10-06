@@ -6,7 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
-import thaumcraft.registry.ModDataComponents;
+import thaumcraft.item.EssenceItem;
+import thaumcraft.item.golem.GolemPlacerItem;
 
 public record TcResult(String id, int count, @Nullable Aspect aspect, int core) {
     public static TcResult of(String id) {
@@ -36,10 +37,10 @@ public record TcResult(String id, int count, @Nullable Aspect aspect, int core) 
         }
         ItemStack stack = new ItemStack(item, count);
         if (aspect != null) {
-            stack.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+            EssenceItem.setAspect(stack, aspect);
         }
         if (core >= 0) {
-            stack.set(ModDataComponents.GOLEM_CORE.get(), core);
+            GolemPlacerItem.setCore(stack, core);
         }
         return stack;
     }

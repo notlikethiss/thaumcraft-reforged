@@ -20,7 +20,6 @@ import thaumcraft.item.wand.CastingWandItem;
 import thaumcraft.item.wand.EqualTradeWandItem;
 import thaumcraft.item.wand.HellrodItem;
 import thaumcraft.item.wand.WandManager;
-import thaumcraft.registry.ModDataComponents;
 
 public final class TcHud {
     private TcHud() {
@@ -41,7 +40,7 @@ public final class TcHud {
         }
         ItemStack held = player.getMainHandItem();
         if (held.getItem() instanceof CastingWandItem wand) {
-            Integer vis = held.get(ModDataComponents.WAND_VIS.get());
+            Integer vis = CastingWandItem.getVis(held);
             if (vis != null) {
                 renderCastingWand(graphics, minecraft, player, vis, wand.getMaxVis());
             }

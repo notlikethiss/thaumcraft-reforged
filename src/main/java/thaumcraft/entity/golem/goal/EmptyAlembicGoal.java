@@ -10,7 +10,6 @@ import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.entity.golem.GolemUtils;
 import thaumcraft.entity.golem.TallowGolem;
 import thaumcraft.item.EssenceItem;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModItems;
 
 public class EmptyAlembicGoal extends Goal {
@@ -61,7 +60,7 @@ public class EmptyAlembicGoal extends Goal {
                 ItemStack essences = this.golem.getProvideStack();
                 if (essences.isEmpty()) {
                     essences = new ItemStack(ModItems.ESSENCE.get());
-                    essences.set(ModDataComponents.ESSENCE_ASPECT.get(), alembic.getAspect());
+                    EssenceItem.setAspect(essences, alembic.getAspect());
                 } else {
                     essences = essences.copyWithCount(essences.getCount() + 1);
                 }

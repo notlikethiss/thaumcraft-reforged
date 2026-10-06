@@ -26,6 +26,7 @@ import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.MagicWorkbenchBlockEntity;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.golem.GolemKind;
+import org.jspecify.annotations.Nullable;
 import thaumcraft.registry.ModDataComponents;
 
 public class GolemPlacerItem extends Item {
@@ -49,13 +50,29 @@ public class GolemPlacerItem extends Item {
         return stack.getOrDefault(ModDataComponents.GOLEM_CORE.get(), 0);
     }
 
+    public static boolean hasCore(ItemStack stack) {
+        return stack.has(ModDataComponents.GOLEM_CORE.get());
+    }
+
+    public static void setCore(ItemStack stack, int core) {
+        stack.set(ModDataComponents.GOLEM_CORE.get(), core);
+    }
+
+    public static @Nullable String getDecoration(ItemStack stack) {
+        return stack.get(ModDataComponents.GOLEM_DECORATION.get());
+    }
+
+    public static void setDecoration(ItemStack stack, String decoration) {
+        stack.set(ModDataComponents.GOLEM_DECORATION.get(), decoration);
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
         int core = getCore(stack);
         if (core > 0 && core < CORE_NAMES.length) {
             builder.accept(Component.translatable("tc.thaumcraft.golem." + CORE_NAMES[core]).withStyle(ChatFormatting.GRAY));
         }
-        String decoration = stack.get(ModDataComponents.GOLEM_DECORATION.get());
+        String decoration = getDecoration(stack);
         if (decoration != null && !decoration.isEmpty()) {
             MutableComponent line = Component.empty().withStyle(ChatFormatting.DARK_GREEN);
             for (String[] entry : DECORATIONS) {
@@ -111,7 +128,7 @@ public class GolemPlacerItem extends Item {
         golem.snapTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
         golem.setHomeTo(BlockPos.containing(x, y, z), 32);
         golem.setup(getCore(stack), -1, side);
-        String decoration = stack.get(ModDataComponents.GOLEM_DECORATION.get());
+        String decoration = getDecoration(stack);
         if (decoration != null) {
             golem.setDecoration(decoration);
         }

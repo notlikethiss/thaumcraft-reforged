@@ -26,6 +26,10 @@ public class EssenceItem extends Item implements AspectProvidingItem {
         return stack.get(ModDataComponents.ESSENCE_ASPECT.get());
     }
 
+    public static void setAspect(ItemStack stack, Aspect aspect) {
+        stack.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+    }
+
     @Override
     public Component getName(ItemStack stack) {
         Aspect aspect = getAspect(stack);

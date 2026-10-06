@@ -16,7 +16,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import thaumcraft.blockentity.MirrorBlockEntity;
-import thaumcraft.registry.ModDataComponents;
 import thaumcraft.registry.ModSounds;
 
 public class MirrorItem extends BlockItem {
@@ -36,7 +35,7 @@ public class MirrorItem extends BlockItem {
         }
         if (!mirror.isLinkValid()) {
             ItemStack linked = stack.copyWithCount(1);
-            linked.set(ModDataComponents.MIRROR_LINK.get(), GlobalPos.of(level.dimension(), context.getClickedPos()));
+            HandMirrorItem.setLink(linked, GlobalPos.of(level.dimension(), context.getClickedPos()));
             level.playSound(null, context.getClickedPos(), ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
             stack.consume(1, player);
             if (!player.getInventory().add(linked)) {
@@ -54,7 +53,7 @@ public class MirrorItem extends BlockItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        GlobalPos link = stack.get(ModDataComponents.MIRROR_LINK.get());
+        GlobalPos link = HandMirrorItem.getLink(stack);
         if (link != null) {
             builder.accept(linkText("tc.thaumcraft.mirror_linked_to", link));
         }

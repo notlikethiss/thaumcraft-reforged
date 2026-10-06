@@ -32,6 +32,14 @@ public final class Hover {
         }
     }
 
+    public static int getCharge(ItemStack armor) {
+        return armor.getOrDefault(ModDataComponents.HOVER_CHARGE.get(), 0);
+    }
+
+    public static void setCharge(ItemStack armor, int charge) {
+        armor.set(ModDataComponents.HOVER_CHARGE.get(), charge);
+    }
+
     public static boolean isFuel(ItemStack jar) {
         JarContents contents = fuelContents(jar);
         return contents != null && contents.amount() > 0;
@@ -70,17 +78,17 @@ public final class Hover {
         }
         JarContents contents = fuelContents(jar);
         int fuel = contents == null ? 0 : contents.amount();
-        int charge = armor.getOrDefault(ModDataComponents.HOVER_CHARGE.get(), 0);
+        int charge = getCharge(armor);
         if (fuel <= 0) {
             return false;
         }
         if (charge < EFFICIENCY) {
-            armor.set(ModDataComponents.HOVER_CHARGE.get(), charge + 1);
+            setCharge(armor, charge + 1);
             return true;
         }
-        armor.set(ModDataComponents.HOVER_CHARGE.get(), 0);
+        setCharge(armor, 0);
         fuel--;
-        jar.set(ModDataComponents.JAR_CONTENTS.get(), new JarContents(Aspect.POWER, fuel));
+        FilledJarItem.setContents(jar, new JarContents(Aspect.POWER, fuel));
         setJar(armor, jar);
         return fuel > 0;
     }

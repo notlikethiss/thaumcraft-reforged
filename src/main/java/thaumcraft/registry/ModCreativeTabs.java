@@ -1,5 +1,6 @@
 package thaumcraft.registry;
 
+import thaumcraft.item.EssenceItem;
 import thaumcraft.item.golem.GolemPlacerItem;
 import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
@@ -24,7 +25,7 @@ public final class ModCreativeTabs {
                     for (Aspect aspect : Aspect.values()) {
                         if (aspect != Aspect.UNKNOWN) {
                             ItemStack essence = new ItemStack(item.get());
-                            essence.set(ModDataComponents.ESSENCE_ASPECT.get(), aspect);
+                            EssenceItem.setAspect(essence, aspect);
                             output.accept(essence);
                         }
                     }
@@ -32,7 +33,7 @@ public final class ModCreativeTabs {
                     for (int core = 0; core < 5; core++) {
                         if (placer.kind().allowsCore(core)) {
                             ItemStack golem = new ItemStack(placer);
-                            golem.set(ModDataComponents.GOLEM_CORE.get(), core);
+                            GolemPlacerItem.setCore(golem, core);
                             output.accept(golem);
                         }
                     }
