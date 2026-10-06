@@ -27,6 +27,7 @@ def snake_nbt_key(component):
 class Profile:
     name = "26.3"
     modern = True
+    explicit_render_types = False
     data_version = 5023
     recipe_folder = "recipe"
     loot_folder = "loot_table"
@@ -125,6 +126,7 @@ class Profile:
 
 class Legacy(Profile):
     modern = False
+    explicit_render_types = True
     feature_folder = "configured_feature"
 
     def recipe_ingredient(self, value):

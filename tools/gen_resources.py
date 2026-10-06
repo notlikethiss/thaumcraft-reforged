@@ -90,6 +90,63 @@ def block_model(name, content):
     write(ASSETS / "models" / "block" / f"{name}.json", convert_elements(f"block/{name}", content))
 
 
+def texture_file(reference):
+    if ":" not in reference:
+        reference = "minecraft:" + reference
+    namespace, path = reference.split(":", 1)
+    if namespace != NS:
+        return None
+    for root in (ASSETS / "textures", SOURCE_TEXTURES):
+        candidate = root / f"{path}.png"
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def texture_layer(reference, cache={}):
+    if reference not in cache:
+        from PIL import Image
+        file = texture_file(reference)
+        layer = "solid"
+        if file is not None:
+            alpha = Image.open(file).convert("RGBA").getchannel("A")
+            histogram = alpha.histogram()
+            if any(histogram[1:255]):
+                layer = "translucent"
+            elif histogram[0]:
+                layer = "cutout"
+        cache[reference] = layer
+    return cache[reference]
+
+
+def model_textures(name, seen=None):
+    seen = seen or set()
+    if name in seen or name not in BLOCK_MODELS:
+        return []
+    seen.add(name)
+    content = BLOCK_MODELS[name]
+    result = [value for value in content.get("textures", {}).values() if not value.startswith("#")]
+    parent = content.get("parent", "")
+    if parent.startswith(f"{NS}:block/"):
+        result += model_textures(parent[len(f"{NS}:block/"):], seen)
+    return result
+
+
+def apply_render_types():
+    order = ["solid", "cutout", "translucent"]
+    for name in BLOCK_MODELS:
+        layers = [texture_layer(texture) for texture in model_textures(name)]
+        if not layers:
+            continue
+        layer = max(layers, key=order.index)
+        if layer == "solid":
+            continue
+        path = ASSETS / "models" / "block" / f"{name}.json"
+        content = json.loads(path.read_text(encoding="utf-8"))
+        content["render_type"] = f"minecraft:{layer}"
+        path.write_text(json.dumps(content, indent=2) + "\n", encoding="utf-8")
+
+
 def item_model(name, content):
     ITEM_MODELS[name] = content
     write(ASSETS / "models" / "item" / f"{name}.json", convert_elements(f"item/{name}", content))
@@ -1869,6 +1926,8 @@ def main():
     enchantments()
     recipes()
     write_tags()
+    if profile.explicit_render_types:
+        apply_render_types()
     write_extras()
     write_manifests()
     count = sum(1 for _ in OUT.rglob("*.json"))
