@@ -6,12 +6,15 @@ import javax.annotation.Nullable;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
 import thaumcraft.entity.golem.GolemBase;
 
 public class GolemModel extends EntityModel<GolemBase> {
     private final ModelPart root;
     private int healing;
+    private boolean hurt;
+    public boolean tinted = true;
     private final ModelPart head;
     private final @Nullable ModelPart headSmart;
     private final @Nullable ModelPart headObserver;
@@ -77,6 +80,7 @@ public class GolemModel extends EntityModel<GolemBase> {
         float partialTick = ageInTicks - entity.tickCount;
         int core = entity.getCore();
         healing = entity.healing;
+        hurt = entity.hurtTime > 0 || entity.deathTime > 0;
         float yaw = netHeadYaw * ((float) Math.PI / 180.0F);
         float pitch = headPitch * ((float) Math.PI / 180.0F);
         for (ModelPart part : new ModelPart[] {head, headSmart, headObserver, headBrain, headJar}) {
@@ -117,10 +121,17 @@ public class GolemModel extends EntityModel<GolemBase> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int light, int overlay, int color) {
-        if (healing > 0) {
-            float h1 = healing / 10.0F;
-            float h2 = healing / 5.0F;
-            color = FastColor.ARGB32.multiply(color, FastColor.ARGB32.colorFromFloat(1.0F, Math.min(1.0F, 0.5F + h1), Math.min(1.0F, 0.9F + h2), Math.min(1.0F, 0.5F + h1)));
+        if (tinted) {
+            if (healing > 0) {
+                float h1 = healing / 10.0F;
+                float h2 = healing / 5.0F;
+                color = FastColor.ARGB32.multiply(color, FastColor.ARGB32.colorFromFloat(1.0F, Math.min(1.0F, 0.5F + h1), Math.min(1.0F, 0.9F + h2), Math.min(1.0F, 0.5F + h1)));
+            } else if (hurt) {
+                color = FastColor.ARGB32.multiply(color, FastColor.ARGB32.colorFromFloat(1.0F, 0.9F, 0.5F, 0.5F));
+            }
+            if (hurt) {
+                overlay = OverlayTexture.NO_OVERLAY;
+            }
         }
         poseStack.pushPose();
         poseStack.scale(0.4F, 0.4F, 0.4F);

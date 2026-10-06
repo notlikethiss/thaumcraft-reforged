@@ -1,27 +1,31 @@
 package thaumcraft.client.render.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import thaumcraft.client.render.RayRendering;
 import thaumcraft.entity.SpecialItem;
 
 public class SpecialItemRenderer extends EntityRenderer<SpecialItem> {
-    private static final float HALF_SQRT_3 = 0.866F;
     private final ItemRenderer itemRenderer;
     private final RandomSource random = RandomSource.create();
     private final boolean rays;
@@ -50,43 +54,42 @@ public class SpecialItemRenderer extends EntityRenderer<SpecialItem> {
         if (this.rays) {
             poseStack.pushPose();
             poseStack.translate(0.0F, bob + 0.275F, 0.0F);
-            renderRays(poseStack, bufferSource, 10, age, 0x00FF00FF);
+            RayRendering.submitRays(poseStack, bufferSource, 10, age, 0x00FF00FF);
             poseStack.popPose();
         }
         this.random.setSeed(ItemEntityRenderer.getSeedForItemStack(stack));
         BakedModel model = this.itemRenderer.getModel(stack, entity.level(), null, entity.getId());
-        float groundScale = model.getTransforms().getTransform(ItemDisplayContext.GROUND).scale.y();
         poseStack.pushPose();
-        poseStack.translate(0.0F, bob + 0.25F * groundScale, 0.0F);
+        poseStack.translate(0.0F, bob - modelMinY(model) + 0.0625F, 0.0F);
         poseStack.mulPose(Axis.YP.rotation(age / 20.0F + entity.hoverStart));
         ItemEntityRenderer.renderMultipleFromCount(this.itemRenderer, poseStack, bufferSource, light, stack, this.random, entity.level());
         poseStack.popPose();
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, light);
     }
 
-    private static void renderRays(PoseStack poseStack, MultiBufferSource bufferSource, int count, float age, int outerColor) {
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.dragonRays());
-        float time = age / 500.0F;
-        float grow = 30.0F / (Math.min(age, 10.0F) / 10.0F);
-        Random random = new Random(245L);
-        Matrix4f matrix = new Matrix4f(poseStack.last().pose());
-        for (int index = 0; index < count; index++) {
-            matrix.rotateX((float) Math.toRadians(random.nextFloat() * 360.0F));
-            matrix.rotateY((float) Math.toRadians(random.nextFloat() * 360.0F));
-            matrix.rotateZ((float) Math.toRadians(random.nextFloat() * 360.0F));
-            matrix.rotateX((float) Math.toRadians(random.nextFloat() * 360.0F));
-            matrix.rotateY((float) Math.toRadians(random.nextFloat() * 360.0F));
-            matrix.rotateZ((float) Math.toRadians(random.nextFloat() * 360.0F + time * 360.0F));
-            float length = (random.nextFloat() * 20.0F + 5.0F) / grow;
-            float width = (random.nextFloat() * 2.0F + 1.0F) / grow;
-            float[][] corners = {{-HALF_SQRT_3 * width, length, -0.5F * width}, {HALF_SQRT_3 * width, length, -0.5F * width}, {0.0F, length, width}};
-            for (int side = 0; side < 3; side++) {
-                float[] first = corners[side];
-                float[] second = corners[(side + 1) % 3];
-                buffer.addVertex(matrix, 0.0F, 0.0F, 0.0F).setColor(0xFFFFFFFF);
-                buffer.addVertex(matrix, first[0], first[1], first[2]).setColor(outerColor);
-                buffer.addVertex(matrix, second[0], second[1], second[2]).setColor(outerColor);
+    private static float modelMinY(BakedModel model) {
+        ItemTransform transform = model.getTransforms().getTransform(ItemDisplayContext.GROUND);
+        Matrix4f matrix = new Matrix4f()
+            .translate(transform.translation)
+            .rotate(new Quaternionf().rotationXYZ(transform.rotation.x * Mth.DEG_TO_RAD, transform.rotation.y * Mth.DEG_TO_RAD, transform.rotation.z * Mth.DEG_TO_RAD))
+            .scale(transform.scale)
+            .translate(-0.5F, -0.5F, -0.5F);
+        float minY = Float.MAX_VALUE;
+        Vector3f point = new Vector3f();
+        RandomSource quadRandom = RandomSource.create(42L);
+        List<Direction> directions = new ArrayList<>(List.of(Direction.values()));
+        directions.add(null);
+        for (Direction direction : directions) {
+            for (BakedQuad quad : model.getQuads(null, direction, quadRandom)) {
+                int[] vertices = quad.getVertices();
+                int stride = vertices.length / 4;
+                for (int index = 0; index < 4; index++) {
+                    point.set(Float.intBitsToFloat(vertices[index * stride]), Float.intBitsToFloat(vertices[index * stride + 1]), Float.intBitsToFloat(vertices[index * stride + 2]));
+                    matrix.transformPosition(point);
+                    minY = Math.min(minY, point.y);
+                }
             }
         }
+        return minY == Float.MAX_VALUE ? -0.25F * transform.scale.y() : minY;
     }
 }

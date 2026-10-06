@@ -114,6 +114,7 @@ public class GolemRenderer extends MobRenderer<GolemBase, GolemModel> {
         DamageLayer(GolemRenderer renderer, GolemModel model) {
             super(renderer);
             this.model = model;
+            this.model.tinted = false;
         }
 
         @Override
