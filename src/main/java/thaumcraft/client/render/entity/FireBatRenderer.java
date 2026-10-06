@@ -11,7 +11,7 @@ import thaumcraft.client.render.model.FireBatModel;
 import thaumcraft.client.render.model.TcModelLayers;
 import thaumcraft.entity.monster.FireBat;
 
-public class FireBatRenderer extends MobRenderer<FireBat, FireBatRenderState, FireBatModel> {
+public class FireBatRenderer extends MobRenderer<FireBat, FireBatModel> {
     private static final ResourceLocation TEXTURE = Thaumcraft.id("textures/model/firebat.png");
 
     public FireBatRenderer(EntityRendererProvider.Context context) {
@@ -19,19 +19,8 @@ public class FireBatRenderer extends MobRenderer<FireBat, FireBatRenderState, Fi
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FireBatRenderState state) {
+    public ResourceLocation getTextureLocation(FireBat entity) {
         return TEXTURE;
-    }
-
-    @Override
-    public FireBatRenderState createRenderState() {
-        return new FireBatRenderState();
-    }
-
-    @Override
-    public void extractRenderState(FireBat entity, FireBatRenderState state, float partialTicks) {
-        super.extractRenderState(entity, state, partialTicks);
-        state.hanging = entity.isHanging();
     }
 
     @Override
@@ -45,17 +34,17 @@ public class FireBatRenderer extends MobRenderer<FireBat, FireBatRenderState, Fi
     }
 
     @Override
-    protected void scale(FireBatRenderState state, PoseStack poseStack) {
+    protected void scale(FireBat entity, PoseStack poseStack, float partialTick) {
         poseStack.scale(0.35F, 0.35F, 0.35F);
     }
 
     @Override
-    protected void setupRotations(FireBatRenderState state, PoseStack poseStack, float bodyRot, float entityScale) {
-        if (state.hanging) {
+    protected void setupRotations(FireBat entity, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale) {
+        if (entity.isHanging()) {
             poseStack.translate(0.0F, -0.1F, 0.0F);
         } else {
-            poseStack.translate(0.0F, Mth.cos(state.ageInTicks * 0.3F) * 0.1F, 0.0F);
+            poseStack.translate(0.0F, Mth.cos(bob * 0.3F) * 0.1F, 0.0F);
         }
-        super.setupRotations(state, poseStack, bodyRot, entityScale);
+        super.setupRotations(entity, poseStack, bob, yBodyRot, partialTick, scale);
     }
 }

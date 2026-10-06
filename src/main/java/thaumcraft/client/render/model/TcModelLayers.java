@@ -1,7 +1,6 @@
 package thaumcraft.client.render.model;
 
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -9,7 +8,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import thaumcraft.Thaumcraft;
 
@@ -24,13 +22,6 @@ public final class TcModelLayers {
     public static final ModelLayerLocation BORE = layer("bore");
     public static final ModelLayerLocation BORE_BASE = layer("bore_base");
     public static final ModelLayerLocation BRAINY_ZOMBIE = layer("brainy_zombie");
-    public static final ModelLayerLocation BRAINY_ZOMBIE_BABY = layer("brainy_zombie_baby");
-    public static final ArmorModelSet<ModelLayerLocation> BRAINY_ZOMBIE_BABY_ARMOR = new ArmorModelSet<>(
-        layer("brainy_zombie_baby", "helmet"),
-        layer("brainy_zombie_baby", "chestplate"),
-        layer("brainy_zombie_baby", "leggings"),
-        layer("brainy_zombie_baby", "boots")
-    );
     public static final ModelLayerLocation FIRE_BAT = layer("fire_bat");
     public static final ModelLayerLocation GOLEM = layer("golem");
     public static final ModelLayerLocation GOLEM_ADVANCED = layer("golem_advanced");
@@ -41,11 +32,7 @@ public final class TcModelLayers {
     }
 
     private static ModelLayerLocation layer(String name) {
-        return layer(name, "main");
-    }
-
-    private static ModelLayerLocation layer(String name, String part) {
-        return new ModelLayerLocation(Thaumcraft.id(name), part);
+        return new ModelLayerLocation(Thaumcraft.id(name), "main");
     }
 
     public static void register(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -59,13 +46,6 @@ public final class TcModelLayers {
         event.registerLayerDefinition(BORE, TcModelLayers::bore);
         event.registerLayerDefinition(BORE_BASE, TcModelLayers::boreBase);
         event.registerLayerDefinition(BRAINY_ZOMBIE, TcModelLayers::legacyHumanoid);
-        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY, () -> legacyHumanoid().apply(HumanoidModel.BABY_TRANSFORMER));
-        ArmorModelSet<LayerDefinition> babyArmor = HumanoidModel.createArmorMeshSet(LayerDefinitions.INNER_ARMOR_DEFORMATION, LayerDefinitions.OUTER_ARMOR_DEFORMATION)
-            .map(mesh -> LayerDefinition.create(mesh, 64, 32).apply(HumanoidModel.BABY_TRANSFORMER));
-        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.head(), babyArmor::head);
-        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.chest(), babyArmor::chest);
-        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.legs(), babyArmor::legs);
-        event.registerLayerDefinition(BRAINY_ZOMBIE_BABY_ARMOR.feet(), babyArmor::feet);
         event.registerLayerDefinition(FIRE_BAT, TcModelLayers::fireBat);
         event.registerLayerDefinition(GOLEM, TcModelLayers::golem);
         event.registerLayerDefinition(GOLEM_ADVANCED, TcModelLayers::golemAdvanced);
@@ -239,7 +219,7 @@ public final class TcModelLayers {
 
     private static LayerDefinition golem() {
         MeshDefinition mesh = new MeshDefinition();
-        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO);
         golemPart(golem, "head", cubes(0, 0, -4.0F, -11.0F, -5.5F, 8.0F, 9.0F, 8.0F), 0.0F, 0.0F, -2.0F);
         golemPart(golem, "head_smart", cubes(0, 96, -4.0F, -13.0F, -5.5F, 8.0F, 11.0F, 8.0F), 0.0F, 0.0F, -2.0F);
         golemPart(golem, "head_observer", cubes(0, 17, -4.0F, -11.0F, -5.5F, 8.0F, 9.0F, 8.0F), 0.0F, 0.0F, -2.0F);
@@ -251,7 +231,7 @@ public final class TcModelLayers {
 
     private static LayerDefinition golemAdvanced() {
         MeshDefinition mesh = new MeshDefinition();
-        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO);
         golemPart(golem, "head", cubes(64, 113, -4.0F, -9.0F, -5.5F, 8.0F, 7.0F, 8.0F), 0.0F, 0.0F, -2.0F);
         golemPart(golem, "head_brain", cubes(96, 118, -3.5F, -12.0F, -5.0F, 7.0F, 3.0F, 7.0F), 0.0F, 0.0F, -2.0F);
         golemPart(golem, "head_jar", cubes(96, 104, -4.0F, -13.0F, -5.5F, 8.0F, 4.0F, 8.0F), 0.0F, 0.0F, -2.0F);
@@ -262,14 +242,14 @@ public final class TcModelLayers {
 
     private static LayerDefinition golemMarker() {
         MeshDefinition mesh = new MeshDefinition();
-        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO);
         golemPart(golem, "marker", cubes(0, 88, -2.0F, 3.0F, -7.0F, 4.0F, 6.0F, 1.0F), 0.0F, 0.0F, 0.0F);
         return LayerDefinition.create(mesh, 128, 128);
     }
 
     private static LayerDefinition golemAccessories() {
         MeshDefinition mesh = new MeshDefinition();
-        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO.withScale(0.4F));
+        PartDefinition golem = mesh.getRoot().addOrReplaceChild("golem", CubeListBuilder.create(), PartPose.ZERO);
         golemPart(golem, "fez", cubes(0, 94, -4.5F, -15.0F, -6.0F, 9.0F, 7.0F, 9.0F), 0.0F, 0.0F, -2.0F);
         golemPart(golem, "plate", cubes(32, 40, -6.5F, -1.0F, -7.0F, 13.0F, 12.0F, 13.0F), 0.0F, 0.0F, 0.0F);
         golemPart(golem, "plate_left", cubes(0, 44, -8.5F, -4.0F, -6.5F, 3.0F, 6.0F, 12.0F), 0.0F, 0.0F, 0.0F);
