@@ -55,7 +55,6 @@
         16,
         16
       ],
-      "light_emission": 10,
       "faces": {
         "down": {
           "texture": "#ore",
@@ -87,6 +86,10 @@
           "cullface": "east",
           "tintindex": 0
         }
+      },
+      "neoforge_data": {
+        "block_light": 10,
+        "sky_light": 10
       }
     }
   ]

@@ -1,18 +1,20 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:amber"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:amber"
     },
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:amber_block"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:amber_block"
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "thaumcraft:amber_block"
+    {
+      "item": "thaumcraft:amber_block"
+    }
   ],
   "result": {
     "id": "thaumcraft:amber",

@@ -19,7 +19,6 @@
         15.68,
         15.68
       ],
-      "light_emission": 11,
       "shade": false,
       "faces": {
         "up": {
@@ -46,6 +45,10 @@
           "texture": "#glow",
           "tintindex": 0
         }
+      },
+      "neoforge_data": {
+        "block_light": 11,
+        "sky_light": 11
       }
     },
     {

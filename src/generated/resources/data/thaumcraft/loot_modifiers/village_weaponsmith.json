@@ -1,8 +1,10 @@
 {
   "type": "neoforge:add_table",
-  "condition": {
-    "type": "neoforge:loot_table_id",
-    "loot_table_id": "minecraft:chests/village/village_weaponsmith"
-  },
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/village/village_weaponsmith"
+    }
+  ],
   "table": "thaumcraft:inject/village_weaponsmith"
 }

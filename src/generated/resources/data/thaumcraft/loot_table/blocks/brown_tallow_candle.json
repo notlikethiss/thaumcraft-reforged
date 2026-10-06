@@ -9,9 +9,11 @@
           "name": "thaumcraft:brown_tallow_candle"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/brown_tallow_candle"

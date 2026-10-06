@@ -9,9 +9,11 @@
           "name": "thaumcraft:arcane_stone"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/arcane_stone"

@@ -9,10 +9,12 @@
           "name": "minecraft:rotten_flesh"
         }
       ],
-      "condition": {
-        "type": "minecraft:random_chance",
-        "chance": 0.5
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.5
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -22,16 +24,18 @@
           "name": "thaumcraft:zombie_brain"
         }
       ],
-      "condition": {
-        "type": "minecraft:random_chance_with_enchanted_bonus",
-        "enchantment": "minecraft:looting",
-        "unenchanted_chance": 0.5,
-        "enchanted_chance": {
-          "type": "minecraft:linear",
-          "base": 0.6,
-          "per_level_above_first": 0.1
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance_with_enchanted_bonus",
+          "enchantment": "minecraft:looting",
+          "unenchanted_chance": 0.5,
+          "enchanted_chance": {
+            "type": "minecraft:linear",
+            "base": 0.6,
+            "per_level_above_first": 0.1
+          }
         }
-      }
+      ]
     },
     {
       "rolls": 1,
@@ -49,24 +53,26 @@
           "name": "minecraft:potato"
         }
       ],
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:killed_by_player"
-          },
-          {
-            "type": "minecraft:random_chance_with_enchanted_bonus",
-            "enchantment": "minecraft:looting",
-            "unenchanted_chance": 0.025,
-            "enchanted_chance": {
-              "type": "minecraft:linear",
-              "base": 0.035,
-              "per_level_above_first": 0.01
+      "conditions": [
+        {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:killed_by_player"
+            },
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.025,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 0.035,
+                "per_level_above_first": 0.01
+              }
             }
-          }
-        ]
-      }
+          ]
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:entities/brainy_zombie"

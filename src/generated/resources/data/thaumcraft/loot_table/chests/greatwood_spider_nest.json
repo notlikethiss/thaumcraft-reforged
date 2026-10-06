@@ -34,10 +34,12 @@
           "name": "thaumcraft:elemental_hoe"
         }
       ],
-      "condition": {
-        "type": "minecraft:random_chance",
-        "chance": 0.06666666666666667
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.06666666666666667
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:chests/greatwood_spider_nest"

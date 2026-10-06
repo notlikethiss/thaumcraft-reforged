@@ -44,7 +44,10 @@
           "tintindex": 2
         }
       },
-      "light_emission": 11
+      "neoforge_data": {
+        "block_light": 11,
+        "sky_light": 11
+      }
     },
     {
       "from": [

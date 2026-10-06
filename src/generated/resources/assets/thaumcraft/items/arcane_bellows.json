@@ -1,9 +1,0 @@
-{
-  "model": {
-    "type": "minecraft:special",
-    "base": "thaumcraft:item/arcane_bellows",
-    "model": {
-      "type": "thaumcraft:bellows"
-    }
-  }
-}

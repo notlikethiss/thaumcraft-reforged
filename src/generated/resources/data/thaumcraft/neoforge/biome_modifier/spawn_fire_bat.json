@@ -3,7 +3,8 @@
   "biomes": "#minecraft:is_nether",
   "spawners": {
     "type": "thaumcraft:fire_bat",
-    "count": 1,
-    "weight": 10
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
   }
 }

@@ -1,15 +1,19 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:lime_marker"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:lime_marker"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "W": "#minecraft:planks",
-    "S": "minecraft:lime_wool"
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:lime_wool"
+    }
   },
   "pattern": [
     " W ",

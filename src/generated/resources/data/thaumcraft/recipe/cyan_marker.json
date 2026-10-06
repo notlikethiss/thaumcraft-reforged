@@ -1,15 +1,19 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:cyan_marker"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:cyan_marker"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "W": "#minecraft:planks",
-    "S": "minecraft:cyan_wool"
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:cyan_wool"
+    }
   },
   "pattern": [
     " W ",

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "entries": [
+    "thaumcraft:simple_dungeon",
+    "thaumcraft:jungle_temple",
+    "thaumcraft:desert_pyramid",
+    "thaumcraft:abandoned_mineshaft",
+    "thaumcraft:stronghold_corridor",
+    "thaumcraft:stronghold_crossing",
+    "thaumcraft:stronghold_library",
+    "thaumcraft:village_weaponsmith"
+  ]
+}

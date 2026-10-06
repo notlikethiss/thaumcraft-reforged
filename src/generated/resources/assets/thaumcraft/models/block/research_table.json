@@ -501,7 +501,7 @@
           2.4
         ],
         "axis": "y",
-        "angle": -15
+        "angle": -22.5
       },
       "faces": {
         "up": {
@@ -533,7 +533,7 @@
           10.72
         ],
         "axis": "y",
-        "angle": 15
+        "angle": 22.5
       },
       "faces": {
         "east": {

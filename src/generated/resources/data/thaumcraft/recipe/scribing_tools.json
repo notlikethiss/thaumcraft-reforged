@@ -1,16 +1,22 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:scribing_tools"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:scribing_tools"
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:glass_bottle",
-    "minecraft:feather",
-    "minecraft:ink_sac"
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    }
   ],
   "result": {
     "id": "thaumcraft:scribing_tools"

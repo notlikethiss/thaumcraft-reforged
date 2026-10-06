@@ -19,7 +19,7 @@ public final class ConfigAspects extends AspectRegistrar {
         register("minecraft:clay_ball", tags().add(Aspect.EARTH, 2).add(Aspect.WATER, 1));
         register("minecraft:clay", tags().add(Aspect.EARTH, 6).add(Aspect.WATER, 3));
         register("minecraft:gold_nugget", tags().add(Aspect.METAL, 1));
-        register(List.of("minecraft:iron_nugget", "minecraft:copper_nugget", "thaumcraft:tin_nugget", "thaumcraft:silver_nugget", "thaumcraft:lead_nugget", "thaumcraft:quicksilver_drop", "thaumcraft:native_copper_cluster", "thaumcraft:native_tin_cluster", "thaumcraft:native_silver_cluster", "thaumcraft:native_lead_cluster"), tags().add(Aspect.METAL, 1));
+        register(List.of("minecraft:iron_nugget", "thaumcraft:tin_nugget", "thaumcraft:silver_nugget", "thaumcraft:lead_nugget", "thaumcraft:quicksilver_drop", "thaumcraft:native_copper_cluster", "thaumcraft:native_tin_cluster", "thaumcraft:native_silver_cluster", "thaumcraft:native_lead_cluster"), tags().add(Aspect.METAL, 1));
         register("minecraft:brick", tags().add(Aspect.EARTH, 2).add(Aspect.FIRE, 1));
         register("minecraft:soul_sand", tags().add(Aspect.EARTH, 1).add(Aspect.TRAP, 1).add(Aspect.SPIRIT, 1));
         register("minecraft:netherrack", tags().add(Aspect.EARTH, 1).add(Aspect.ROCK, 1).add(Aspect.FIRE, 1));

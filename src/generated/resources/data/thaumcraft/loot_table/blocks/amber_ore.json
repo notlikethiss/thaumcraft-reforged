@@ -9,15 +9,31 @@
           "children": [
             {
               "type": "minecraft:item",
-              "condition": "minecraft:tool/can_silk_touch",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
               "name": "thaumcraft:amber_ore"
             },
             {
               "type": "minecraft:item",
               "name": "thaumcraft:amber",
-              "modifier": [
+              "functions": [
                 {
-                  "type": "minecraft:apply_bonus",
+                  "function": "minecraft:apply_bonus",
                   "enchantment": "minecraft:fortune",
                   "formula": "minecraft:uniform_bonus_count",
                   "parameters": {
@@ -25,7 +41,7 @@
                   }
                 },
                 {
-                  "type": "minecraft:explosion_decay"
+                  "function": "minecraft:explosion_decay"
                 }
               ]
             }

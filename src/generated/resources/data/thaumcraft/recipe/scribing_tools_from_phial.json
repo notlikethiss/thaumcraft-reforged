@@ -1,20 +1,26 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:essentia_phial"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:essentia_phial"
     },
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:scribing_tools"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:scribing_tools"
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "thaumcraft:essentia_phial",
-    "minecraft:feather",
-    "minecraft:ink_sac"
+    {
+      "item": "thaumcraft:essentia_phial"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    }
   ],
   "result": {
     "id": "thaumcraft:scribing_tools"

@@ -3,7 +3,8 @@
   "biomes": "#minecraft:is_overworld",
   "spawners": {
     "type": "thaumcraft:brainy_zombie",
-    "count": 1,
-    "weight": 6
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
   }
 }

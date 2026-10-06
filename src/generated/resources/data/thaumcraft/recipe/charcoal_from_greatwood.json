@@ -1,14 +1,16 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:greatwood_log"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:greatwood_log"
     }
   ],
   "type": "minecraft:smelting",
   "cookingtime": 200,
   "experience": 0.5,
-  "ingredient": "thaumcraft:greatwood_log",
+  "ingredient": {
+    "item": "thaumcraft:greatwood_log"
+  },
   "result": {
     "id": "minecraft:charcoal"
   }

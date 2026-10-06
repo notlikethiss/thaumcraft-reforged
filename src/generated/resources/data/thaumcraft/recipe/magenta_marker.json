@@ -1,15 +1,19 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:magenta_marker"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:magenta_marker"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "W": "#minecraft:planks",
-    "S": "minecraft:magenta_wool"
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:magenta_wool"
+    }
   },
   "pattern": [
     " W ",

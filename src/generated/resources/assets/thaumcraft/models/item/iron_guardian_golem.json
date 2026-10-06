@@ -2,5 +2,31 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "thaumcraft:item/golemiron"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "thaumcraft:golem_core": 1
+      },
+      "model": "thaumcraft:item/iron_guardian_golem_golemtypefast"
+    },
+    {
+      "predicate": {
+        "thaumcraft:golem_core": 2
+      },
+      "model": "thaumcraft:item/iron_guardian_golem_golemtypesmart"
+    },
+    {
+      "predicate": {
+        "thaumcraft:golem_core": 3
+      },
+      "model": "thaumcraft:item/iron_guardian_golem_golemtypevision"
+    },
+    {
+      "predicate": {
+        "thaumcraft:golem_core": 4
+      },
+      "model": "thaumcraft:item/iron_guardian_golem_golemtypestrong"
+    }
+  ]
 }

@@ -43,10 +43,12 @@
           "name": "thaumcraft:elemental_hoe"
         }
       ],
-      "condition": {
-        "type": "minecraft:random_chance",
-        "chance": 0.1
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.1
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:chests/hilltop_stones"

@@ -9,15 +9,22 @@
           "children": [
             {
               "type": "minecraft:item",
-              "condition": "minecraft:tool/can_shear",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "items": "minecraft:shears"
+                  }
+                }
+              ],
               "name": "thaumcraft:shimmerleaf"
             },
             {
               "type": "minecraft:item",
               "name": "thaumcraft:quicksilver",
-              "modifier": [
+              "functions": [
                 {
-                  "type": "minecraft:apply_bonus",
+                  "function": "minecraft:apply_bonus",
                   "enchantment": "minecraft:fortune",
                   "formula": "minecraft:uniform_bonus_count",
                   "parameters": {

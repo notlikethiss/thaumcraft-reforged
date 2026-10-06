@@ -7,18 +7,22 @@
         {
           "type": "minecraft:item",
           "name": "thaumcraft:arcane_door",
-          "condition": {
-            "type": "minecraft:match_block",
-            "blocks": "thaumcraft:arcane_door",
-            "state": {
-              "half": "lower"
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "thaumcraft:arcane_door",
+              "properties": {
+                "half": "lower"
+              }
             }
-          }
+          ]
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/arcane_door"

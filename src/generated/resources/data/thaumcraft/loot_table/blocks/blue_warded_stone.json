@@ -9,9 +9,11 @@
           "name": "thaumcraft:blue_warded_stone"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/blue_warded_stone"

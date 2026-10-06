@@ -1,14 +1,16 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:native_copper_cluster"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:native_copper_cluster"
     }
   ],
   "type": "minecraft:smelting",
   "cookingtime": 200,
   "experience": 1.0,
-  "ingredient": "thaumcraft:native_copper_cluster",
+  "ingredient": {
+    "item": "thaumcraft:native_copper_cluster"
+  },
   "result": {
     "id": "minecraft:copper_ingot",
     "count": 2

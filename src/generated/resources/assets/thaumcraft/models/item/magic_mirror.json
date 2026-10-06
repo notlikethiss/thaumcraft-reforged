@@ -3,5 +3,13 @@
   "textures": {
     "layer0": "thaumcraft:item/mirrorframe",
     "layer1": "thaumcraft:item/mirrorpane"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "thaumcraft:linked": 1
+      },
+      "model": "thaumcraft:item/magic_mirror_linked"
+    }
+  ]
 }

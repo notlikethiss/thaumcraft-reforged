@@ -1,3 +1,4 @@
 {
-  "type": "thaumcraft:world_generation"
+  "type": "thaumcraft:world_generation",
+  "config": {}
 }

@@ -1,19 +1,23 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:thaumium_axe"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:thaumium_axe"
     },
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:thaumium_ingot"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:thaumium_ingot"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": "thaumcraft:thaumium_ingot",
-    "S": "minecraft:stick"
+    "I": {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
   },
   "pattern": [
     "II",

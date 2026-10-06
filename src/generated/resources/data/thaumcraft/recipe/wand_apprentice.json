@@ -1,16 +1,22 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:wand_apprentice"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:wand_apprentice"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": "#thaumcraft:shards",
-    "G": "minecraft:gold_nugget",
-    "S": "minecraft:stick"
+    "C": {
+      "tag": "thaumcraft:shards"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
   },
   "pattern": [
     "  C",

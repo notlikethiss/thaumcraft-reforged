@@ -1,15 +1,19 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:registered",
-      "value": "thaumcraft:purple_marker"
+      "type": "neoforge:item_exists",
+      "item": "thaumcraft:purple_marker"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "W": "#minecraft:planks",
-    "S": "minecraft:purple_wool"
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:purple_wool"
+    }
   },
   "pattern": [
     " W ",

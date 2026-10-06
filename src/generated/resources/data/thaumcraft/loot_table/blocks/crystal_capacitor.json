@@ -7,13 +7,15 @@
         {
           "type": "minecraft:item",
           "name": "thaumcraft:crystal_capacitor",
-          "modifier": {
-            "type": "minecraft:copy_components",
-            "source": "block_entity",
-            "include": [
-              "thaumcraft:stored_vis"
-            ]
-          }
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "thaumcraft:stored_vis"
+              ]
+            }
+          ]
         }
       ]
     }

@@ -1,8 +1,10 @@
 {
   "type": "neoforge:add_table",
-  "condition": {
-    "type": "neoforge:loot_table_id",
-    "loot_table_id": "minecraft:chests/simple_dungeon"
-  },
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/simple_dungeon"
+    }
+  ],
   "table": "thaumcraft:inject/simple_dungeon"
 }

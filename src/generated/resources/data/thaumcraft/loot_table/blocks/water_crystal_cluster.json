@@ -9,9 +9,11 @@
           "name": "thaumcraft:water_crystal_cluster"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/water_crystal_cluster"
