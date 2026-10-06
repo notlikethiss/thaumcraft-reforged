@@ -52,9 +52,9 @@ public class BellowsBlockEntity extends BlockEntity {
         bellows.delay = 0;
         Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
         if (level.getBlockEntity(pos.relative(facing)) instanceof AbstractFurnaceBlockEntity furnace
-            && furnace.cookingTimer > 0
-            && furnace.cookingTimer < furnace.cookingTotalTime - 1) {
-            furnace.cookingTimer++;
+            && furnace.cookingProgress > 0
+            && furnace.cookingProgress < furnace.cookingTotalTime - 1) {
+            furnace.cookingProgress++;
         }
     }
 }
