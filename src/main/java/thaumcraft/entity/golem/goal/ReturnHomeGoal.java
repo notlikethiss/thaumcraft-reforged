@@ -9,7 +9,7 @@ public class ReturnHomeGoal extends GolemMoveGoal {
     }
 
     private double homeDistance() {
-        BlockPos home = this.golem.getHomePosition();
+        BlockPos home = this.golem.getRestrictCenter();
         return this.golem.distanceToSqr(home.getX() + 0.5F, home.getY() + 0.5F, home.getZ() + 0.5F);
     }
 
@@ -25,7 +25,7 @@ public class ReturnHomeGoal extends GolemMoveGoal {
 
     @Override
     public void start() {
-        BlockPos home = this.golem.getHomePosition();
+        BlockPos home = this.golem.getRestrictCenter();
         startMoving(home.getX(), home.getY(), home.getZ());
     }
 }

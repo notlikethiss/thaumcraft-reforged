@@ -1,6 +1,7 @@
 package thaumcraft.entity.monster;
 
 import java.util.UUID;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -154,8 +155,8 @@ public class FireBat extends Monster {
     }
 
     @Override
-    protected boolean shouldDropLoot(ServerLevel level) {
-        return !this.isSummoned() && super.shouldDropLoot(level);
+    protected boolean shouldDropLoot() {
+        return !this.isSummoned() && super.shouldDropLoot();
     }
 
     @Override
@@ -180,8 +181,9 @@ public class FireBat extends Monster {
     }
 
     @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        ServerLevel level = (ServerLevel) this.level();
         if (this.attackTime > 0) {
             this.attackTime--;
         }
@@ -264,16 +266,20 @@ public class FireBat extends Monster {
             return;
         }
         if (this.isSummoned() && this.summoner != null) {
-            target.setLastHurtByPlayer(this.summoner, 100);
+            Player summonerPlayer = this.level().getPlayerByUUID(this.summoner);
+            if (summonerPlayer != null) {
+                target.setLastHurtByPlayer(summonerPlayer);
+                target.lastHurtByPlayerTime = 100;
+            }
         }
         this.attackTime = 20;
         if (this.random.nextInt(10) == 0) {
-            target.setInvulnerableTime(0);
+            target.invulnerableTime = 0;
             level.explode(this, this.getX(), this.getY(), this.getZ(), 1.5F, Level.ExplosionInteraction.NONE);
             this.discard();
         } else if (this.random.nextBoolean()) {
             Vec3 motion = target.getDeltaMovement();
-            this.doHurtTarget(level, target);
+            this.doHurtTarget(target);
             target.setDeltaMovement(motion);
         } else {
             target.igniteForSeconds(this.isSummoned() ? 4 : 2);
@@ -283,7 +289,7 @@ public class FireBat extends Monster {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
-        if (this.isInvulnerableTo(level, source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION)) {
+        if (this.isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION)) {
             return false;
         }
         if (this.isHanging()) {
@@ -296,8 +302,9 @@ public class FireBat extends Monster {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.entityData.set(DATA_FLAGS, input.getByteOr("BatFlags", (byte) 0));
         this.damBonus = input.getByteOr("damBonus", (byte) 0);
         this.summoner = input.read("Summoner", UUIDUtil.CODEC).orElse(null);
@@ -305,8 +312,9 @@ public class FireBat extends Monster {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putByte("BatFlags", this.entityData.get(DATA_FLAGS));
         output.putByte("damBonus", (byte) this.damBonus);
         output.storeNullable("Summoner", UUIDUtil.CODEC, this.summoner);

@@ -35,7 +35,7 @@ public final class HilltopStonesGenerator {
         if (!LegacyGen.isValidSpawnBase(replace)) {
             replace = Blocks.GRASS_BLOCK.defaultBlockState();
         }
-        boolean genVines = biome.warmEnoughToRain(new BlockPos(i, j, k), level.getSeaLevel());
+        boolean genVines = biome.warmEnoughToRain(new BlockPos(i, j, k));
         BlockState tile = ModBlocks.OBSIDIAN_TILE.get().defaultBlockState();
         BlockState totem = ModBlocks.OBSIDIAN_TOTEM.get().defaultBlockState();
         for (int x = i - 3; x <= i + 3; x++) {

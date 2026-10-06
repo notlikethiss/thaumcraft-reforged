@@ -18,11 +18,13 @@ public class Alumentum extends ThrowableItemProjectile {
     }
 
     public Alumentum(Level level, LivingEntity owner, ItemStack stack) {
-        super(ModEntities.ALUMENTUM.get(), owner, level, stack);
+        super(ModEntities.ALUMENTUM.get(), owner, level);
+        this.setItem(stack);
     }
 
     public Alumentum(Level level, double x, double y, double z, ItemStack stack) {
-        super(ModEntities.ALUMENTUM.get(), x, y, z, level, stack);
+        super(ModEntities.ALUMENTUM.get(), x, y, z, level);
+        this.setItem(stack);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class LiquidEmptyGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        BlockPos home = this.golem.getHomePosition();
+        BlockPos home = this.golem.getRestrictCenter();
         if (this.golem.getAmount() < DecantingGolem.SPACE_PER_UNIT
             || !this.golem.getNavigation().isDone()
             || this.golem.distanceToSqr(home.getX() + 0.5F, home.getY() + 0.5F, home.getZ() + 0.5F) > 5.0) {

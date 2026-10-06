@@ -1,5 +1,6 @@
 package thaumcraft.entity.monster;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -85,7 +87,15 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
 
     @Override
     public void travel(Vec3 input) {
-        this.travelFlying(input, 0.02F);
+        this.moveRelative(0.02F, input);
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        if (this.isInWater()) {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
+        } else if (this.isInLava()) {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+        } else {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.91F));
+        }
     }
 
     @Override
@@ -151,8 +161,9 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
     }
 
     @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        ServerLevel level = (ServerLevel) this.level();
         double dx = this.waypointX - this.getX();
         double dy = this.waypointY - this.getY();
         double dz = this.waypointZ - this.getZ();
@@ -283,18 +294,20 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
         }
         ItemStack essence = new ItemStack(ModItems.WISP_ESSENCE.get(), 1 + this.random.nextInt(looting + 1) / 2);
         EssenceItem.setAspect(essence, aspect);
-        this.spawnAtLocation(level, essence);
+        this.spawnAtLocation(essence);
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putByte("Type", (byte) this.getAspect().getId());
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.entityData.set(DATA_TYPE, input.getByteOr("Type", (byte) Aspect.FLUX.getId()));
     }
 }

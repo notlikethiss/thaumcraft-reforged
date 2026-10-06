@@ -1,5 +1,6 @@
 package thaumcraft.entity.golem;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -96,7 +97,7 @@ public class IronGuardianGolem extends GolemBase {
     }
 
     public void setTargetFlag(int flag, boolean value) {
-        if (flag == PLAYERS && value && !(this.level() instanceof ServerLevel level && level.isPvpAllowed())) {
+        if (flag == PLAYERS && value && !(this.level() instanceof ServerLevel level && level.getServer().isPvpAllowed())) {
             value = false;
         }
         byte flags = this.entityData.get(DATA_TARGETS);
@@ -129,11 +130,15 @@ public class IronGuardianGolem extends GolemBase {
     }
 
     @Override
-    public boolean doHurtTarget(ServerLevel level, Entity target) {
+    public boolean doHurtTarget(Entity target) {
         if (hasDecoration("V") && getOwnerId() != null && target instanceof LivingEntity living) {
-            living.setLastHurtByPlayer(getOwnerId(), 100);
+            Player owner = this.level().getPlayerByUUID(getOwnerId());
+            if (owner != null) {
+                living.setLastHurtByPlayer(owner);
+                living.lastHurtByPlayerTime = 100;
+            }
         }
-        return super.doHurtTarget(level, target);
+        return super.doHurtTarget(target);
     }
 
     public void shootDart(LivingEntity target) {
@@ -165,14 +170,16 @@ public class IronGuardianGolem extends GolemBase {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putByte("Targets", this.entityData.get(DATA_TARGETS));
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.entityData.set(DATA_TARGETS, input.getByteOr("Targets", (byte) HOSTILES));
     }
 }

@@ -203,7 +203,7 @@ public final class GolemUtils {
     }
 
     public static Direction sideFacing(BlockPos from, BlockPos to) {
-        Direction direction = Direction.getApproximateNearest(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
+        Direction direction = Direction.getNearest(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
         return direction;
     }
 

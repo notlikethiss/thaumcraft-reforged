@@ -1,17 +1,13 @@
 package thaumcraft.aura;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.saveddata.SavedDataType;
-import thaumcraft.Thaumcraft;
 
 public final class AuraIdData extends SavedData {
-    public static final Codec<AuraIdData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.INT.optionalFieldOf("last_id", -1).forGetter(data -> data.lastId)
-    ).apply(instance, AuraIdData::new));
-    public static final SavedDataType<AuraIdData> TYPE = new SavedDataType<>(Thaumcraft.id("node_ids"), AuraIdData::new, CODEC);
+    public static final String NAME = "thaumcraft_node_ids";
+    public static final SavedData.Factory<AuraIdData> FACTORY = new SavedData.Factory<>(AuraIdData::new, (tag, provider) -> load(tag), null);
 
     private int lastId;
 
@@ -23,8 +19,18 @@ public final class AuraIdData extends SavedData {
         this.lastId = lastId;
     }
 
+    private static AuraIdData load(CompoundTag tag) {
+        return new AuraIdData(tag.contains("last_id") ? tag.getInt("last_id") : -1);
+    }
+
+    @Override
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+        tag.putInt("last_id", lastId);
+        return tag;
+    }
+
     public static AuraIdData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(TYPE);
+        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, NAME);
     }
 
     public int nextId() {

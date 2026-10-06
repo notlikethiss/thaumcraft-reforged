@@ -31,7 +31,6 @@ public final class AspectHelper {
         BlockTags.INCORRECT_FOR_WOODEN_TOOL, 0,
         BlockTags.INCORRECT_FOR_GOLD_TOOL, 0,
         BlockTags.INCORRECT_FOR_STONE_TOOL, 1,
-        BlockTags.INCORRECT_FOR_COPPER_TOOL, 1,
         BlockTags.INCORRECT_FOR_IRON_TOOL, 2,
         BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 3,
         BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 4

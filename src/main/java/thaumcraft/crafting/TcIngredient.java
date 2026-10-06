@@ -92,7 +92,7 @@ public record TcIngredient(String id, boolean tag, @Nullable Aspect aspect, int 
 
     public Ingredient toIngredient() {
         if (tag) {
-            return Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tagKey()));
+            return Ingredient.of(tagKey());
         }
         Item item = resolveItem();
         return item == null ? Ingredient.of() : Ingredient.of(item);

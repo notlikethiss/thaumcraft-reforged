@@ -34,17 +34,17 @@ public final class VillageTowers {
 
     @SubscribeEvent
     static void onServerAboutToStart(ServerAboutToStartEvent event) {
-        Registry<StructureTemplatePool> pools = event.getServer().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL);
-        Registry<StructureProcessorList> processorLists = event.getServer().registryAccess().lookupOrThrow(Registries.PROCESSOR_LIST);
+        Registry<StructureTemplatePool> pools = event.getServer().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL);
+        Registry<StructureProcessorList> processorLists = event.getServer().registryAccess().registryOrThrow(Registries.PROCESSOR_LIST);
         BIOMES.forEach((biome, processorName) -> {
-            StructureTemplatePool pool = pools.getValueOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, ResourceLocation.withDefaultNamespace("village/" + biome + "/houses")));
+            StructureTemplatePool pool = pools.getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL, ResourceLocation.withDefaultNamespace("village/" + biome + "/houses")));
             String location = Thaumcraft.MODID + ":village/" + biome + "/wizard_tower";
             for (Pair<StructurePoolElement, Integer> entry : pool.rawTemplates) {
                 if (entry.getFirst() instanceof LegacySinglePoolElement single && single.toString().contains(location)) {
                     return;
                 }
             }
-            Holder<StructureProcessorList> processors = processorLists.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, ResourceLocation.withDefaultNamespace(processorName)));
+            Holder<StructureProcessorList> processors = processorLists.getHolderOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, ResourceLocation.withDefaultNamespace(processorName)));
             StructurePoolElement element = StructurePoolElement.legacy(location, processors).apply(StructureTemplatePool.Projection.RIGID);
             List<Pair<StructurePoolElement, Integer>> raw = new ArrayList<>(pool.rawTemplates);
             raw.add(Pair.of(element, WEIGHT));

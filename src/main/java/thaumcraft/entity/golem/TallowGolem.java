@@ -1,6 +1,7 @@
 package thaumcraft.entity.golem;
 
 import java.util.List;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -141,14 +142,15 @@ public class TallowGolem extends GolemWorker {
     public void dropContents(ServerLevel level) {
         super.dropContents(level);
         if (!this.essences.isEmpty()) {
-            this.spawnAtLocation(level, this.essences, 0.5F);
+            this.spawnAtLocation(this.essences, 0.5F);
             this.essences = ItemStack.EMPTY;
         }
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putShort("TallowType", (short) getTallowType());
         if (!this.essences.isEmpty()) {
             output.store("Essences", ItemStack.CODEC, this.essences);
@@ -156,8 +158,9 @@ public class TallowGolem extends GolemWorker {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.essences = input.read("Essences", ItemStack.CODEC).orElse(ItemStack.EMPTY);
         applyType(input.getShortOr("TallowType", (short) 0));
     }

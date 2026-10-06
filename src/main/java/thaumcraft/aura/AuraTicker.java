@@ -43,7 +43,7 @@ public final class AuraTicker {
             node.dimension = level.dimension();
             if (node.key < 0) {
                 node.key = AuraIdData.get(level.getServer()).nextId();
-                chunk.markUnsaved();
+                chunk.setUnsaved(true);
             }
             if (AuraManager.getNode(node.key) == null) {
                 AuraManager.addNode(node);
@@ -74,7 +74,7 @@ public final class AuraTicker {
         }
         LevelChunk chunk = level.getChunkSource().getChunkNow(SectionPos.blockToSectionCoord(node.x), SectionPos.blockToSectionCoord(node.z));
         if (chunk != null) {
-            chunk.markUnsaved();
+            chunk.setUnsaved(true);
         }
     }
 

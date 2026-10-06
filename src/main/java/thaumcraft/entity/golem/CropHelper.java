@@ -1,5 +1,6 @@
 package thaumcraft.entity.golem;
 
+import java.util.Collections;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -43,7 +44,7 @@ public final class CropHelper {
     private static boolean isMaxAge(BlockState state) {
         for (Property<?> property : state.getProperties()) {
             if (property.getName().equals("age") && property instanceof IntegerProperty age) {
-                return state.getValue(age).equals(age.getPossibleValues().getLast());
+                return state.getValue(age).equals(Collections.max(age.getPossibleValues()));
             }
         }
         return false;

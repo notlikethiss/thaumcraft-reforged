@@ -34,7 +34,7 @@ public final class LegacyGen {
         int distanceToAir = 0;
         while (!isAir(level, x, y + distanceToAir, z)) {
             distanceToAir++;
-            if (y + distanceToAir > level.getMaxY()) {
+            if (y + distanceToAir > level.getMaxBuildHeight() - 1) {
                 return false;
             }
         }

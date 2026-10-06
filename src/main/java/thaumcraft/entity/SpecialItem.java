@@ -1,5 +1,6 @@
 package thaumcraft.entity;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,7 +13,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoveSimulationType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -68,11 +68,6 @@ public class SpecialItem extends Entity {
     @Override
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;
-    }
-
-    @Override
-    public MoveSimulationType getMoveSimulationType() {
-        return MoveSimulationType.SERVER_AND_CLIENT;
     }
 
     @Override
@@ -161,7 +156,8 @@ public class SpecialItem extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
+    public void addAdditionalSaveData(CompoundTag tag) {
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putShort("Health", (short) this.health);
         output.putShort("Age", (short) this.age);
         output.putInt("Lifespan", this.lifespan);
@@ -172,7 +168,8 @@ public class SpecialItem extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
+    public void readAdditionalSaveData(CompoundTag tag) {
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.health = input.getShortOr("Health", (short) 5) & 255;
         this.age = input.getShortOr("Age", (short) 0);
         this.lifespan = input.getIntOr("Lifespan", 6000);

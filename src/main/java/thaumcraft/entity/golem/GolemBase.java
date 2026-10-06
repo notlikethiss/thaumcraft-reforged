@@ -2,6 +2,7 @@ package thaumcraft.entity.golem;
 
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.UUIDUtil;
@@ -136,7 +137,7 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     public BlockPos getHomeContainerPos() {
-        return getHomePosition().relative(homeFacing.getOpposite());
+        return getRestrictCenter().relative(homeFacing.getOpposite());
     }
 
     public GolemInventory getInventory() {
@@ -172,9 +173,9 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     @Override
-    public boolean isWithinHome(BlockPos pos) {
+    public boolean isWithinRestriction(BlockPos pos) {
         float range = getRange();
-        return getHomePosition().distSqr(pos) < range * range;
+        return getRestrictCenter().distSqr(pos) < range * range;
     }
 
     protected void refreshStats() {
@@ -274,7 +275,7 @@ public abstract class GolemBase extends PathfinderMob {
             }
         }
         if (!this.level().isClientSide()) {
-            BlockPos home = getHomePosition();
+            BlockPos home = getRestrictCenter();
             if (this.distanceToSqr(home.getX(), home.getY(), home.getZ()) >= 2304.0 || this.isInWall()) {
                 returnToHome(home);
             }
@@ -289,7 +290,7 @@ public abstract class GolemBase extends PathfinderMob {
                     BlockPos pos = home.offset(dx, dy, dz);
                     BlockPos below = pos.below();
                     if (level.getBlockState(below).isFaceSturdy(level, below, Direction.UP) && !level.getBlockState(pos).isRedstoneConductor(level, pos)) {
-                        this.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.getYRot(), this.getXRot());
+                        this.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.getYRot(), this.getXRot());
                         this.getNavigation().stop();
                         return;
                     }
@@ -339,12 +340,12 @@ public abstract class GolemBase extends PathfinderMob {
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
             ItemStack stack = inventory.removeItemNoUpdate(slot);
             if (!stack.isEmpty()) {
-                this.spawnAtLocation(level, stack);
+                this.spawnAtLocation(stack);
             }
         }
         ItemStack carried = getCarried();
         if (!carried.isEmpty()) {
-            this.spawnAtLocation(level, carried, 0.5F);
+            this.spawnAtLocation(carried, 0.5F);
             setCarried(ItemStack.EMPTY);
         }
     }
@@ -402,7 +403,7 @@ public abstract class GolemBase extends PathfinderMob {
                     this.random.nextGaussian() * 0.02,
                     this.random.nextGaussian() * 0.02
                 );
-                this.playSound(SoundEvents.GENERIC_EAT.value(), 0.3F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.playSound(SoundEvents.GENERIC_EAT, 0.3F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 if (!this.level().isClientSide()) {
                     int duration = 600;
                     MobEffectInstance speed = this.getEffect(MobEffects.MOVEMENT_SPEED);
@@ -443,9 +444,10 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
-        BlockPos home = getHomePosition();
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
+        BlockPos home = getRestrictCenter();
         output.putInt("HomeX", home.getX());
         output.putInt("HomeY", home.getY());
         output.putInt("HomeZ", home.getZ());
@@ -461,9 +463,10 @@ public abstract class GolemBase extends PathfinderMob {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
-        this.setHomeTo(new BlockPos(input.getIntOr("HomeX", 0), input.getIntOr("HomeY", 0), input.getIntOr("HomeZ", 0)), 32);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
+        this.restrictTo(new BlockPos(input.getIntOr("HomeX", 0), input.getIntOr("HomeY", 0), input.getIntOr("HomeZ", 0)), 32);
         this.homeFacing = Direction.from3DDataValue(input.getIntOr("HomeFacing", 0));
         this.entityData.set(DATA_COLOR, (int) input.getShortOr("Color", (short) 0));
         int core = input.getShortOr("GolemType", (short) 0);

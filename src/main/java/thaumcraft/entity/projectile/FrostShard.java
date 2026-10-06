@@ -1,5 +1,6 @@
 package thaumcraft.entity.projectile;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,7 +16,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -62,7 +63,7 @@ public class FrostShard extends Projectile {
         double x = shooter.getX() - Mth.cos(yaw / 180.0F * (float) Math.PI) * 0.16F + look.x;
         double y = shooter.getEyeY() - 0.15F + look.y;
         double z = shooter.getZ() - Mth.sin(yaw / 180.0F * (float) Math.PI) * 0.16F + look.z;
-        this.snapTo(x, y, z, yaw, pitch);
+        this.moveTo(x, y, z, yaw, pitch);
         double motionX = -Mth.sin(yaw / 180.0F * (float) Math.PI) * Mth.cos(pitch / 180.0F * (float) Math.PI);
         double motionZ = Mth.cos(yaw / 180.0F * (float) Math.PI) * Mth.cos(pitch / 180.0F * (float) Math.PI);
         double motionY = -Mth.sin(pitch / 180.0F * (float) Math.PI);
@@ -241,13 +242,13 @@ public class FrostShard extends Projectile {
             drag = 0.1F;
         }
         this.setDeltaMovement(motion.scale(drag).add(0.0, -0.05F, 0.0));
-        this.applyEffectsFromBlocks();
+        this.checkInsideBlocks();
     }
 
     private void hitEntity(ServerLevel level, Entity target) {
         Vec3 motion = this.getDeltaMovement();
         float speed = (float) motion.length();
-        if (target instanceof Blaze || target instanceof FireBat || target instanceof Enderman) {
+        if (target instanceof Blaze || target instanceof FireBat || target instanceof EnderMan) {
             speed = (int) (this.damage * 2.0);
         }
         int amount = Mth.ceil(speed * this.damage);
@@ -263,11 +264,11 @@ public class FrostShard extends Projectile {
                 }
                 EnchantmentHelper.doPostAttackEffects(level, living, source);
                 if (owner instanceof ServerPlayer player && target != owner && target instanceof Player) {
-                    player.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.PLAY_ARROW_HIT_SOUND, 0.0F));
+                    player.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
                 }
             }
             this.playSound(SoundEvents.PLAYER_HURT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-            if (!(target instanceof Enderman)) {
+            if (!(target instanceof EnderMan)) {
                 this.discard();
             }
         } else {
@@ -312,8 +313,9 @@ public class FrostShard extends Projectile {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.storeNullable("inPos", BlockPos.CODEC, this.inPos);
         output.storeNullable("inState", BlockState.CODEC, this.inState);
         output.putBoolean("inGround", this.inGround);
@@ -322,8 +324,9 @@ public class FrostShard extends Projectile {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.inPos = input.read("inPos", BlockPos.CODEC).orElse(null);
         this.inState = input.read("inState", BlockState.CODEC).orElse(null);
         this.inGround = input.getBooleanOr("inGround", false);

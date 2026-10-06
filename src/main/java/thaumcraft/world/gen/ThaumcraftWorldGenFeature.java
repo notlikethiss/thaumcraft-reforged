@@ -1,6 +1,5 @@
 package thaumcraft.world.gen;
 
-import com.mojang.serialization.MapCodec;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -20,6 +19,8 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -31,22 +32,23 @@ import thaumcraft.block.world.InfusedStoneBlock;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.world.BiomeHandler;
 
-public record ThaumcraftWorldGenFeature() implements Feature {
-    public static final MapCodec<ThaumcraftWorldGenFeature> CODEC = MapCodec.unit(ThaumcraftWorldGenFeature::new);
+public class ThaumcraftWorldGenFeature extends Feature<NoneFeatureConfiguration> {
     private static final Set<ResourceKey<Structure>> SCATTERED = Set.of(
         BuiltinStructures.DESERT_PYRAMID,
         BuiltinStructures.JUNGLE_TEMPLE,
         BuiltinStructures.SWAMP_HUT
     );
 
-    @Override
-    public MapCodec<ThaumcraftWorldGenFeature> codec() {
-        return CODEC;
+    public ThaumcraftWorldGenFeature() {
+        super(NoneFeatureConfiguration.CODEC);
     }
 
     @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource randomSource, BlockPos origin) {
-        Random random = new Random(randomSource.nextLong());
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator chunkGenerator = context.chunkGenerator();
+        BlockPos origin = context.origin();
+        Random random = new Random(context.random().nextLong());
         int chunkX = origin.getX() >> 4;
         int chunkZ = origin.getZ() >> 4;
         ResourceKey<Level> dimension = level.getLevel().dimension();
@@ -64,7 +66,7 @@ public record ThaumcraftWorldGenFeature() implements Feature {
 
     private static int firstUncoveredY(WorldGenLevel level, int x, int z) {
         int y = 5;
-        while (!level.isEmptyBlock(new BlockPos(x, y + 1, z)) && y < level.getMaxY()) {
+        while (!level.isEmptyBlock(new BlockPos(x, y + 1, z)) && y < level.getMaxBuildHeight() - 1) {
             y++;
         }
         return y;
@@ -218,7 +220,7 @@ public record ThaumcraftWorldGenFeature() implements Feature {
 
     private static BlockPos findScatteredStart(WorldGenLevel level, int chunkX, int chunkZ) {
         ChunkAccess chunk = level.getChunk(chunkX, chunkZ);
-        var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        var registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
         for (Map.Entry<Structure, StructureStart> entry : chunk.getAllStarts().entrySet()) {
             if (!entry.getValue().isValid()) {
                 continue;

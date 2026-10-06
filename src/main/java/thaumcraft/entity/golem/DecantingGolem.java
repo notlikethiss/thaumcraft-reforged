@@ -2,6 +2,7 @@ package thaumcraft.entity.golem;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -101,7 +102,7 @@ public class DecantingGolem extends GolemWorker {
 
     public @Nullable Fluid getWatchedLiquid() {
         String id = this.entityData.get(DATA_WATCHED);
-        return id.isEmpty() ? null : BuiltInRegistries.FLUID.getValue(ResourceLocation.parse(id));
+        return id.isEmpty() ? null : BuiltInRegistries.FLUID.get(ResourceLocation.parse(id));
     }
 
     private void setWatchedLiquid(@Nullable Fluid fluid) {
@@ -264,8 +265,9 @@ public class DecantingGolem extends GolemWorker {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putShort("TallowType", (short) getTallowType());
         output.putByte("tag", (byte) this.entityData.get(DATA_ASPECT).intValue());
         output.putByte("amount", (byte) getAmount());
@@ -274,11 +276,12 @@ public class DecantingGolem extends GolemWorker {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         this.entityData.set(DATA_ASPECT, (int) input.getByteOr("tag", (byte) -1));
         this.entityData.set(DATA_AMOUNT, (int) input.getByteOr("amount", (byte) 0));
-        this.liquid = BuiltInRegistries.FLUID.getValue(ResourceLocation.parse(input.getStringOr("liquid", "minecraft:empty")));
+        this.liquid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(input.getStringOr("liquid", "minecraft:empty")));
         this.entityData.set(DATA_WATCHED, input.getStringOr("watched", ""));
         applyType(input.getShortOr("TallowType", (short) 0));
     }

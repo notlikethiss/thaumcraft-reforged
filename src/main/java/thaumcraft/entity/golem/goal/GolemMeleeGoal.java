@@ -34,7 +34,7 @@ public class GolemMeleeGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.golem.getTarget() != null && this.target != null && this.target.isAlive() && this.golem.isWithinHome(this.target.blockPosition());
+        return this.golem.getTarget() != null && this.target != null && this.target.isAlive() && this.golem.isWithinRestriction(this.target.blockPosition());
     }
 
     @Override
@@ -70,12 +70,12 @@ public class GolemMeleeGoal extends Goal {
         if (this.golem.distanceToSqr(target.getX(), target.getBoundingBox().minY, target.getZ()) <= range * range && this.attackTick <= 0) {
             this.attackTick = 20;
             if (!this.golem.getMainHandItem().isEmpty()) {
-                this.golem.swingForAttack(InteractionHand.MAIN_HAND);
+                this.golem.swing(InteractionHand.MAIN_HAND);
             } else {
                 this.golem.startActionTimer();
             }
             if (this.golem.level() instanceof ServerLevel level) {
-                this.golem.doHurtTarget(level, target);
+                this.golem.doHurtTarget(target);
             }
         }
     }

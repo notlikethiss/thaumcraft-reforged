@@ -44,7 +44,7 @@ public class Thaumcraft {
         ModMenus.register(modEventBus);
         ModPoiTypes.register(modEventBus);
         ModVillagers.register(modEventBus);
-        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         modEventBus.addListener(this::commonSetup);
     }
 

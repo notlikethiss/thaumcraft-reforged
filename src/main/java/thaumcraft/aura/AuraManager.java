@@ -584,12 +584,12 @@ public final class AuraManager {
         if (type == null) {
             return null;
         }
-        Entity entity = type.create(level, MobSpawnType.EVENT);
+        Entity entity = type.create(level);
         return entity instanceof Mob mob ? mob : null;
     }
 
     private static boolean trySpawn(ServerLevel level, Mob mob, double x, double y, double z) {
-        mob.snapTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
+        mob.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
         return mob.checkSpawnRules(level, MobSpawnType.EVENT) && level.addFreshEntity(mob);
     }
 
@@ -661,7 +661,7 @@ public final class AuraManager {
         if (!Utils.isChunkLoaded(level, x, z)) {
             return false;
         }
-        Mob witch = EntityType.WITCH.create(level, MobSpawnType.EVENT);
+        Mob witch = EntityType.WITCH.create(level);
         if (witch == null) {
             return false;
         }
@@ -697,7 +697,7 @@ public final class AuraManager {
 
     public static List<AuraNode> nodesInChunk(ResourceKey<Level> dimension, ChunkPos pos) {
         List<AuraNode> nodes = new ArrayList<>();
-        List<Integer> keys = NODE_CHUNKS.get(new ChunkKey(dimension, pos.x(), pos.z()));
+        List<Integer> keys = NODE_CHUNKS.get(new ChunkKey(dimension, pos.x, pos.z));
         if (keys != null) {
             for (Integer key : keys) {
                 AuraNode node = NODES.get(key);

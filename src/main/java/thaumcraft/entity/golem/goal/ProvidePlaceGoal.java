@@ -34,7 +34,7 @@ public class ProvidePlaceGoal extends GolemChestGoal {
         });
     }
 
-    private GolemUtils.@Nullable MarkedContainer target() {
+    private @Nullable GolemUtils.MarkedContainer target() {
         BlockPos home = this.golem.getHomeContainerPos();
         for (GolemUtils.MarkedContainer container : containers()) {
             if (container.pos().equals(home)) {

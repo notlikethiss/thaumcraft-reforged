@@ -7,6 +7,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -262,7 +263,7 @@ public class MagicalTreeGenerator {
         int[] from = {basePos[0] + dx, basePos[1], basePos[2] + dz};
         int[] to = {basePos[0] + dx, basePos[1] + heightLimit - 1, basePos[2] + dz};
         BlockState soil = level.getBlockState(new BlockPos(basePos[0] + dx, basePos[1] - 1, basePos[2] + dz));
-        if (!soil.is(BlockTags.DIRT) && !soil.is(BlockTags.GRASS_BLOCKS)) {
+        if (!soil.is(BlockTags.DIRT) && !soil.is(Blocks.GRASS_BLOCK)) {
             return false;
         }
         int blocked = checkBlockLine(from, to);

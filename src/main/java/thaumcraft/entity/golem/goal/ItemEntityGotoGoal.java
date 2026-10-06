@@ -22,7 +22,7 @@ public class ItemEntityGotoGoal extends GolemMoveGoal {
         if (this.worker.hasDecoration("G")) {
             range = (int) (range * 1.2F);
         }
-        BlockPos home = this.worker.getHomePosition();
+        BlockPos home = this.worker.getRestrictCenter();
         AABB area = new AABB(home).inflate(range);
         double best = Double.MAX_VALUE;
         this.target = null;

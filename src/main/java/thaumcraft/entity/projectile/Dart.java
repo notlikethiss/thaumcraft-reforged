@@ -29,7 +29,7 @@ public class Dart extends AbstractArrow {
         if (horizontal >= 1.0E-7) {
             float yaw = (float) (Mth.atan2(dz, dx) * 180.0 / Math.PI) - 90.0F;
             float pitch = (float) -(Mth.atan2(dy, horizontal) * 180.0 / Math.PI);
-            this.snapTo(shooter.getX() + dx / horizontal / 5.0, y, shooter.getZ() + dz / horizontal / 5.0, yaw, pitch);
+            this.moveTo(shooter.getX() + dx / horizontal / 5.0, y, shooter.getZ() + dz / horizontal / 5.0, yaw, pitch);
             this.shoot(dx, dy + horizontal * 0.2F, dz, speed, inaccuracy);
         }
     }

@@ -14,7 +14,7 @@ public final class AuraWorldGen {
         ChunkAccess chunk = level.getChunk(pos);
         AuraNode node = new AuraNode(-1, value, type, level.getLevel().dimension(), pos);
         AuraManager.chunkData(chunk).addPending(node);
-        chunk.markUnsaved();
+        chunk.setUnsaved(true);
     }
 
     public static boolean auraNearby(WorldGenLevel level, int x, int y, int z, int range) {

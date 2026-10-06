@@ -1,6 +1,7 @@
 package thaumcraft.aspect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,7 +11,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import javax.annotation.Nullable;
@@ -173,15 +173,15 @@ public final class AspectRegistry {
             if (ingredient == null || ingredient.isEmpty()) {
                 continue;
             }
-            List<Holder<Item>> options = ingredient.items().toList();
+            List<Item> options = Arrays.stream(ingredient.getItems()).map(ItemStack::getItem).toList();
             Item chosen = null;
             if (options.size() == 1) {
-                chosen = options.getFirst().value();
+                chosen = options.getFirst();
             } else {
-                for (Holder<Item> option : options) {
-                    AspectList aspects = generate(option.value(), history);
+                for (Item option : options) {
+                    AspectList aspects = generate(option, history);
                     if (aspects != null && aspects.size() > 0) {
-                        chosen = option.value();
+                        chosen = option;
                         break;
                     }
                 }
@@ -198,9 +198,9 @@ public final class AspectRegistry {
         for (Map.Entry<Item, Integer> entry : ingredients.entrySet()) {
             AspectList aspects = generate(entry.getKey(), history);
             AspectList container = null;
-            ItemStackTemplate remainder = entry.getKey().getCraftingRemainder(new ItemStack(entry.getKey()));
+            Item remainder = entry.getKey().getCraftingRemainingItem();
             if (remainder != null) {
-                container = generate(remainder.item().value(), history);
+                container = generate(remainder, history);
             }
             if (aspects == null) {
                 continue;

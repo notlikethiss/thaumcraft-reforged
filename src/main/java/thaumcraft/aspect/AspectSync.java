@@ -3,17 +3,14 @@ package thaumcraft.aspect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
@@ -71,21 +68,24 @@ public final class AspectSync {
             if (recipe instanceof ShapedRecipe shaped) {
                 List<Ingredient> ingredients = new ArrayList<>();
                 int width = shaped.getWidth();
-                List<Optional<Ingredient>> pattern = shaped.getIngredients();
+                List<Ingredient> pattern = shaped.getIngredients();
                 for (int x = 0; x < width && x < 3; x++) {
                     for (int y = 0; y < shaped.getHeight() && y < 3; y++) {
-                        pattern.get(x + y * width).ifPresent(ingredients::add);
+                        Ingredient ingredient = pattern.get(x + y * width);
+                        if (!ingredient.isEmpty()) {
+                            ingredients.add(ingredient);
+                        }
                     }
                 }
-                ItemStack result = shaped.assemble(CraftingInput.EMPTY);
+                ItemStack result = shaped.getResultItem(server.registryAccess()).copy();
                 output.add(new AspectSourceRecipe(AspectSourceRecipe.Kind.CRAFTING, result, ingredients, 0, AspectList.EMPTY));
             } else if (recipe instanceof ShapelessRecipe shapeless) {
-                ItemStackTemplate result = shapeless.result();
-                if (result != null) {
-                    List<Ingredient> ingredients = shapeless.placementInfo().ingredients();
+                ItemStack result = shapeless.getResultItem(server.registryAccess());
+                if (!result.isEmpty()) {
+                    List<Ingredient> ingredients = shapeless.getIngredients();
                     output.add(new AspectSourceRecipe(
                         AspectSourceRecipe.Kind.CRAFTING,
-                        result.create(),
+                        result.copy(),
                         ingredients.subList(0, Math.min(9, ingredients.size())),
                         0,
                         AspectList.EMPTY

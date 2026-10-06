@@ -2,6 +2,8 @@ package thaumcraft.aura;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 import thaumcraft.compat.ValueInput;
@@ -10,23 +12,24 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
 public final class AuraChunkData {
-    public static final IAttachmentSerializer<AuraChunkData> SERIALIZER = new IAttachmentSerializer<>() {
+    public static final IAttachmentSerializer<CompoundTag, AuraChunkData> SERIALIZER = new IAttachmentSerializer<>() {
         @Override
-        public AuraChunkData read(IAttachmentHolder holder, ValueInput input) {
+        public AuraChunkData read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider provider) {
             AuraChunkData data = new AuraChunkData(holder);
-            input.listOrEmpty("nodes", AuraNode.CODEC).forEach(data.pending::add);
+            ValueInput.of(tag, provider).listOrEmpty("nodes", AuraNode.CODEC).forEach(data.pending::add);
             return data;
         }
 
         @Override
-        public boolean write(AuraChunkData attachment, ValueOutput output) {
+        public CompoundTag write(AuraChunkData attachment, HolderLookup.Provider provider) {
             List<AuraNode> nodes = attachment.currentNodes();
             if (nodes.isEmpty()) {
-                return false;
+                return null;
             }
-            ValueOutput.TypedOutputList<AuraNode> list = output.list("nodes", AuraNode.CODEC);
+            CompoundTag tag = new CompoundTag();
+            ValueOutput.TypedOutputList<AuraNode> list = ValueOutput.of(tag, provider).list("nodes", AuraNode.CODEC);
             nodes.forEach(list::add);
-            return true;
+            return tag;
         }
     };
 

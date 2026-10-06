@@ -51,10 +51,10 @@ public enum GolemKind {
     }
 
     public EntityType<?> entityType() {
-        return BuiltInRegistries.ENTITY_TYPE.getValue(Thaumcraft.id(id));
+        return BuiltInRegistries.ENTITY_TYPE.get(Thaumcraft.id(id));
     }
 
     public Item item() {
-        return BuiltInRegistries.ITEM.getValue(Thaumcraft.id(id));
+        return BuiltInRegistries.ITEM.get(Thaumcraft.id(id));
     }
 }

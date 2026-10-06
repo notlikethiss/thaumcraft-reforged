@@ -1,6 +1,7 @@
 package thaumcraft.entity.golem;
 
 import java.util.List;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -100,8 +101,9 @@ public class AdvancedClayGolem extends GolemWorker implements MultiColorGolem {
     }
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {
-        super.addAdditionalSaveData(output);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        ValueOutput output = ValueOutput.of(tag, this.registryAccess());
         output.putBoolean("toggle", isToggled());
         int[] colors = new int[6];
         for (int slot = 0; slot < 6; slot++) {
@@ -111,8 +113,9 @@ public class AdvancedClayGolem extends GolemWorker implements MultiColorGolem {
     }
 
     @Override
-    protected void readAdditionalSaveData(ValueInput input) {
-        super.readAdditionalSaveData(input);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        ValueInput input = ValueInput.of(tag, this.registryAccess());
         setToggled(input.getBooleanOr("toggle", false));
         int[] colors = input.getIntArray("colors").orElse(new int[0]);
         for (int slot = 0; slot < 6; slot++) {

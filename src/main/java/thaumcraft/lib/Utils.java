@@ -28,7 +28,7 @@ public final class Utils {
 
     public static int getFirstUncoveredBlockHeight(Level level, int x, int z) {
         int y = Math.max(10, level.getMinBuildHeight());
-        while (y < level.getMaxY() && !level.isEmptyBlock(new BlockPos(x, y + 1, z))) {
+        while (y < level.getMaxBuildHeight() - 1 && !level.isEmptyBlock(new BlockPos(x, y + 1, z))) {
             y++;
         }
         return y;
@@ -55,7 +55,7 @@ public final class Utils {
         Entity pointed = null;
         double closest = 0.0;
         for (Entity entity : entities) {
-            if (!entity.canBeCollidedWith(player) && !nonCollide) {
+            if (!entity.canBeCollidedWith() && !nonCollide) {
                 continue;
             }
             Vec3 target = new Vec3(entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
@@ -103,7 +103,7 @@ public final class Utils {
 
     public static boolean isBlockExposed(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
-            if (!level.getBlockState(pos.relative(direction)).isSolidRender()) {
+            if (!level.getBlockState(pos.relative(direction)).isSolidRender(level, pos.relative(direction))) {
                 return true;
             }
         }
