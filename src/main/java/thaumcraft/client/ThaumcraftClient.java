@@ -2,17 +2,10 @@ package thaumcraft.client;
 
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.NoopRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.FoliageColor;
 import net.neoforged.api.distmarker.Dist;
@@ -41,29 +34,7 @@ import thaumcraft.client.extensions.InfusedStoneClientExtensions;
 import thaumcraft.client.extensions.JarClientExtensions;
 import thaumcraft.client.fx.ClientFx;
 import thaumcraft.client.gui.TcHud;
-import thaumcraft.client.render.AlembicRenderer;
-import thaumcraft.client.render.ArcaneBoreBaseRenderer;
-import thaumcraft.client.render.ArcaneBoreRenderer;
-import thaumcraft.client.render.BellowsRenderer;
-import thaumcraft.client.render.CrucibleRenderer;
-import thaumcraft.client.render.CrystalCapacitorRenderer;
-import thaumcraft.client.render.CrystalClusterRenderer;
-import thaumcraft.client.render.CrystalCoreRenderer;
 import thaumcraft.client.render.HoleRenderer;
-import thaumcraft.client.render.HoverHarnessLayer;
-import thaumcraft.client.render.HungryChestRenderer;
-import thaumcraft.client.render.JarRenderer;
-import thaumcraft.client.render.MirrorRenderer;
-import thaumcraft.client.render.WorkbenchWandRenderer;
-import thaumcraft.client.render.entity.BrainyZombieRenderer;
-import thaumcraft.client.render.entity.DartRenderer;
-import thaumcraft.client.render.entity.FireBatRenderer;
-import thaumcraft.client.render.entity.FrostShardRenderer;
-import thaumcraft.client.render.entity.GiantBrainyZombieRenderer;
-import thaumcraft.client.render.entity.GolemRenderer;
-import thaumcraft.client.render.entity.SpecialItemRenderer;
-import thaumcraft.client.render.entity.WispRenderer;
-import thaumcraft.client.render.model.TcModelLayers;
 import thaumcraft.client.research.ResearchBookScreen;
 import thaumcraft.client.research.ResearchTexts;
 import thaumcraft.client.screen.ArcaneBoreScreen;
@@ -74,14 +45,11 @@ import thaumcraft.client.screen.HoverHarnessScreen;
 import thaumcraft.client.screen.InfusionWorkbenchScreen;
 import thaumcraft.client.screen.ResearchTableScreen;
 import thaumcraft.crafting.ConfigRecipes;
-import thaumcraft.entity.golem.GolemBase;
-import thaumcraft.entity.golem.GolemKind;
 import thaumcraft.fx.Fx;
 import thaumcraft.item.HandMirrorItem;
 import thaumcraft.item.golem.GolemPlacerItem;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModBlocks;
-import thaumcraft.registry.ModEntities;
 import thaumcraft.registry.ModItems;
 import thaumcraft.registry.ModMenus;
 import thaumcraft.research.ResearchClientHooks;
@@ -192,51 +160,8 @@ public final class ThaumcraftClient {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unchecked")
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKTABLE.get(), context -> new WorkbenchWandRenderer<>(context, false));
-        event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_WORKBENCH.get(), context -> new WorkbenchWandRenderer<>(context, true));
-        event.registerBlockEntityRenderer(ModBlockEntities.WARDED_JAR.get(), JarRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), JarRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.MIRROR.get(), MirrorRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HOLE.get(), HoleRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE.get(), ArcaneBoreRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE_BASE.get(), ArcaneBoreBaseRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CLUSTER.get(), CrystalClusterRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CORE.get(), CrystalCoreRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_CAPACITOR.get(), CrystalCapacitorRenderer::new);
-        event.registerEntityRenderer(ModEntities.BRAINY_ZOMBIE.get(), BrainyZombieRenderer::new);
-        event.registerEntityRenderer(ModEntities.GIANT_BRAINY_ZOMBIE.get(), GiantBrainyZombieRenderer::new);
-        event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
-        event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
-        event.registerEntityRenderer(ModEntities.ALUMENTUM.get(), NoopRenderer::new);
-        event.registerEntityRenderer(ModEntities.DART.get(), DartRenderer::new);
-        event.registerEntityRenderer(ModEntities.FROST_SHARD.get(), FrostShardRenderer::new);
-        event.registerEntityRenderer(ModEntities.SPECIAL_ITEM.get(), context -> new SpecialItemRenderer(context, true));
-        event.registerEntityRenderer(ModEntities.FOLLOWING_ITEM.get(), context -> new SpecialItemRenderer(context, false));
-        for (GolemKind kind : GolemKind.values()) {
-            EntityType<GolemBase> type = (EntityType<GolemBase>) kind.entityType();
-            event.registerEntityRenderer(type, context -> new GolemRenderer(context, kind.advanced()));
-        }
-    }
-
-    @SubscribeEvent
-    static void addLayers(EntityRenderersEvent.AddLayers event) {
-        for (PlayerSkin.Model skin : event.getSkins()) {
-            EntityRenderer<? extends Player> renderer = event.getSkin(skin);
-            if (renderer instanceof PlayerRenderer playerRenderer) {
-                playerRenderer.addLayer(new HoverHarnessLayer(playerRenderer));
-            }
-        }
-    }
-
-    @SubscribeEvent
-    static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        TcModelLayers.register(event);
     }
 
     @SubscribeEvent
