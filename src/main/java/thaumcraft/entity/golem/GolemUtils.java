@@ -19,18 +19,12 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import thaumcraft.block.device.AlembicBlock;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.JarBlockEntity;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Config;
 import thaumcraft.crafting.ConfigRecipes;
@@ -57,10 +51,6 @@ public final class GolemUtils {
         return !first.isEmpty() && !second.isEmpty() && ItemStack.isSameItemSameComponents(first, second);
     }
 
-    public static @Nullable ResourceHandler<ItemResource> handler(Level level, BlockPos pos, @Nullable Direction side) {
-        return level.getCapability(Capabilities.Item.BLOCK, pos, side);
-    }
-
     public static List<BlockPos> markers(ServerLevel level, BlockPos center, int radius) {
         return level.getPoiManager()
             .getInRange(holder -> holder.is(ModPoiTypes.MARKER.getKey()), center, radius, PoiManager.Occupancy.ANY)
@@ -81,68 +71,11 @@ public final class GolemUtils {
                 continue;
             }
             Direction side = direction.getOpposite();
-            if (handler(level, pos, side) != null) {
+            if (GolemInventories.hasItems(level, pos, side)) {
                 containers.add(new MarkedContainer(pos, side, marker));
             }
         }
         return containers;
-    }
-
-    public static int count(ResourceHandler<ItemResource> handler, ItemStack stack) {
-        int total = 0;
-        for (int index = 0; index < handler.size(); index++) {
-            ItemResource resource = handler.getResource(index);
-            if (!resource.isEmpty() && resource.matches(stack)) {
-                total += handler.getAmountAsInt(index);
-            }
-        }
-        return total;
-    }
-
-    public static boolean contains(ResourceHandler<ItemResource> handler, Predicate<ItemStack> filter) {
-        for (int index = 0; index < handler.size(); index++) {
-            ItemResource resource = handler.getResource(index);
-            if (!resource.isEmpty() && filter.test(resource.toStack(handler.getAmountAsInt(index)))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static int insert(ResourceHandler<ItemResource> handler, ItemStack stack, boolean simulate) {
-        if (stack.isEmpty()) {
-            return 0;
-        }
-        try (Transaction transaction = Transaction.openRoot()) {
-            int inserted = ResourceHandlerUtil.insertStacking(handler, ItemResource.of(stack), stack.getCount(), transaction);
-            if (!simulate) {
-                transaction.commit();
-            }
-            return inserted;
-        }
-    }
-
-    public static ItemStack extractFirst(ResourceHandler<ItemResource> handler, Predicate<ItemStack> filter, int maxAmount) {
-        for (int index = 0; index < handler.size(); index++) {
-            ItemResource resource = handler.getResource(index);
-            if (resource.isEmpty()) {
-                continue;
-            }
-            int amount = handler.getAmountAsInt(index);
-            if (!filter.test(resource.toStack(amount))) {
-                continue;
-            }
-            int wanted = Math.min(amount, maxAmount);
-            if (wanted <= 0) {
-                return ItemStack.EMPTY;
-            }
-            try (Transaction transaction = Transaction.openRoot()) {
-                int extracted = handler.extract(index, resource, wanted, transaction);
-                transaction.commit();
-                return resource.toStack(extracted);
-            }
-        }
-        return ItemStack.EMPTY;
     }
 
     private static int containerRange(GolemBase golem) {
@@ -161,8 +94,7 @@ public final class GolemUtils {
             }
             for (MarkedContainer container : adjacentContainers(level, marker)) {
                 if (golem.distanceToSqr(Vec3.atCenterOf(container.pos())) < range * range) {
-                    ResourceHandler<ItemResource> handler = handler(level, container.pos(), container.side());
-                    if (handler != null && contains(handler, stack -> sameItem(stack, goods))) {
+                    if (GolemInventories.contains(level, container.pos(), container.side(), stack -> sameItem(stack, goods))) {
                         results.add(container);
                     }
                 }
@@ -183,8 +115,7 @@ public final class GolemUtils {
             }
             for (MarkedContainer container : adjacentContainers(level, marker)) {
                 if (golem.distanceToSqr(Vec3.atCenterOf(container.pos())) < range * range) {
-                    ResourceHandler<ItemResource> handler = handler(level, container.pos(), container.side());
-                    if (handler != null && insert(handler, stack, true) > 0) {
+                    if (GolemInventories.insert(level, container.pos(), container.side(), stack, true) > 0) {
                         results.add(container);
                     }
                 }
@@ -230,51 +161,6 @@ public final class GolemUtils {
         return result;
     }
 
-    public static @Nullable ResourceHandler<FluidResource> fluidHandler(Level level, BlockPos pos, @Nullable Direction side) {
-        return level.getCapability(Capabilities.Fluid.BLOCK, pos, side);
-    }
-
-    public static int fluidAmount(ResourceHandler<FluidResource> handler, Fluid fluid) {
-        int total = 0;
-        for (int index = 0; index < handler.size(); index++) {
-            FluidResource resource = handler.getResource(index);
-            if (!resource.isEmpty() && resource.getFluid().isSame(fluid)) {
-                total += handler.getAmountAsInt(index);
-            }
-        }
-        return total;
-    }
-
-    public static int fillFluid(ResourceHandler<FluidResource> handler, Fluid fluid, int amount, boolean simulate) {
-        try (Transaction transaction = Transaction.openRoot()) {
-            int inserted = handler.insert(FluidResource.of(fluid), amount, transaction);
-            if (!simulate) {
-                transaction.commit();
-            }
-            return inserted;
-        }
-    }
-
-    public static int drainFluid(ResourceHandler<FluidResource> handler, Fluid fluid, int amount, boolean simulate) {
-        try (Transaction transaction = Transaction.openRoot()) {
-            int extracted = handler.extract(FluidResource.of(fluid), amount, transaction);
-            if (!simulate) {
-                transaction.commit();
-            }
-            return extracted;
-        }
-    }
-
-    public static @Nullable Fluid firstFluid(ResourceHandler<FluidResource> handler) {
-        for (int index = 0; index < handler.size(); index++) {
-            FluidResource resource = handler.getResource(index);
-            if (!resource.isEmpty() && handler.getAmountAsInt(index) > 0) {
-                return resource.getFluid();
-            }
-        }
-        return null;
-    }
-
     public static boolean isSource(Level level, BlockPos pos, Fluid fluid) {
         FluidState state = level.getFluidState(pos);
         return state.isSource() && state.getType().isSame(fluid);
@@ -288,8 +174,7 @@ public final class GolemUtils {
                 result.add(pos);
                 continue;
             }
-            ResourceHandler<FluidResource> handler = fluidHandler(level, pos, direction.getOpposite());
-            if (handler != null && fluidAmount(handler, Fluids.WATER) > 0) {
+            if (GolemInventories.fluidAmount(level, pos, direction.getOpposite(), Fluids.WATER) > 0) {
                 result.add(pos);
             }
         }
@@ -300,7 +185,7 @@ public final class GolemUtils {
         List<BlockPos> result = new ArrayList<>();
         for (Direction direction : Direction.values()) {
             BlockPos pos = marker.relative(direction);
-            if (isSource(level, pos, Fluids.WATER) || isSource(level, pos, Fluids.LAVA) || fluidHandler(level, pos, direction.getOpposite()) != null) {
+            if (isSource(level, pos, Fluids.WATER) || isSource(level, pos, Fluids.LAVA) || GolemInventories.hasFluids(level, pos, direction.getOpposite())) {
                 result.add(pos);
             }
         }

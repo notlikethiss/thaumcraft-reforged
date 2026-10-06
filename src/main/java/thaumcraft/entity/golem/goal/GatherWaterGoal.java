@@ -2,6 +2,7 @@ package thaumcraft.entity.golem.goal;
 
 import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -9,9 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.jspecify.annotations.Nullable;
+import thaumcraft.entity.golem.GolemInventories;
 import thaumcraft.entity.golem.GolemUtils;
 import thaumcraft.entity.golem.TallowGolem;
 
@@ -55,9 +55,9 @@ public class GatherWaterGoal extends Goal {
             this.golem.setCarried(new ItemStack(Items.WATER_BUCKET));
             return;
         }
-        ResourceHandler<FluidResource> handler = GolemUtils.fluidHandler(level, this.water, GolemUtils.sideFacing(this.water, this.marker));
-        if (handler != null && GolemUtils.drainFluid(handler, Fluids.WATER, 1000, true) == 1000) {
-            GolemUtils.drainFluid(handler, Fluids.WATER, 1000, false);
+        Direction side = GolemUtils.sideFacing(this.water, this.marker);
+        if (GolemInventories.drainFluid(level, this.water, side, Fluids.WATER, 1000, true) == 1000) {
+            GolemInventories.drainFluid(level, this.water, side, Fluids.WATER, 1000, false);
             this.golem.setCarried(new ItemStack(Items.WATER_BUCKET));
         }
     }

@@ -3,8 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
+import thaumcraft.entity.golem.GolemInventories;
 import thaumcraft.entity.golem.GolemUtils;
 import thaumcraft.entity.golem.GolemWorker;
 import thaumcraft.entity.golem.MultiColorGolem;
@@ -48,11 +47,7 @@ public class SupplyTakeGoal extends GolemChestGoal {
             if (container.pos().equals(home)) {
                 continue;
             }
-            ResourceHandler<ItemResource> handler = GolemUtils.handler(this.golem.level(), container.pos(), container.side());
-            if (handler == null) {
-                continue;
-            }
-            ItemStack taken = GolemUtils.extractFirst(handler, stack -> GolemUtils.sameItem(stack, watched), wanted);
+            ItemStack taken = GolemInventories.extractFirst(this.golem.level(), container.pos(), container.side(), stack -> GolemUtils.sameItem(stack, watched), wanted);
             if (!taken.isEmpty()) {
                 this.golem.setCarried(taken);
                 openChest(container.pos());

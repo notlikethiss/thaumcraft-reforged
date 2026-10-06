@@ -23,7 +23,6 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.aura.AuraManager;
 import thaumcraft.aura.NodeType;
 import net.minecraft.world.item.ItemStack;
-import thaumcraft.registry.ModAttachments;
 import thaumcraft.registry.ModItems;
 import thaumcraft.research.ResearchNoteData;
 import thaumcraft.research.PlayerKnowledge;
@@ -164,7 +163,7 @@ public final class ThaumcraftCommand {
             for (ResearchItem research : ResearchList.RESEARCH.values()) {
                 knowledge.complete(research.key);
             }
-            player.setData(ModAttachments.KNOWLEDGE, knowledge);
+            ResearchManager.saveKnowledge(player, knowledge);
         }
         source.sendSuccess(() -> Component.literal("Granted all research to " + targets.size() + " player(s)"), true);
         return targets.size();

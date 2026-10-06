@@ -20,11 +20,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import thaumcraft.blockentity.AlembicBlockEntity;
 import thaumcraft.blockentity.CrucibleBlockEntity;
 import thaumcraft.blockentity.MagicWorkbenchBlockEntity;
 import thaumcraft.entity.golem.GolemBase;
+import thaumcraft.entity.golem.GolemInventories;
 import thaumcraft.entity.golem.GolemKind;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.registry.ModDataComponents;
@@ -89,9 +89,9 @@ public class GolemPlacerItem extends Item {
         return switch (kind) {
             case STRAW, IRON_GUARDIAN -> true;
             case TALLOW -> blockEntity instanceof CrucibleBlockEntity || blockEntity instanceof AlembicBlockEntity;
-            case DECANTING -> blockEntity instanceof AlembicBlockEntity || level.getCapability(Capabilities.Fluid.BLOCK, pos, side) != null;
+            case DECANTING -> blockEntity instanceof AlembicBlockEntity || GolemInventories.hasFluids(level, pos, side);
             default -> blockEntity != null
-                && level.getCapability(Capabilities.Item.BLOCK, pos, side) != null
+                && GolemInventories.hasItems(level, pos, side)
                 && !(blockEntity instanceof MagicWorkbenchBlockEntity)
                 && !(blockEntity instanceof AbstractFurnaceBlockEntity && side.getAxis().isHorizontal() && kind != GolemKind.STONE && kind != GolemKind.ADVANCED_STONE);
         };

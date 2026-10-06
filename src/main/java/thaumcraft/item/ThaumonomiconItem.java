@@ -12,7 +12,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import thaumcraft.Config;
-import thaumcraft.registry.ModAttachments;
 import thaumcraft.registry.ModSounds;
 import thaumcraft.research.PlayerKnowledge;
 import thaumcraft.research.ResearchClientHooks;
@@ -36,7 +35,7 @@ public class ThaumonomiconItem extends Item {
                 for (ResearchItem research : ResearchList.RESEARCH.values()) {
                     knowledge.complete(research.key);
                 }
-                player.setData(ModAttachments.KNOWLEDGE, knowledge);
+                ResearchManager.saveKnowledge(player, knowledge);
             }
         } else {
             level.playLocalSound(player.getX(), player.getY(), player.getZ(), ModSounds.PAGE.get(), SoundSource.PLAYERS, 1.0F, 1.0F, false);

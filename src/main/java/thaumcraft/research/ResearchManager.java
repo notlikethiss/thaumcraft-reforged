@@ -36,6 +36,10 @@ public final class ResearchManager {
         return player.getData(ModAttachments.KNOWLEDGE);
     }
 
+    public static void saveKnowledge(Player player, PlayerKnowledge knowledge) {
+        player.setData(ModAttachments.KNOWLEDGE, knowledge);
+    }
+
     public static boolean isResearchComplete(Player player, String key) {
         if (ResearchList.getResearch(key) == null) {
             return true;
@@ -272,7 +276,7 @@ public final class ResearchManager {
     public static void completeResearch(Player player, String key, boolean notify) {
         PlayerKnowledge knowledge = knowledge(player);
         if (knowledge.complete(key)) {
-            player.setData(ModAttachments.KNOWLEDGE, knowledge);
+            saveKnowledge(player, knowledge);
             if (notify && player instanceof ServerPlayer serverPlayer) {
                 ModNetwork.sendToPlayer(serverPlayer, new ResearchCompletePayload(key));
             }
@@ -331,7 +335,7 @@ public final class ResearchManager {
             }
         }
         if (changed) {
-            event.getEntity().setData(ModAttachments.KNOWLEDGE, knowledge);
+            saveKnowledge(event.getEntity(), knowledge);
         }
     }
 }

@@ -5,7 +5,6 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
-import thaumcraft.registry.ModAttachments;
 
 public final class AuraWorldGen {
     private AuraWorldGen() {
@@ -14,7 +13,7 @@ public final class AuraWorldGen {
     public static void registerNode(WorldGenLevel level, int value, NodeType type, BlockPos pos) {
         ChunkAccess chunk = level.getChunk(pos);
         AuraNode node = new AuraNode(-1, value, type, level.getLevel().dimension(), pos);
-        chunk.getData(ModAttachments.AURA_CHUNK).addPending(node);
+        AuraManager.chunkData(chunk).addPending(node);
         chunk.markUnsaved();
     }
 
@@ -42,10 +41,10 @@ public final class AuraWorldGen {
                     continue;
                 }
                 ChunkAccess chunk = level.getChunk(cx + dx, cz + dz, ChunkStatus.EMPTY, false);
-                if (chunk == null || !chunk.hasData(ModAttachments.AURA_CHUNK)) {
+                if (chunk == null || !AuraManager.hasChunkData(chunk)) {
                     continue;
                 }
-                for (AuraNode node : chunk.getData(ModAttachments.AURA_CHUNK).pendingView()) {
+                for (AuraNode node : AuraManager.chunkData(chunk).pendingView()) {
                     if (type != null && node.type != type) {
                         continue;
                     }

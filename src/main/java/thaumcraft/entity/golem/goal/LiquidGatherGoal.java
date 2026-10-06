@@ -3,6 +3,7 @@ package thaumcraft.entity.golem.goal;
 import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
@@ -10,9 +11,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import thaumcraft.entity.golem.DecantingGolem;
+import thaumcraft.entity.golem.GolemInventories;
 import thaumcraft.entity.golem.GolemUtils;
 
 public class LiquidGatherGoal extends Goal {
@@ -54,15 +54,15 @@ public class LiquidGatherGoal extends Goal {
                     playSound(0.2F);
                     continue;
                 }
-                ResourceHandler<FluidResource> handler = GolemUtils.fluidHandler(level, pos, GolemUtils.sideFacing(pos, marker));
-                Fluid available = handler == null ? null : GolemUtils.firstFluid(handler);
-                if (available == null || GolemUtils.drainFluid(handler, available, DecantingGolem.UNIT, true) != DecantingGolem.UNIT) {
+                Direction side = GolemUtils.sideFacing(pos, marker);
+                Fluid available = GolemInventories.firstFluid(level, pos, side);
+                if (available == null || GolemInventories.drainFluid(level, pos, side, available, DecantingGolem.UNIT, true) != DecantingGolem.UNIT) {
                     continue;
                 }
                 for (DecantingGolem.MissingLiquid liquid : missing) {
                     if (liquid.fluid().isSame(available)
                         && this.golem.getAmount() / DecantingGolem.SPACE_PER_UNIT * DecantingGolem.UNIT < liquid.space()
-                        && GolemUtils.drainFluid(handler, available, DecantingGolem.UNIT, false) > 0) {
+                        && GolemInventories.drainFluid(level, pos, side, available, DecantingGolem.UNIT, false) > 0) {
                         this.golem.setLiquid(available);
                         this.golem.setAmount(this.golem.getAmount() + DecantingGolem.SPACE_PER_UNIT);
                         playSound(0.15F);

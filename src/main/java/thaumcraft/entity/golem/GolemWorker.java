@@ -1,12 +1,11 @@
 package thaumcraft.entity.golem;
 
 import java.util.List;
+import java.util.function.Predicate;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.Nullable;
 
 public abstract class GolemWorker extends GolemBase {
@@ -21,8 +20,24 @@ public abstract class GolemWorker extends GolemBase {
         return null;
     }
 
-    public @Nullable ResourceHandler<ItemResource> homeHandler() {
-        return GolemUtils.handler(this.level(), getHomeContainerPos(), getHomeFacing());
+    public boolean hasHomeInventory() {
+        return GolemInventories.hasItems(this.level(), getHomeContainerPos(), getHomeFacing());
+    }
+
+    public int homeCount(ItemStack stack) {
+        return GolemInventories.count(this.level(), getHomeContainerPos(), getHomeFacing(), stack);
+    }
+
+    public boolean homeContains(Predicate<ItemStack> filter) {
+        return GolemInventories.contains(this.level(), getHomeContainerPos(), getHomeFacing(), filter);
+    }
+
+    public int homeInsert(ItemStack stack, boolean simulate) {
+        return GolemInventories.insert(this.level(), getHomeContainerPos(), getHomeFacing(), stack, simulate);
+    }
+
+    public ItemStack homeExtractFirst(Predicate<ItemStack> filter, int maxAmount) {
+        return GolemInventories.extractFirst(this.level(), getHomeContainerPos(), getHomeFacing(), filter, maxAmount);
     }
 
     public boolean hasSomething() {

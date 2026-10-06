@@ -20,8 +20,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.blockentity.AlembicBlockEntity;
@@ -158,13 +156,17 @@ public class DecantingGolem extends GolemWorker {
         BlockPos home = getHomeContainerPos();
         if (this.level().getBlockEntity(home) instanceof AlembicBlockEntity) {
             applyType(1);
-        } else if (homeTank() != null) {
+        } else if (hasHomeTank()) {
             applyType(0);
         }
     }
 
-    public @Nullable ResourceHandler<FluidResource> homeTank() {
-        return GolemUtils.fluidHandler(this.level(), getHomeContainerPos(), getHomeFacing());
+    public boolean hasHomeTank() {
+        return GolemInventories.hasFluids(this.level(), getHomeContainerPos(), getHomeFacing());
+    }
+
+    public int homeFill(Fluid fluid, int amount, boolean simulate) {
+        return GolemInventories.fillFluid(this.level(), getHomeContainerPos(), getHomeFacing(), fluid, amount, simulate);
     }
 
     private void refreshDisplay() {
@@ -189,14 +191,13 @@ public class DecantingGolem extends GolemWorker {
 
     public List<MissingLiquid> getMissingLiquids() {
         List<MissingLiquid> result = new ArrayList<>();
-        ResourceHandler<FluidResource> tank = homeTank();
-        if (tank == null) {
+        if (!hasHomeTank()) {
             return result;
         }
         Fluid watched = getWatchedLiquid();
         for (Fluid fluid : registeredLiquids()) {
             if (watched == null || watched == fluid) {
-                int space = GolemUtils.fillFluid(tank, fluid, Integer.MAX_VALUE / 2, true);
+                int space = homeFill(fluid, Integer.MAX_VALUE / 2, true);
                 if (space >= UNIT) {
                     result.add(new MissingLiquid(fluid, space));
                 }
@@ -218,9 +219,9 @@ public class DecantingGolem extends GolemWorker {
                 if (pos.equals(home) || best != null && this.distanceToSqr(Vec3.atLowerCornerOf(pos)) >= this.distanceToSqr(Vec3.atLowerCornerOf(best))) {
                     continue;
                 }
-                ResourceHandler<FluidResource> handler = GolemUtils.fluidHandler(this.level(), pos, GolemUtils.sideFacing(pos, marker));
-                if (handler != null) {
-                    if (GolemUtils.drainFluid(handler, fluid, UNIT, true) >= UNIT) {
+                Direction side = GolemUtils.sideFacing(pos, marker);
+                if (GolemInventories.hasFluids(this.level(), pos, side)) {
+                    if (GolemInventories.drainFluid(this.level(), pos, side, fluid, UNIT, true) >= UNIT) {
                         best = pos;
                     }
                 } else if ((fluid == Fluids.WATER || fluid == Fluids.LAVA)

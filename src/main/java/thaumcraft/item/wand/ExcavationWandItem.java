@@ -68,7 +68,7 @@ public class ExcavationWandItem extends ElementalWandItem {
         if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
-        ExcavationState state = player.getData(ModAttachments.EXCAVATION);
+        ExcavationState state = state(player);
         if (hasBlock) {
             if (state.soundDelayUntil <= serverLevel.getGameTime()) {
                 serverLevel.playSound(null, end.x, end.y, end.z, ModSounds.RUMBLE.value(), SoundSource.PLAYERS, 0.3F, 1.0F);
@@ -82,6 +82,10 @@ public class ExcavationWandItem extends ElementalWandItem {
         if (state.mined > stack.getMaxDamage() - stack.getDamageValue()) {
             player.releaseUsingItem();
         }
+    }
+
+    public static ExcavationState state(Player player) {
+        return player.getData(ModAttachments.EXCAVATION);
     }
 
     private void excavate(ServerLevel level, ServerPlayer player, ItemStack stack, ExcavationState state, BlockPos pos) {
@@ -155,7 +159,7 @@ public class ExcavationWandItem extends ElementalWandItem {
         if (level.isClientSide() || !(entity instanceof Player player) || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        ExcavationState state = player.getData(ModAttachments.EXCAVATION);
+        ExcavationState state = state(player);
         clearProgress(serverLevel, player, state);
         state.soundDelayUntil = 0L;
         int charges = Math.min(state.mined, stack.getMaxDamage() - stack.getDamageValue() + 1);

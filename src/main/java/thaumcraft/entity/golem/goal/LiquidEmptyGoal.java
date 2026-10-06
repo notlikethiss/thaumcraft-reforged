@@ -4,8 +4,6 @@ import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import thaumcraft.entity.golem.DecantingGolem;
 import thaumcraft.entity.golem.GolemUtils;
 
@@ -40,9 +38,8 @@ public class LiquidEmptyGoal extends Goal {
 
     @Override
     public void start() {
-        ResourceHandler<FluidResource> tank = this.golem.homeTank();
-        if (tank != null && GolemUtils.fillFluid(tank, this.golem.getLiquid(), DecantingGolem.UNIT, true) == DecantingGolem.UNIT) {
-            GolemUtils.fillFluid(tank, this.golem.getLiquid(), DecantingGolem.UNIT, false);
+        if (this.golem.homeFill(this.golem.getLiquid(), DecantingGolem.UNIT, true) == DecantingGolem.UNIT) {
+            this.golem.homeFill(this.golem.getLiquid(), DecantingGolem.UNIT, false);
             this.golem.setAmount(this.golem.getAmount() - DecantingGolem.SPACE_PER_UNIT);
             this.golem.playSound(SoundEvents.GENERIC_SWIM, 0.15F, 1.0F + (this.golem.getRandom().nextFloat() - this.golem.getRandom().nextFloat()) * 0.3F);
         }

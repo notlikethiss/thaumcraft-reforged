@@ -3,8 +3,6 @@ package thaumcraft.entity.golem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.Nullable;
 
 final class ClayLogic {
@@ -22,8 +20,7 @@ final class ClayLogic {
             }
             return result;
         }
-        ResourceHandler<ItemResource> handler = golem.homeHandler();
-        if (handler == null) {
+        if (!golem.hasHomeInventory()) {
             return null;
         }
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
@@ -31,7 +28,7 @@ final class ClayLogic {
             if (filter.isEmpty()) {
                 continue;
             }
-            int found = GolemUtils.count(handler, filter);
+            int found = golem.homeCount(filter);
             int needed = inventory.getAmountNeeded(filter);
             if (found < needed) {
                 int missing = filter.getCount() - found;

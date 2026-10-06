@@ -29,6 +29,8 @@ import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import thaumcraft.registry.ModAttachments;
 import net.minecraft.world.level.Level;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.phys.AABB;
@@ -70,6 +72,14 @@ public final class AuraManager {
         NODE_CHUNKS.clear();
         MARKED_FOR_TRANSMISSION.clear();
         FLUX_EVENTS.clear();
+    }
+
+    public static AuraChunkData chunkData(ChunkAccess chunk) {
+        return chunk.getData(ModAttachments.AURA_CHUNK);
+    }
+
+    public static boolean hasChunkData(ChunkAccess chunk) {
+        return chunk.hasData(ModAttachments.AURA_CHUNK);
     }
 
     public static int registerAuraNode(ServerLevel level, int auraLevel, NodeType type, BlockPos pos) {

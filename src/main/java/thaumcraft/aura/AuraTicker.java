@@ -18,7 +18,6 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.lib.Utils;
-import thaumcraft.registry.ModAttachments;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class AuraTicker {
@@ -39,7 +38,7 @@ public final class AuraTicker {
         if (!(event.getLevel() instanceof ServerLevel level) || !(event.getChunk() instanceof LevelChunk chunk)) {
             return;
         }
-        AuraChunkData data = chunk.getData(ModAttachments.AURA_CHUNK);
+        AuraChunkData data = AuraManager.chunkData(chunk);
         for (AuraNode node : data.takePending()) {
             node.dimension = level.dimension();
             if (node.key < 0) {
