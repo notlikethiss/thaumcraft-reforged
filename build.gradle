@@ -29,7 +29,11 @@ repositories {
 }
 
 base {
-    archivesName = "${mod_id}-${minecraft_version}"
+    archivesName = "thaumcraft-3-reforged"
+}
+
+tasks.named('jar', Jar) {
+    archiveFileName = "thaumcraft-3-reforged-${minecraft_version}.jar"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(Integer.parseInt(java_version))
