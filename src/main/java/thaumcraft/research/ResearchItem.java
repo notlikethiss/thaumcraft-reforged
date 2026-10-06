@@ -11,9 +11,9 @@ import thaumcraft.aspect.AspectList;
 public class ResearchItem {
     public final String key;
     public final AspectList tags;
-    public ResearchItem @Nullable [] parents;
-    public ResearchItem @Nullable [] parentsHidden;
-    public ResearchItem @Nullable [] siblings;
+    public @Nullable ResearchItem[] parents;
+    public @Nullable ResearchItem[] parentsHidden;
+    public @Nullable ResearchItem[] siblings;
     public final int displayColumn;
     public final int displayRow;
     public final @Nullable String iconItem;

@@ -37,7 +37,7 @@ public final class ResearchList {
         return RESEARCH.get(key);
     }
 
-    public static Aspect @Nullable [] getResearchTags(String key) {
+    public static @Nullable Aspect[] getResearchTags(String key) {
         ResearchItem research = RESEARCH.get(key);
         return research == null ? null : research.tags.getAspects().toArray(new Aspect[0]);
     }

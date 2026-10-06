@@ -3,9 +3,7 @@ package thaumcraft.client.screen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -16,6 +14,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.gui.GuiDraw;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.blockentity.ResearchTableBlockEntity;
 import thaumcraft.client.gui.AspectRenderer;
@@ -37,7 +36,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private float popupScale = 0.05F;
 
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title, 240, 242);
+        super(menu, inventory, title);
+        this.imageWidth = 240;
+        this.imageHeight = 242;
     }
 
     private ContainerData data() {
@@ -59,12 +60,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos, topPos, 0.0F, 0.0F, imageWidth, imageHeight, 256, 256);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + 76, topPos + 40, 241.0F, buttonActive() ? 0.0F : 15.0F, 15, 15, 256, 256);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        GuiDraw.blit(graphics, TEXTURE, leftPos, topPos, 0.0F, 0.0F, imageWidth, imageHeight, 256, 256);
+        GuiDraw.blit(graphics, TEXTURE, leftPos + 76, topPos + 40, 241.0F, buttonActive() ? 0.0F : 15.0F, 15, 15, 256, 256);
         boolean safe = data().get(15) == 1;
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, leftPos + 51, topPos + 130, safe ? 109.0F : 87.0F, 246.0F, 29, 7, 256, 256);
+        GuiDraw.blit(graphics, TEXTURE, leftPos + 51, topPos + 130, safe ? 109.0F : 87.0F, 246.0F, 29, 7, 256, 256);
         ResearchNoteData note = noteData();
         for (int a = 0; a < ResearchTableBlockEntity.INPUT_SLOTS; a++) {
             Aspect aspect = tag(a);
@@ -77,7 +77,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         drawResearchData(graphics, note, leftPos + 167, topPos + 76);
     }
 
-    private void drawResearchData(GuiGraphicsExtractor graphics, @Nullable ResearchNoteData note, int x, int y) {
+    private void drawResearchData(GuiGraphics graphics, @Nullable ResearchNoteData note, int x, int y) {
         coords.clear();
         diagramTags.clear();
         if (note == null) {
@@ -134,19 +134,16 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
     }
 
-    @Override
-    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractContents(graphics, mouseX, mouseY, partialTick);
+    private void drawPopups(GuiGraphics graphics, int mouseX, int mouseY) {
         int mx = mouseX - (leftPos + 51);
         int my = mouseY - (topPos + 130);
         if (mx >= 0 && my >= 0 && mx < 29 && my < 7) {
-            graphics.nextStratum();
             Component text = Component.translatable(data().get(15) == 1 ? "tc.thaumcraft.research_cursory" : "tc.thaumcraft.research_thorough");
-            graphics.pose().pushMatrix();
-            graphics.pose().translate(leftPos + 65, topPos + 142);
-            graphics.pose().scale(0.65F, 0.65F);
-            graphics.text(font, text, -font.width(text) / 2, 0, 0xFFAEAEAE, false);
-            graphics.pose().popMatrix();
+            graphics.pose().pushPose();
+            graphics.pose().translate(leftPos + 65, topPos + 142, 0.0F);
+            graphics.pose().scale(0.65F, 0.65F, 1.0F);
+            graphics.drawString(font, text, -font.width(text) / 2, 0, 0xFFAEAEAE, false);
+            graphics.pose().popPose();
         }
         ResearchNoteData note = noteData();
         if (diagramTags.isEmpty() || note == null || note.key == null) {
@@ -160,12 +157,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         if (popupScale > 0.05F && (mx < 0 || my < 0 || mx > 17.0F * popupScale * 15.5F || my > 17.0F * popupScale * 15.5F)) {
             popupScale = Math.max(0.05F, popupScale * 0.75F);
         }
-        graphics.nextStratum();
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(leftPos + 105, topPos + 14);
-        graphics.pose().scale(popupScale, popupScale);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, PARCHMENT, 0, 0, 0.0F, 0.0F, 256, 256, 256, 256);
-        graphics.pose().scale(1.5F, 1.5F);
+        graphics.pose().pushPose();
+        graphics.pose().translate(leftPos + 105, topPos + 14, 0.0F);
+        graphics.pose().scale(popupScale, popupScale, 1.0F);
+        GuiDraw.blit(graphics, PARCHMENT, 0, 0, 0.0F, 0.0F, 256, 256, 256, 256);
+        graphics.pose().scale(1.5F, 1.5F, 1.0F);
         ResearchTexts.Entry entry = ResearchTexts.get(note.key);
         String text = entry == null ? "" : entry.longText();
         boolean galactic = note.getTotalProgress() < 0.5F;
@@ -173,20 +169,20 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         List<FormattedCharSequence> lines = font.split(component, 130);
         int lift = (int) (font.width(component) / 130.0F * (font.lineHeight / 2.0F));
         for (int i = 0; i < lines.size(); i++) {
-            graphics.text(font, lines.get(i), 22, 80 - lift + i * font.lineHeight, 0xFF000000, false);
+            graphics.drawString(font, lines.get(i), 22, 80 - lift + i * font.lineHeight, 0xFF000000, false);
         }
-        graphics.pose().popMatrix();
+        graphics.pose().popPose();
     }
 
     @Override
-    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        super.extractTooltip(graphics, mouseX, mouseY);
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderTooltip(graphics, mouseX, mouseY);
         for (int a = 0; a < ResearchTableBlockEntity.INPUT_SLOTS; a++) {
             Aspect aspect = tag(a);
             int mx = mouseX - (leftPos + 48);
             int my = mouseY - (topPos + 32 + 16 * a);
             if (aspect != null && mx >= 0 && my >= 0 && mx < 16 && my < 16) {
-                graphics.setTooltipForNextFrame(font, List.of(aspect.getDisplayName(), aspect.getMeaning()), Optional.empty(), mouseX, mouseY);
+                graphics.renderTooltip(font, List.of(aspect.getDisplayName(), aspect.getMeaning()), Optional.empty(), mouseX, mouseY);
             }
         }
         ResearchNoteData note = noteData();
@@ -203,30 +199,34 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 if (progress > 0.333332F) {
                     lines.add(Component.literal(String.valueOf((int) (progress * 100.0F))).append(Component.translatable("tc.thaumcraft.discoveryprogress")));
                 }
-                graphics.setTooltipForNextFrame(font, lines, Optional.empty(), mouseX, mouseY);
+                graphics.renderTooltip(font, lines, Optional.empty(), mouseX, mouseY);
             }
         }
     }
 
     @Override
-    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(-leftPos, -topPos, 300.0F);
+        drawPopups(graphics, mouseX, mouseY);
+        graphics.pose().popPose();
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        int mx = (int) event.x() - (leftPos + 76);
-        int my = (int) event.y() - (topPos + 40);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        int mx = (int) mouseX - (leftPos + 76);
+        int my = (int) mouseY - (topPos + 40);
         if (buttonActive() && mx >= 0 && my >= 0 && mx < 15 && my < 15) {
             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, ResearchTableMenu.BUTTON_RESEARCH);
             buttonCooldown = System.currentTimeMillis() + 150L;
             return true;
         }
-        mx = (int) event.x() - (leftPos + 51);
-        my = (int) event.y() - (topPos + 130);
+        mx = (int) mouseX - (leftPos + 51);
+        my = (int) mouseY - (topPos + 130);
         if (buttonCooldown <= System.currentTimeMillis() && mx >= 0 && my >= 0 && mx < 29 && my < 7) {
             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, ResearchTableMenu.BUTTON_TOGGLE_SAFE);
             return true;
         }
-        return super.mouseClicked(event, doubleClick);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

@@ -9,7 +9,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -69,8 +68,7 @@ public final class HoverHarnessClient {
         if (timer > 0) {
             timer--;
         }
-        Input keys = player.input.keyPresses;
-        if (keys.jump()) {
+        if (player.input.jumping) {
             if (timer == 0 || timer >= 5) {
                 timer = 7;
             } else {
@@ -89,13 +87,13 @@ public final class HoverHarnessClient {
             }
             Vec3 motion = player.getDeltaMovement();
             double motionY = motion.y;
-            if (keys.jump() && motionY < 0.2F) {
+            if (player.input.jumping && motionY < 0.2F) {
                 motionY += 0.15;
                 if (motionY > 0.2F) {
                     motionY = 0.2F;
                 }
             }
-            if (!keys.shift() && motionY <= 0.0) {
+            if (!player.input.shiftKeyDown && motionY <= 0.0) {
                 motionY = 0.0;
             }
             player.setDeltaMovement(motion.x, motionY, motion.z);

@@ -1,10 +1,8 @@
 package thaumcraft.client.screen;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -12,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.gui.GuiDraw;
 import thaumcraft.crafting.ConfigRecipes;
 import thaumcraft.entity.golem.ClayGolem;
 import thaumcraft.entity.golem.AdvancedClayGolem;
@@ -42,7 +41,9 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
     private final int quote;
 
     public GolemScreen(GolemMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title, 176, 166);
+        super(menu, inventory, title);
+        this.imageWidth = 176;
+        this.imageHeight = 166;
         this.golem = menu.getGolem();
         this.texture = Thaumcraft.id("textures/gui/" + switch (golem.kind()) {
             case WOOD, STRAW -> "guigolemwood";
@@ -61,13 +62,13 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
         return golem.getCore() == 2;
     }
 
-    private void blit(GuiGraphicsExtractor graphics, int x, int y, int u, int v, int width, int height) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + x, topPos + y, u, v, width, height, 256, 256);
+    private void blit(GuiGraphics graphics, int x, int y, int u, int v, int width, int height) {
+        GuiDraw.blit(graphics, texture, leftPos + x, topPos + y, u, v, width, height, 256, 256);
     }
 
-    private void swatch(GuiGraphicsExtractor graphics, int x, int y, int color) {
+    private void swatch(GuiGraphics graphics, int x, int y, int color) {
         if (color >= 0 && color < MARKER_COLORS.length) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + x, topPos + y, 200.0F, 0.0F, 6, 6, 256, 256, FastColor.ARGB32.opaque(MARKER_COLORS[color]));
+            GuiDraw.blit(graphics, texture, leftPos + x, topPos + y, 200.0F, 0.0F, 6, 6, 256, 256, FastColor.ARGB32.opaque(MARKER_COLORS[color]));
         }
     }
 
@@ -81,27 +82,26 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
         return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
     }
 
-    private void centered(GuiGraphicsExtractor graphics, Component text, int centerX, int y, int color) {
-        graphics.text(font, text, leftPos + centerX - font.width(text) / 2, topPos + y, color, true);
+    private void centered(GuiGraphics graphics, Component text, int centerX, int y, int color) {
+        graphics.drawString(font, text, leftPos + centerX - font.width(text) / 2, topPos + y, color, true);
     }
 
-    private void wrapped(GuiGraphicsExtractor graphics, String key, int x, int y, int width) {
-        graphics.textWithWordWrap(font, Component.translatable(key), leftPos + x, topPos + y, width, TEXT, true);
+    private void wrapped(GuiGraphics graphics, String key, int x, int y, int width) {
+        GuiDraw.wrapped(graphics, font, Component.translatable(key), leftPos + x, topPos + y, width, TEXT, true);
     }
 
-    private void toggleLabel(GuiGraphicsExtractor graphics, boolean toggled, int indicatorX, int indicatorY, int textX, int textY) {
+    private void toggleLabel(GuiGraphics graphics, boolean toggled, int indicatorX, int indicatorY, int textX, int textY) {
         blit(graphics, toggled ? indicatorX + 5 : indicatorX, indicatorY, 176, 72, 5, 5);
         Component text = Component.translatable(toggled ? "tc.thaumcraft.golem.gui.any_amount" : "tc.thaumcraft.golem.gui.precise_amount");
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(leftPos + textX, topPos + textY);
-        graphics.pose().scale(0.5F, 0.5F);
-        graphics.text(font, text, -font.width(text), 0, LABEL, true);
-        graphics.pose().popMatrix();
+        graphics.pose().pushPose();
+        graphics.pose().translate(leftPos + textX, topPos + textY, 0.0F);
+        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+        graphics.drawString(font, text, -font.width(text), 0, LABEL, true);
+        graphics.pose().popPose();
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         blit(graphics, 0, 0, 0, 0, imageWidth, imageHeight);
         switch (golem.kind()) {
             case WOOD, STRAW -> {
@@ -136,15 +136,15 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
                 if (smart() && golem instanceof IronGuardianGolem guardian) {
                     for (int index = 0; index < 4; index++) {
                         blit(graphics, 124, 5 + 16 * index, 176, guardian.hasTargetFlag(TARGET_FLAGS[index]) ? 16 : 0, 13, 13);
-                        graphics.text(font, Component.translatable("tc.thaumcraft.golem.gui." + TARGET_NAMES[index]), leftPos + 142, topPos + 7 + 16 * index, TARGET_COLORS[index], true);
+                        graphics.drawString(font, Component.translatable("tc.thaumcraft.golem.gui." + TARGET_NAMES[index]), leftPos + 142, topPos + 7 + 16 * index, TARGET_COLORS[index], true);
                     }
                 }
             }
         }
-        InventoryScreen.extractEntityInInventoryFollowsMouse(graphics, leftPos + 26, topPos + 8, leftPos + 76, topPos + 78, 45, 0.0625F, mouseX, mouseY, golem);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, leftPos + 26, topPos + 8, leftPos + 76, topPos + 78, 45, 0.0625F, mouseX, mouseY, golem);
     }
 
-    private void extractDecanting(GuiGraphicsExtractor graphics) {
+    private void extractDecanting(GuiGraphics graphics) {
         DecantingGolem decanting = (DecantingGolem) golem;
         swatch(graphics, 149, 18, golem.getColor());
         if (decanting.getTallowType() == 0) {
@@ -154,7 +154,7 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
             if (watched != null) {
                 ItemStack bucket = new ItemStack(watched.getBucket());
                 if (!bucket.isEmpty()) {
-                    graphics.item(bucket, leftPos + 144, topPos + 29);
+                    graphics.renderItem(bucket, leftPos + 144, topPos + 29);
                 }
                 name = watched.getFluidType().getDescription();
             } else {
@@ -163,20 +163,21 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
             centered(graphics, name, 152, 53, LABEL);
             blit(graphics, 143, 28, 200, watched == null ? 40 : 16, 18, 18);
         } else {
-            graphics.pose().pushMatrix();
-            graphics.pose().translate(leftPos + 140, topPos + 24);
-            graphics.pose().scale(1.5F, 1.5F);
-            graphics.item(new ItemStack(ModItems.WARDED_JAR.get()), 0, 0);
-            graphics.pose().popMatrix();
+            graphics.pose().pushPose();
+            graphics.pose().translate(leftPos + 140, topPos + 24, 0.0F);
+            graphics.pose().scale(1.5F, 1.5F, 1.0F);
+            graphics.renderItem(new ItemStack(ModItems.WARDED_JAR.get()), 0, 0);
+            graphics.pose().popPose();
         }
     }
 
     @Override
-    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         int x = mouseX - leftPos;
         int y = mouseY - topPos;
         switch (golem.kind()) {
-            case WOOD, STRAW -> graphics.textWithWordWrap(
+            case WOOD, STRAW -> GuiDraw.wrapped(
+                graphics,
                 font,
                 Component.translatable(smart() ? "tc.thaumcraft.golem.gui.wood_smart" : "tc.thaumcraft.golem.gui.wood_simple"),
                 40,
@@ -186,45 +187,46 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
                 true
             );
             case CLAY, STONE -> {
-                graphics.textWithWordWrap(font, Component.translatable("tc.thaumcraft.golem.gui." + (golem.kind() == GolemKind.CLAY ? "clay" : "stone")), 40, 11, 96, TEXT, true);
+                GuiDraw.wrapped(graphics, font, Component.translatable("tc.thaumcraft.golem.gui." + (golem.kind() == GolemKind.CLAY ? "clay" : "stone")), 40, 11, 96, TEXT, true);
                 if (inside(x, y, 139, 10, 22, 8)) {
                     Component name = colorName(golem.getColor());
-                    graphics.text(font, name, 150 - font.width(name) / 2, -1, LABEL, true);
+                    graphics.drawString(font, name, 150 - font.width(name) / 2, -1, LABEL, true);
                 }
             }
             case TALLOW -> {
                 int type = golem instanceof TallowGolem tallow ? tallow.getTallowType() : 0;
-                graphics.textWithWordWrap(font, Component.translatable(type == 0 ? "tc.thaumcraft.golem.gui.tallow_crucible" : "tc.thaumcraft.golem.gui.tallow_alembic"), 40, 11, 96, TEXT, true);
+                GuiDraw.wrapped(graphics, font, Component.translatable(type == 0 ? "tc.thaumcraft.golem.gui.tallow_crucible" : "tc.thaumcraft.golem.gui.tallow_alembic"), 40, 11, 96, TEXT, true);
                 if (inside(x, y, 141, 10, 22, 8)) {
                     Component name = colorName(golem.getColor());
-                    graphics.text(font, name, 152 - font.width(name) / 2, -1, LABEL, true);
+                    graphics.drawString(font, name, 152 - font.width(name) / 2, -1, LABEL, true);
                 }
             }
             case ADVANCED_CLAY, ADVANCED_STONE -> {
-                graphics.pose().pushMatrix();
-                graphics.pose().translate(39.0F, 10.0F);
-                graphics.pose().scale(0.75F, 0.75F);
-                graphics.textWithWordWrap(font, Component.translatable("tc.thaumcraft.golem.gui.quote." + quote), 0, 0, 72, TEXT, true);
-                graphics.pose().popMatrix();
+                graphics.pose().pushPose();
+                graphics.pose().translate(39.0F, 10.0F, 0.0F);
+                graphics.pose().scale(0.75F, 0.75F, 1.0F);
+                GuiDraw.wrapped(graphics, font, Component.translatable("tc.thaumcraft.golem.gui.quote." + quote), 0, 0, 72, TEXT, true);
+                graphics.pose().popPose();
                 if (golem instanceof MultiColorGolem multi) {
                     for (int column = 0; column < 3; column++) {
                         for (int row = 0; row < 2; row++) {
                             if (inside(x, y, 94 + column * 28, 5 + row * 37, 22, 8)) {
                                 Component name = colorName(multi.getSlotColor(row * 3 + column));
-                                graphics.text(font, name, 133 - font.width(name) / 2, -6, LABEL, true);
+                                graphics.drawString(font, name, 133 - font.width(name) / 2, -6, LABEL, true);
                             }
                         }
                     }
                 }
             }
             case DECANTING -> {
-                graphics.textWithWordWrap(font, Component.translatable("tc.thaumcraft.golem.gui.decanting_quote." + quote), 40, 11, 90, TEXT, true);
+                GuiDraw.wrapped(graphics, font, Component.translatable("tc.thaumcraft.golem.gui.decanting_quote." + quote), 40, 11, 90, TEXT, true);
                 if (inside(x, y, 141, 17, 22, 8)) {
                     Component name = colorName(golem.getColor());
-                    graphics.text(font, name, 152 - font.width(name) / 2, 6, LABEL, true);
+                    graphics.drawString(font, name, 152 - font.width(name) / 2, 6, LABEL, true);
                 }
             }
-            case IRON_GUARDIAN -> graphics.textWithWordWrap(
+            case IRON_GUARDIAN -> GuiDraw.wrapped(
+                graphics,
                 font,
                 Component.translatable(smart() ? "tc.thaumcraft.golem.gui.iron_smart" : "tc.thaumcraft.golem.gui.iron_simple"),
                 40,
@@ -242,9 +244,9 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        double x = event.x() - leftPos;
-        double y = event.y() - topPos;
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        double x = mouseX - leftPos;
+        double y = mouseY - topPos;
         switch (golem.kind()) {
             case CLAY, STONE -> {
                 if (inside(x, y, 139, 10, 8, 8)) {
@@ -308,6 +310,6 @@ public class GolemScreen extends AbstractContainerScreen<GolemMenu> {
             default -> {
             }
         }
-        return super.mouseClicked(event, doubleClick);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

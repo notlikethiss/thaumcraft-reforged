@@ -1,11 +1,19 @@
 package thaumcraft.client.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.Random;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
-import thaumcraft.client.fx.ModRenderPipelines;
+import org.joml.Matrix4f;
 
 public final class GuiLines {
     private static final Random RANDOM = new Random();
@@ -13,7 +21,7 @@ public final class GuiLines {
     private GuiLines() {
     }
 
-    public static void unstable(GuiGraphicsExtractor graphics, int x, int y, int x2, int y2, float instability, float opacity) {
+    public static void unstable(GuiGraphics graphics, int x, int y, int x2, int y2, float instability, float opacity) {
         if (instability <= 0.01F) {
             line(graphics, x, y, x2, y2, opacity);
             return;
@@ -35,7 +43,7 @@ public final class GuiLines {
         line(graphics, (int) (x + dx * a) + xr, (int) (y + dy * a) + yr, x2, y2, opacity);
     }
 
-    public static void line(GuiGraphicsExtractor graphics, int x, int y, int x2, int y2, float opacity) {
+    public static void line(GuiGraphics graphics, int x, int y, int x2, int y2, float opacity) {
         Minecraft minecraft = Minecraft.getInstance();
         int count = minecraft.player == null ? 0 : minecraft.player.tickCount;
         float red = Mth.sin((count + x2) / 10.0F) * 0.15F + 0.15F;
@@ -49,8 +57,16 @@ public final class GuiLines {
         int error = dx + dy;
         int cx = x;
         int cy = y;
+        Matrix4f matrix = graphics.pose().last().pose();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         while (true) {
-            graphics.fill(ModRenderPipelines.GUI_ADDITIVE, cx, cy, cx + 1, cy + 1, color);
+            buffer.addVertex(matrix, cx, cy, 0.0F).setColor(color);
+            buffer.addVertex(matrix, cx, cy + 1, 0.0F).setColor(color);
+            buffer.addVertex(matrix, cx + 1, cy + 1, 0.0F).setColor(color);
+            buffer.addVertex(matrix, cx + 1, cy, 0.0F).setColor(color);
             if (cx == x2 && cy == y2) {
                 break;
             }
@@ -64,5 +80,7 @@ public final class GuiLines {
                 cy += sy;
             }
         }
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
+        RenderSystem.defaultBlendFunc();
     }
 }

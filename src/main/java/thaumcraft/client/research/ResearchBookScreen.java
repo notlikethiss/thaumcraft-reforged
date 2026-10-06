@@ -6,20 +6,19 @@ import java.util.Arrays;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.gui.GuiDraw;
 import thaumcraft.client.gui.TcFonts;
 import thaumcraft.research.PlayerKnowledge;
 import thaumcraft.research.ResearchItem;
@@ -61,7 +60,7 @@ public class ResearchBookScreen extends Screen {
     }
 
     public static void open() {
-        Minecraft.getInstance().gui.setScreen(new ResearchBookScreen());
+        Minecraft.getInstance().setScreen(new ResearchBookScreen());
     }
 
     public double mapX() {
@@ -85,17 +84,17 @@ public class ResearchBookScreen extends Screen {
     }
 
     @Override
-    public boolean isInGameUi() {
-        return true;
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        renderTransparentBackground(graphics);
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (minecraft.options.keyInventory.matches(event)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (minecraft.options.keyInventory.matches(keyCode, scanCode)) {
             onClose();
             return true;
         }
-        return super.keyPressed(event);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
@@ -142,9 +141,9 @@ public class ResearchBookScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dx, double dy) {
         if (!dragging) {
-            return super.mouseDragged(event, dx, dy);
+            return super.mouseDragged(mouseX, mouseY, button, dx, dy);
         }
         mapX -= dx;
         mapY -= dy;
@@ -154,15 +153,16 @@ public class ResearchBookScreen extends Screen {
     }
 
     @Override
-    public boolean mouseReleased(MouseButtonEvent event) {
-        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             dragging = false;
         }
-        return super.mouseReleased(event);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
         targetMapX = Mth.clamp(targetMapX, mapTop, mapBottom - 1);
         targetMapY = Mth.clamp(targetMapY, mapLeft, mapRight - 1);
         int viewX = Mth.clamp(Mth.floor(previousMapX + (mapX - previousMapX) * partialTick), mapTop, mapBottom - 1);
@@ -174,18 +174,19 @@ public class ResearchBookScreen extends Screen {
         graphics.enableScissor(originX, originY, originX + 224, originY + 196);
         int u = (int) ((float) (viewX - mapTop) / Math.abs(mapTop - mapBottom) * 288.0F);
         int v = (int) ((float) (viewY - mapLeft) / Math.abs(mapLeft - mapRight) * 316.0F);
-        graphics.pose().pushMatrix();
-        graphics.pose().scale(2.0F, 2.0F);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, originX / 2, originY / 2, u / 2.0F, v / 2.0F, 112, 98, 256, 256);
-        graphics.pose().popMatrix();
+        graphics.pose().pushPose();
+        graphics.pose().scale(2.0F, 2.0F, 1.0F);
+        GuiDraw.blit(graphics, BACKGROUND, originX / 2, originY / 2, u / 2.0F, v / 2.0F, 112, 98, 256, 256);
+        graphics.pose().popPose();
         drawConnections(graphics, viewX, viewY, originX, originY);
         drawIcons(graphics, viewX, viewY, originX, originY, mouseX, mouseY);
         graphics.disableScissor();
-        graphics.blit(RenderPipelines.GUI_TEXTURED, FRAME, paneX, paneY, 0.0F, 0.0F, PANE_WIDTH, PANE_HEIGHT, 256, 256);
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        GuiDraw.blit(graphics, FRAME, paneX, paneY, 0.0F, 0.0F, PANE_WIDTH, PANE_HEIGHT, 256, 256);
         if (highlight != null) {
-            graphics.nextStratum();
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0F, 0.0F, 400.0F);
             drawTooltip(graphics, highlight, mouseX + 12, mouseY - 4);
+            graphics.pose().popPose();
         }
     }
 
@@ -193,7 +194,7 @@ public class ResearchBookScreen extends Screen {
         return Math.sin(Util.getMillis() % 600L / 600.0 * Math.PI * 2.0) > 0.6 ? 255 : 130;
     }
 
-    private void drawConnections(GuiGraphicsExtractor graphics, int viewX, int viewY, int originX, int originY) {
+    private void drawConnections(GuiGraphics graphics, int viewX, int viewY, int originX, int originY) {
         for (ResearchItem item : research) {
             if (item.parents != null) {
                 for (ResearchItem parent : item.parents) {
@@ -213,7 +214,7 @@ public class ResearchBookScreen extends Screen {
         }
     }
 
-    private void drawConnection(GuiGraphicsExtractor graphics, ResearchItem item, ResearchItem other, int viewX, int viewY, int originX, int originY) {
+    private void drawConnection(GuiGraphics graphics, ResearchItem item, ResearchItem other, int viewX, int viewY, int originX, int originY) {
         int x1 = item.displayColumn * 24 - viewX + 11 + originX;
         int y1 = item.displayRow * 24 - viewY + 11 + originY;
         int x2 = other.displayColumn * 24 - viewX + 11 + originX;
@@ -229,11 +230,11 @@ public class ResearchBookScreen extends Screen {
                 color = 0x00FF00 + (pulse() << 24);
             }
         }
-        graphics.horizontalLine(x1, x2, y1, color);
-        graphics.verticalLine(x2, y1, y2, color);
+        graphics.hLine(x1, x2, y1, color);
+        graphics.vLine(x2, y1, y2, color);
     }
 
-    private void drawIcons(GuiGraphicsExtractor graphics, int viewX, int viewY, int originX, int originY, int mouseX, int mouseY) {
+    private void drawIcons(GuiGraphics graphics, int viewX, int viewY, int originX, int originY, int mouseX, int mouseY) {
         highlight = null;
         for (ResearchItem item : research) {
             int dx = item.displayColumn * 24 - viewX;
@@ -258,22 +259,22 @@ public class ResearchBookScreen extends Screen {
             int x = originX + dx;
             int y = originY + dy;
             float frameU = item.getStub() ? 54.0F : item.getLost() ? 86.0F : 0.0F;
-            graphics.blit(RenderPipelines.GUI_TEXTURED, FRAME, x - 2, y - 2, frameU, 230.0F, 26, 26, 256, 256, frameColor);
+            GuiDraw.blit(graphics, FRAME, x - 2, y - 2, frameU, 230.0F, 26, 26, 256, 256, frameColor);
             if (item.getSpecial()) {
-                graphics.blit(RenderPipelines.GUI_TEXTURED, FRAME, x - 2, y - 2, 26.0F, 230.0F, 26, 26, 256, 256, frameColor);
+                GuiDraw.blit(graphics, FRAME, x - 2, y - 2, 26.0F, 230.0F, 26, 26, 256, 256, frameColor);
             }
             boolean unlockable = canUnlock(item);
             ItemStack icon = item.getIconStack();
             if (!icon.isEmpty()) {
-                graphics.item(icon, x + 3, y + 3);
+                graphics.renderItem(icon, x + 3, y + 3);
                 if (!unlockable) {
-                    graphics.fill(x + 3, y + 3, x + 19, y + 19, 0xE6000000);
+                    graphics.fill(RenderType.guiOverlay(), x + 3, y + 3, x + 19, y + 19, 0xE6000000);
                 }
             } else if (item.iconIndex >= 0) {
                 float iconBrightness = unlockable ? brightness : 0.1F;
                 int iconColor = FastColor.ARGB32.colorFromFloat(1.0F, iconBrightness, iconBrightness, iconBrightness);
-                graphics.blit(
-                    RenderPipelines.GUI_TEXTURED,
+                GuiDraw.blit(
+                    graphics,
                     ICONS,
                     x + 3,
                     y + 3,
@@ -293,7 +294,7 @@ public class ResearchBookScreen extends Screen {
         }
     }
 
-    private void drawTooltip(GuiGraphicsExtractor graphics, ResearchItem item, int x, int y) {
+    private void drawTooltip(GuiGraphics graphics, ResearchItem item, int x, int y) {
         boolean complete = isComplete(item);
         boolean galactic = !complete;
         ResearchTexts.Entry entry = ResearchTexts.get(item.key);
@@ -311,10 +312,10 @@ public class ResearchBookScreen extends Screen {
             }
             graphics.fill(x - 3, y - 3, x + textWidth + 3, y + textHeight + 3 + 12, 0xC0000000);
             for (int i = 0; i < lines.size(); i++) {
-                graphics.text(font, lines.get(i), x, y + 12 + i * font.lineHeight, -6250336, false);
+                graphics.drawString(font, lines.get(i), x, y + 12 + i * font.lineHeight, -6250336, false);
             }
             if (complete) {
-                graphics.text(font, Component.translatable("tc.thaumcraft.research_completed"), x, y + textHeight + 4, -7302913, true);
+                graphics.drawString(font, Component.translatable("tc.thaumcraft.research_completed"), x, y + textHeight + 4, -7302913, true);
             }
         } else {
             int textWidth = Math.max(font.width(popupText), 120);
@@ -322,23 +323,23 @@ public class ResearchBookScreen extends Screen {
             int textHeight = lines.size() * font.lineHeight;
             graphics.fill(x - 3, y - 3, x + textWidth + 3, y + textHeight + 12 + 3, 0xC0000000);
             for (int i = 0; i < lines.size(); i++) {
-                graphics.text(font, lines.get(i), x, y + 12 + i * font.lineHeight, -9416624, false);
+                graphics.drawString(font, lines.get(i), x, y + 12 + i * font.lineHeight, -9416624, false);
             }
         }
         int nameColor = canUnlock(item) ? (item.getSpecial() ? -128 : -1) : (item.getSpecial() ? -8355776 : -8355712);
-        graphics.text(font, nameText, x, y, nameColor, true);
+        graphics.drawString(font, nameText, x, y, nameColor, true);
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (highlight != null && isComplete(highlight) && ResearchPageScreen.hasPages(highlight.key)) {
-            minecraft.gui.setScreen(new ResearchPageScreen(highlight, mapX, mapY));
+            minecraft.setScreen(new ResearchPageScreen(highlight, mapX, mapY));
             return true;
         }
-        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && insideMap(event.x(), event.y())) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && insideMap(mouseX, mouseY)) {
             dragging = true;
             return true;
         }
-        return super.mouseClicked(event, doubleClick);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

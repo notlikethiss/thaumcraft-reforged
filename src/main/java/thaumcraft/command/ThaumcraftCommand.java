@@ -14,7 +14,6 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Prediction;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -47,7 +46,7 @@ public final class ThaumcraftCommand {
     private static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             Commands.literal(Thaumcraft.MODID)
-                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .requires(source -> source.hasPermission(2))
                 .then(
                     Commands.literal("research")
                         .then(
@@ -139,7 +138,7 @@ public final class ThaumcraftCommand {
                 note = ResearchManager.toDiscovery(note);
             }
             if (!player.getInventory().add(note)) {
-                player.drop(note, false, Prediction.SERVER_ONLY);
+                player.drop(note, false);
             }
         }
         source.sendSuccess(() -> Component.literal("Gave research note " + key + " to " + targets.size() + " player(s)"), true);

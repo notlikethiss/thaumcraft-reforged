@@ -10,6 +10,8 @@ import thaumcraft.client.aura.AuraClientData;
 import thaumcraft.fx.Fx;
 import thaumcraft.aspect.AspectRegistry;
 import thaumcraft.network.AspectTagsPayload;
+import thaumcraft.network.KnowledgeSyncPayload;
+import thaumcraft.registry.ModAttachments;
 import thaumcraft.network.BlockBoilPayload;
 import thaumcraft.network.BlockSparklePayload;
 import thaumcraft.network.BlockTagsPayload;
@@ -109,6 +111,10 @@ public final class ClientPayloadHandlers {
     }
 
     public static void researchComplete(ResearchCompletePayload payload, IPayloadContext context) {
-        Minecraft.getInstance().gui.toastManager().addToast(new ResearchToast(payload.key()));
+        Minecraft.getInstance().getToasts().addToast(new ResearchToast(payload.key()));
+    }
+
+    public static void knowledgeSync(KnowledgeSyncPayload payload, IPayloadContext context) {
+        context.player().setData(ModAttachments.KNOWLEDGE, payload.knowledge());
     }
 }

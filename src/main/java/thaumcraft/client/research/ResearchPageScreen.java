@@ -3,29 +3,27 @@ package thaumcraft.client.research;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
-import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
-import net.minecraft.world.item.crafting.display.SlotDisplay;
-import net.minecraft.world.item.crafting.display.SlotDisplayContext;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import javax.annotation.Nullable;
 import thaumcraft.Config;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.gui.GuiDraw;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.client.gui.AspectRenderer;
@@ -84,32 +82,32 @@ public class ResearchPageScreen extends Screen {
     }
 
     @Override
-    public boolean isInGameUi() {
-        return true;
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        renderTransparentBackground(graphics);
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (event.isEscape() || minecraft.options.keyInventory.matches(event)) {
-            minecraft.gui.setScreen(new ResearchBookScreen(mapX, mapY));
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == InputConstants.KEY_ESCAPE || minecraft.options.keyInventory.matches(keyCode, scanCode)) {
+            minecraft.setScreen(new ResearchBookScreen(mapX, mapY));
             return true;
         }
-        return super.keyPressed(event);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
         tooltip = null;
         tooltipStack = ItemStack.EMPTY;
         references.clear();
         int sw = (width - PANE_WIDTH) / 2;
         int sh = (height - PANE_HEIGHT) / 2;
-        graphics.pose().pushMatrix();
-        graphics.pose().translate((width - PANE_WIDTH * 1.3F) / 2.0F, (height - PANE_HEIGHT * 1.3F) / 2.0F);
-        graphics.pose().scale(1.3F, 1.3F);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, 0, 0, 0.0F, 0.0F, PANE_WIDTH, PANE_HEIGHT, 256, 256);
-        graphics.pose().popMatrix();
+        graphics.pose().pushPose();
+        graphics.pose().translate((width - PANE_WIDTH * 1.3F) / 2.0F, (height - PANE_HEIGHT * 1.3F) / 2.0F, 0.0F);
+        graphics.pose().scale(1.3F, 1.3F, 1.0F);
+        GuiDraw.blit(graphics, BOOK, 0, 0, 0.0F, 0.0F, PANE_WIDTH, PANE_HEIGHT, 256, 256);
+        graphics.pose().popPose();
         for (int index = page; index <= page + 1 && index < pages.size(); index++) {
             drawPage(graphics, pages.get(index), index % 2, sw, sh, mouseX, mouseY);
         }
@@ -124,19 +122,19 @@ public class ResearchPageScreen extends Screen {
         }
         if (tooltip != null) {
             if (tooltipStack.isEmpty()) {
-                graphics.setTooltipForNextFrame(font, tooltip, Optional.empty(), mouseX, mouseY);
+                graphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
             } else {
-                graphics.setTooltipForNextFrame(font, tooltip, tooltipStack.getTooltipImage(), tooltipStack, mouseX, mouseY);
+                graphics.renderTooltip(font, tooltip, tooltipStack.getTooltipImage(), mouseX, mouseY);
             }
         }
     }
 
-    private void drawArrow(GuiGraphicsExtractor graphics, int x, int y, float u, float alpha, float scale) {
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(x + 6.0F, y + 4.0F);
-        graphics.pose().scale(1.0F + scale, 1.0F + scale);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, -6, -4, u, 184.0F, 12, 8, 256, 256, FastColor.ARGB32.white(Mth.clamp(alpha, 0.0F, 1.0F)));
-        graphics.pose().popMatrix();
+    private void drawArrow(GuiGraphics graphics, int x, int y, float u, float alpha, float scale) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x + 6.0F, y + 4.0F, 0.0F);
+        graphics.pose().scale(1.0F + scale, 1.0F + scale, 1.0F);
+        GuiDraw.blit(graphics, BOOK, -6, -4, u, 184.0F, 12, 8, 256, 256, GuiDraw.whiteAlpha(Mth.clamp(alpha, 0.0F, 1.0F)));
+        graphics.pose().popPose();
     }
 
     private static boolean inside(int mouseX, int mouseY, int x, int y, int width, int height) {
@@ -145,25 +143,25 @@ public class ResearchPageScreen extends Screen {
         return mx >= 0 && my >= 0 && mx < width && my < height;
     }
 
-    private void drawPage(GuiGraphicsExtractor graphics, ResearchTexts.Page node, int side, int x, int y, int mouseX, int mouseY) {
+    private void drawPage(GuiGraphics graphics, ResearchTexts.Page node, int side, int x, int y, int mouseX, int mouseY) {
         if (lastCycle < System.currentTimeMillis()) {
             cycle++;
             lastCycle = System.currentTimeMillis() + 1000L;
         }
         if (page == 0 && side == 0) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, x + 4, y - 13, 24.0F, 184.0F, 96, 4, 256, 256);
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK, x + 4, y + 4, 24.0F, 184.0F, 96, 4, 256, 256);
+            GuiDraw.blit(graphics, BOOK, x + 4, y - 13, 24.0F, 184.0F, 96, 4, 256, 256);
+            GuiDraw.blit(graphics, BOOK, x + 4, y + 4, 24.0F, 184.0F, 96, 4, 256, 256);
             Component name = Component.literal(ResearchTexts.name(research.key));
             int nameWidth = font.width(name);
             if (nameWidth <= 130) {
-                graphics.text(font, name, x + 52 - nameWidth / 2, y - 6, TITLE_COLOR, false);
+                graphics.drawString(font, name, x + 52 - nameWidth / 2, y - 6, TITLE_COLOR, false);
             } else {
                 float scale = 130.0F / nameWidth;
-                graphics.pose().pushMatrix();
-                graphics.pose().translate(x + 52 - nameWidth / 2.0F * scale, y - 6.0F * scale);
-                graphics.pose().scale(scale, scale);
-                graphics.text(font, name, 0, 0, TITLE_COLOR, false);
-                graphics.pose().popMatrix();
+                graphics.pose().pushPose();
+                graphics.pose().translate(x + 52 - nameWidth / 2.0F * scale, y - 6.0F * scale, 0.0F);
+                graphics.pose().scale(scale, scale, 1.0F);
+                graphics.drawString(font, name, 0, 0, TITLE_COLOR, false);
+                graphics.pose().popPose();
             }
             y += 25;
         }
@@ -180,24 +178,28 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    private void drawTextPage(GuiGraphicsExtractor graphics, int side, int x, int y, String text) {
+    private void drawTextPage(GuiGraphics graphics, int side, int x, int y, String text) {
         List<FormattedCharSequence> lines = font.split(TcFonts.uniform(text.stripTrailing()), 139);
         for (int i = 0; i < lines.size(); i++) {
-            graphics.text(font, lines.get(i), x - 15 + side * 152, y + i * font.lineHeight, TEXT_COLOR, false);
+            graphics.drawString(font, lines.get(i), x - 15 + side * 152, y + i * font.lineHeight, TEXT_COLOR, false);
         }
     }
 
-    private void drawTitle(GuiGraphicsExtractor graphics, String key, int x, int y) {
+    private void drawTitle(GuiGraphics graphics, String key, int x, int y) {
         Component text = Component.translatable(key);
-        graphics.text(font, text, x + 56 - font.width(text) / 2, y, TITLE_COLOR, false);
+        graphics.drawString(font, text, x + 56 - font.width(text) / 2, y, TITLE_COLOR, false);
     }
 
-    private void overlay(GuiGraphicsExtractor graphics, int x, int y, int drawX, int drawY, float u, float v, int width, int height) {
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(x, y);
-        graphics.pose().scale(2.0F, 2.0F);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, OVERLAY, drawX, drawY, u, v, width, height, 256, 256);
-        graphics.pose().popMatrix();
+    private void overlay(GuiGraphics graphics, int x, int y, int drawX, int drawY, float u, float v, int width, int height) {
+        overlay(graphics, x, y, 0.0F, drawX, drawY, u, v, width, height);
+    }
+
+    private void overlay(GuiGraphics graphics, int x, int y, float z, int drawX, int drawY, float u, float v, int width, int height) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, z);
+        graphics.pose().scale(2.0F, 2.0F, 1.0F);
+        GuiDraw.blit(graphics, OVERLAY, drawX, drawY, u, v, width, height, 256, 256);
+        graphics.pose().popPose();
     }
 
     private static @Nullable RecipeReference reference(String key) {
@@ -235,22 +237,22 @@ public class ResearchPageScreen extends Screen {
         if (holder == null) {
             return null;
         }
-        ContextMap context = SlotDisplayContext.fromLevel(minecraft.level);
-        for (RecipeDisplay display : holder.value().display()) {
-            if (display instanceof ShapedCraftingRecipeDisplay shaped) {
-                return new GridRecipe(true, shaped.width(), shaped.height(), resolve(shaped.ingredients(), context), shaped.result().resolveForStacks(context), 0, new AspectList());
-            }
-            if (display instanceof ShapelessCraftingRecipeDisplay shapeless) {
-                return new GridRecipe(false, 3, 3, resolve(shapeless.ingredients(), context), shapeless.result().resolveForStacks(context), 0, new AspectList());
-            }
+        RegistryAccess registryAccess = minecraft.level.registryAccess();
+        Recipe<?> recipe = holder.value();
+        List<ItemStack> output = List.of(recipe.getResultItem(registryAccess));
+        if (recipe instanceof ShapedRecipe shaped) {
+            return new GridRecipe(true, shaped.getWidth(), shaped.getHeight(), resolve(shaped.getIngredients()), output, 0, new AspectList());
+        }
+        if (recipe instanceof ShapelessRecipe shapeless) {
+            return new GridRecipe(false, 3, 3, resolve(shapeless.getIngredients()), output, 0, new AspectList());
         }
         return null;
     }
 
-    private static List<List<ItemStack>> resolve(List<SlotDisplay> displays, ContextMap context) {
+    private static List<List<ItemStack>> resolve(List<Ingredient> ingredients) {
         List<List<ItemStack>> result = new ArrayList<>();
-        for (SlotDisplay display : displays) {
-            result.add(display.resolveForStacks(context));
+        for (Ingredient ingredient : ingredients) {
+            result.add(List.of(ingredient.getItems()));
         }
         return result;
     }
@@ -262,14 +264,14 @@ public class ResearchPageScreen extends Screen {
         return stacks.get((int) (System.currentTimeMillis() / 1000L % stacks.size()));
     }
 
-    private void drawItem(GuiGraphicsExtractor graphics, List<ItemStack> stacks, int x, int y, int mouseX, int mouseY, boolean output) {
+    private void drawItem(GuiGraphics graphics, List<ItemStack> stacks, int x, int y, int mouseX, int mouseY, boolean output) {
         ItemStack stack = cycle(stacks);
         if (stack.isEmpty()) {
             return;
         }
-        graphics.item(stack, x, y);
+        graphics.renderItem(stack, x, y);
         if (output) {
-            graphics.itemDecorations(font, stack, x, y);
+            graphics.renderItemDecorations(font, stack, x, y);
         }
         if (!inside(mouseX, mouseY, x, y, 16, 16)) {
             return;
@@ -286,7 +288,7 @@ public class ResearchPageScreen extends Screen {
         tooltipStack = stack;
     }
 
-    private void drawAspect(GuiGraphicsExtractor graphics, Aspect aspect, int amount, int x, int y, int mouseX, int mouseY) {
+    private void drawAspect(GuiGraphics graphics, Aspect aspect, int amount, int x, int y, int mouseX, int mouseY) {
         AspectRenderer.drawTag(graphics, x, y, aspect, amount, false, true);
         if (inside(mouseX, mouseY, x, y, 16, 16)) {
             tooltip = List.of(aspect.getDisplayName(), aspect.getMeaning());
@@ -294,8 +296,8 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    private void drawCost(GuiGraphicsExtractor graphics, int cost, int x, int y) {
-        graphics.text(font, Component.translatable("tc.thaumcraft.vis_amount", cost), x, y, TITLE_COLOR, false);
+    private void drawCost(GuiGraphics graphics, int cost, int x, int y) {
+        graphics.drawString(font, Component.translatable("tc.thaumcraft.vis_amount", cost), x, y, TITLE_COLOR, false);
     }
 
     private static String findRecipeReference(ItemStack stack) {
@@ -311,7 +313,7 @@ public class ResearchPageScreen extends Screen {
         return "";
     }
 
-    private void drawGrid(GuiGraphicsExtractor graphics, GridRecipe recipe, int x, int y, int shapedY, int shapelessY, int mouseX, int mouseY) {
+    private void drawGrid(GuiGraphics graphics, GridRecipe recipe, int x, int y, int shapedY, int shapelessY, int mouseX, int mouseY) {
         if (recipe.shaped()) {
             for (int i = 0; i < recipe.width() && i < 3; i++) {
                 for (int j = 0; j < recipe.height() && j < 3; j++) {
@@ -328,7 +330,7 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    private void drawArcanePage(GuiGraphicsExtractor graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
+    private void drawArcanePage(GuiGraphics graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
         GridRecipe recipe = grid(reference(key));
         if (recipe == null) {
             return;
@@ -342,16 +344,16 @@ public class ResearchPageScreen extends Screen {
         drawCost(graphics, recipe.cost(), x + 86 + start, y + 43);
         drawGrid(graphics, recipe, x + start, y, 76, 68, mouseX, mouseY);
         if ((key.equals("WARDEDSTONE") || key.equals("WARDEDGLASS") || key.equals("ARCANEDOOR")) && !Config.wardedStone()) {
-            graphics.pose().pushMatrix();
-            graphics.pose().translate(x + start + 30, y + 80);
-            graphics.pose().rotate(Mth.PI / 4.0F);
-            graphics.pose().scale(2.0F, 2.0F);
-            graphics.text(font, Component.translatable("tc.thaumcraft.nerfed"), 0, 0, 0xFFFF5050, false);
-            graphics.pose().popMatrix();
+            graphics.pose().pushPose();
+            graphics.pose().translate(x + start + 30, y + 80, 0.0F);
+            graphics.pose().mulPose(Axis.ZP.rotation(Mth.PI / 4.0F));
+            graphics.pose().scale(2.0F, 2.0F, 1.0F);
+            graphics.drawString(font, Component.translatable("tc.thaumcraft.nerfed"), 0, 0, 0xFFFF5050, false);
+            graphics.pose().popPose();
         }
     }
 
-    private void drawInfusionPage(GuiGraphicsExtractor graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
+    private void drawInfusionPage(GuiGraphics graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
         RecipeReference reference;
         if (key.startsWith("C_")) {
             reference = reference(key + cycle);
@@ -382,7 +384,7 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    private void drawCraftingPage(GuiGraphicsExtractor graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
+    private void drawCraftingPage(GuiGraphics graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
         GridRecipe recipe = vanillaGrid(reference(key));
         if (recipe == null) {
             return;
@@ -395,7 +397,7 @@ public class ResearchPageScreen extends Screen {
         drawGrid(graphics, recipe, x + start, y, 76, 76, mouseX, mouseY);
     }
 
-    private void drawCruciblePage(GuiGraphicsExtractor graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
+    private void drawCruciblePage(GuiGraphics graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
         CrucibleRecipe recipe = ThaumcraftRecipes.getCrucibleRecipe(key);
         if (recipe == null) {
             return;
@@ -418,7 +420,7 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    private void drawCompoundPage(GuiGraphicsExtractor graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
+    private void drawCompoundPage(GuiGraphics graphics, int side, int x, int y, int mouseX, int mouseY, String key) {
         if (!(reference(key) instanceof RecipeReference.Compound compound)) {
             return;
         }
@@ -446,7 +448,7 @@ public class ResearchPageScreen extends Screen {
                         boolean pillar = j < dy - 1 && (k == dz - 1 && i == dx - 1 || i == 0 && k == 0 || i == dx - 1 && k == 0 || k == dz - 1 && i == 0);
                         boolean front = k == dz - 1 && i == 0;
                         if (pass == 0 && pillar && !front || pass == 2 && pillar && front) {
-                            overlay(graphics, px + 7, py - 10, 0, 0, 80.0F, 76.0F, 2, 30);
+                            overlay(graphics, px + 7, py - 10, pass == 2 ? 200.0F : 0.0F, 0, 0, 80.0F, 76.0F, 2, 30);
                         }
                         String id = count < blocks.size() ? blocks.get(count) : null;
                         if (pass == 1 && id != null) {
@@ -460,9 +462,9 @@ public class ResearchPageScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        int mouseX = (int) event.x();
-        int mouseY = (int) event.y();
+    public boolean mouseClicked(double clickX, double clickY, int button) {
+        int mouseX = (int) clickX;
+        int mouseY = (int) clickY;
         int sw = (width - PANE_WIDTH) / 2;
         int sh = (height - PANE_HEIGHT) / 2;
         if (page < pages.size() - 2 && inside(mouseX, mouseY, sw + 261, sh + 189, 14, 10)) {
@@ -477,12 +479,12 @@ public class ResearchPageScreen extends Screen {
             if (inside(mouseX, mouseY, reference.x(), reference.y(), 16, 16)) {
                 ResearchItem target = ResearchList.getResearch(reference.key());
                 if (target != null && hasPages(target.key)) {
-                    minecraft.gui.setScreen(new ResearchPageScreen(target, mapX, mapY));
+                    minecraft.setScreen(new ResearchPageScreen(target, mapX, mapY));
                     return true;
                 }
             }
         }
-        return super.mouseClicked(event, doubleClick);
+        return super.mouseClicked(clickX, clickY, button);
     }
 
     private void turnPage(int delta) {

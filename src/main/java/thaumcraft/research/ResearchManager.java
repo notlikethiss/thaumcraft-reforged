@@ -3,17 +3,14 @@ package thaumcraft.research;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Prediction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.network.ModNetwork;
 import javax.annotation.Nullable;
@@ -23,6 +20,7 @@ import thaumcraft.aspect.Aspect;
 import thaumcraft.blockentity.ResearchTableBlockEntity;
 import thaumcraft.crafting.CrucibleRecipe;
 import thaumcraft.crafting.ThaumcraftRecipes;
+import thaumcraft.network.KnowledgeSyncPayload;
 import thaumcraft.network.ResearchCompletePayload;
 import thaumcraft.registry.ModAttachments;
 import thaumcraft.registry.ModItems;
@@ -38,6 +36,13 @@ public final class ResearchManager {
 
     public static void saveKnowledge(Player player, PlayerKnowledge knowledge) {
         player.setData(ModAttachments.KNOWLEDGE, knowledge);
+        syncKnowledge(player);
+    }
+
+    public static void syncKnowledge(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModNetwork.sendToPlayer(serverPlayer, new KnowledgeSyncPayload(knowledge(serverPlayer)));
+        }
     }
 
     public static boolean isResearchComplete(Player player, String key) {
@@ -102,7 +107,7 @@ public final class ResearchManager {
         if (slot >= 0) {
             inventory.setItem(slot, note);
         } else if (!inventory.add(note)) {
-            player.drop(note, false, Prediction.SERVER_ONLY);
+            player.drop(note, false);
         }
         player.inventoryMenu.broadcastChanges();
         return level.getRandom().nextFloat() < chance;
@@ -321,11 +326,6 @@ public final class ResearchManager {
     }
 
     @SubscribeEvent
-    public static void onDatapackSync(OnDatapackSyncEvent event) {
-        event.sendRecipes(RecipeType.CRAFTING);
-    }
-
-    @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerKnowledge knowledge = knowledge(event.getEntity());
         boolean changed = false;
@@ -336,6 +336,18 @@ public final class ResearchManager {
         }
         if (changed) {
             saveKnowledge(event.getEntity(), knowledge);
+        } else {
+            syncKnowledge(event.getEntity());
         }
+    }
+
+    @SubscribeEvent
+    public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        syncKnowledge(event.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        syncKnowledge(event.getEntity());
     }
 }

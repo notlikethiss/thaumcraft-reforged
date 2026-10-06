@@ -1,6 +1,6 @@
 package thaumcraft.client.screen;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -15,8 +15,8 @@ public class ArcaneWorkbenchScreen extends MagicWorkbenchScreen<ArcaneWorkbenchM
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
         WorkbenchRecipe recipe = findRecipe(WorkbenchRecipe.Kind.ARCANE);
         ItemStack wand = workbench().getWand();
         if (recipe == null || !(wand.getItem() instanceof CastingWandItem castingWand)) {

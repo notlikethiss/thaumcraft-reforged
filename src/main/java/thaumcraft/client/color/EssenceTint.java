@@ -1,26 +1,18 @@
 package thaumcraft.client.color;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.client.color.item.ItemTintSource;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.EssenceItem;
 
-public record EssenceTint() implements ItemTintSource {
-    public static final MapCodec<EssenceTint> MAP_CODEC = MapCodec.unit(new EssenceTint());
-
+public record EssenceTint(int layer) implements ItemColor {
     @Override
-    public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
+    public int getColor(ItemStack stack, int tintIndex) {
+        if (tintIndex != layer) {
+            return -1;
+        }
         Aspect aspect = EssenceItem.getAspect(stack);
         return aspect == null ? -1 : FastColor.ARGB32.opaque(aspect.color);
-    }
-
-    @Override
-    public MapCodec<EssenceTint> type() {
-        return MAP_CODEC;
     }
 }

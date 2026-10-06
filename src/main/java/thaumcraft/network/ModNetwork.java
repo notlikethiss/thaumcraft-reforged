@@ -7,11 +7,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.ClientPayloadHandlers;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class ModNetwork {
@@ -21,18 +21,19 @@ public final class ModNetwork {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToClient(AuraNodePayload.TYPE, AuraNodePayload.STREAM_CODEC);
-        registrar.playToClient(BoreDigPayload.TYPE, BoreDigPayload.STREAM_CODEC);
-        registrar.playToClient(AuraTransferFxPayload.TYPE, AuraTransferFxPayload.STREAM_CODEC);
-        registrar.playToClient(AuraDeletePayload.TYPE, AuraDeletePayload.STREAM_CODEC);
-        registrar.playToClient(NodeZapPayload.TYPE, NodeZapPayload.STREAM_CODEC);
-        registrar.playToClient(WispZapPayload.TYPE, WispZapPayload.STREAM_CODEC);
-        registrar.playToClient(LightningWandPayload.TYPE, LightningWandPayload.STREAM_CODEC);
-        registrar.playToClient(AspectTagsPayload.TYPE, AspectTagsPayload.STREAM_CODEC);
-        registrar.playToClient(ResearchCompletePayload.TYPE, ResearchCompletePayload.STREAM_CODEC);
-        registrar.playToClient(BlockSparklePayload.TYPE, BlockSparklePayload.STREAM_CODEC);
-        registrar.playToClient(BlockBoilPayload.TYPE, BlockBoilPayload.STREAM_CODEC);
-        registrar.playToClient(BlockTagsPayload.TYPE, BlockTagsPayload.STREAM_CODEC);
+        registrar.playToClient(AuraNodePayload.TYPE, AuraNodePayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.auraNode(payload, context));
+        registrar.playToClient(BoreDigPayload.TYPE, BoreDigPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.boreDig(payload, context));
+        registrar.playToClient(AuraTransferFxPayload.TYPE, AuraTransferFxPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.auraTransferFx(payload, context));
+        registrar.playToClient(AuraDeletePayload.TYPE, AuraDeletePayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.auraDelete(payload, context));
+        registrar.playToClient(NodeZapPayload.TYPE, NodeZapPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.nodeZap(payload, context));
+        registrar.playToClient(WispZapPayload.TYPE, WispZapPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.wispZap(payload, context));
+        registrar.playToClient(LightningWandPayload.TYPE, LightningWandPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.lightningWand(payload, context));
+        registrar.playToClient(AspectTagsPayload.TYPE, AspectTagsPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.aspectTags(payload, context));
+        registrar.playToClient(ResearchCompletePayload.TYPE, ResearchCompletePayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.researchComplete(payload, context));
+        registrar.playToClient(BlockSparklePayload.TYPE, BlockSparklePayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.blockSparkle(payload, context));
+        registrar.playToClient(BlockBoilPayload.TYPE, BlockBoilPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.blockBoil(payload, context));
+        registrar.playToClient(BlockTagsPayload.TYPE, BlockTagsPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.blockTags(payload, context));
+        registrar.playToClient(KnowledgeSyncPayload.TYPE, KnowledgeSyncPayload.STREAM_CODEC, (payload, context) -> ClientPayloadHandlers.knowledgeSync(payload, context));
         registrar.playToServer(HoverTogglePayload.TYPE, HoverTogglePayload.STREAM_CODEC, HoverTogglePayload::handle);
     }
 
@@ -61,6 +62,6 @@ public final class ModNetwork {
     }
 
     public static void sendToServer(CustomPacketPayload payload) {
-        ClientPacketDistributor.sendToServer(payload);
+        PacketDistributor.sendToServer(payload);
     }
 }

@@ -2,7 +2,7 @@ package thaumcraft.client.screen;
 
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import javax.annotation.Nullable;
@@ -26,8 +26,8 @@ public class InfusionWorkbenchScreen extends MagicWorkbenchScreen<InfusionWorkbe
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
         WorkbenchRecipe recipe = currentRecipe();
         if (recipe == null || !(workbench().getWand().getItem() instanceof CastingWandItem castingWand)) {
             drawVisInfo(graphics, 140, 85, null, 0, false);
@@ -40,7 +40,7 @@ public class InfusionWorkbenchScreen extends MagicWorkbenchScreen<InfusionWorkbe
         drawVisInfo(graphics, 140, 85, recipe.assemble(), cost, cost > castingWand.getMaxVis());
     }
 
-    private void drawAspects(GuiGraphicsExtractor graphics, AspectList required) {
+    private void drawAspects(GuiGraphics graphics, AspectList required) {
         AspectList found = ((InfusionWorkbenchBlockEntity) workbench()).getFoundTags();
         List<Aspect> aspects = required.getAspects();
         int ticks = minecraft.player == null ? 0 : minecraft.player.tickCount;
@@ -60,8 +60,8 @@ public class InfusionWorkbenchScreen extends MagicWorkbenchScreen<InfusionWorkbe
     }
 
     @Override
-    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        super.extractTooltip(graphics, mouseX, mouseY);
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderTooltip(graphics, mouseX, mouseY);
         WorkbenchRecipe recipe = currentRecipe();
         if (recipe == null || recipe.kind() != WorkbenchRecipe.Kind.INFUSION) {
             return;
@@ -70,7 +70,7 @@ public class InfusionWorkbenchScreen extends MagicWorkbenchScreen<InfusionWorkbe
         for (int i = 0; i < aspects.size(); i++) {
             if (isHovering(aspectX(i, aspects.size()), 72, 16, 16, mouseX, mouseY)) {
                 Aspect aspect = aspects.get(i);
-                graphics.setTooltipForNextFrame(font, List.of(aspect.getDisplayName(), aspect.getMeaning()), Optional.empty(), mouseX, mouseY);
+                graphics.renderTooltip(font, List.of(aspect.getDisplayName(), aspect.getMeaning()), Optional.empty(), mouseX, mouseY);
             }
         }
     }
