@@ -1,5 +1,10 @@
+import argparse
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import mcformat
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "reference" / "decompiled" / "thaumcraft" / "common" / "Config.java"
@@ -246,6 +251,9 @@ def resolve(reference, meta):
 
 
 def java_target(target):
+    target = profile.aspect_target(target)
+    if target is None:
+        return None
     if isinstance(target, list):
         return "List.of(" + ", ".join(f'"{entry}"' for entry in target) + ")"
     return f'"{target}"'
@@ -256,8 +264,10 @@ def convert_expression(expression):
     if not base:
         raise ValueError(expression)
     if base.group(1):
-        source = resolve(base.group(1), int(base.group(2)))
-        result = f"copy({java_target(source)})"
+        source = java_target(resolve(base.group(1), int(base.group(2))))
+        if source is None:
+            return None
+        result = f"copy({source})"
     else:
         result = "tags()"
     for method, aspect, amount in OPERATION.findall(expression):
@@ -266,7 +276,16 @@ def convert_expression(expression):
 
 
 def main():
-    text = CONFIG.read_text(encoding="utf-8")
+    global profile
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="path to decompiled Config.java")
+    profile = mcformat.init(parser=parser)
+    args, _ = parser.parse_known_args()
+    config = Path(args.config) if args.config else CONFIG
+    output = OUTPUT
+    if mcformat.out_overridden:
+        output = mcformat.out_root / "thaumcraft" / "aspect" / "ConfigAspects.java"
+    text = config.read_text(encoding="utf-8")
     start = text.index("public static void initTags()")
     end = text.index("for (EnumTag tag : EnumTag.values())", start)
     body = text[start:end]
@@ -276,9 +295,12 @@ def main():
 
     lines = []
     for method, reference, meta, expression in CALL.findall(body):
-        target = resolve(reference, int(meta))
+        target = java_target(resolve(reference, int(meta)))
+        converted = convert_expression(expression)
+        if target is None or converted is None:
+            continue
         call = "complex" if method == "registerComplexObjectTag" else "register"
-        lines.append(f"        {call}({java_target(target)}, {convert_expression(expression)});")
+        lines.append(f"        {call}({target}, {converted});")
 
     java = f"""package thaumcraft.aspect;
 
@@ -295,8 +317,8 @@ public final class ConfigAspects extends AspectRegistrar {{
     }}
 }}
 """
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(java, encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(java, encoding="utf-8")
     print(f"converted {len(lines)} registrations")
 
 

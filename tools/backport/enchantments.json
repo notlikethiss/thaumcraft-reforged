@@ -1,0 +1,182 @@
+{
+  "enchantments": [
+    {
+      "id": "thaumcraft:potency",
+      "weight": 4,
+      "suggested_rarity_1_19_2": "RARE",
+      "max_level": 3,
+      "min_cost": {
+        "base": 10,
+        "per_level_above_first": 11
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "mainhand",
+      "supported_items_tag": "#thaumcraft:enchantable/wand",
+      "supported_items": [
+        "thaumcraft:hellrod",
+        "thaumcraft:wand_equal_trade",
+        "thaumcraft:wand_excavation",
+        "thaumcraft:wand_fire",
+        "thaumcraft:wand_frost",
+        "thaumcraft:wand_lightning"
+      ],
+      "exclusive_with": null,
+      "treasure": false,
+      "discoverable_tradeable": true
+    },
+    {
+      "id": "thaumcraft:frugal",
+      "weight": 5,
+      "suggested_rarity_1_19_2": "UNCOMMON",
+      "max_level": 3,
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 11
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "mainhand",
+      "supported_items_tag": "#thaumcraft:enchantable/wand_frugal",
+      "supported_items": [
+        "thaumcraft:wand_equal_trade",
+        "thaumcraft:wand_excavation",
+        "thaumcraft:wand_fire",
+        "thaumcraft:wand_frost",
+        "thaumcraft:wand_lightning"
+      ],
+      "exclusive_with": "thaumcraft:charging",
+      "treasure": false,
+      "discoverable_tradeable": true
+    },
+    {
+      "id": "thaumcraft:charging",
+      "weight": 2,
+      "suggested_rarity_1_19_2": "RARE",
+      "max_level": 1,
+      "min_cost": {
+        "base": 20,
+        "per_level_above_first": 0
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "mainhand",
+      "supported_items_tag": "#thaumcraft:enchantable/wand",
+      "supported_items": [
+        "thaumcraft:hellrod",
+        "thaumcraft:wand_equal_trade",
+        "thaumcraft:wand_excavation",
+        "thaumcraft:wand_fire",
+        "thaumcraft:wand_frost",
+        "thaumcraft:wand_lightning"
+      ],
+      "exclusive_with": "thaumcraft:frugal",
+      "treasure": false,
+      "discoverable_tradeable": true
+    },
+    {
+      "id": "thaumcraft:treasure",
+      "weight": 3,
+      "suggested_rarity_1_19_2": "RARE",
+      "max_level": 3,
+      "min_cost": {
+        "base": 15,
+        "per_level_above_first": 9
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "mainhand",
+      "supported_items_tag": "#thaumcraft:enchantable/wand_trade_excavation",
+      "supported_items": [
+        "thaumcraft:wand_equal_trade",
+        "thaumcraft:wand_excavation"
+      ],
+      "exclusive_with": null,
+      "treasure": false,
+      "discoverable_tradeable": true
+    },
+    {
+      "id": "thaumcraft:haste",
+      "weight": 3,
+      "suggested_rarity_1_19_2": "RARE",
+      "max_level": 3,
+      "min_cost": {
+        "base": 15,
+        "per_level_above_first": 9
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "armor",
+      "supported_items_tag": "#thaumcraft:enchantable/haste",
+      "supported_items": [
+        "thaumcraft:boots_traveller",
+        "thaumcraft:hover_harness"
+      ],
+      "exclusive_with": null,
+      "treasure": false,
+      "discoverable_tradeable": true,
+      "primary_items_tag": "#minecraft:enchantable/armor"
+    },
+    {
+      "id": "thaumcraft:repair",
+      "weight": 2,
+      "suggested_rarity_1_19_2": "RARE",
+      "max_level": 2,
+      "min_cost": {
+        "base": 20,
+        "per_level_above_first": 10
+      },
+      "max_cost": {
+        "base": 61,
+        "per_level_above_first": 10
+      },
+      "anvil_cost": 2,
+      "slot": "any",
+      "supported_items_tag": "#thaumcraft:vis_repairable",
+      "supported_items": [
+        "thaumcraft:boots_traveller",
+        "thaumcraft:elemental_axe",
+        "thaumcraft:elemental_hoe",
+        "thaumcraft:elemental_pickaxe",
+        "thaumcraft:elemental_shovel",
+        "thaumcraft:elemental_sword",
+        "thaumcraft:goggles_of_revealing",
+        "thaumcraft:hover_harness",
+        "thaumcraft:robe_boots",
+        "thaumcraft:robe_chestplate",
+        "thaumcraft:robe_leggings",
+        "thaumcraft:thaumium_axe",
+        "thaumcraft:thaumium_boots",
+        "thaumcraft:thaumium_chestplate",
+        "thaumcraft:thaumium_helmet",
+        "thaumcraft:thaumium_hoe",
+        "thaumcraft:thaumium_leggings",
+        "thaumcraft:thaumium_pickaxe",
+        "thaumcraft:thaumium_shovel",
+        "thaumcraft:thaumium_sword"
+      ],
+      "exclusive_with": "minecraft:unbreaking",
+      "treasure": false,
+      "discoverable_tradeable": true
+    }
+  ],
+  "notes": {
+    "1.21.1": "json is emitted in data/thaumcraft/enchantment with empty effects, all behaviour lives in Java events",
+    "1.19.2": "no json, implement as Enchantment subclasses, item tags thaumcraft:enchantable/* are still generated"
+  }
+}

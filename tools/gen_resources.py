@@ -7,7 +7,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gen_structures
-OUT = ROOT / "src" / "generated" / "resources"
+import mcformat
+
+profile = mcformat.init()
+OUT = mcformat.out_root
 ASSETS = OUT / "assets" / "thaumcraft"
 DATA = OUT / "data"
 NS = "thaumcraft"
@@ -37,8 +40,31 @@ def copy_texture(source, target):
     shutil.copyfile(SOURCE_TEXTURES / source, destination)
 
 
+MANIFEST = {"predicates": {}, "tints": {}, "builtin_entity": {}, "composite": {}}
+TRADES = {}
+FUELS = {}
+NOTES = defaultdict(list)
+ITEM_MODELS = {}
+BLOCK_MODELS = {}
+INJECTIONS = []
+FUEL_ITEMS = {"alumentum": ["alumentum"], "magical_log": ["greatwood_log", "silverwood_log"]}
+NBT_KEYS = {"thaumcraft:wand_vis": "wand_vis", "thaumcraft:stored_vis": "stored_vis", "thaumcraft:golem_core": "golem_core", "thaumcraft:mirror_link": "mirror_link"}
+
+
+def rename_ids(value):
+    if isinstance(value, str):
+        return profile.rename_vanilla(value)
+    if isinstance(value, list):
+        return [rename_ids(entry) for entry in value]
+    if isinstance(value, dict):
+        return {key: rename_ids(entry) for key, entry in value.items()}
+    return value
+
+
 def write(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
+    if profile.vanilla_renames:
+        content = rename_ids(content)
     path.write_text(json.dumps(content, indent=2) + "\n", encoding="utf-8")
 
 
@@ -53,15 +79,45 @@ def tint(color):
     return {"type": "minecraft:constant", "value": value}
 
 
+def convert_elements(name, content):
+    if profile.modern or "elements" not in content:
+        return content
+    return {**content, "elements": [profile.model_element(element, name, NOTES["model_elements"]) for element in content["elements"]]}
+
+
 def block_model(name, content):
-    write(ASSETS / "models" / "block" / f"{name}.json", content)
+    BLOCK_MODELS[name] = content
+    write(ASSETS / "models" / "block" / f"{name}.json", convert_elements(f"block/{name}", content))
 
 
 def item_model(name, content):
-    write(ASSETS / "models" / "item" / f"{name}.json", content)
+    ITEM_MODELS[name] = content
+    write(ASSETS / "models" / "item" / f"{name}.json", convert_elements(f"item/{name}", content))
+
+
+def tint_manifest(tints):
+    result = {}
+    for layer, entry in enumerate(tints):
+        if entry["type"] == "minecraft:constant":
+            result[str(layer)] = {"constant": f"#{entry['value'] & 0xFFFFFF:06X}"}
+        else:
+            result[str(layer)] = {"source": entry["type"]}
+    return result
+
+
+def register_tints(name, tints):
+    if tints:
+        MANIFEST["tints"][name] = tint_manifest(tints)
+    else:
+        MANIFEST["tints"].pop(name, None)
 
 
 def item_definition(name, model, tints=None):
+    if not profile.modern:
+        if model != ref(name, "item"):
+            item_model(name, {"parent": model})
+        register_tints(name, tints)
+        return
     definition = {"type": "minecraft:model", "model": model}
     if tints:
         definition["tints"] = tints
@@ -89,12 +145,16 @@ def block_item(name, tints=None):
     item_definition(name, ref(name), tints)
 
 
-def loot(name, pools):
-    write(DATA / NS / "loot_table" / "blocks" / f"{name}.json", {
-        "type": "minecraft:block",
+def write_loot(folder, name, table_type, pools):
+    write(DATA / NS / profile.loot_folder / folder / f"{name}.json", profile.loot_table({
+        "type": table_type,
         "pools": pools,
-        "random_sequence": f"{NS}:blocks/{name}",
-    })
+        "random_sequence": f"{NS}:{folder}/{name}",
+    }))
+
+
+def loot(name, pools):
+    write_loot("blocks", name, "minecraft:block", pools)
 
 
 def self_drop(name):
@@ -145,6 +205,9 @@ def shear_only(name):
 
 
 def fuel(name, ticks):
+    if not profile.modern:
+        FUELS[name] = ticks
+        return
     write(DATA / NS / "context_int_provider" / "cooking" / f"time_{name}.json", {
         "type": "minecraft:div",
         "left": ticks,
@@ -374,6 +437,11 @@ def items():
     item_tags["minecraft:head_armor"].add(f"{NS}:goggles_of_revealing")
     item_tags["minecraft:chest_armor"].add(f"{NS}:hover_harness")
     for asset, (outer, inner) in EQUIPMENT.items():
+        if not profile.modern:
+            copy_texture(f"model/{outer}.png", f"models/armor/{asset}_layer_1.png")
+            if inner:
+                copy_texture(f"model/{inner}.png", f"models/armor/{asset}_layer_2.png")
+            continue
         layers = {"humanoid": [{"texture": f"{NS}:{asset}"}]}
         copy_texture(f"model/{outer}.png", f"entity/equipment/humanoid/{asset}.png")
         if inner:
@@ -794,7 +862,17 @@ def wards_and_decor():
         mineable("axe", name)
 
 
+def builtin_entity_model(name, base):
+    kind = "item" if "/item/" in base else "block"
+    source = (ITEM_MODELS if kind == "item" else BLOCK_MODELS).get(base.split("/")[-1], {})
+    item_model(name, {"parent": "minecraft:builtin/entity", "textures": source.get("textures", {}), "display": profile.item_model_display()})
+
+
 def special_item(name, base, model):
+    if not profile.modern:
+        builtin_entity_model(name, base)
+        MANIFEST["builtin_entity"][name] = {"renderer": model["type"], **{key: value for key, value in model.items() if key != "type"}}
+        return
     write(ASSETS / "items" / f"{name}.json", {"model": {"type": "minecraft:special", "base": base, "model": model}})
 
 
@@ -1098,13 +1176,20 @@ def crystals():
         "elements": [full_cube("#frame"), *inner],
     })
     simple_state("crystal_capacitor")
-    write(ASSETS / "items" / "crystal_capacitor.json", {"model": {
-        "type": "minecraft:composite",
-        "models": [
-            {"type": "minecraft:model", "model": ref("crystal_capacitor")},
-            {"type": "minecraft:special", "base": ref("crystal_capacitor"), "model": {"type": f"{NS}:crystal", "kind": "capacitor"}},
-        ],
-    }})
+    if profile.modern:
+        write(ASSETS / "items" / "crystal_capacitor.json", {"model": {
+            "type": "minecraft:composite",
+            "models": [
+                {"type": "minecraft:model", "model": ref("crystal_capacitor")},
+                {"type": "minecraft:special", "base": ref("crystal_capacitor"), "model": {"type": f"{NS}:crystal", "kind": "capacitor"}},
+            ],
+        }})
+    else:
+        builtin_entity_model("crystal_capacitor", ref("crystal_capacitor"))
+        MANIFEST["composite"]["crystal_capacitor"] = [
+            {"kind": "block_model", "model": ref("crystal_capacitor")},
+            {"kind": "builtin_entity", "renderer": f"{NS}:crystal", "params": {"kind": "capacitor"}},
+        ]
     loot("crystal_capacitor", [{
         "rolls": 1,
         "entries": [{
@@ -1139,13 +1224,28 @@ def mirrors_and_hole():
         copy_texture(f"block/{texture}.png", f"item/{texture}.png")
     for suffix, pane in [("", "mirrorpane"), ("_linked", "mirrorpaneopen")]:
         item_model(f"magic_mirror{suffix}", {"parent": "minecraft:item/generated", "textures": {"layer0": ref("mirrorframe", "item"), "layer1": ref(pane, "item")}})
-    write(ASSETS / "items" / "magic_mirror.json", {"model": {
-        "type": "minecraft:condition",
-        "property": "minecraft:has_component",
-        "component": f"{NS}:mirror_link",
-        "on_true": {"type": "minecraft:model", "model": ref("magic_mirror_linked", "item")},
-        "on_false": {"type": "minecraft:model", "model": ref("magic_mirror", "item")},
-    }})
+    if profile.modern:
+        write(ASSETS / "items" / "magic_mirror.json", {"model": {
+            "type": "minecraft:condition",
+            "property": "minecraft:has_component",
+            "component": f"{NS}:mirror_link",
+            "on_true": {"type": "minecraft:model", "model": ref("magic_mirror_linked", "item")},
+            "on_false": {"type": "minecraft:model", "model": ref("magic_mirror", "item")},
+        }})
+    else:
+        item_model("magic_mirror", {**ITEM_MODELS["magic_mirror"], "overrides": [
+            {"predicate": {f"{NS}:linked": 1}, "model": ref("magic_mirror_linked", "item")},
+        ]})
+        MANIFEST["predicates"]["magic_mirror"] = {
+            f"{NS}:linked": {
+                "kind": "has_component",
+                "component": f"{NS}:mirror_link",
+                "nbt_key": NBT_KEYS[f"{NS}:mirror_link"],
+                "meaning": "1 when the stack carries the mirror link, otherwise 0",
+                "values": {"1": ref("magic_mirror_linked", "item")},
+                "default": ref("magic_mirror", "item"),
+            },
+        }
     loot("magic_mirror", [])
     generated_item("hand_mirror", "mirrorhand")
     generated_item("portable_hole", "portablehole")
@@ -1206,7 +1306,7 @@ def chest_loot(name, base_tables, elemental_chance):
         "entries": [{"type": "minecraft:item", "name": tool} for tool in ELEMENTAL_TOOLS],
         "condition": {"type": "minecraft:random_chance", "chance": elemental_chance},
     })
-    write(DATA / NS / "loot_table" / "chests" / f"{name}.json", {"type": "minecraft:chest", "pools": pools, "random_sequence": f"{NS}:chests/{name}"})
+    write_loot("chests", name, "minecraft:chest", pools)
 
 
 EGG_SHAPE = [
@@ -1257,11 +1357,7 @@ def spawn_egg(name, base, spots):
 
 
 def entity_loot(name, pools):
-    write(DATA / NS / "loot_table" / "entities" / f"{name}.json", {
-        "type": "minecraft:entity",
-        "pools": pools,
-        "random_sequence": f"{NS}:entities/{name}",
-    })
+    write_loot("entities", name, "minecraft:entity", pools)
 
 
 def chance_pool(item, rolls, chance, count=1):
@@ -1304,11 +1400,7 @@ def rare_pool(items):
 
 
 def add_spawns(name, biomes, entity, weight):
-    write(DATA / NS / "neoforge" / "biome_modifier" / f"spawn_{name}.json", {
-        "type": "neoforge:add_spawns",
-        "biomes": biomes,
-        "spawners": {"type": f"{NS}:{entity}", "count": 1, "weight": weight},
-    })
+    write(DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / f"spawn_{name}.json", profile.spawn_modifier(biomes, f"{NS}:{entity}", weight))
 
 
 GOLEM_ICONS = {
@@ -1336,13 +1428,28 @@ def golems():
             name = f"{golem}_{overlay}"
             item_model(name, {"parent": "minecraft:item/generated", "textures": {"layer0": ref(icon, "item"), "layer1": ref(overlay, "item")}})
             cases.append({"when": core, "model": {"type": "minecraft:model", "model": ref(name, "item")}})
-        write(ASSETS / "items" / f"{golem}.json", {"model": {
-            "type": "minecraft:select",
-            "property": "minecraft:component",
-            "component": f"{NS}:golem_core",
-            "cases": cases,
-            "fallback": {"type": "minecraft:model", "model": ref(golem, "item")},
-        }})
+        if profile.modern:
+            write(ASSETS / "items" / f"{golem}.json", {"model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": f"{NS}:golem_core",
+                "cases": cases,
+                "fallback": {"type": "minecraft:model", "model": ref(golem, "item")},
+            }})
+        else:
+            item_model(golem, {**ITEM_MODELS[golem], "overrides": [
+                {"predicate": {f"{NS}:golem_core": case["when"]}, "model": case["model"]["model"]} for case in cases
+            ]})
+            MANIFEST["predicates"][golem] = {
+                f"{NS}:golem_core": {
+                    "kind": "component_int",
+                    "component": f"{NS}:golem_core",
+                    "nbt_key": NBT_KEYS[f"{NS}:golem_core"],
+                    "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+                    "values": {str(case["when"]): case["model"]["model"] for case in cases},
+                    "default": ref(golem, "item"),
+                },
+            }
     block_tags[f"{NS}:golem_harvestable"]
 
 
@@ -1382,15 +1489,12 @@ def entities():
 
 
 def worldgen():
-    write(DATA / NS / "worldgen" / "feature" / "world_generation.json", {"type": f"{NS}:world_generation"})
+    write(DATA / NS / "worldgen" / profile.feature_folder / "world_generation.json", profile.configured_feature({"type": f"{NS}:world_generation"}))
     write(DATA / NS / "worldgen" / "placed_feature" / "world_generation.json", {"feature": f"{NS}:world_generation", "placement": []})
     for dimension in ["overworld", "nether"]:
-        write(DATA / NS / "neoforge" / "biome_modifier" / f"world_generation_{dimension}.json", {
-            "type": "neoforge:add_features",
-            "biomes": f"#minecraft:is_{dimension}",
-            "features": f"{NS}:world_generation",
-            "step": "top_layer_modification",
-        })
+        write(DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / f"world_generation_{dimension}.json", profile.feature_modifier(
+            f"#minecraft:is_{dimension}", f"{NS}:world_generation", "top_layer_modification",
+        ))
     chest_loot("mound", ["minecraft:chests/simple_dungeon"], 1 / 20)
     chest_loot("hilltop_stones", ["minecraft:chests/simple_dungeon", "minecraft:chests/simple_dungeon"], 1 / 10)
     chest_loot("greatwood_spider_nest", ["minecraft:chests/simple_dungeon"], 1 / 15)
@@ -1429,16 +1533,9 @@ def count_modifier(minimum, maximum):
 
 
 def chest_injection(name, target, pools):
-    write(DATA / NS / "loot_table" / "inject" / f"{name}.json", {
-        "type": "minecraft:chest",
-        "pools": pools,
-        "random_sequence": f"{NS}:inject/{name}",
-    })
-    write(DATA / NS / "loot_modifiers" / f"{name}.json", {
-        "type": "neoforge:add_table",
-        "condition": {"type": "neoforge:loot_table_id", "loot_table_id": target},
-        "table": f"{NS}:inject/{name}",
-    })
+    write_loot("inject", name, "minecraft:chest", pools)
+    write(DATA / NS / "loot_modifiers" / f"{name}.json", profile.loot_modifier(name, target, f"{NS}:inject/{name}"))
+    INJECTIONS.append(f"{NS}:{name}")
 
 
 def chest_injections():
@@ -1469,11 +1566,7 @@ def wizard_tower_loot():
         if maximum > minimum:
             entry["modifier"] = {"type": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": minimum, "max": maximum}}
         entries.append(entry)
-    write(DATA / NS / "loot_table" / "chests" / "wizard_tower.json", {
-        "type": "minecraft:chest",
-        "pools": [{"rolls": {"type": "minecraft:uniform", "min": 4, "max": 9}, "entries": entries}],
-        "random_sequence": f"{NS}:chests/wizard_tower",
-    })
+    write_loot("chests", "wizard_tower", "minecraft:chest", [{"rolls": {"type": "minecraft:uniform", "min": 4, "max": 9}, "entries": entries}])
 
 
 
@@ -1487,32 +1580,37 @@ def mod_ids(values):
 
 
 def recipe(name, content, referenced):
-    conditions = [{"type": "neoforge:registered", "value": item} for item in sorted(mod_ids(referenced))]
+    conditions = profile.recipe_conditions(sorted(mod_ids(referenced)))
     if conditions:
-        content = {"neoforge:conditions": conditions, **content}
-    write(DATA / NS / "recipe" / f"{name}.json", content)
+        content = {**conditions, **content}
+    write(DATA / NS / profile.recipe_folder / f"{name}.json", content)
 
 
 def shaped(name, result, count, pattern, key, category="misc", components=None):
-    content = {"type": "minecraft:crafting_shaped", "category": category, "key": key, "pattern": pattern, "result": {"id": result}}
-    if components:
-        content["result"]["components"] = components
-    if count > 1:
-        content["result"]["count"] = count
+    content = {"type": "minecraft:crafting_shaped"}
+    profile.recipe_category(content, category)
+    content["key"] = {symbol: profile.recipe_ingredient(ingredient) for symbol, ingredient in key.items()}
+    content["pattern"] = pattern
+    content["result"] = profile.recipe_result(result, count, components)
     recipe(name, content, [result, *key.values()])
 
 
 def shapeless(name, result, count, ingredients, category="misc"):
-    content = {"type": "minecraft:crafting_shapeless", "category": category, "ingredients": ingredients, "result": {"id": result}}
-    if count > 1:
-        content["result"]["count"] = count
+    content = {"type": "minecraft:crafting_shapeless"}
+    profile.recipe_category(content, category)
+    content["ingredients"] = [profile.recipe_ingredient(ingredient) for ingredient in ingredients]
+    content["result"] = profile.recipe_result(result, count, None)
     recipe(name, content, [result, *ingredients])
 
 
 def smelting(name, ingredient, result, count, experience):
-    content = {"type": "minecraft:smelting", "cookingtime": 200, "experience": experience, "ingredient": ingredient, "result": {"id": result}}
-    if count > 1:
-        content["result"]["count"] = count
+    if count > 1 and not profile.modern:
+        NOTES["recipes"].append({
+            "recipe": f"{NS}:{name}",
+            "note": f"smelting result count {count} for {result} is not representable in the {profile.name} cooking recipe format",
+            "emitted_count": count if profile.name == "1.21.1" else 1,
+        })
+    content = {"type": "minecraft:smelting", "cookingtime": 200, "experience": experience, "ingredient": profile.recipe_ingredient(ingredient), "result": profile.smelting_result(result, count)}
     recipe(name, content, [ingredient, result])
 
 
@@ -1573,6 +1671,9 @@ def villagers():
         content = {"wants": wants, "gives": gives, "max_uses": max_uses, "xp": xp, "reputation_discount": 0.05}
         if modifier:
             content["given_item_modifier"] = modifier
+        if not profile.modern:
+            TRADES.setdefault(level, []).append({"name": name, **content})
+            return f"{NS}:wizard/{level}/{name}"
         write(DATA / NS / "villager_trade" / "wizard" / str(level) / f"{name}.json", content)
         return f"{NS}:wizard/{level}/{name}"
 
@@ -1601,6 +1702,8 @@ def villagers():
         ],
     }
     for level, trades in levels.items():
+        if not profile.modern:
+            continue
         write(DATA / NS / "tags" / "villager_trade" / "wizard" / f"level_{level}.json", {"values": trades})
         write(DATA / NS / "trade_set" / "wizard" / f"level_{level}.json", {
             "amount": min(2, len(trades)),
@@ -1629,6 +1732,8 @@ ENCHANTMENTS = [
 
 def enchantments():
     for name, weight, max_level, base, step, slot, supported, exclusive in ENCHANTMENTS:
+        if not profile.enchantment_json:
+            continue
         definition = {
             "anvil_cost": 2,
             "description": {"translate": f"enchantment.{NS}.{name}"},
@@ -1646,6 +1751,8 @@ def enchantments():
             definition["exclusive_set"] = exclusive
         write(DATA / NS / "enchantment" / f"{name}.json", definition)
     for tag in ["in_enchanting_table", "on_random_loot", "tradeable", "non_treasure"]:
+        if not profile.enchantment_json:
+            break
         write(DATA / "minecraft" / "tags" / "enchantment" / f"{tag}.json", {"replace": False, "values": [f"{NS}:{name}" for name, *_ in ENCHANTMENTS]})
     item_tags[f"{NS}:enchantable/wand"].update(f"{NS}:{name}" for name in WAND_ITEMS)
     item_tags[f"{NS}:enchantable/wand_frugal"].update(f"{NS}:{name}" for name in WAND_ITEMS if name != "hellrod")
@@ -1653,6 +1760,39 @@ def enchantments():
     item_tags[f"{NS}:enchantable/haste"].update({f"{NS}:boots_traveller", f"{NS}:hover_harness"})
     item_tags[f"{NS}:vis_repairable"].update(f"{NS}:{name}" for name in VIS_REPAIRABLE)
     item_tags[f"{NS}:repairs_goggles"].add("minecraft:gold_ingot")
+    if not profile.modern:
+        enchantment_manifest()
+
+
+def resolve_tag(tag):
+    if not tag.startswith("#"):
+        return [tag]
+    return sorted(item_tags.get(tag[1:], []))
+
+
+def enchantment_manifest():
+    rarities = [(10, "COMMON"), (5, "UNCOMMON"), (2, "RARE"), (1, "VERY_RARE")]
+    entries = []
+    for name, weight, max_level, base, step, slot, supported, exclusive in ENCHANTMENTS:
+        entry = {
+            "id": f"{NS}:{name}",
+            "weight": weight,
+            "suggested_rarity_1_19_2": next(rarity for threshold, rarity in rarities if weight >= threshold),
+            "max_level": max_level,
+            "min_cost": {"base": base, "per_level_above_first": step},
+            "max_cost": {"base": 61, "per_level_above_first": 10},
+            "anvil_cost": 2,
+            "slot": slot,
+            "supported_items_tag": supported,
+            "supported_items": resolve_tag(supported),
+            "exclusive_with": exclusive,
+            "treasure": False,
+            "discoverable_tradeable": True,
+        }
+        if name == "haste":
+            entry["primary_items_tag"] = "#minecraft:enchantable/armor"
+        entries.append(entry)
+    NOTES["enchantments"] = entries
 
 
 def tag_entries(values):
@@ -1661,15 +1801,63 @@ def tag_entries(values):
 
 def write_tags():
     for tag, values in block_tags.items():
-        namespace, path = tag.split(":")
-        write(DATA / namespace / "tags" / "block" / f"{path}.json", {"replace": False, "values": tag_entries(values)})
+        if tag in profile.dropped_tags:
+            continue
+        namespace, path = profile.tag_name(tag)
+        write(DATA / namespace / profile.block_tag_folder / f"{path}.json", {"replace": False, "values": tag_entries(values)})
     for tag, values in item_tags.items():
-        namespace, path = tag.split(":")
-        write(DATA / namespace / "tags" / "item" / f"{path}.json", {"replace": False, "values": tag_entries(values)})
+        if tag in profile.dropped_tags:
+            continue
+        namespace, path = profile.tag_name(tag)
+        write(DATA / namespace / profile.item_tag_folder / f"{path}.json", {"replace": False, "values": tag_entries(values)})
+
+
+def write_manifest(name, content):
+    path = mcformat.manifest_dir / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(content, indent=2) + "\n", encoding="utf-8")
+
+
+def write_extras():
+    if INJECTIONS and not profile.modern:
+        write(DATA / profile.loot_modifier_namespace / "loot_modifiers" / "global_loot_modifiers.json", {"replace": False, "entries": INJECTIONS})
+    if FUELS and not profile.modern:
+        if profile.data_maps:
+            values = {f"{NS}:{item}": {"burn_time": ticks} for name, ticks in FUELS.items() for item in FUEL_ITEMS[name]}
+            write(DATA / "neoforge" / "data_maps" / "item" / "furnace_fuels.json", {"values": values})
+        write_manifest("fuels.json", {f"{NS}:{item}": ticks for name, ticks in FUELS.items() for item in FUEL_ITEMS[name]})
+    if profile.pack_mcmeta:
+        write(OUT / "pack.mcmeta", profile.pack_mcmeta)
+
+
+def write_manifests():
+    if profile.modern:
+        return
+    manifest = {"minecraft_version": profile.name, "nbt_keys": NBT_KEYS, **MANIFEST}
+    manifest["notes"] = {"model_elements": NOTES["model_elements"]}
+    write_manifest(f"item_models_{profile.name}.json", manifest)
+    write_manifest("trades.json", {
+        "profession": f"{NS}:wizard",
+        "point_of_interest": f"{NS}:arcane_worktable",
+        "levels": {
+            str(level): {"offers_picked_per_level": min(2, len(offers)), "offers": offers} for level, offers in TRADES.items()
+        },
+    })
+    write_manifest("enchantments.json", {
+        "enchantments": NOTES["enchantments"],
+        "notes": {
+            "1.21.1": "json is emitted in data/thaumcraft/enchantment with empty effects, all behaviour lives in Java events",
+            "1.19.2": "no json, implement as Enchantment subclasses, item tags thaumcraft:enchantable/* are still generated",
+        },
+    })
+    if NOTES["recipes"]:
+        write_manifest(f"recipe_notes_{profile.name}.json", NOTES["recipes"])
 
 
 def main():
     if OUT.exists():
+        if mcformat.out_overridden and OUT == ROOT:
+            raise SystemExit("refusing to clear the repository root")
         shutil.rmtree(OUT)
     world_blocks()
     devices()
@@ -1681,6 +1869,8 @@ def main():
     enchantments()
     recipes()
     write_tags()
+    write_extras()
+    write_manifests()
     count = sum(1 for _ in OUT.rglob("*.json"))
     print(f"generated {count} files")
 

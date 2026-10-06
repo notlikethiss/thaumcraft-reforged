@@ -1,0 +1,597 @@
+{
+  "minecraft_version": "1.21.1",
+  "nbt_keys": {
+    "thaumcraft:wand_vis": "wand_vis",
+    "thaumcraft:stored_vis": "stored_vis",
+    "thaumcraft:golem_core": "golem_core",
+    "thaumcraft:mirror_link": "mirror_link"
+  },
+  "predicates": {
+    "magic_mirror": {
+      "thaumcraft:linked": {
+        "kind": "has_component",
+        "component": "thaumcraft:mirror_link",
+        "nbt_key": "mirror_link",
+        "meaning": "1 when the stack carries the mirror link, otherwise 0",
+        "values": {
+          "1": "thaumcraft:item/magic_mirror_linked"
+        },
+        "default": "thaumcraft:item/magic_mirror"
+      }
+    },
+    "wood_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/wood_golem_golemtypefast",
+          "2": "thaumcraft:item/wood_golem_golemtypesmart",
+          "3": "thaumcraft:item/wood_golem_golemtypevision",
+          "4": "thaumcraft:item/wood_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/wood_golem"
+      }
+    },
+    "clay_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/clay_golem_golemtypefast",
+          "2": "thaumcraft:item/clay_golem_golemtypesmart",
+          "3": "thaumcraft:item/clay_golem_golemtypevision",
+          "4": "thaumcraft:item/clay_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/clay_golem"
+      }
+    },
+    "stone_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/stone_golem_golemtypefast",
+          "2": "thaumcraft:item/stone_golem_golemtypesmart",
+          "3": "thaumcraft:item/stone_golem_golemtypevision",
+          "4": "thaumcraft:item/stone_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/stone_golem"
+      }
+    },
+    "tallow_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/tallow_golem_golemtypefast",
+          "2": "thaumcraft:item/tallow_golem_golemtypesmart",
+          "3": "thaumcraft:item/tallow_golem_golemtypevision",
+          "4": "thaumcraft:item/tallow_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/tallow_golem"
+      }
+    },
+    "straw_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/straw_golem_golemtypefast",
+          "2": "thaumcraft:item/straw_golem_golemtypesmart",
+          "3": "thaumcraft:item/straw_golem_golemtypevision",
+          "4": "thaumcraft:item/straw_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/straw_golem"
+      }
+    },
+    "advanced_clay_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/advanced_clay_golem_golemtypefast",
+          "2": "thaumcraft:item/advanced_clay_golem_golemtypesmart",
+          "3": "thaumcraft:item/advanced_clay_golem_golemtypevision",
+          "4": "thaumcraft:item/advanced_clay_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/advanced_clay_golem"
+      }
+    },
+    "advanced_stone_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/advanced_stone_golem_golemtypefast",
+          "2": "thaumcraft:item/advanced_stone_golem_golemtypesmart",
+          "3": "thaumcraft:item/advanced_stone_golem_golemtypevision",
+          "4": "thaumcraft:item/advanced_stone_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/advanced_stone_golem"
+      }
+    },
+    "iron_guardian_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/iron_guardian_golem_golemtypefast",
+          "2": "thaumcraft:item/iron_guardian_golem_golemtypesmart",
+          "3": "thaumcraft:item/iron_guardian_golem_golemtypevision",
+          "4": "thaumcraft:item/iron_guardian_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/iron_guardian_golem"
+      }
+    },
+    "decanting_golem": {
+      "thaumcraft:golem_core": {
+        "kind": "component_int",
+        "component": "thaumcraft:golem_core",
+        "nbt_key": "golem_core",
+        "meaning": "golem core type stored in the stack (0 or absent = base model), overrides are threshold based so each value from 1 to 4 selects its own model",
+        "values": {
+          "1": "thaumcraft:item/decanting_golem_golemtypefast",
+          "2": "thaumcraft:item/decanting_golem_golemtypesmart",
+          "3": "thaumcraft:item/decanting_golem_golemtypevision",
+          "4": "thaumcraft:item/decanting_golem_golemtypestrong"
+        },
+        "default": "thaumcraft:item/decanting_golem"
+      }
+    }
+  },
+  "tints": {
+    "air_infused_stone": {
+      "0": {
+        "constant": "#FFFF7E"
+      }
+    },
+    "fire_infused_stone": {
+      "0": {
+        "constant": "#FF5A01"
+      }
+    },
+    "water_infused_stone": {
+      "0": {
+        "constant": "#0090FF"
+      }
+    },
+    "earth_infused_stone": {
+      "0": {
+        "constant": "#00A000"
+      }
+    },
+    "vis_infused_stone": {
+      "0": {
+        "constant": "#AA33FC"
+      }
+    },
+    "dull_infused_stone": {
+      "0": {
+        "constant": "#B0B0BC"
+      }
+    },
+    "greatwood_leaves": {
+      "0": {
+        "constant": "#48B518"
+      }
+    },
+    "silverwood_leaves": {
+      "0": {
+        "constant": "#8899AA"
+      }
+    },
+    "white_warded_stone": {
+      "0": {
+        "constant": "#F0F0F0"
+      }
+    },
+    "orange_warded_stone": {
+      "0": {
+        "constant": "#EB8844"
+      }
+    },
+    "magenta_warded_stone": {
+      "0": {
+        "constant": "#C354CD"
+      }
+    },
+    "light_blue_warded_stone": {
+      "0": {
+        "constant": "#6689D3"
+      }
+    },
+    "yellow_warded_stone": {
+      "0": {
+        "constant": "#DECF2A"
+      }
+    },
+    "lime_warded_stone": {
+      "0": {
+        "constant": "#41CD34"
+      }
+    },
+    "pink_warded_stone": {
+      "0": {
+        "constant": "#D88198"
+      }
+    },
+    "gray_warded_stone": {
+      "0": {
+        "constant": "#434343"
+      }
+    },
+    "light_gray_warded_stone": {
+      "0": {
+        "constant": "#A0A0A0"
+      }
+    },
+    "cyan_warded_stone": {
+      "0": {
+        "constant": "#287697"
+      }
+    },
+    "purple_warded_stone": {
+      "0": {
+        "constant": "#7B2FBE"
+      }
+    },
+    "blue_warded_stone": {
+      "0": {
+        "constant": "#253192"
+      }
+    },
+    "brown_warded_stone": {
+      "0": {
+        "constant": "#51301A"
+      }
+    },
+    "green_warded_stone": {
+      "0": {
+        "constant": "#3B511A"
+      }
+    },
+    "red_warded_stone": {
+      "0": {
+        "constant": "#B3312C"
+      }
+    },
+    "black_warded_stone": {
+      "0": {
+        "constant": "#1E1B1B"
+      }
+    },
+    "white_tallow_candle": {
+      "0": {
+        "constant": "#F0F0F0"
+      }
+    },
+    "orange_tallow_candle": {
+      "0": {
+        "constant": "#EB8844"
+      }
+    },
+    "magenta_tallow_candle": {
+      "0": {
+        "constant": "#C354CD"
+      }
+    },
+    "light_blue_tallow_candle": {
+      "0": {
+        "constant": "#6689D3"
+      }
+    },
+    "yellow_tallow_candle": {
+      "0": {
+        "constant": "#DECF2A"
+      }
+    },
+    "lime_tallow_candle": {
+      "0": {
+        "constant": "#41CD34"
+      }
+    },
+    "pink_tallow_candle": {
+      "0": {
+        "constant": "#D88198"
+      }
+    },
+    "gray_tallow_candle": {
+      "0": {
+        "constant": "#434343"
+      }
+    },
+    "light_gray_tallow_candle": {
+      "0": {
+        "constant": "#A0A0A0"
+      }
+    },
+    "cyan_tallow_candle": {
+      "0": {
+        "constant": "#287697"
+      }
+    },
+    "purple_tallow_candle": {
+      "0": {
+        "constant": "#7B2FBE"
+      }
+    },
+    "blue_tallow_candle": {
+      "0": {
+        "constant": "#253192"
+      }
+    },
+    "brown_tallow_candle": {
+      "0": {
+        "constant": "#51301A"
+      }
+    },
+    "green_tallow_candle": {
+      "0": {
+        "constant": "#3B511A"
+      }
+    },
+    "red_tallow_candle": {
+      "0": {
+        "constant": "#B3312C"
+      }
+    },
+    "black_tallow_candle": {
+      "0": {
+        "constant": "#1E1B1B"
+      }
+    },
+    "white_marker": {
+      "0": {
+        "constant": "#F0F0F0"
+      }
+    },
+    "orange_marker": {
+      "0": {
+        "constant": "#EB8844"
+      }
+    },
+    "magenta_marker": {
+      "0": {
+        "constant": "#C354CD"
+      }
+    },
+    "light_blue_marker": {
+      "0": {
+        "constant": "#6689D3"
+      }
+    },
+    "yellow_marker": {
+      "0": {
+        "constant": "#DECF2A"
+      }
+    },
+    "lime_marker": {
+      "0": {
+        "constant": "#41CD34"
+      }
+    },
+    "pink_marker": {
+      "0": {
+        "constant": "#D88198"
+      }
+    },
+    "gray_marker": {
+      "0": {
+        "constant": "#434343"
+      }
+    },
+    "light_gray_marker": {
+      "0": {
+        "constant": "#A0A0A0"
+      }
+    },
+    "cyan_marker": {
+      "0": {
+        "constant": "#287697"
+      }
+    },
+    "purple_marker": {
+      "0": {
+        "constant": "#7B2FBE"
+      }
+    },
+    "blue_marker": {
+      "0": {
+        "constant": "#253192"
+      }
+    },
+    "brown_marker": {
+      "0": {
+        "constant": "#51301A"
+      }
+    },
+    "green_marker": {
+      "0": {
+        "constant": "#3B511A"
+      }
+    },
+    "red_marker": {
+      "0": {
+        "constant": "#B3312C"
+      }
+    },
+    "black_marker": {
+      "0": {
+        "constant": "#1E1B1B"
+      }
+    },
+    "arcane_levitator": {
+      "0": {
+        "constant": "#00A000"
+      },
+      "1": {
+        "constant": "#FFFF7E"
+      },
+      "2": {
+        "constant": "#AA33FC"
+      }
+    },
+    "research_notes": {
+      "0": {
+        "constant": "#FFFFFF"
+      },
+      "1": {
+        "source": "thaumcraft:research_note"
+      }
+    },
+    "discovery": {
+      "0": {
+        "constant": "#FFFFFF"
+      },
+      "1": {
+        "source": "thaumcraft:research_note"
+      }
+    },
+    "essence": {
+      "0": {
+        "constant": "#FFFFFF"
+      },
+      "1": {
+        "source": "thaumcraft:essence"
+      }
+    },
+    "air_shard": {
+      "0": {
+        "constant": "#FFFF7E"
+      }
+    },
+    "fire_shard": {
+      "0": {
+        "constant": "#FF5A01"
+      }
+    },
+    "water_shard": {
+      "0": {
+        "constant": "#0090FF"
+      }
+    },
+    "earth_shard": {
+      "0": {
+        "constant": "#00A000"
+      }
+    },
+    "vis_shard": {
+      "0": {
+        "constant": "#AA33FC"
+      }
+    },
+    "dull_shard": {
+      "0": {
+        "constant": "#B0B0BC"
+      }
+    },
+    "wisp_essence": {
+      "0": {
+        "source": "thaumcraft:essence"
+      }
+    }
+  },
+  "builtin_entity": {
+    "hungry_chest": {
+      "renderer": "thaumcraft:hungry_chest"
+    },
+    "air_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 0
+    },
+    "fire_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 1
+    },
+    "water_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 2
+    },
+    "earth_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 3
+    },
+    "vis_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 4
+    },
+    "mixed_crystal_cluster": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "cluster",
+      "crystal": 5
+    },
+    "crystal_core": {
+      "renderer": "thaumcraft:crystal",
+      "kind": "core"
+    },
+    "arcane_bore_base": {
+      "renderer": "thaumcraft:bore",
+      "base": true
+    },
+    "arcane_bore": {
+      "renderer": "thaumcraft:bore"
+    },
+    "warded_jar": {
+      "renderer": "thaumcraft:jar",
+      "brain": false
+    },
+    "brain_jar": {
+      "renderer": "thaumcraft:jar",
+      "brain": true
+    },
+    "filled_jar": {
+      "renderer": "thaumcraft:jar"
+    },
+    "arcane_bellows": {
+      "renderer": "thaumcraft:bellows"
+    }
+  },
+  "composite": {
+    "crystal_capacitor": [
+      {
+        "kind": "block_model",
+        "model": "thaumcraft:block/crystal_capacitor"
+      },
+      {
+        "kind": "builtin_entity",
+        "renderer": "thaumcraft:crystal",
+        "params": {
+          "kind": "capacitor"
+        }
+      }
+    ]
+  },
+  "notes": {
+    "model_elements": [
+      {
+        "model": "block/research_table",
+        "note": "element rotation -15 is not allowed by 1.21.1 (only 0, 22.5, 45), snapped to -22.5"
+      },
+      {
+        "model": "block/research_table",
+        "note": "element rotation 15 is not allowed by 1.21.1 (only 0, 22.5, 45), snapped to 22.5"
+      }
+    ]
+  }
+}

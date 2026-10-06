@@ -1,0 +1,17 @@
+[
+  {
+    "recipe": "thaumcraft:iron_from_cluster",
+    "note": "smelting result count 2 for minecraft:iron_ingot is not representable in the 1.21.1 cooking recipe format",
+    "emitted_count": 2
+  },
+  {
+    "recipe": "thaumcraft:gold_from_cluster",
+    "note": "smelting result count 2 for minecraft:gold_ingot is not representable in the 1.21.1 cooking recipe format",
+    "emitted_count": 2
+  },
+  {
+    "recipe": "thaumcraft:copper_from_cluster",
+    "note": "smelting result count 2 for minecraft:copper_ingot is not representable in the 1.21.1 cooking recipe format",
+    "emitted_count": 2
+  }
+]

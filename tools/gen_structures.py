@@ -2,7 +2,8 @@ import gzip
 import struct
 from pathlib import Path
 
-DATA_VERSION = 5023
+import mcformat
+
 NS = "thaumcraft"
 BIOMES = {"plains": "plains", "taiga": "taiga", "savanna": "savanna", "snowy": "snow", "desert": "desert"}
 
@@ -201,7 +202,7 @@ def template(biome):
         },
     }
     return {
-        "DataVersion": Int(DATA_VERSION),
+        "DataVersion": Int(mcformat.profile.data_version),
         "size": TagList([Int(5), Int(12), Int(6)], TAG_INT),
         "palette": TagList(palette_tag, TAG_COMPOUND),
         "blocks": TagList(entries, TAG_COMPOUND),
@@ -211,6 +212,6 @@ def template(biome):
 
 def generate(data_dir):
     for biome in BIOMES:
-        path = Path(data_dir) / NS / "structure" / "village" / biome / "wizard_tower.nbt"
+        path = Path(data_dir) / NS / mcformat.profile.structure_folder / "village" / biome / "wizard_tower.nbt"
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(to_nbt(template(biome)))

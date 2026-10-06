@@ -1,0 +1,209 @@
+{
+  "profession": "thaumcraft:wizard",
+  "point_of_interest": "thaumcraft:arcane_worktable",
+  "levels": {
+    "1": {
+      "offers_picked_per_level": 2,
+      "offers": [
+        {
+          "name": "emerald_knowledge_fragment",
+          "wants": {
+            "id": "minecraft:emerald"
+          },
+          "gives": {
+            "id": "thaumcraft:knowledge_fragment"
+          },
+          "max_uses": 8,
+          "xp": 2,
+          "reputation_discount": 0.05
+        },
+        {
+          "name": "quicksilver_emerald",
+          "wants": {
+            "id": "thaumcraft:quicksilver",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 4,
+              "max": 6
+            }
+          },
+          "gives": {
+            "id": "minecraft:emerald"
+          },
+          "max_uses": 12,
+          "xp": 2,
+          "reputation_discount": 0.05
+        }
+      ]
+    },
+    "2": {
+      "offers_picked_per_level": 2,
+      "offers": [
+        {
+          "name": "emerald_alumentum",
+          "wants": {
+            "id": "minecraft:emerald"
+          },
+          "gives": {
+            "id": "thaumcraft:alumentum"
+          },
+          "max_uses": 8,
+          "xp": 5,
+          "reputation_discount": 0.05
+        },
+        {
+          "name": "amber_emerald",
+          "wants": {
+            "id": "thaumcraft:amber",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 4,
+              "max": 6
+            }
+          },
+          "gives": {
+            "id": "minecraft:emerald"
+          },
+          "max_uses": 12,
+          "xp": 5,
+          "reputation_discount": 0.05
+        }
+      ]
+    },
+    "3": {
+      "offers_picked_per_level": 2,
+      "offers": [
+        {
+          "name": "emerald_nitor",
+          "wants": {
+            "id": "minecraft:emerald"
+          },
+          "gives": {
+            "id": "thaumcraft:nitor"
+          },
+          "max_uses": 8,
+          "xp": 10,
+          "reputation_discount": 0.05
+        },
+        {
+          "name": "chicken_nugget_emerald",
+          "wants": {
+            "id": "thaumcraft:chicken_nugget",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 24,
+              "max": 31
+            }
+          },
+          "gives": {
+            "id": "minecraft:emerald"
+          },
+          "max_uses": 12,
+          "xp": 10,
+          "reputation_discount": 0.05
+        }
+      ]
+    },
+    "4": {
+      "offers_picked_per_level": 2,
+      "offers": [
+        {
+          "name": "bookshelf_knowledge_fragment",
+          "wants": {
+            "id": "minecraft:bookshelf",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 3
+            }
+          },
+          "gives": {
+            "id": "thaumcraft:knowledge_fragment"
+          },
+          "max_uses": 8,
+          "xp": 15,
+          "reputation_discount": 0.05
+        },
+        {
+          "name": "emerald_shard",
+          "wants": {
+            "id": "minecraft:emerald"
+          },
+          "gives": {
+            "id": "thaumcraft:air_shard"
+          },
+          "max_uses": 8,
+          "xp": 15,
+          "reputation_discount": 0.05,
+          "given_item_modifier": [
+            {
+              "type": "minecraft:set_item",
+              "item": "thaumcraft:fire_shard",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              }
+            },
+            {
+              "type": "minecraft:set_item",
+              "item": "thaumcraft:water_shard",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.3333333333333333
+              }
+            },
+            {
+              "type": "minecraft:set_item",
+              "item": "thaumcraft:earth_shard",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.25
+              }
+            },
+            {
+              "type": "minecraft:set_item",
+              "item": "thaumcraft:vis_shard",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.2
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "offers_picked_per_level": 1,
+      "offers": [
+        {
+          "name": "wand_adept_knowledge_fragment",
+          "wants": {
+            "id": "thaumcraft:wand_adept"
+          },
+          "gives": {
+            "id": "thaumcraft:knowledge_fragment"
+          },
+          "max_uses": 4,
+          "xp": 30,
+          "reputation_discount": 0.05,
+          "given_item_modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  }
+}
