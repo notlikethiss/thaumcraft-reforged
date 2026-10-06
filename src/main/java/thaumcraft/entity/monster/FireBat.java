@@ -289,6 +289,9 @@ public class FireBat extends Monster {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
+        if (this.level().isClientSide()) {
+            return false;
+        }
         if (this.isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION)) {
             return false;
         }

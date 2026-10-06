@@ -119,6 +119,9 @@ public class SpecialItem extends Entity {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
+        if (this.level().isClientSide()) {
+            return false;
+        }
         this.markHurt();
         this.health -= (int) damage;
         if (this.health <= 0) {

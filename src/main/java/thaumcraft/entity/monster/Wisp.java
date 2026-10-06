@@ -124,6 +124,9 @@ public class Wisp extends Mob implements Enemy, AuraManager.AspectTyped {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
+        if (this.level().isClientSide()) {
+            return false;
+        }
         if (source.getDirectEntity() instanceof LivingEntity living) {
             this.targetedEntity = living;
             this.aggroCooldown = 200;

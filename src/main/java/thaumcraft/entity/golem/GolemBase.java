@@ -301,6 +301,9 @@ public abstract class GolemBase extends PathfinderMob {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
+        if (this.level().isClientSide()) {
+            return false;
+        }
         paused = false;
         return !source.is(DamageTypes.CACTUS) && super.hurt(source, damage);
     }

@@ -72,6 +72,9 @@ public class GiantBrainyZombie extends BrainyZombie {
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
+        if (this.level().isClientSide()) {
+            return false;
+        }
         this.setAnger(Math.min(2.0F, this.getAnger() + 0.1F));
         return super.hurt(source, damage);
     }
