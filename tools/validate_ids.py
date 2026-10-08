@@ -273,9 +273,10 @@ class Validator:
     def check_structure(self, path):
         relative = path.relative_to(self.out).as_posix()
         root = read_nbt(path.read_bytes())
+        name_key = mcformat.PROFILES[self.version].block_state_keys[0]
         for entry in root["palette"]:
-            if entry["id"].startswith("minecraft:"):
-                self.check(relative, entry["id"], "block")
+            if entry[name_key].startswith("minecraft:"):
+                self.check(relative, entry[name_key], "block")
         for entry in root["blocks"]:
             nbt = entry.get("nbt")
             if nbt and nbt["id"].startswith("minecraft:"):
