@@ -57,7 +57,7 @@
 - `/setblock` прогоняет `updateShape`, многоблочные штуки (стол исследований) ставить с режимом `strict`
 - Блочные модели из `ModelRenderer` оригинала генерируются хелпером `model_box` в `gen_resources.py` (текстура копируется в `textures/block/*_model.png`, иначе её нет в атласе блоков)
 - Теги с id мода пишутся с `"required": false`
-- Пулы деревень: AT `StructureTemplatePool.rawTemplates` (без final) и `templates`, `VillageTowers` на `ServerAboutToStartEvent` добавляет `StructurePoolElement.legacy` (вес 2) в оба поля; шаблон башни лежит в 5 биомах (plains, taiga, savanna, snowy, desert с песчаником)
+- Пулы деревень: AT `StructureTemplatePool.rawTemplates` (без final) и `templates`, `VillageTowers` на `ServerAboutToStartEvent` добавляет `StructurePoolElement.legacy` (вес 1) в оба поля, не больше 2 башен на деревню через миксин `mixin/JigsawPlacerMixin` (убирает башню из кандидатов `JigsawPlacement$Placer`); шаблон башни лежит в 5 биомах (plains, taiga, savanna, snowy, desert с песчаником)
 - Мехи ускоряют ванильную печь через access transformer (`META-INF/accesstransformer.cfg`, `AbstractFurnaceBlockEntity.cookingTimer`/`cookingTotalTime`)
 - Модели из `ModelRenderer` 1.5.2 переносятся без `.mirror()`, если в оригинале `mirror = true` ставится после `addBox` (на бокс не влияет); если до `addBox`, то с `.mirror()`
 - Текстуры гуманоидов 1.5.2 в раскладке 64×32 (низ пустой): слой `HumanoidModel.createMesh` + `LayerDefinition.create(mesh, 64, 64)`, малыш через `HumanoidModel.BABY_TRANSFORMER` (ванильная модель малыша 26.3 другая)
