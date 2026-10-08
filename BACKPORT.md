@@ -9,7 +9,7 @@
 
 ## Last synced main commit
 
-`15f0500` (fix: wizard tower weight back to 2 with village cap)
+`c3256df` (fix: validate structure palettes with profile block state keys)
 
 ## Sync procedure
 
