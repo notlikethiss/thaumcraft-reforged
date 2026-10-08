@@ -187,9 +187,10 @@ def template(biome):
         entries.append(entry)
     palette_tag = []
     for name, properties in palette:
-        entry = {"id": name}
+        name_key, properties_key = mcformat.profile.block_state_keys
+        entry = {name_key: name}
         if properties:
-            entry["properties"] = {key: value for key, value in properties}
+            entry[properties_key] = {key: value for key, value in properties}
         palette_tag.append(entry)
     villager_position = (2.5, 1.0, 3.5)
     villager = {
