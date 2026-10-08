@@ -9,7 +9,7 @@
 
 ## Last synced main commit
 
-`7b5ce8e` (feat: version profiles for resource generators)
+`15f0500` (fix: wizard tower weight back to 2 with village cap)
 
 ## Sync procedure
 
