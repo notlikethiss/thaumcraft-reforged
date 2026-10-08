@@ -24,7 +24,7 @@ import thaumcraft.Thaumcraft;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class VillageTowers {
-    private static final int WEIGHT = 1;
+    private static final int WEIGHT = 2;
     private static final int MAX_PER_VILLAGE = 2;
     private static final Map<String, String> BIOMES = Map.of(
         "plains", "mossify_10_percent",
