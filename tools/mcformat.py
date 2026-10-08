@@ -34,6 +34,7 @@ class Profile:
     block_tag_folder = "tags/block"
     item_tag_folder = "tags/item"
     structure_folder = "structure"
+    block_state_keys = ("id", "properties")
     common_namespace = "c"
     biome_modifier_namespace = "neoforge"
     loot_modifier_namespace = "neoforge"
@@ -128,6 +129,7 @@ class Legacy(Profile):
     modern = False
     explicit_render_types = True
     feature_folder = "configured_feature"
+    block_state_keys = ("Name", "Properties")
 
     def recipe_ingredient(self, value):
         if value.startswith("#"):
